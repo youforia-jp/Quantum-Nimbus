@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nimbus IQ - Interactive Simulator</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+</head>
+<body class="theme-disconnected">
+    <div class="background-radial-glow"></div>
+    
+    <header class="main-header">
+        <div class="logo">
+            <span class="nimbus-symbol">☁</span>
+            <h1>Quantum <span class="accent-text">Nimbus</span></h1>
+        </div>
+        <div class="badge-container">
+            <span class="header-badge env-badge">DEMO STAGE</span>
+            <span class="header-badge api-badge">WebBLE API v3</span>
+        </div>
+    </header>
+
+    <main class="simulator-container">
+        
+        <!-- ================= SMARTPHONE APP PANE ================= -->
+        <section class="phone-mockup card">
+            <div class="phone-notch"></div>
+            <div class="phone-header">
+                <span class="phone-time">18:42</span>
+                <div class="phone-icons">
+                    <span class="wifi-icon">📶</span>
+                    <span class="battery-icon">100%</span>
+                </div>
+            </div>
+            
+            <!-- Fixed App Brand Header -->
+            <div class="app-brand">
+                <span class="brand-text">NIMBUS <span class="sub-brand">IQ</span></span>
+            </div>
+            
+            <div class="phone-screen-content">
+                <!-- BLE Pairing Panel -->
+                <div id="ble-panel" class="app-section ble-section active">
+                    <div class="ble-pulse-container">
+                        <div class="pulse-ring"></div>
+                        <div class="pulse-ring"></div>
+                        <div class="pulse-center">⚡</div>
+                    </div>
+                    <h2>WebBLE Integration</h2>
+                    <p class="section-desc">Connect securely via Web Bluetooth API to configure your Nimbus device directly from the web browser.</p>
+                    <button id="btn-pair" class="btn-primary">Scan for Nimbus Device</button>
+                    <span id="ble-status-text" class="status-subtext">Device disconnected</span>
+                </div>
+
+                <!-- Active App Interface -->
+                <div id="app-interface" class="app-section dynamic-fade">
+                    
+                    <!-- ================= TAB: CONTROL ================= -->
+                    <div id="tab-control" class="tab-view active">
+                        <!-- Cartridge Security & Info Card -->
+                        <div class="app-card auth-card">
+                            <div class="auth-header">
+                                <span class="card-label">CARTRIDGE INFORMATION</span>
+                                <span id="badge-auth" class="auth-badge">UNVERIFIED</span>
+                            </div>
+                            <div class="cart-details">
+                                <div class="detail-row">
+                                    <span class="label">Brand:</span>
+                                    <span id="info-brand" class="value">None</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="label">Oil Formula:</span>
+                                    <span id="info-type" class="value">None</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="label">Batch ID:</span>
+                                    <span id="info-batch" class="value">None</span>
+                                </div>
+                                <div class="detail-row key-row">
+                                    <span class="label">NFC Signature:</span>
+                                    <span id="info-sig" class="value code-text">None</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mode Selectors -->
+                        <div class="app-card">
+                            <span class="card-label">VAPORIZATION MODES</span>
+                            <div class="mode-selectors">
+                                <button class="mode-btn" data-mode="Flavor Focus">
+                                    <span class="mode-icon">🍓</span>
+                                    <span class="mode-name">Flavor Focus</span>
+                                    <span class="mode-delta">-15°C</span>
+                                </button>
+                                <button class="mode-btn active" data-mode="Balanced">
+                                    <span class="mode-icon">⚖️</span>
+                                    <span class="mode-name">Balanced</span>
+                                    <span class="mode-delta">Optimal</span>
+                                </button>
+                                <button class="mode-btn" data-mode="Max Cloud">
+                                    <span class="mode-icon">💨</span>
+                                    <span class="mode-name">Max Cloud</span>
+                                    <span class="mode-delta">+15°C</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Temperature Settings Panel -->
+                        <div class="app-card">
+                            <span class="card-label">THERMAL TELEMETRY</span>
+                            <div class="telemetry-grid">
+                                <div class="tel-item">
+                                    <span class="tel-label">Base Temperature</span>
+                                    <span id="val-base-temp" class="tel-val">--</span>
+                                </div>
+                                <div class="tel-item">
+                                    <span class="tel-label">Active Target</span>
+                                    <span id="val-target-temp" class="tel-val highlight-val">--</span>
+                                </div>
+                                <div class="tel-item">
+                                    <span class="tel-label">Safe Max Limit</span>
+                                    <span id="val-safe-max" class="tel-val">--</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ================= TAB: WELLNESS ================= -->
+                    <div id="tab-wellness" class="tab-view">
+                        <!-- Mascot Panel -->
+                        <div class="app-card mascot-card">
+                            <span class="card-label">NIMBY COMPANION</span>
+                            <div class="mascot-display">
+                                <svg id="nimby-svg" viewBox="0 0 200 150" class="nimby-character sleeping">
+                                    <defs>
+                                        <linearGradient id="cloudGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                            <stop offset="0%" stop-color="#ffffff" />
+                                            <stop offset="100%" stop-color="#cbd5e1" class="cloud-bottom-color" />
+                                        </linearGradient>
+                                        <radialGradient id="sunGlow" cx="50%" cy="50%" r="50%">
+                                            <stop offset="0%" stop-color="#f59e0b" stop-opacity="1" />
+                                            <stop offset="100%" stop-color="#f59e0b" stop-opacity="0" />
+                                        </radialGradient>
+                                        <filter id="glow">
+                                            <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                                            <feMerge>
+                                                <feMergeNode in="coloredBlur"/>
+                                                <feMergeNode in="SourceGraphic"/>
+                                            </feMerge>
+                                        </filter>
+                                    </defs>
+
+                                    <!-- Sun (visible in sunny state) -->
+                                    <g class="nimby-sun">
+                                        <circle cx="150" cy="40" r="22" fill="#f59e0b" filter="url(#glow)" />
+                                        <g class="sun-rays">
+                                            <line x1="150" y1="8" x2="150" y2="15" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" />
+                                            <line x1="150" y1="65" x2="150" y2="72" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" />
+                                            <line x1="118" y1="40" x2="125" y2="40" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" />
+                                            <line x1="175" y1="40" x2="182" y2="40" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" />
+                                            <line x1="127" y1="17" x2="132" y2="22" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" />
+                                            <line x1="168" y1="58" x2="173" y2="63" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" />
+                                            <line x1="127" y1="63" x2="132" y2="58" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" />
+                                            <line x1="168" y1="22" x2="173" y2="17" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" />
+                                        </g>
+                                    </g>
+
+                                    <!-- Sleeping Zzz (visible in sleeping state) -->
+                                    <g class="nimby-zzz">
+                                        <text x="140" y="45" class="zzz z1">z</text>
+                                        <text x="155" y="30" class="zzz z2">z</text>
+                                        <text x="170" y="15" class="zzz z3">Z</text>
+                                    </g>
+
+                                    <!-- Lightning Bolts (visible in angry state) -->
+                                    <g class="nimby-lightning">
+                                        <path d="M 70,110 L 60,128 L 72,128 L 65,142" stroke="#fbbf24" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)" />
+                                        <path d="M 130,110 L 120,128 L 132,128 L 125,142" stroke="#fbbf24" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)" />
+                                    </g>
+
+                                    <!-- Toxic Vapor steam (visible in toxic state) -->
+                                    <g class="nimby-toxic-steam">
+                                        <path d="M 60,35 Q 55,20 62,10" stroke="#10b981" stroke-width="2" fill="none" opacity="0.6" stroke-linecap="round" />
+                                        <path d="M 140,35 Q 145,20 138,10" stroke="#10b981" stroke-width="2" fill="none" opacity="0.6" stroke-linecap="round" />
+                                    </g>
+
+                                    <!-- Cloud Body -->
+                                    <path class="cloud-body" d="M 45,95 A 25,25 0 0,1 55,50 A 32,32 0 0,1 110,35 A 32,32 0 0,1 155,55 A 25,25 0 0,1 155,95 A 15,15 0 0,1 145,110 L 55,110 A 15,15 0 0,1 45,95 Z" fill="url(#cloudGrad)" />
+
+                                    <!-- Rosy Cheeks -->
+                                    <circle cx="72" cy="84" r="6" fill="#f43f5e" opacity="0.4" class="blush" />
+                                    <circle cx="128" cy="84" r="6" fill="#f43f5e" opacity="0.4" class="blush" />
+
+                                    <!-- Face Elements -->
+                                    <!-- Eyes -->
+                                    <g class="face-eye eye-left">
+                                        <!-- Sleeping -->
+                                        <path class="eye-sleep" d="M 67,80 Q 72,83 77,80" stroke="#475569" stroke-width="2.2" fill="none" stroke-linecap="round" />
+                                        <!-- Happy -->
+                                        <circle class="eye-happy" cx="72" cy="78" r="3" fill="#1e293b" />
+                                        <!-- Angry -->
+                                        <g class="eye-angry">
+                                            <line x1="66" y1="74" x2="76" y2="78" stroke="#1e293b" stroke-width="2.2" stroke-linecap="round" />
+                                            <circle cx="71" cy="80" r="2.5" fill="#1e293b" />
+                                        </g>
+                                        <!-- Toxic -->
+                                        <g class="eye-toxic">
+                                            <line x1="68" y1="76" x2="76" y2="82" stroke="#047857" stroke-width="2.2" stroke-linecap="round" />
+                                            <line x1="76" y1="76" x2="68" y2="82" stroke="#047857" stroke-width="2.2" stroke-linecap="round" />
+                                        </g>
+                                    </g>
+                                    <g class="face-eye eye-right">
+                                        <!-- Sleeping -->
+                                        <path class="eye-sleep" d="M 123,80 Q 128,83 133,80" stroke="#475569" stroke-width="2.2" fill="none" stroke-linecap="round" />
+                                        <!-- Happy -->
+                                        <circle class="eye-happy" cx="128" cy="78" r="3" fill="#1e293b" />
+                                        <!-- Angry -->
+                                        <g class="eye-angry">
+                                            <line x1="134" y1="74" x2="124" y2="78" stroke="#1e293b" stroke-width="2.2" stroke-linecap="round" />
+                                            <circle cx="129" cy="80" r="2.5" fill="#1e293b" />
+                                        </g>
+                                        <!-- Toxic -->
+                                        <g class="eye-toxic">
+                                            <line x1="124" y1="76" x2="132" y2="82" stroke="#047857" stroke-width="2.2" stroke-linecap="round" />
+                                            <line x1="132" y1="76" x2="124" y2="82" stroke="#047857" stroke-width="2.2" stroke-linecap="round" />
+                                        </g>
+                                    </g>
+
+                                    <!-- Mouth -->
+                                    <g class="face-mouth">
+                                        <!-- Happy smile -->
+                                        <path class="mouth-happy" d="M 96,86 Q 100,90 104,86" stroke="#1e293b" stroke-width="2.2" fill="none" stroke-linecap="round" />
+                                        <!-- Sleeping snore circle -->
+                                        <circle class="mouth-sleep" cx="100" cy="86" r="2" fill="#475569" />
+                                        <!-- Angry squiggly -->
+                                        <path class="mouth-angry" d="M 95,87 Q 97.5,85 100,87 T 105,87" stroke="#1e293b" stroke-width="2.2" fill="none" stroke-linecap="round" />
+                                        <!-- Toxic sad face -->
+                                        <path class="mouth-toxic" d="M 96,88 Q 100,84 104,88" stroke="#047857" stroke-width="2.2" fill="none" stroke-linecap="round" />
+                                        <!-- Puffing blow circle -->
+                                        <circle class="mouth-puff" cx="100" cy="86" r="3.5" stroke="#1e293b" stroke-width="2.2" fill="none" />
+                                    </g>
+                                </svg>
+                            </div>
+                            <div id="nimby-speech" class="nimby-speech-bubble">Zzz... Companion is sleeping. Insert a cartridge to activate.</div>
+                        </div>
+
+                        <!-- Wellness Analytics Card -->
+                        <div class="app-card stats-card">
+                            <span class="card-label">WELLNESS METRICS</span>
+                            <div class="stats-container">
+                                <!-- Circular Puff Progress -->
+                                <div class="stat-circle-box">
+                                    <svg class="progress-ring" width="80" height="80">
+                                        <circle class="progress-ring__circle-bg" stroke="rgba(255, 255, 255, 0.05)" stroke-width="6" fill="transparent" r="34" cx="40" cy="40"/>
+                                        <circle id="progress-ring-fill" class="progress-ring__circle" stroke="var(--primary-glow)" stroke-width="6" fill="transparent" r="34" cx="40" cy="40"/>
+                                    </svg>
+                                    <div class="progress-text">
+                                        <span id="stat-puffs-curr">0</span>
+                                        <span class="divider">/</span>
+                                        <span id="stat-puffs-limit">15</span>
+                                    </div>
+                                    <span class="circle-label">Today's Puffs</span>
+                                </div>
+                                <!-- Toxins Avoided Card -->
+                                <div class="stat-toxins-box">
+                                    <span class="toxins-title">Toxins Blocked</span>
+                                    <span id="val-toxins" class="toxins-val highlight-val">0.0 mg</span>
+                                    <p class="toxins-desc">Estimated heavy metals and combustion toxic degradation avoided by security clamping.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Supplement Integration Panel -->
+                        <div class="app-card supplement-card">
+                            <div class="supplement-header">
+                                <span class="card-label">NIMBUS ELEVATE DAILY</span>
+                                <span id="supplement-badge" class="supplement-badge badge-pending">PENDING INTAKE</span>
+                            </div>
+                            <p class="supplement-desc">Log your morning nootropic to clear mental brain fog and increase your safety puff threshold.</p>
+                            <button id="btn-take-supplement" class="btn-supplement">Log Supplement Intake</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- PWA Bottom Navigation Bar -->
+            <div id="app-nav" class="app-nav-bar">
+                <button class="nav-btn active" data-tab="control">
+                    <span class="nav-icon">⚙️</span>
+                    <span class="nav-label">Control</span>
+                </button>
+                <button class="nav-btn" data-tab="wellness">
+                    <span class="nav-icon">☁️</span>
+                    <span class="nav-label">Wellness</span>
+                </button>
+            </div>
+
+            <div class="phone-home-indicator"></div>
+
+            <!-- Warning Modal Overlay -->
+            <div id="warning-modal" class="modal-overlay">
+                <div class="modal-content">
+                    <span class="warning-icon">⚠️</span>
+                    <h3>UNVERIFIED CARTRIDGE DETECTED</h3>
+                    <p class="warning-text">
+                        This cartridge has failed cryptographic authentication. Running unverified hardware or non-compliant oils at standard temperatures may release toxic heavy metals (lead, cadmium) or hazardous chemical vapor.
+                    </p>
+                    <div class="warning-benefits">
+                        <strong>Restricted Safety Mode will:</strong>
+                        <ul>
+                            <li>Clamp maximum temperature to 150°C.</li>
+                            <li>Reduce toxic degradation risk.</li>
+                            <li>Disable Flavor Focus & Max Cloud modes.</li>
+                        </ul>
+                    </div>
+                    <div class="modal-actions">
+                        <button id="btn-modal-accept" class="btn-warning-action">Proceed in Safe-Mode</button>
+                        <button id="btn-modal-reject" class="btn-secondary-action">Eject Cartridge</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PHYSICAL VAPE DEVICE PANE ================= -->
+        <section class="device-mockup card">
+            <div class="device-section-title">NIMBUS FRONTIER VAPE MOCKUP</div>
+            
+            <div class="device-chassis">
+                <!-- Outer Tube and Cartridge Area -->
+                <div class="cartridge-assembly">
+                    <div class="mouthpiece-tip"></div>
+                    <div class="cartridge-chamber">
+                        <div class="chamber-glass">
+                            <div id="liquid-vapor" class="liquid-fluid"></div>
+                            <div id="vapor-clouds" class="vapor-clouds-smoke"></div>
+                        </div>
+                        <div class="cartridge-connector">
+                            <div class="thread-510"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Walnut / Premium Accents Band -->
+                <div class="accent-band">
+                    <span class="wood-grain-label">NIMBUS LABS</span>
+                </div>
+
+                <!-- Core Body -->
+                <div class="device-core">
+                    <!-- OLED Screen -->
+                    <div class="oled-screen">
+                        <div class="oled-header">
+                            <span id="oled-state">STANDBY</span>
+                            <span id="oled-battery">100%</span>
+                        </div>
+                        <div class="oled-main">
+                            <div class="oled-temp-display">
+                                <span id="oled-curr-temp">20.0</span><span class="oled-unit">°C</span>
+                            </div>
+                            <div class="oled-target-sub">
+                                TARGET: <span id="oled-target">--</span>
+                            </div>
+                        </div>
+                        <div class="oled-indicator-dots">
+                            <span id="oled-indicator-nfc">NFC Ready</span>
+                        </div>
+                    </div>
+
+                    <!-- LED Glowing Control Ring -->
+                    <div class="led-ring-outer">
+                        <div id="led-ring" class="led-ring-inner">
+                            <div class="led-glow-overlay"></div>
+                        </div>
+                    </div>
+
+                    <!-- Hold to Puff Manual Action Button -->
+                    <div class="puff-button-container">
+                        <button id="btn-puff" class="puff-btn" disabled>
+                            <span class="puff-btn-inner">PRESS & HOLD TO PUFF</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controller Console to Simulate Cartridge Insertion -->
+            <div class="console-card">
+                <h3>Simulator Controls & Developer Options</h3>
+                <p class="console-desc">Simulate NFC pen connections and toggle hardware-level security override settings.</p>
+                
+                <div class="cartridge-buttons">
+                    <button class="cart-btn active" data-cart="disconnected">
+                        ❌ Eject Cartridge
+                    </button>
+                    <button class="cart-btn" data-cart="astro">
+                        🌌 Astro (D9 THC)
+                    </button>
+                    <button class="cart-btn" data-cart="frontier">
+                        🪵 Frontier (Rosin)
+                    </button>
+                    <button class="cart-btn" data-cart="nimby">
+                        ☁️ NIMBY (CBD)
+                    </button>
+                    <button class="cart-btn" data-cart="counterfeit">
+                        ⚠️ Counterfeit
+                    </button>
+                </div>
+
+                <!-- Custom NFC input for generated JSONs -->
+                <div class="custom-nfc-input">
+                    <span class="console-sublabel">Scan / Paste Custom NFC Payload</span>
+                    <div class="nfc-input-row">
+                        <input type="text" id="input-nfc-payload" placeholder='{"b":"Brand","y":"Type","i":"Batch","s":"sig"}'>
+                        <button id="btn-nfc-submit" class="btn-nfc-action">Scan Tag</button>
+                    </div>
+                </div>
+
+                <div class="developer-settings">
+                    <div class="toggle-row">
+                        <div class="toggle-info">
+                            <span class="toggle-title">Allow Unverified Cartridges</span>
+                            <span class="toggle-desc">Restricts output to 150°C safety cap</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="chk-allow-unverified">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="secret-row">
+                        <label for="input-secret">Master Signing Secret (Hardware Encrypted)</label>
+                        <input type="text" id="input-secret" value="nimbus_secure_master_secret_2026">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="simulator-footer">
+        <p>Quantum Nimbus Patent Pending NFC-Secure Smart Vaporization. Purely human-designed firmware demo.</p>
+    </footer>
+
+    <!-- Script Injection -->
+    <script src="app.js"></script>
+</body>
+</html>
