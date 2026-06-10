@@ -134,7 +134,6 @@ This protocol establishes strict rules for AI-human pair programming to ensure t
     * The agent MUST explain the exact low-level mechanics of the implementation, focusing on memory allocation, data references, and hardware constraints.
     * Limit explanations to structural architecture choices to ensure maximum firmware efficiency and zero bloat.
     * Use analogies that relate to physical systems, data flow, and hardware limitations to ensure deep architectural understanding.
-
 *   **The Systems Quiz:** The agent **MUST** present exactly **one** challenging system or logic question based on the existing code (firmware or Python simulator).
 *   **Execution Lock:** The agent is blocked from writing any code, modifying files, or creating implementation task lists until the user answers the quiz.
 
