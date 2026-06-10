@@ -19,6 +19,7 @@
             <h1>Quantum <span class="accent-text">Nimbus</span></h1>
         </div>
         <div class="badge-container">
+            <button id="btn-mute" class="header-badge" style="background: rgba(255, 255, 255, 0.08); color: var(--text-primary); border: 1px solid rgba(255, 255, 255, 0.15); cursor: pointer; transition: background 0.3s; outline: none;">🔊 Sound: On</button>
             <span class="header-badge env-badge">DEMO STAGE</span>
             <span class="header-badge api-badge">WebBLE API v3</span>
         </div>
@@ -106,6 +107,42 @@
                                     <span class="mode-name">Max Cloud</span>
                                     <span class="mode-delta">+15°C</span>
                                 </button>
+                            </div>
+                        </div>
+
+                        <!-- Custom Profile Creator -->
+                        <div class="app-card custom-profiles-card">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
+                                <span class="card-label" style="margin-bottom: 0;">CUSTOM TEMPERATURE CURVES</span>
+                                <button id="btn-toggle-designer" style="background: transparent; border: none; color: var(--accent-color); font-size: 0.75rem; font-weight: 600; cursor: pointer; text-decoration: underline; outline: none;">+ Create New</button>
+                            </div>
+                            
+                            <div id="custom-profiles-selector" class="custom-select-row" style="display: flex; gap: 0.5rem; margin-bottom: 0;">
+                                <select id="select-custom-profile" style="flex: 1; background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 0.45rem; color: white; font-size: 0.75rem; cursor: pointer; outline: none;">
+                                    <option value="">-- Use Factory Presets --</option>
+                                </select>
+                                <button id="btn-delete-profile" style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); color: #fca5a5; border-radius: 8px; padding: 0 0.6rem; font-size: 0.75rem; cursor: pointer; display: none; outline: none;">Delete</button>
+                            </div>
+
+                            <div id="profile-designer-form" style="display: none; flex-direction: column; gap: 0.6rem; border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 0.6rem; margin-top: 0.6rem;">
+                                <div class="form-group" style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                    <label style="font-size: 0.65rem; color: var(--text-secondary); font-weight: 600;">PROFILE NAME</label>
+                                    <input type="text" id="custom-profile-name" placeholder="e.g. Cherry Blast" style="background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 0.45rem; color: white; font-size: 0.75rem; outline: none;">
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                                    <div class="form-group" style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                        <label style="font-size: 0.65rem; color: var(--text-secondary); font-weight: 600;">OPTIMAL TEMP (°C)</label>
+                                        <input type="number" id="custom-profile-optimal" value="180" min="100" max="230" style="background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 0.45rem; color: white; font-size: 0.75rem; outline: none;">
+                                    </div>
+                                    <div class="form-group" style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                        <label style="font-size: 0.65rem; color: var(--text-secondary); font-weight: 600;">SAFETY MAX (°C)</label>
+                                        <input type="number" id="custom-profile-max" value="200" min="100" max="230" style="background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 0.45rem; color: white; font-size: 0.75rem; outline: none;">
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 0.5rem; margin-top: 0.2rem;">
+                                    <button id="btn-save-profile" style="flex: 1; background: var(--primary-glow); border: none; color: white; border-radius: 8px; padding: 0.5rem; font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: background 0.3s; outline: none;">Save Curve</button>
+                                    <button id="btn-cancel-profile" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08); color: var(--text-secondary); border-radius: 8px; padding: 0.5rem 0.8rem; font-size: 0.75rem; cursor: pointer; outline: none;">Cancel</button>
+                                </div>
                             </div>
                         </div>
 
@@ -271,6 +308,14 @@
                                     <span id="val-toxins" class="toxins-val highlight-val">0.0 mg</span>
                                     <p class="toxins-desc">Estimated heavy metals and combustion toxic degradation avoided by security clamping.</p>
                                 </div>
+                            </div>
+                        </div>
+
+                        <!-- Weekly Puff History Card -->
+                        <div class="app-card history-card">
+                            <span class="card-label">7-DAY CONSUMPTION HISTORY</span>
+                            <div id="chart-container" style="width: 100%; height: 110px; display: flex; align-items: flex-end; justify-content: space-between; margin-top: 0.8rem; position: relative;">
+                                <!-- Dynamic SVG chart will be injected here -->
                             </div>
                         </div>
 

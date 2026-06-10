@@ -2,7 +2,187 @@
 // QUANTUM NIMBUS INTERACTIVE WEB LOGIC
 // ==========================================
 
+// Web Audio API Synthesizer Class
+class SoundSynth {
+    constructor() {
+        this.ctx = null;
+        this.isMuted = false;
+        this.activeHumOsc = null;
+        this.activeHumGain = null;
+        this.activeHumLfo = null;
+    }
+
+    init() {
+        if (!this.ctx) {
+            this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (this.ctx.state === 'suspended') {
+            this.ctx.resume();
+        }
+    }
+
+    toggleMute(state) {
+        this.isMuted = state;
+        if (this.isMuted) {
+            this.stopCoilHum();
+        }
+    }
+
+    playPairSound() {
+        if (this.isMuted) return;
+        this.init();
+        const now = this.ctx.currentTime;
+        
+        const notes = [440, 554.37]; // A4 -> C#5 (Major third)
+        const durations = [0.12, 0.25];
+        
+        notes.forEach((freq, index) => {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(freq, now + (index * 0.1));
+            
+            gain.gain.setValueAtTime(0.08, now + (index * 0.1));
+            gain.gain.exponentialRampToValueAtTime(0.001, now + (index * 0.1) + durations[index]);
+            
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            
+            osc.start(now + (index * 0.1));
+            osc.stop(now + (index * 0.1) + durations[index]);
+        });
+    }
+
+    playDisconnectSound() {
+        if (this.isMuted) return;
+        this.init();
+        const now = this.ctx.currentTime;
+        
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        
+        osc.type = "triangle";
+        osc.frequency.setValueAtTime(330, now); // E4
+        osc.frequency.exponentialRampToValueAtTime(110, now + 0.35); // A2
+        
+        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.linearRampToValueAtTime(0.001, now + 0.35);
+        
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        
+        osc.start(now);
+        osc.stop(now + 0.35);
+    }
+
+    startCoilHum() {
+        if (this.isMuted || this.activeHumOsc) return;
+        this.init();
+        const now = this.ctx.currentTime;
+        
+        this.activeHumOsc = this.ctx.createOscillator();
+        this.activeHumGain = this.ctx.createGain();
+        
+        this.activeHumOsc.type = "triangle";
+        this.activeHumOsc.frequency.setValueAtTime(65.41, now); // C2 hum
+        
+        // Slight frequency modulation (vibrato)
+        const lfo = this.ctx.createOscillator();
+        const lfoGain = this.ctx.createGain();
+        lfo.frequency.value = 6.0; 
+        lfoGain.gain.value = 2.0; 
+        lfo.connect(lfoGain);
+        lfoGain.connect(this.activeHumOsc.frequency);
+        lfo.start();
+        this.activeHumLfo = lfo;
+        
+        this.activeHumGain.gain.setValueAtTime(0, now);
+        this.activeHumGain.gain.linearRampToValueAtTime(0.12, now + 0.15); // fade in
+        
+        this.activeHumOsc.connect(this.activeHumGain);
+        this.activeHumGain.connect(this.ctx.destination);
+        
+        this.activeHumOsc.start(now);
+    }
+
+    stopCoilHum() {
+        if (!this.activeHumOsc) return;
+        const now = this.ctx.currentTime;
+        
+        const osc = this.activeHumOsc;
+        const gain = this.activeHumGain;
+        const lfo = this.activeHumLfo;
+        
+        this.activeHumOsc = null;
+        this.activeHumGain = null;
+        this.activeHumLfo = null;
+        
+        gain.gain.setValueAtTime(gain.gain.value, now);
+        gain.gain.linearRampToValueAtTime(0, now + 0.15); // fade out
+        
+        setTimeout(() => {
+            try {
+                osc.stop();
+                lfo.stop();
+            } catch (err) {}
+        }, 200);
+    }
+
+    playWarningAlarm() {
+        if (this.isMuted) return;
+        this.init();
+        const now = this.ctx.currentTime;
+        
+        const duration = 0.5;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        
+        osc.type = "sawtooth";
+        osc.frequency.setValueAtTime(220, now); 
+        osc.frequency.setValueAtTime(293.66, now + 0.15); 
+        osc.frequency.setValueAtTime(220, now + 0.3); 
+        
+        gain.gain.setValueAtTime(0.06, now);
+        gain.gain.linearRampToValueAtTime(0.001, now + duration);
+        
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        
+        osc.start(now);
+        osc.stop(now + duration);
+    }
+
+    playSupplementSpark() {
+        if (this.isMuted) return;
+        this.init();
+        const now = this.ctx.currentTime;
+        
+        const freqs = [523.25, 659.25, 783.99, 1046.50]; // C Major
+        const noteDur = 0.08;
+        
+        freqs.forEach((freq, index) => {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(freq, now + (index * 0.06));
+            
+            gain.gain.setValueAtTime(0.04, now + (index * 0.06));
+            gain.gain.exponentialRampToValueAtTime(0.001, now + (index * 0.06) + noteDur);
+            
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            
+            osc.start(now + (index * 0.06));
+            osc.stop(now + (index * 0.06) + noteDur);
+        });
+    }
+}
+
 // Global state variables
+const synth = new SoundSynth();
+
 let isPaired = false;
 let activeCartridge = null;
 let currentTemp = 20.0;
@@ -18,6 +198,11 @@ let dailyPuffLimit = 15;
 let toxinsAvoided = 0.0;
 let nimbyState = "sleeping"; // 'sleeping' | 'happy' | 'puffing' | 'angry' | 'toxic' | 'sunny'
 let supplementTaken = false;
+
+// New simulator enhancement states
+let activeCustomProfile = null;
+let customProfiles = [];
+let puffHistory = [];
 
 // Intervals
 let heatInterval = null;
@@ -143,6 +328,19 @@ const progressRingFill = document.getElementById("progress-ring-fill");
 const btnTakeSupplement = document.getElementById("btn-take-supplement");
 const supplementBadge = document.getElementById("supplement-badge");
 
+// New simulator enhancement DOM references
+const btnMute = document.getElementById("btn-mute");
+const selectCustomProfile = document.getElementById("select-custom-profile");
+const btnToggleDesigner = document.getElementById("btn-toggle-designer");
+const btnDeleteProfile = document.getElementById("btn-delete-profile");
+const profileDesignerForm = document.getElementById("profile-designer-form");
+const customProfileName = document.getElementById("custom-profile-name");
+const customProfileOptimal = document.getElementById("custom-profile-optimal");
+const customProfileMax = document.getElementById("custom-profile-max");
+const btnSaveProfile = document.getElementById("btn-save-profile");
+const btnCancelProfile = document.getElementById("btn-cancel-profile");
+const chartContainer = document.getElementById("chart-container");
+
 // Initialize Bluetooth simulator
 btnPair.addEventListener("click", () => {
     btnPair.textContent = "Scanning...";
@@ -155,6 +353,7 @@ btnPair.addEventListener("click", () => {
         appNav.classList.add("active"); // Show nav bar
         bleStatusText.textContent = "Connected to Nimbus BLE v3";
         oledIndicatorNfc.textContent = "NFC & BLE Online";
+        synth.playPairSound();
         updateInterface();
     }, 1200);
 });
@@ -257,6 +456,7 @@ async function processCartridgeConnection(cartData) {
         oledIndicatorNfc.textContent = "NFC Ready";
         liquidFluid.style.opacity = "0";
         warningModal.classList.remove("active");
+        synth.playDisconnectSound();
         updateInterface();
         updateNimbyState('sleeping');
         updateWellnessStats();
@@ -297,6 +497,7 @@ async function processCartridgeConnection(cartData) {
         oledState.textContent = "VERIFIED";
         oledIndicatorNfc.textContent = "Security OK";
         warningModal.classList.remove("active");
+        synth.playPairSound();
         
         // Switch to wellness tab if NIMBY CBD cart is scanned
         if (cartData.theme === "theme-nimby") {
@@ -309,6 +510,8 @@ async function processCartridgeConnection(cartData) {
         oledIndicatorNfc.textContent = "Security ERR";
         // Show warning popup to consumer
         warningModal.classList.add("active");
+        synth.playWarningAlarm();
+        triggerHapticShake();
     }
     
     calculateTemperatures();
@@ -328,7 +531,10 @@ function calculateTemperatures() {
     let baseTemp = defaultTemp;
     let maxSafety = 230.0;
     
-    if (profile) {
+    if (activeCustomProfile) {
+        baseTemp = activeCustomProfile.optimal;
+        maxSafety = activeCustomProfile.safetyMax;
+    } else if (profile) {
         baseTemp = profile.optimal;
         maxSafety = profile.safetyMax;
     }
@@ -431,6 +637,7 @@ function startPuffing() {
     isPuffing = true;
     clearInterval(coolInterval);
     vaporClouds.classList.add("puffing");
+    synth.startCoilHum();
     
     oledState.textContent = "HEATING";
     
@@ -467,6 +674,7 @@ function stopPuffing() {
     if (!isPuffing) return;
     
     isPuffing = false;
+    synth.stopCoilHum();
     clearInterval(heatInterval);
     vaporClouds.classList.remove("puffing");
     
@@ -475,6 +683,12 @@ function stopPuffing() {
         currentPuffs++;
         calculateToxinsAvoided();
         updateWellnessStats();
+        
+        // Warn if daily limit crossed
+        if (currentPuffs === dailyPuffLimit) {
+            synth.playWarningAlarm();
+            triggerHapticShake();
+        }
     }
     
     if (batteryLevel > 0) {
@@ -555,9 +769,13 @@ btnTakeSupplement.addEventListener("click", () => {
     dailyPuffLimit = 20;
     statPuffsLimit.textContent = dailyPuffLimit;
     
+    // Play sweet synth sparkly chime
+    synth.playSupplementSpark();
+    
     // Update mascot and progress ring
     updateProgressRing();
     updateNimbyState(determineMascotState());
+    updateWellnessStats();
 });
 
 // Helper: Determine mascot state
@@ -622,7 +840,14 @@ function updateWellnessStats() {
     statPuffsLimit.textContent = dailyPuffLimit;
     valToxins.textContent = `${toxinsAvoided.toFixed(1)} mg`;
     
+    // Sync to weekly history and save to localStorage
+    if (puffHistory.length > 0) {
+        puffHistory[puffHistory.length - 1].count = currentPuffs;
+        localStorage.setItem("nimbus_puff_history", JSON.stringify(puffHistory));
+    }
+    
     updateProgressRing();
+    renderWeeklyChart();
 }
 
 // Helper: Calculate and update circular SVG progress ring fill
@@ -646,3 +871,281 @@ function updateProgressRing() {
         progressRingFill.style.stroke = "var(--primary-glow)"; // Theme Accent color
     }
 }
+
+// Helper: Trigger visual phone shake to simulate haptics
+function triggerHapticShake() {
+    const phone = document.querySelector(".phone-mockup");
+    if (phone) {
+        phone.classList.remove("haptic-shake");
+        // Trigger reflow to restart CSS animation
+        void phone.offsetWidth;
+        phone.classList.add("haptic-shake");
+        
+        // Remove class after animation finishes
+        setTimeout(() => {
+            phone.classList.remove("haptic-shake");
+        }, 450);
+    }
+}
+
+// Helper: Web Audio Mute controller
+function setupMuteListener() {
+    if (!btnMute) return;
+    
+    // Check local storage setting
+    const savedMute = localStorage.getItem("nimbus_muted") === "true";
+    synth.toggleMute(savedMute);
+    btnMute.textContent = savedMute ? "🔇 Sound: Off" : "🔊 Sound: On";
+    btnMute.style.background = savedMute ? "rgba(239, 68, 68, 0.1)" : "rgba(255, 255, 255, 0.08)";
+    btnMute.style.borderColor = savedMute ? "rgba(239, 68, 68, 0.3)" : "rgba(255, 255, 255, 0.15)";
+    
+    btnMute.addEventListener("click", () => {
+        const muted = !synth.isMuted;
+        synth.toggleMute(muted);
+        localStorage.setItem("nimbus_muted", muted);
+        
+        btnMute.textContent = muted ? "🔇 Sound: Off" : "🔊 Sound: On";
+        btnMute.style.background = muted ? "rgba(239, 68, 68, 0.1)" : "rgba(255, 255, 255, 0.08)";
+        btnMute.style.borderColor = muted ? "rgba(239, 68, 68, 0.3)" : "rgba(255, 255, 255, 0.15)";
+        
+        if (!muted) {
+            synth.playPairSound(); // Play test tone on unmute
+        }
+    });
+}
+
+// Helper: Render the 7-day SVG bar chart dynamically
+function renderWeeklyChart() {
+    if (!chartContainer || puffHistory.length === 0) return;
+    
+    const maxVal = Math.max(...puffHistory.map(h => h.count), dailyPuffLimit, 10);
+    const chartWidth = 320;
+    const chartHeight = 90;
+    const paddingBottom = 16;
+    const paddingTop = 10;
+    const drawHeight = chartHeight - paddingTop - paddingBottom;
+    
+    // Generate SVG rectangles and labels
+    const barWidth = 22;
+    const spacing = (chartWidth - 30 - (barWidth * 7)) / 6;
+    let svgContent = `<svg class="weekly-chart-svg" viewBox="0 0 ${chartWidth} ${chartHeight}">`;
+    
+    // Draw daily limit dashed line
+    const limitY = chartHeight - paddingBottom - ((dailyPuffLimit / maxVal) * drawHeight);
+    svgContent += `
+        <line class="chart-limit-line" x1="10" y1="${limitY}" x2="${chartWidth - 10}" y2="${limitY}" />
+        <text class="chart-limit-text" x="${chartWidth - 55}" y="${limitY - 4}">LIMIT (${dailyPuffLimit})</text>
+    `;
+    
+    // Draw weekly bars
+    puffHistory.forEach((dayData, idx) => {
+        const x = 15 + idx * (barWidth + spacing);
+        const barHeight = (dayData.count / maxVal) * drawHeight;
+        const y = chartHeight - paddingBottom - barHeight;
+        
+        const isToday = idx === puffHistory.length - 1;
+        const isOverLimit = dayData.count >= dailyPuffLimit;
+        const isNearLimit = dayData.count >= dailyPuffLimit * 0.8 && dayData.count < dailyPuffLimit;
+        
+        let barClass = "chart-bar";
+        if (isOverLimit) barClass += " over-limit";
+        else if (isNearLimit) barClass += " warning-limit";
+        
+        svgContent += `
+            <g class="chart-bar-group">
+                <!-- Hover value label -->
+                <text class="chart-value-text" x="${x + barWidth / 2}" y="${y - 4}">${dayData.count} puff${dayData.count !== 1 ? 's' : ''}</text>
+                <!-- Bar rectangle -->
+                <rect class="${barClass}" x="${x}" y="${y}" width="${barWidth}" height="${barHeight || 1}" />
+                <!-- Weekday label -->
+                <text class="chart-label-text" x="${x + barWidth / 2}" y="${chartHeight - 4}" style="${isToday ? 'fill: var(--accent-color); font-weight: bold;' : ''}">${dayData.day}</text>
+            </g>
+        `;
+    });
+    
+    svgContent += `</svg>`;
+    chartContainer.innerHTML = svgContent;
+}
+
+// Helper: Custom Profile logic and events
+function setupCustomProfileListeners() {
+    if (!btnToggleDesigner || !profileDesignerForm || !selectCustomProfile) return;
+    
+    // Toggle form display
+    btnToggleDesigner.addEventListener("click", () => {
+        profileDesignerForm.style.display = "flex";
+        customProfileName.value = "";
+        customProfileOptimal.value = 180;
+        customProfileMax.value = 200;
+        
+        // Hide selector row
+        document.getElementById("custom-profiles-selector").style.display = "none";
+    });
+    
+    btnCancelProfile.addEventListener("click", () => {
+        profileDesignerForm.style.display = "none";
+        document.getElementById("custom-profiles-selector").style.display = "flex";
+    });
+    
+    // Save new profile
+    btnSaveProfile.addEventListener("click", () => {
+        const name = customProfileName.value.trim();
+        const optimal = parseFloat(customProfileOptimal.value);
+        const max = parseFloat(customProfileMax.value);
+        
+        if (!name) {
+            alert("Please enter a name for the temperature profile.");
+            return;
+        }
+        if (isNaN(optimal) || optimal < 100 || optimal > 230) {
+            alert("Optimal temperature must be between 100°C and 230°C.");
+            return;
+        }
+        if (isNaN(max) || max < 100 || max > 230) {
+            alert("Safety max temperature must be between 100°C and 230°C.");
+            return;
+        }
+        if (optimal > max) {
+            alert("Optimal temperature cannot exceed the safety maximum temperature.");
+            return;
+        }
+        
+        // Add to profiles
+        const newProfile = { name, optimal, safetyMax: max };
+        customProfiles.push(newProfile);
+        localStorage.setItem("nimbus_custom_profiles", JSON.stringify(customProfiles));
+        
+        // Update selector list
+        updateCustomProfilesDropdown();
+        
+        // Select newly created profile
+        selectCustomProfile.value = name;
+        activeCustomProfile = newProfile;
+        btnDeleteProfile.style.display = "block";
+        
+        // Recalculate
+        calculateTemperatures();
+        updateInterface();
+        
+        // Cheer chime!
+        synth.playSupplementSpark();
+        
+        // Hide form
+        profileDesignerForm.style.display = "none";
+        document.getElementById("custom-profiles-selector").style.display = "flex";
+    });
+    
+    // Delete profile
+    btnDeleteProfile.addEventListener("click", () => {
+        const selectedName = selectCustomProfile.value;
+        if (!selectedName) return;
+        
+        customProfiles = customProfiles.filter(p => p.name !== selectedName);
+        localStorage.setItem("nimbus_custom_profiles", JSON.stringify(customProfiles));
+        
+        updateCustomProfilesDropdown();
+        selectCustomProfile.value = "";
+        activeCustomProfile = null;
+        btnDeleteProfile.style.display = "none";
+        
+        calculateTemperatures();
+        updateInterface();
+        synth.playDisconnectSound();
+    });
+    
+    // Select custom profile change trigger
+    selectCustomProfile.addEventListener("change", () => {
+        const val = selectCustomProfile.value;
+        if (!val) {
+            activeCustomProfile = null;
+            btnDeleteProfile.style.display = "none";
+        } else {
+            activeCustomProfile = customProfiles.find(p => p.name === val) || null;
+            btnDeleteProfile.style.display = "block";
+        }
+        calculateTemperatures();
+        updateInterface();
+    });
+}
+
+function updateCustomProfilesDropdown() {
+    if (!selectCustomProfile) return;
+    
+    // Keep first option
+    selectCustomProfile.innerHTML = '<option value="">-- Use Factory Presets --</option>';
+    
+    customProfiles.forEach(p => {
+        const opt = document.createElement("option");
+        opt.value = p.name;
+        opt.textContent = `${p.name} (${p.optimal}°C / ${p.safetyMax}°C)`;
+        selectCustomProfile.appendChild(opt);
+    });
+}
+
+// Helper: Seed and Initialize localStorage states
+function initLocalStorage() {
+    // 1. Seed history if none exists
+    const savedHistory = localStorage.getItem("nimbus_puff_history");
+    if (savedHistory) {
+        try {
+            puffHistory = JSON.parse(savedHistory);
+        } catch (e) {
+            puffHistory = [];
+        }
+    }
+    
+    const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const today = new Date();
+    const todayName = weekdays[today.getDay()];
+    
+    // If empty or if history's last entry is not today's weekday, generate/shift history
+    if (puffHistory.length === 0 || puffHistory[puffHistory.length - 1].day !== todayName) {
+        // Generate last 7 days ending today
+        let newHistory = [];
+        for (let i = 6; i >= 0; i--) {
+            const d = new Date(today);
+            d.setDate(today.getDate() - i);
+            const dayName = weekdays[d.getDay()];
+            
+            let count = 0;
+            if (i > 0) {
+                // Seed some realistic data
+                const seeds = [11, 14, 8, 15, 12, 10];
+                count = seeds[6 - i] || Math.floor(Math.random() * 8) + 6;
+            }
+            newHistory.push({ day: dayName, count });
+        }
+        
+        // Preserve today's current counts if they exist in the previous log
+        if (puffHistory.length > 0) {
+            const prevToday = puffHistory.find(h => h.day === todayName);
+            if (prevToday) {
+                newHistory[newHistory.length - 1].count = prevToday.count;
+            }
+        }
+        
+        puffHistory = newHistory;
+        localStorage.setItem("nimbus_puff_history", JSON.stringify(puffHistory));
+    }
+    
+    // Set current puffs count to match today's history entry
+    currentPuffs = puffHistory[puffHistory.length - 1].count;
+    
+    // 2. Load custom profiles
+    const savedProfiles = localStorage.getItem("nimbus_custom_profiles");
+    if (savedProfiles) {
+        try {
+            customProfiles = JSON.parse(savedProfiles);
+        } catch (e) {
+            customProfiles = [];
+        }
+    }
+    
+    updateCustomProfilesDropdown();
+}
+
+// Kick off initialization
+initLocalStorage();
+setupCustomProfileListeners();
+setupMuteListener();
+renderWeeklyChart();

@@ -1777,3 +1777,107 @@ body.theme-warning .led-ring-inner {
     box-shadow: none;
 }
 
+/* ==========================================
+   NEW SIMULATOR ENHANCEMENTS
+   ========================================== */
+
+/* Historical Puff Chart Styles */
+.history-card {
+    padding-bottom: 1.4rem;
+}
+
+.weekly-chart-svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.chart-bar {
+    fill: var(--primary-glow);
+    opacity: 0.8;
+    rx: 4px;
+    ry: 4px;
+    transition: fill var(--transition-speed) ease, height 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), y 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.2s ease;
+    cursor: pointer;
+}
+
+.chart-bar:hover {
+    opacity: 1;
+    fill: var(--accent-color);
+}
+
+.chart-bar.over-limit {
+    fill: #ef4444 !important;
+}
+
+.chart-bar.warning-limit {
+    fill: #f59e0b !important;
+}
+
+.chart-label-text {
+    font-size: 8px;
+    font-weight: 600;
+    fill: var(--text-secondary);
+    text-anchor: middle;
+}
+
+.chart-value-text {
+    font-size: 8px;
+    font-weight: 700;
+    fill: var(--text-primary);
+    text-anchor: middle;
+    opacity: 0;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    transform: translateY(2px);
+}
+
+.chart-bar-group:hover .chart-value-text {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Limit threshold reference line */
+.chart-limit-line {
+    stroke: rgba(239, 68, 68, 0.4);
+    stroke-dasharray: 3 3;
+    stroke-width: 1.5;
+}
+
+.chart-limit-text {
+    font-size: 7px;
+    fill: #fca5a5;
+    font-weight: 700;
+}
+
+/* Custom Profile Creator Elements */
+.custom-profiles-card {
+    transition: all 0.3s ease;
+}
+
+#btn-toggle-designer:hover {
+    color: var(--text-primary) !important;
+}
+
+#btn-save-profile:hover {
+    background: var(--accent-color) !important;
+    color: black !important;
+}
+
+/* Mute Button Active state */
+#btn-mute:hover {
+    background: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Visual Haptics Animation (Screen Shake) */
+@keyframes hapticShake {
+    0%, 100% { transform: translate(0, 0); }
+    10%, 30%, 50%, 70%, 90% { transform: translate(-3px, 1px); }
+    20%, 40%, 60%, 80% { transform: translate(3px, -1px); }
+}
+
+.haptic-shake {
+    animation: hapticShake 0.45s cubic-bezier(.36,.07,.19,.97) both;
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
