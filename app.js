@@ -203,6 +203,7 @@ let supplementTaken = false;
 let activeCustomProfile = null;
 let customProfiles = [];
 let puffHistory = [];
+let liveTempPoints = [];
 
 // Intervals
 let heatInterval = null;
@@ -335,11 +336,22 @@ const btnToggleDesigner = document.getElementById("btn-toggle-designer");
 const btnDeleteProfile = document.getElementById("btn-delete-profile");
 const profileDesignerForm = document.getElementById("profile-designer-form");
 const customProfileName = document.getElementById("custom-profile-name");
-const customProfileOptimal = document.getElementById("custom-profile-optimal");
-const customProfileMax = document.getElementById("custom-profile-max");
 const btnSaveProfile = document.getElementById("btn-save-profile");
 const btnCancelProfile = document.getElementById("btn-cancel-profile");
 const chartContainer = document.getElementById("chart-container");
+
+// Interactive Temp Graph & Tuning Elements
+const tempTunerContainer = document.getElementById("temp-tuner-container");
+const tempTunerSlider = document.getElementById("temp-tuner-slider");
+const valTunerTemp = document.getElementById("val-tuner-temp");
+const advancedBadge = document.getElementById("advanced-badge");
+const tempCurveSvg = document.getElementById("temp-curve-svg");
+const graphLimitLine = document.getElementById("graph-limit-line");
+const graphTargetLine = document.getElementById("graph-target-line");
+const graphLimitLabel = document.getElementById("graph-limit-label");
+const graphTargetLabel = document.getElementById("graph-target-label");
+const graphPreviewCurve = document.getElementById("graph-preview-curve");
+const graphLiveCurve = document.getElementById("graph-live-curve");
 
 // Initialize Bluetooth simulator
 btnPair.addEventListener("click", () => {
@@ -399,9 +411,19 @@ document.querySelectorAll(".mode-btn").forEach(btn => {
         targetBtn.classList.add("active");
         selectedMode = targetBtn.dataset.mode;
         
+        // Deselect custom profile selection to avoid conflict
+        if (selectCustomProfile) {
+            selectCustomProfile.value = "";
+            activeCustomProfile = null;
+        }
+        if (btnDeleteProfile) {
+            btnDeleteProfile.style.display = "none";
+        }
+        
         if (activeCartridge) {
             calculateTemperatures();
         }
+        updateInterface();
     });
 });
 
@@ -577,6 +599,7 @@ function calculateTemperatures() {
     valTargetTemp.textContent = `${targetTemp.toFixed(1)}°C`;
     valSafeMax.textContent = `${maxSafety.toFixed(1)}°C`;
     oledTarget.textContent = `${targetTemp.toFixed(0)}C`;
+    renderTemperatureGraph();
 }
 
 // Update app UI displays
@@ -604,6 +627,11 @@ function updateInterface() {
         valBaseTemp.textContent = "--";
         valTargetTemp.textContent = "--";
         valSafeMax.textContent = "--";
+        
+        if (tempTunerContainer) tempTunerContainer.style.display = "none";
+        if (advancedBadge) advancedBadge.style.display = "none";
+        
+        renderTemperatureGraph();
         return;
     }
     
@@ -625,6 +653,20 @@ function updateInterface() {
         badgeAuth.style.color = "#fca5a5";
         badgeAuth.style.background = "rgba(239, 68, 68, 0.15)";
     }
+    
+    // Show/hide advanced tuner if custom profile is active
+    if (activeCustomProfile && authState) {
+        if (tempTunerContainer) tempTunerContainer.style.display = "flex";
+        if (advancedBadge) advancedBadge.style.display = "inline-block";
+        if (tempTunerSlider) {
+            tempTunerSlider.value = activeCustomProfile.optimal;
+            valTunerTemp.textContent = `${activeCustomProfile.optimal.toFixed(0)}°C`;
+        }
+    } else {
+        if (tempTunerContainer) tempTunerContainer.style.display = "none";
+        if (advancedBadge) advancedBadge.style.display = "none";
+    }
+    renderTemperatureGraph();
 }
 
 // ==========================================
@@ -635,6 +677,8 @@ function startPuffing() {
     if (isPuffing || btnPuff.disabled) return;
     
     isPuffing = true;
+    liveTempPoints = [currentTemp];
+    renderTemperatureGraph();
     clearInterval(coolInterval);
     vaporClouds.classList.add("puffing");
     synth.startCoilHum();
@@ -654,6 +698,12 @@ function startPuffing() {
                 currentTemp = targetTemp;
             }
         }
+        
+        // Record point for graph
+        if (liveTempPoints.length < 50) {
+            liveTempPoints.push(currentTemp);
+        }
+        renderTemperatureGraph();
         
         // Drain battery
         if (batteryLevel > 0) {
@@ -706,6 +756,13 @@ function stopPuffing() {
                 clearInterval(coolInterval);
             }
         }
+        
+        // Record cooling point for graph
+        if (liveTempPoints.length < 50) {
+            liveTempPoints.push(currentTemp);
+        }
+        renderTemperatureGraph();
+        
         updateLiveTelemetry();
     }, 100);
 }
@@ -967,6 +1024,87 @@ function renderWeeklyChart() {
     chartContainer.innerHTML = svgContent;
 }
 
+// Helper: Convert temperature to Y-coordinate for the SVG graph canvas
+function tempToY(temp) {
+    const minT = 20;
+    const maxT = 230;
+    const minY = 100;
+    const maxY = 20;
+    const val = minY - ((temp - minT) / (maxT - minT)) * (minY - maxY);
+    return Math.max(maxY, Math.min(minY, val));
+}
+
+// Helper: Render the dynamic SVG temperature curves and target markers
+function renderTemperatureGraph() {
+    if (!tempCurveSvg) return;
+    
+    const baseTempText = valBaseTemp.textContent;
+    const targetTempText = valTargetTemp.textContent;
+    const maxSafetyText = valSafeMax.textContent;
+    
+    let baseT = 20.0;
+    let targetT = 190.0;
+    let safetyMaxT = 220.0;
+    
+    if (activeCartridge) {
+        if (!authState && !chkAllowUnverified.checked) {
+            targetT = 20.0;
+            safetyMaxT = 20.0;
+        } else {
+            const parsedTarget = parseFloat(targetTempText);
+            const parsedMax = parseFloat(maxSafetyText);
+            const parsedBase = parseFloat(baseTempText);
+            if (!isNaN(parsedTarget)) targetT = parsedTarget;
+            if (!isNaN(parsedMax)) safetyMaxT = parsedMax;
+            if (!isNaN(parsedBase)) baseT = parsedBase;
+        }
+    }
+    
+    const limitY = tempToY(safetyMaxT);
+    const targetY = tempToY(targetT);
+    
+    // Update reference lines
+    if (graphLimitLine) {
+        graphLimitLine.setAttribute("y1", limitY);
+        graphLimitLine.setAttribute("y2", limitY);
+    }
+    if (graphTargetLine) {
+        graphTargetLine.setAttribute("y1", targetY);
+        graphTargetLine.setAttribute("y2", targetY);
+    }
+    
+    // Update reference labels
+    if (graphLimitLabel) {
+        graphLimitLabel.setAttribute("y", Math.max(12, limitY - 4));
+        graphLimitLabel.textContent = `LIMIT: ${safetyMaxT.toFixed(0)}°C`;
+    }
+    if (graphTargetLabel) {
+        graphTargetLabel.setAttribute("y", Math.max(12, targetY - 4));
+        graphTargetLabel.textContent = `TARGET: ${targetT.toFixed(0)}°C`;
+    }
+    
+    // Draw preview curve
+    if (graphPreviewCurve) {
+        const previewPath = `M 0 100 C 40 100, 50 ${targetY}, 70 ${targetY} L 210 ${targetY} C 230 ${targetY}, 250 100, 300 100`;
+        graphPreviewCurve.setAttribute("d", previewPath);
+    }
+    
+    // Draw live puff curve
+    if (graphLiveCurve) {
+        if (liveTempPoints.length === 0) {
+            graphLiveCurve.setAttribute("d", "");
+        } else {
+            let pathStr = `M 0 100`;
+            liveTempPoints.forEach((tempPoint, idx) => {
+                const x = idx * 6;
+                const y = tempToY(tempPoint);
+                pathStr += ` L ${x} ${y}`;
+            });
+            graphLiveCurve.setAttribute("d", pathStr);
+        }
+    }
+}
+
 // Helper: Custom Profile logic and events
 function setupCustomProfileListeners() {
     if (!btnToggleDesigner || !profileDesignerForm || !selectCustomProfile) return;
@@ -975,43 +1113,29 @@ function setupCustomProfileListeners() {
     btnToggleDesigner.addEventListener("click", () => {
         profileDesignerForm.style.display = "flex";
         customProfileName.value = "";
-        customProfileOptimal.value = 180;
-        customProfileMax.value = 200;
         
         // Hide selector row
-        document.getElementById("custom-profiles-selector").style.display = "none";
+        const selectorRow = document.getElementById("custom-profiles-selector");
+        if (selectorRow) selectorRow.style.display = "none";
     });
     
     btnCancelProfile.addEventListener("click", () => {
         profileDesignerForm.style.display = "none";
-        document.getElementById("custom-profiles-selector").style.display = "flex";
+        const selectorRow = document.getElementById("custom-profiles-selector");
+        if (selectorRow) selectorRow.style.display = "flex";
     });
     
     // Save new profile
     btnSaveProfile.addEventListener("click", () => {
         const name = customProfileName.value.trim();
-        const optimal = parseFloat(customProfileOptimal.value);
-        const max = parseFloat(customProfileMax.value);
         
         if (!name) {
             alert("Please enter a name for the temperature profile.");
             return;
         }
-        if (isNaN(optimal) || optimal < 100 || optimal > 230) {
-            alert("Optimal temperature must be between 100°C and 230°C.");
-            return;
-        }
-        if (isNaN(max) || max < 100 || max > 230) {
-            alert("Safety max temperature must be between 100°C and 230°C.");
-            return;
-        }
-        if (optimal > max) {
-            alert("Optimal temperature cannot exceed the safety maximum temperature.");
-            return;
-        }
         
         // Add to profiles
-        const newProfile = { name, optimal, safetyMax: max };
+        const newProfile = { name, optimal: 180, safetyMax: 200 };
         customProfiles.push(newProfile);
         localStorage.setItem("nimbus_custom_profiles", JSON.stringify(customProfiles));
         
@@ -1023,6 +1147,10 @@ function setupCustomProfileListeners() {
         activeCustomProfile = newProfile;
         btnDeleteProfile.style.display = "block";
         
+        // Deselect mode buttons
+        document.querySelectorAll(".mode-btn").forEach(b => b.classList.remove("active"));
+        selectedMode = "Custom";
+        
         // Recalculate
         calculateTemperatures();
         updateInterface();
@@ -1032,7 +1160,8 @@ function setupCustomProfileListeners() {
         
         // Hide form
         profileDesignerForm.style.display = "none";
-        document.getElementById("custom-profiles-selector").style.display = "flex";
+        const selectorRow = document.getElementById("custom-profiles-selector");
+        if (selectorRow) selectorRow.style.display = "flex";
     });
     
     // Delete profile
@@ -1048,6 +1177,12 @@ function setupCustomProfileListeners() {
         activeCustomProfile = null;
         btnDeleteProfile.style.display = "none";
         
+        // Reset to Balanced standard mode
+        document.querySelectorAll(".mode-btn").forEach(b => b.classList.remove("active"));
+        const balancedBtn = document.querySelector(".mode-btn[data-mode='Balanced']");
+        if (balancedBtn) balancedBtn.classList.add("active");
+        selectedMode = "Balanced";
+        
         calculateTemperatures();
         updateInterface();
         synth.playDisconnectSound();
@@ -1059,13 +1194,45 @@ function setupCustomProfileListeners() {
         if (!val) {
             activeCustomProfile = null;
             btnDeleteProfile.style.display = "none";
+            // Reset to Balanced mode
+            document.querySelectorAll(".mode-btn").forEach(b => b.classList.remove("active"));
+            const balancedBtn = document.querySelector(".mode-btn[data-mode='Balanced']");
+            if (balancedBtn) balancedBtn.classList.add("active");
+            selectedMode = "Balanced";
         } else {
             activeCustomProfile = customProfiles.find(p => p.name === val) || null;
             btnDeleteProfile.style.display = "block";
+            // Deselect mode buttons
+            document.querySelectorAll(".mode-btn").forEach(b => b.classList.remove("active"));
+            selectedMode = "Custom";
         }
         calculateTemperatures();
         updateInterface();
     });
+    
+    // Advanced Slider input event
+    if (tempTunerSlider) {
+        tempTunerSlider.addEventListener("input", () => {
+            const val = parseFloat(tempTunerSlider.value);
+            if (valTunerTemp) {
+                valTunerTemp.textContent = `${val.toFixed(0)}°C`;
+            }
+            
+            if (activeCustomProfile) {
+                activeCustomProfile.optimal = val;
+                activeCustomProfile.safetyMax = Math.min(220, val + 20);
+                
+                // Save updated list
+                localStorage.setItem("nimbus_custom_profiles", JSON.stringify(customProfiles));
+                
+                // Update select option text label dynamically
+                updateCustomProfilesDropdown();
+                selectCustomProfile.value = activeCustomProfile.name;
+                
+                calculateTemperatures();
+            }
+        });
+    }
 }
 
 function updateCustomProfilesDropdown() {
@@ -1077,7 +1244,7 @@ function updateCustomProfilesDropdown() {
     customProfiles.forEach(p => {
         const opt = document.createElement("option");
         opt.value = p.name;
-        opt.textContent = `${p.name} (${p.optimal}°C / ${p.safetyMax}°C)`;
+        opt.textContent = `${p.name} (${p.optimal.toFixed(0)}°C / ${p.safetyMax.toFixed(0)}°C)`;
         selectCustomProfile.appendChild(opt);
     });
 }

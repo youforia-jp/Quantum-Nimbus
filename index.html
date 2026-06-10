@@ -81,17 +81,19 @@
                                     <span class="label">Batch ID:</span>
                                     <span id="info-batch" class="value">None</span>
                                 </div>
-                                <div class="detail-row key-row">
+                                <div class="detail-row key-row" style="display: none;">
                                     <span class="label">NFC Signature:</span>
                                     <span id="info-sig" class="value code-text">None</span>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Mode Selectors -->
-                        <div class="app-card">
-                            <span class="card-label">VAPORIZATION MODES</span>
-                            <div class="mode-selectors">
+                        <!-- Unified Vaporization Profiles Card -->
+                        <div class="app-card custom-profiles-card">
+                            <span class="card-label">VAPORIZATION PROFILES</span>
+                            
+                            <!-- Factory Preset Modes -->
+                            <div class="mode-selectors" style="margin-bottom: 0.8rem;">
                                 <button class="mode-btn" data-mode="Flavor Focus">
                                     <span class="mode-icon">🍓</span>
                                     <span class="mode-name">Flavor Focus</span>
@@ -108,13 +110,11 @@
                                     <span class="mode-delta">+15°C</span>
                                 </button>
                             </div>
-                        </div>
-
-                        <!-- Custom Profile Creator -->
-                        <div class="app-card custom-profiles-card">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
-                                <span class="card-label" style="margin-bottom: 0;">CUSTOM TEMPERATURE CURVES</span>
-                                <button id="btn-toggle-designer" style="background: transparent; border: none; color: var(--accent-color); font-size: 0.75rem; font-weight: 600; cursor: pointer; text-decoration: underline; outline: none;">+ Create New</button>
+                            
+                            <!-- Custom Profiles Menu -->
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                                <span class="card-label" style="font-size: 0.55rem; margin-bottom: 0; color: var(--text-secondary);">CUSTOM TEMP PROFILES</span>
+                                <button id="btn-toggle-designer" style="background: transparent; border: none; color: var(--accent-color); font-size: 0.7rem; font-weight: 600; cursor: pointer; text-decoration: underline; outline: none;">+ Create New</button>
                             </div>
                             
                             <div id="custom-profiles-selector" class="custom-select-row" style="display: flex; gap: 0.5rem; margin-bottom: 0;">
@@ -124,34 +124,76 @@
                                 <button id="btn-delete-profile" style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); color: #fca5a5; border-radius: 8px; padding: 0 0.6rem; font-size: 0.75rem; cursor: pointer; display: none; outline: none;">Delete</button>
                             </div>
 
+                            <!-- Simplified Designer Form -->
                             <div id="profile-designer-form" style="display: none; flex-direction: column; gap: 0.6rem; border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 0.6rem; margin-top: 0.6rem;">
                                 <div class="form-group" style="display: flex; flex-direction: column; gap: 0.25rem;">
-                                    <label style="font-size: 0.65rem; color: var(--text-secondary); font-weight: 600;">PROFILE NAME</label>
+                                    <label style="font-size: 0.65rem; color: var(--text-secondary); font-weight: 600;">NEW PROFILE NAME</label>
                                     <input type="text" id="custom-profile-name" placeholder="e.g. Cherry Blast" style="background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 0.45rem; color: white; font-size: 0.75rem; outline: none;">
                                 </div>
-                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
-                                    <div class="form-group" style="display: flex; flex-direction: column; gap: 0.25rem;">
-                                        <label style="font-size: 0.65rem; color: var(--text-secondary); font-weight: 600;">OPTIMAL TEMP (°C)</label>
-                                        <input type="number" id="custom-profile-optimal" value="180" min="100" max="230" style="background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 0.45rem; color: white; font-size: 0.75rem; outline: none;">
-                                    </div>
-                                    <div class="form-group" style="display: flex; flex-direction: column; gap: 0.25rem;">
-                                        <label style="font-size: 0.65rem; color: var(--text-secondary); font-weight: 600;">SAFETY MAX (°C)</label>
-                                        <input type="number" id="custom-profile-max" value="200" min="100" max="230" style="background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 0.45rem; color: white; font-size: 0.75rem; outline: none;">
-                                    </div>
-                                </div>
                                 <div style="display: flex; gap: 0.5rem; margin-top: 0.2rem;">
-                                    <button id="btn-save-profile" style="flex: 1; background: var(--primary-glow); border: none; color: white; border-radius: 8px; padding: 0.5rem; font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: background 0.3s; outline: none;">Save Curve</button>
+                                    <button id="btn-save-profile" style="flex: 1; background: var(--primary-glow); border: none; color: white; border-radius: 8px; padding: 0.5rem; font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: background 0.3s; outline: none;">Save Profile</button>
                                     <button id="btn-cancel-profile" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08); color: var(--text-secondary); border-radius: 8px; padding: 0.5rem 0.8rem; font-size: 0.75rem; cursor: pointer; outline: none;">Cancel</button>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Temperature Settings Panel -->
-                        <div class="app-card">
-                            <span class="card-label">THERMAL TELEMETRY</span>
+                        <!-- Heating Insights Panel (Interactive SVG Graph + Live Telemetry) -->
+                        <div class="app-card heating-insights-card">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
+                                <span class="card-label" style="margin-bottom: 0;">HEATING INSIGHTS</span>
+                                <span id="advanced-badge" class="header-badge" style="background: rgba(var(--primary-glow-rgb), 0.15); border: 1px solid rgba(var(--primary-glow-rgb), 0.3); color: var(--accent-color); font-size: 0.65rem; padding: 0.15rem 0.4rem; display: none; margin-left: auto; border-radius: 4px; line-height: 1;">ADVANCED</span>
+                            </div>
+                            
+                            <!-- SVG Temperature Curve Graph -->
+                            <div class="temp-graph-container" style="position: relative; width: 100%; height: 110px; background: rgba(0, 0, 0, 0.25); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.05); margin-bottom: 0.8rem; overflow: hidden;">
+                                <svg id="temp-curve-svg" width="100%" height="100%" viewBox="0 0 300 110" style="display: block;">
+                                    <!-- Grid Lines -->
+                                    <line x1="0" y1="27.5" x2="300" y2="27.5" stroke="rgba(255, 255, 255, 0.03)" stroke-width="1" />
+                                    <line x1="0" y1="55" x2="300" y2="55" stroke="rgba(255, 255, 255, 0.03)" stroke-width="1" />
+                                    <line x1="0" y1="82.5" x2="300" y2="82.5" stroke="rgba(255, 255, 255, 0.03)" stroke-width="1" />
+                                    
+                                    <!-- Reference lines for target and safety -->
+                                    <line id="graph-limit-line" x1="0" y1="20" x2="300" y2="20" stroke="rgba(239, 68, 68, 0.25)" stroke-dasharray="3,3" stroke-width="1.2" />
+                                    <line id="graph-target-line" x1="0" y1="50" x2="300" y2="50" stroke="rgba(var(--primary-glow-rgb), 0.5)" stroke-dasharray="3,3" stroke-width="1.2" />
+                                    
+                                    <!-- Text indicators inside graph -->
+                                    <text id="graph-limit-label" x="5" y="15" fill="rgba(239, 68, 68, 0.6)" font-size="7" font-weight="600">LIMIT: --</text>
+                                    <text id="graph-target-label" x="5" y="45" fill="var(--accent-color)" font-size="7" font-weight="600">TARGET: --</text>
+                                    
+                                    <!-- Static/Preview curve path -->
+                                    <path id="graph-preview-curve" d="" fill="none" stroke="rgba(255, 255, 255, 0.15)" stroke-dasharray="2,2" stroke-width="1.5" />
+                                    <!-- Live Temperature curve path -->
+                                    <path id="graph-live-curve" d="" fill="none" stroke="url(#tempGlowGrad)" stroke-width="2.5" stroke-linecap="round" filter="url(#tempGlow)" />
+                                    
+                                    <defs>
+                                        <linearGradient id="tempGlowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                            <stop offset="0%" stop-color="var(--accent-color)" />
+                                            <stop offset="100%" stop-color="var(--primary-glow)" />
+                                        </linearGradient>
+                                        <filter id="tempGlow">
+                                            <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                                            <feMerge>
+                                                <feMergeNode in="coloredBlur"/>
+                                                <feMergeNode in="SourceGraphic"/>
+                                            </feMerge>
+                                        </filter>
+                                    </defs>
+                                </svg>
+                            </div>
+                            
+                            <!-- Advanced Temp Tuning slider -->
+                            <div id="temp-tuner-container" style="display: none; flex-direction: column; gap: 0.35rem; margin-bottom: 0.8rem; background: rgba(0,0,0,0.15); border: 1px solid rgba(255,255,255,0.04); padding: 0.5rem 0.6rem; border-radius: 8px;">
+                                <div style="display: flex; justify-content: space-between; font-size: 0.65rem; color: var(--text-secondary); font-weight: 600; letter-spacing: 0.5px;">
+                                    <span>ADVANCED TEMPERATURE CONTROL</span>
+                                    <span id="val-tuner-temp" style="color: var(--accent-color); font-weight: 700;">180°C</span>
+                                </div>
+                                <input type="range" id="temp-tuner-slider" min="100" max="220" value="180" style="margin-top: 0.1rem;">
+                            </div>
+                            
+                            <!-- Telemetry Grid -->
                             <div class="telemetry-grid">
                                 <div class="tel-item">
-                                    <span class="tel-label">Base Temperature</span>
+                                    <span class="tel-label">Base Temp</span>
                                     <span id="val-base-temp" class="tel-val">--</span>
                                 </div>
                                 <div class="tel-item">
@@ -159,7 +201,7 @@
                                     <span id="val-target-temp" class="tel-val highlight-val">--</span>
                                 </div>
                                 <div class="tel-item">
-                                    <span class="tel-label">Safe Max Limit</span>
+                                    <span class="tel-label">Safe Max</span>
                                     <span id="val-safe-max" class="tel-val">--</span>
                                 </div>
                             </div>
@@ -208,9 +250,9 @@
 
                                     <!-- Sleeping Zzz (visible in sleeping state) -->
                                     <g class="nimby-zzz">
-                                        <text x="140" y="45" class="zzz z1">z</text>
-                                        <text x="155" y="30" class="zzz z2">z</text>
-                                        <text x="170" y="15" class="zzz z3">Z</text>
+                                        <text x="135" y="65" class="zzz z1">z</text>
+                                        <text x="150" y="50" class="zzz z2">z</text>
+                                        <text x="165" y="35" class="zzz z3">Z</text>
                                     </g>
 
                                     <!-- Lightning Bolts (visible in angry state) -->

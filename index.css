@@ -423,6 +423,11 @@ body {
     font-size: 0.65rem;
     font-weight: 700;
     letter-spacing: 0.5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    min-height: 20px;
 }
 
 body.theme-astro .auth-badge, 
@@ -1412,9 +1417,10 @@ body.theme-warning .led-ring-inner {
 .z3 { animation-delay: 2.6s; font-size: 22px; }
 
 @keyframes zzzFloat {
-    0% { transform: translate(0, 5px) scale(0.5); opacity: 0; }
+    0% { transform: translate(0, 10px) scale(0.5); opacity: 0; }
     30% { opacity: 0.7; }
-    100% { transform: translate(12px, -24px) scale(1.1); opacity: 0; }
+    70% { opacity: 0.7; }
+    100% { transform: translate(15px, -30px) scale(1.1); opacity: 0; }
 }
 
 /* Hide inactive face features */
@@ -1880,4 +1886,56 @@ body.theme-warning .led-ring-inner {
     backface-visibility: hidden;
     perspective: 1000px;
 }
+
+/* ==========================================
+   HEATING GRAPH & SLIDER SYSTEM (ADVANCED)
+   ========================================== */
+.temp-graph-container {
+    transition: border-color var(--transition-speed) ease;
+}
+
+#temp-tuner-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.1);
+    outline: none;
+    transition: background 0.3s;
+}
+
+#temp-tuner-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--primary-glow);
+    border: 2.5px solid #ffffff;
+    box-shadow: 0 0 10px rgba(var(--primary-glow-rgb), 0.8);
+    cursor: pointer;
+    transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+#temp-tuner-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.25);
+    box-shadow: 0 0 14px var(--primary-glow);
+}
+
+#temp-tuner-slider::-moz-range-thumb {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--primary-glow);
+    border: 2.5px solid #ffffff;
+    box-shadow: 0 0 10px rgba(var(--primary-glow-rgb), 0.8);
+    cursor: pointer;
+    transition: transform 0.15s ease;
+}
+
+#temp-tuner-slider::-moz-range-thumb:hover {
+    transform: scale(1.25);
+}
+
 
