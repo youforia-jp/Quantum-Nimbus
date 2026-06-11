@@ -1576,16 +1576,24 @@ body.theme-warning .led-ring-inner {
     stop-color: #064e3b;
 }
 
-.nimby-character.toxic .nimby-toxic-steam path {
-    animation: steamRising 2.5s infinite ease-out;
-    stroke-dasharray: 20;
-    stroke-dashoffset: 20;
+.nimby-character.toxic .toxic-cloud {
+    animation: toxicCloudFloat 3s infinite ease-in-out;
+    transform-origin: center;
 }
 
-@keyframes steamRising {
-    0% { stroke-dashoffset: 20; opacity: 0; }
-    25% { opacity: 0.7; }
-    100% { stroke-dashoffset: 0; opacity: 0; }
+.nimby-character.toxic .toxic-cloud.left {
+    animation-delay: 0s;
+}
+
+.nimby-character.toxic .toxic-cloud.right {
+    animation-delay: 1.5s;
+}
+
+@keyframes toxicCloudFloat {
+    0% { transform: translateY(15px) scale(0.6); opacity: 0; }
+    30% { opacity: 0.8; }
+    80% { opacity: 0.8; }
+    100% { transform: translateY(-20px) scale(1.2); opacity: 0; }
 }
 
 .nimby-character.toxic .eye-sleep,
@@ -1964,6 +1972,34 @@ body.theme-warning .led-ring-inner {
 
 #temp-tuner-slider::-moz-range-thumb:hover {
     transform: scale(1.25);
+}
+
+/* Hide puff smoke by default for all states except puffing */
+.nimby-puff-smoke {
+    display: none;
+}
+.nimby-character.puffing .nimby-puff-smoke {
+    display: block;
+}
+
+/* Mascot exhaled puffing smoke */
+.nimby-character.puffing .nimby-smoke-bubble {
+    animation: nimbySmokeFade 1.2s infinite ease-in-out;
+    transform-origin: 100px 90px;
+}
+
+.nimby-character.puffing .nimby-smoke-bubble:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.nimby-character.puffing .nimby-smoke-bubble:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes nimbySmokeFade {
+    0% { transform: scale(0.4); opacity: 0; filter: blur(1px); }
+    40% { opacity: 0.6; }
+    100% { transform: scale(1.5); opacity: 0; filter: blur(4px); }
 }
 
 

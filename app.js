@@ -100,7 +100,7 @@ class SoundSynth {
         
         const gain = this.ctx.createGain();
         gain.gain.setValueAtTime(0, now);
-        gain.gain.linearRampToValueAtTime(0.15, now + 0.15); // fade in
+        gain.gain.linearRampToValueAtTime(0.04, now + 0.15); // fade in
         
         source.connect(filter);
         filter.connect(gain);
@@ -854,8 +854,8 @@ btnTakeSupplement.addEventListener("click", () => {
 function determineMascotState() {
     if (!activeCartridge) return 'sleeping';
     if (!authState) return 'toxic';
-    if (supplementTaken) return 'sunny';
     if (mgConsumed >= mgDailyLimit) return 'angry';
+    if (supplementTaken) return 'sunny';
     return 'happy';
 }
 
@@ -903,6 +903,14 @@ function updateWellnessStats() {
     statPuffsCurr.textContent = mgConsumed.toFixed(1);
     statPuffsLimit.textContent = mgDailyLimit.toFixed(1);
     valToxins.textContent = `${toxinsAvoided.toFixed(1)} mg`;
+    
+    // Sync the developer simulation slider
+    const sliderSimMg = document.getElementById("slider-sim-mg");
+    const valSimMg = document.getElementById("val-sim-mg");
+    if (sliderSimMg && valSimMg) {
+        sliderSimMg.value = mgConsumed;
+        valSimMg.textContent = `${mgConsumed.toFixed(1)} mg`;
+    }
     
     // Sync to weekly history and save to localStorage
     if (puffHistory.length > 0) {
@@ -1332,8 +1340,24 @@ function initLocalStorage() {
     updateCustomProfilesDropdown();
 }
 
+// Helper: Setup Simulation controls
+function setupSimulationListeners() {
+    const sliderSimMg = document.getElementById("slider-sim-mg");
+    const valSimMg = document.getElementById("val-sim-mg");
+    if (sliderSimMg && valSimMg) {
+        sliderSimMg.addEventListener("input", () => {
+            const val = parseFloat(sliderSimMg.value);
+            valSimMg.textContent = `${val.toFixed(1)} mg`;
+            mgConsumed = val;
+            updateWellnessStats();
+            updateNimbyState(determineMascotState());
+        });
+    }
+}
+
 // Kick off initialization
 initLocalStorage();
 setupCustomProfileListeners();
 setupMuteListener();
+setupSimulationListeners();
 renderWeeklyChart();

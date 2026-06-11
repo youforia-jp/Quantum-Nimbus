@@ -263,8 +263,10 @@
 
                                     <!-- Toxic Vapor steam (visible in toxic state) -->
                                     <g class="nimby-toxic-steam">
-                                        <path d="M 60,35 Q 55,20 62,10" stroke="#10b981" stroke-width="2" fill="none" opacity="0.6" stroke-linecap="round" />
-                                        <path d="M 140,35 Q 145,20 138,10" stroke="#10b981" stroke-width="2" fill="none" opacity="0.6" stroke-linecap="round" />
+                                        <!-- Left toxic cloud -->
+                                        <path class="toxic-cloud left" d="M 50,28 a 6,6 0 0,1 8,-5 a 8,8 0 0,1 12,2 a 6,6 0 0,1 4,6 a 4,4 0 0,1 -2,3 Z" fill="#10b981" opacity="0.75" />
+                                        <!-- Right toxic cloud -->
+                                        <path class="toxic-cloud right" d="M 130,28 a 6,6 0 0,1 8,-5 a 8,8 0 0,1 12,2 a 6,6 0 0,1 4,6 a 4,4 0 0,1 -2,3 Z" fill="#10b981" opacity="0.75" />
                                     </g>
 
                                     <!-- Cloud Body -->
@@ -321,6 +323,12 @@
                                         <path class="mouth-toxic" d="M 96,88 Q 100,84 104,88" stroke="#047857" stroke-width="2.2" fill="none" stroke-linecap="round" />
                                         <!-- Puffing blow circle -->
                                         <circle class="mouth-puff" cx="100" cy="86" r="3.5" stroke="#1e293b" stroke-width="2.2" fill="none" />
+                                    </g>
+                                    <!-- Exhaled smoke (visible in puffing state) -->
+                                    <g class="nimby-puff-smoke">
+                                        <circle cx="100" cy="90" r="8" fill="#ffffff" opacity="0" class="nimby-smoke-bubble" />
+                                        <circle cx="109" cy="90" r="5" fill="#ffffff" opacity="0" class="nimby-smoke-bubble" />
+                                        <circle cx="91" cy="90" r="5" fill="#ffffff" opacity="0" class="nimby-smoke-bubble" />
                                     </g>
                                 </svg>
                             </div>
@@ -517,6 +525,13 @@
                             <input type="checkbox" id="chk-allow-unverified">
                             <span class="slider"></span>
                         </label>
+                    </div>
+                    <div class="sim-mg-row" style="display: flex; flex-direction: column; gap: 0.3rem; margin-top: 0.6rem; border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 0.6rem; margin-bottom: 0.4rem;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem;">
+                            <span class="toggle-title" style="font-weight: 600; color: var(--text-secondary);">Simulate mg Today Intake</span>
+                            <span id="val-sim-mg" style="color: var(--accent-color); font-weight: 700;">0.0 mg</span>
+                        </div>
+                        <input type="range" id="slider-sim-mg" min="0" max="25" step="0.1" value="0" style="width: 100%; margin-top: 0.2rem;">
                     </div>
                     <div class="secret-row">
                         <label for="input-secret">Master Signing Secret (Hardware Encrypted)</label>
