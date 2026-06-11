@@ -904,12 +904,12 @@ function updateWellnessStats() {
     statPuffsLimit.textContent = mgDailyLimit.toFixed(1);
     valToxins.textContent = `${toxinsAvoided.toFixed(1)} mg`;
     
-    // Sync the developer simulation slider
-    const sliderSimMg = document.getElementById("slider-sim-mg");
-    const valSimMg = document.getElementById("val-sim-mg");
-    if (sliderSimMg && valSimMg) {
-        sliderSimMg.value = mgConsumed;
-        valSimMg.textContent = `${mgConsumed.toFixed(1)} mg`;
+    // Sync the developer limit adjustment slider
+    const sliderLimitMg = document.getElementById("slider-limit-mg");
+    const valLimitMg = document.getElementById("val-limit-mg");
+    if (sliderLimitMg && valLimitMg) {
+        sliderLimitMg.value = mgDailyLimit;
+        valLimitMg.textContent = `${mgDailyLimit.toFixed(1)} mg`;
     }
     
     // Sync to weekly history and save to localStorage
@@ -1342,13 +1342,13 @@ function initLocalStorage() {
 
 // Helper: Setup Simulation controls
 function setupSimulationListeners() {
-    const sliderSimMg = document.getElementById("slider-sim-mg");
-    const valSimMg = document.getElementById("val-sim-mg");
-    if (sliderSimMg && valSimMg) {
-        sliderSimMg.addEventListener("input", () => {
-            const val = parseFloat(sliderSimMg.value);
-            valSimMg.textContent = `${val.toFixed(1)} mg`;
-            mgConsumed = val;
+    const sliderLimitMg = document.getElementById("slider-limit-mg");
+    const valLimitMg = document.getElementById("val-limit-mg");
+    if (sliderLimitMg && valLimitMg) {
+        sliderLimitMg.addEventListener("input", () => {
+            const val = parseFloat(sliderLimitMg.value);
+            valLimitMg.textContent = `${val.toFixed(1)} mg`;
+            mgDailyLimit = val;
             updateWellnessStats();
             updateNimbyState(determineMascotState());
         });

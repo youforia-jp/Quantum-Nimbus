@@ -1576,20 +1576,20 @@ body.theme-warning .led-ring-inner {
     stop-color: #064e3b;
 }
 
-.nimby-character.toxic .toxic-cloud {
-    animation: toxicCloudFloat 3s infinite ease-in-out;
+.nimby-character.toxic .toxic-skull {
+    animation: toxicSkullFloat 3s infinite ease-in-out;
     transform-origin: center;
 }
 
-.nimby-character.toxic .toxic-cloud.left {
+.nimby-character.toxic .toxic-skull.left {
     animation-delay: 0s;
 }
 
-.nimby-character.toxic .toxic-cloud.right {
+.nimby-character.toxic .toxic-skull.right {
     animation-delay: 1.5s;
 }
 
-@keyframes toxicCloudFloat {
+@keyframes toxicSkullFloat {
     0% { transform: translateY(15px) scale(0.6); opacity: 0; }
     30% { opacity: 0.8; }
     80% { opacity: 0.8; }
