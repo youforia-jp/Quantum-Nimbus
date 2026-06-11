@@ -77,56 +77,56 @@ class SoundSynth {
     }
 
     startCoilHum() {
-        if (this.isMuted || this.activeHumOsc) return;
+        if (this.isMuted) return null;
         this.init();
         const now = this.ctx.currentTime;
         
-        this.activeHumOsc = this.ctx.createOscillator();
-        this.activeHumGain = this.ctx.createGain();
+        const duration = 4.0; // 4 seconds
+        const sampleRate = this.ctx.sampleRate;
+        const bufferSize = sampleRate * duration;
+        const buffer = this.ctx.createBuffer(1, bufferSize, sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+            data[i] = Math.random() * 2 - 1;
+        }
         
-        this.activeHumOsc.type = "triangle";
-        this.activeHumOsc.frequency.setValueAtTime(65.41, now); // C2 hum
+        const source = this.ctx.createBufferSource();
+        source.buffer = buffer;
+        source.loop = true;
         
-        // Slight frequency modulation (vibrato)
-        const lfo = this.ctx.createOscillator();
-        const lfoGain = this.ctx.createGain();
-        lfo.frequency.value = 6.0; 
-        lfoGain.gain.value = 2.0; 
-        lfo.connect(lfoGain);
-        lfoGain.connect(this.activeHumOsc.frequency);
-        lfo.start();
-        this.activeHumLfo = lfo;
+        const filter = this.ctx.createBiquadFilter();
+        filter.type = "lowpass";
+        filter.frequency.setValueAtTime(1500, now);
         
-        this.activeHumGain.gain.setValueAtTime(0, now);
-        this.activeHumGain.gain.linearRampToValueAtTime(0.12, now + 0.15); // fade in
+        const gain = this.ctx.createGain();
+        gain.gain.setValueAtTime(0, now);
+        gain.gain.linearRampToValueAtTime(0.15, now + 0.15); // fade in
         
-        this.activeHumOsc.connect(this.activeHumGain);
-        this.activeHumGain.connect(this.ctx.destination);
+        source.connect(filter);
+        filter.connect(gain);
+        gain.connect(this.ctx.destination);
         
-        this.activeHumOsc.start(now);
+        source.start(now);
+        
+        return { source, gain, filter };
     }
 
-    stopCoilHum() {
-        if (!this.activeHumOsc) return;
+    stopCoilHum(activeSound) {
+        if (!activeSound) return;
+        this.init();
         const now = this.ctx.currentTime;
+        const { source, gain } = activeSound;
         
-        const osc = this.activeHumOsc;
-        const gain = this.activeHumGain;
-        const lfo = this.activeHumLfo;
-        
-        this.activeHumOsc = null;
-        this.activeHumGain = null;
-        this.activeHumLfo = null;
-        
-        gain.gain.setValueAtTime(gain.gain.value, now);
-        gain.gain.linearRampToValueAtTime(0, now + 0.15); // fade out
-        
-        setTimeout(() => {
-            try {
-                osc.stop();
-                lfo.stop();
-            } catch (err) {}
-        }, 200);
+        try {
+            gain.gain.setValueAtTime(gain.gain.value, now);
+            gain.gain.linearRampToValueAtTime(0, now + 0.15); // fade out
+            
+            setTimeout(() => {
+                try {
+                    source.stop();
+                } catch (err) {}
+            }, 200);
+        } catch (err) {}
     }
 
     playWarningAlarm() {
@@ -182,6 +182,7 @@ class SoundSynth {
 
 // Global state variables
 const synth = new SoundSynth();
+let activePuffSound = null;
 
 let isPaired = false;
 let activeCartridge = null;
@@ -193,11 +194,12 @@ let isPuffing = false;
 let authState = false;
 
 // Wellness & NIMBY state variables
-let currentPuffs = 0;
-let dailyPuffLimit = 15;
+let mgConsumed = 0.0;
+let mgDailyLimit = 15.0;
 let toxinsAvoided = 0.0;
 let nimbyState = "sleeping"; // 'sleeping' | 'happy' | 'puffing' | 'angry' | 'toxic' | 'sunny'
 let supplementTaken = false;
+let puffStartTime = 0;
 
 // New simulator enhancement states
 let activeCustomProfile = null;
@@ -681,7 +683,8 @@ function startPuffing() {
     renderTemperatureGraph();
     clearInterval(coolInterval);
     vaporClouds.classList.add("puffing");
-    synth.startCoilHum();
+    activePuffSound = synth.startCoilHum();
+    puffStartTime = Date.now();
     
     oledState.textContent = "HEATING";
     
@@ -700,8 +703,9 @@ function startPuffing() {
         }
         
         // Record point for graph
-        if (liveTempPoints.length < 50) {
-            liveTempPoints.push(currentTemp);
+        liveTempPoints.push(currentTemp);
+        if (liveTempPoints.length > 50) {
+            liveTempPoints.shift();
         }
         renderTemperatureGraph();
         
@@ -724,22 +728,32 @@ function stopPuffing() {
     if (!isPuffing) return;
     
     isPuffing = false;
-    synth.stopCoilHum();
+    synth.stopCoilHum(activePuffSound);
+    activePuffSound = null;
     clearInterval(heatInterval);
     vaporClouds.classList.remove("puffing");
     
-    // Wellness puff record
-    if (currentTemp > 30.0) {
-        currentPuffs++;
-        calculateToxinsAvoided();
+    // Wellness tracking calculation (dynamic mg based on duration)
+    if (currentTemp > 30.0 && puffStartTime > 0) {
+        const durationSec = Math.max(0, (Date.now() - puffStartTime) / 1000);
+        const mgRate = authState ? 1.0 : 0.3;
+        const mgPuffed = mgRate * durationSec;
+        
+        const prevMg = mgConsumed;
+        mgConsumed += mgPuffed;
+        
+        const toxinsRate = authState ? 1.2 : 0.4;
+        toxinsAvoided += toxinsRate * durationSec;
+        
         updateWellnessStats();
         
         // Warn if daily limit crossed
-        if (currentPuffs === dailyPuffLimit) {
+        if (mgConsumed >= mgDailyLimit && prevMg < mgDailyLimit) {
             synth.playWarningAlarm();
             triggerHapticShake();
         }
     }
+    puffStartTime = 0;
     
     if (batteryLevel > 0) {
         oledState.textContent = activeCartridge ? (authState ? "VERIFIED" : "TAMPERED") : "STANDBY";
@@ -758,8 +772,9 @@ function stopPuffing() {
         }
         
         // Record cooling point for graph
-        if (liveTempPoints.length < 50) {
-            liveTempPoints.push(currentTemp);
+        liveTempPoints.push(currentTemp);
+        if (liveTempPoints.length > 50) {
+            liveTempPoints.shift();
         }
         renderTemperatureGraph();
         
@@ -823,8 +838,8 @@ btnTakeSupplement.addEventListener("click", () => {
     supplementBadge.className = "supplement-badge badge-taken";
     
     // Custom daily limit extension
-    dailyPuffLimit = 20;
-    statPuffsLimit.textContent = dailyPuffLimit;
+    mgDailyLimit = 20.0;
+    statPuffsLimit.textContent = mgDailyLimit.toFixed(0);
     
     // Play sweet synth sparkly chime
     synth.playSupplementSpark();
@@ -840,7 +855,7 @@ function determineMascotState() {
     if (!activeCartridge) return 'sleeping';
     if (!authState) return 'toxic';
     if (supplementTaken) return 'sunny';
-    if (currentPuffs >= dailyPuffLimit) return 'angry';
+    if (mgConsumed >= mgDailyLimit) return 'angry';
     return 'happy';
 }
 
@@ -876,30 +891,22 @@ function updateNimbyState(newState) {
     nimbySpeech.textContent = speech;
 }
 
-// Helper: Calculate toxins avoided
+// Helper: Calculate toxins avoided (deprecated in favor of dynamic calculations)
 function calculateToxinsAvoided() {
-    if (!activeCartridge) return;
-    
-    if (authState) {
-        // Authentic cartridges at low optimal temp avoid heavy metals and combustion byproducts
-        toxinsAvoided += 1.2;
-    } else if (chkAllowUnverified.checked) {
-        // Counterfeit cartridge clamped to safe 150C limit blocks some heavy metals compared to standard heating
-        toxinsAvoided += 0.4;
-    }
+    // Left as stub for backward compatibility
 }
 
 // Helper: Update all wellness metrics UI elements
 function updateWellnessStats() {
     if (!statPuffsCurr || !statPuffsLimit || !valToxins) return;
     
-    statPuffsCurr.textContent = currentPuffs;
-    statPuffsLimit.textContent = dailyPuffLimit;
+    statPuffsCurr.textContent = mgConsumed.toFixed(1);
+    statPuffsLimit.textContent = mgDailyLimit.toFixed(1);
     valToxins.textContent = `${toxinsAvoided.toFixed(1)} mg`;
     
     // Sync to weekly history and save to localStorage
     if (puffHistory.length > 0) {
-        puffHistory[puffHistory.length - 1].count = currentPuffs;
+        puffHistory[puffHistory.length - 1].count = mgConsumed;
         localStorage.setItem("nimbus_puff_history", JSON.stringify(puffHistory));
     }
     
@@ -914,15 +921,15 @@ function updateProgressRing() {
     const radius = 34;
     const circumference = 2 * Math.PI * radius; // ~213.6
     
-    const percentage = Math.min(100, (currentPuffs / dailyPuffLimit) * 100);
+    const percentage = Math.min(100, (mgConsumed / mgDailyLimit) * 100);
     const offset = circumference - (percentage / 100) * circumference;
     
     progressRingFill.style.strokeDashoffset = offset;
     
     // Change progress ring color based on warning thresholds
-    if (currentPuffs >= dailyPuffLimit) {
+    if (mgConsumed >= mgDailyLimit) {
         progressRingFill.style.stroke = "#ef4444"; // Danger Red
-    } else if (currentPuffs >= dailyPuffLimit * 0.8) {
+    } else if (mgConsumed >= mgDailyLimit * 0.8) {
         progressRingFill.style.stroke = "#f59e0b"; // Warning Orange
     } else {
         progressRingFill.style.stroke = "var(--primary-glow)"; // Theme Accent color
@@ -975,7 +982,7 @@ function setupMuteListener() {
 function renderWeeklyChart() {
     if (!chartContainer || puffHistory.length === 0) return;
     
-    const maxVal = Math.max(...puffHistory.map(h => h.count), dailyPuffLimit, 10);
+    const maxVal = Math.max(...puffHistory.map(h => h.count), mgDailyLimit, 10);
     const chartWidth = 320;
     const chartHeight = 90;
     const paddingBottom = 16;
@@ -988,10 +995,10 @@ function renderWeeklyChart() {
     let svgContent = `<svg class="weekly-chart-svg" viewBox="0 0 ${chartWidth} ${chartHeight}">`;
     
     // Draw daily limit dashed line
-    const limitY = chartHeight - paddingBottom - ((dailyPuffLimit / maxVal) * drawHeight);
+    const limitY = chartHeight - paddingBottom - ((mgDailyLimit / maxVal) * drawHeight);
     svgContent += `
         <line class="chart-limit-line" x1="10" y1="${limitY}" x2="${chartWidth - 10}" y2="${limitY}" />
-        <text class="chart-limit-text" x="${chartWidth - 55}" y="${limitY - 4}">LIMIT (${dailyPuffLimit})</text>
+        <text class="chart-limit-text" x="${chartWidth - 65}" y="${limitY - 4}">LIMIT (${mgDailyLimit.toFixed(1)} mg)</text>
     `;
     
     // Draw weekly bars
@@ -1001,8 +1008,8 @@ function renderWeeklyChart() {
         const y = chartHeight - paddingBottom - barHeight;
         
         const isToday = idx === puffHistory.length - 1;
-        const isOverLimit = dayData.count >= dailyPuffLimit;
-        const isNearLimit = dayData.count >= dailyPuffLimit * 0.8 && dayData.count < dailyPuffLimit;
+        const isOverLimit = dayData.count >= mgDailyLimit;
+        const isNearLimit = dayData.count >= mgDailyLimit * 0.8 && dayData.count < mgDailyLimit;
         
         let barClass = "chart-bar";
         if (isOverLimit) barClass += " over-limit";
@@ -1011,7 +1018,7 @@ function renderWeeklyChart() {
         svgContent += `
             <g class="chart-bar-group">
                 <!-- Hover value label -->
-                <text class="chart-value-text" x="${x + barWidth / 2}" y="${y - 4}">${dayData.count} puff${dayData.count !== 1 ? 's' : ''}</text>
+                <text class="chart-value-text" x="${x + barWidth / 2}" y="${y - 4}">${dayData.count.toFixed(1)} mg</text>
                 <!-- Bar rectangle -->
                 <rect class="${barClass}" x="${x}" y="${y}" width="${barWidth}" height="${barHeight || 1}" />
                 <!-- Weekday label -->
@@ -1085,7 +1092,7 @@ function renderTemperatureGraph() {
     
     // Draw preview curve
     if (graphPreviewCurve) {
-        const previewPath = `M 0 100 C 40 100, 50 ${targetY}, 70 ${targetY} L 210 ${targetY} C 230 ${targetY}, 250 100, 300 100`;
+        const previewPath = `M 0 100 C 15 100, 30 ${targetY}, 48 ${targetY} L 210 ${targetY} C 240 ${targetY}, 270 100, 300 100`;
         graphPreviewCurve.setAttribute("d", previewPath);
     }
     
@@ -1094,12 +1101,26 @@ function renderTemperatureGraph() {
         if (liveTempPoints.length === 0) {
             graphLiveCurve.setAttribute("d", "");
         } else {
-            let pathStr = `M 0 100`;
-            liveTempPoints.forEach((tempPoint, idx) => {
-                const x = idx * 6;
-                const y = tempToY(tempPoint);
-                pathStr += ` L ${x} ${y}`;
-            });
+            let pathStr = `M 0 ${tempToY(liveTempPoints[0]).toFixed(1)}`;
+            for (let i = 1; i < liveTempPoints.length; i++) {
+                const x = i * 6;
+                const y = tempToY(liveTempPoints[i]);
+                const prevX = (i - 1) * 6;
+                const prevY = tempToY(liveTempPoints[i - 1]);
+                const xc = (prevX + x) / 2;
+                const yc = (prevY + y) / 2;
+                if (i === 1) {
+                    pathStr += ` L ${xc.toFixed(1)} ${yc.toFixed(1)}`;
+                } else {
+                    pathStr += ` Q ${prevX.toFixed(1)} ${prevY.toFixed(1)}, ${xc.toFixed(1)} ${yc.toFixed(1)}`;
+                }
+            }
+            if (liveTempPoints.length > 1) {
+                const lastIdx = liveTempPoints.length - 1;
+                const lastX = lastIdx * 6;
+                const lastY = tempToY(liveTempPoints[lastIdx]);
+                pathStr += ` L ${lastX.toFixed(1)} ${lastY.toFixed(1)}`;
+            }
             graphLiveCurve.setAttribute("d", pathStr);
         }
     }
@@ -1276,9 +1297,9 @@ function initLocalStorage() {
             
             let count = 0;
             if (i > 0) {
-                // Seed some realistic data
-                const seeds = [11, 14, 8, 15, 12, 10];
-                count = seeds[6 - i] || Math.floor(Math.random() * 8) + 6;
+                // Seed some realistic data (now in mg)
+                const seeds = [7.5, 9.2, 5.0, 11.4, 8.0, 10.5];
+                count = seeds[6 - i] || parseFloat((Math.random() * 5 + 5).toFixed(1));
             }
             newHistory.push({ day: dayName, count });
         }
@@ -1296,7 +1317,7 @@ function initLocalStorage() {
     }
     
     // Set current puffs count to match today's history entry
-    currentPuffs = puffHistory[puffHistory.length - 1].count;
+    mgConsumed = puffHistory[puffHistory.length - 1].count;
     
     // 2. Load custom profiles
     const savedProfiles = localStorage.getItem("nimbus_custom_profiles");

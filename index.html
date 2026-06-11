@@ -338,11 +338,11 @@
                                         <circle id="progress-ring-fill" class="progress-ring__circle" stroke="var(--primary-glow)" stroke-width="6" fill="transparent" r="34" cx="40" cy="40"/>
                                     </svg>
                                     <div class="progress-text">
-                                        <span id="stat-puffs-curr">0</span>
+                                        <span id="stat-puffs-curr">0.0</span>
                                         <span class="divider">/</span>
-                                        <span id="stat-puffs-limit">15</span>
+                                        <span id="stat-puffs-limit">15.0</span>
                                     </div>
-                                    <span class="circle-label">Today's Puffs</span>
+                                    <span class="circle-label">mg Today</span>
                                 </div>
                                 <!-- Toxins Avoided Card -->
                                 <div class="stat-toxins-box">
@@ -367,7 +367,7 @@
                                 <span class="card-label">NIMBUS ELEVATE DAILY</span>
                                 <span id="supplement-badge" class="supplement-badge badge-pending">PENDING INTAKE</span>
                             </div>
-                            <p class="supplement-desc">Log your morning nootropic to clear mental brain fog and increase your safety puff threshold.</p>
+                            <p class="supplement-desc">Log your morning nootropic to clear mental brain fog and increase your safety milligram threshold.</p>
                             <button id="btn-take-supplement" class="btn-supplement">Log Supplement Intake</button>
                         </div>
                     </div>
@@ -420,11 +420,12 @@
             <div class="device-chassis">
                 <!-- Outer Tube and Cartridge Area -->
                 <div class="cartridge-assembly">
-                    <div class="mouthpiece-tip"></div>
+                    <div class="mouthpiece-tip">
+                        <div id="vapor-clouds" class="vapor-clouds-smoke"></div>
+                    </div>
                     <div class="cartridge-chamber">
                         <div class="chamber-glass">
                             <div id="liquid-vapor" class="liquid-fluid"></div>
-                            <div id="vapor-clouds" class="vapor-clouds-smoke"></div>
                         </div>
                         <div class="cartridge-connector">
                             <div class="thread-510"></div>

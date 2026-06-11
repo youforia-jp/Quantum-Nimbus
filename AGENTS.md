@@ -136,6 +136,7 @@ This protocol establishes strict rules for AI-human pair programming to ensure t
     * Use analogies that relate to physical systems, data flow, and hardware limitations to ensure deep architectural understanding.
 *   **The Systems Quiz:** The agent **MUST** present exactly **one** challenging system or logic question based on the existing code (firmware or Python simulator).
 *   **Execution Lock:** The agent is blocked from writing any code, modifying files, or creating implementation task lists until the user answers the quiz.
+*   **Grading Requirement:** The agent MUST review and "grade" the user's response in the very next prompt they send, providing structured feedback on correctness and architectural reasoning before proceeding.
 
 ### B. Embedded Systems Architecture Constraints
 *   **Zero-Allocation Rule:** All C++ firmware additions must avoid dynamic memory operations (like `new`, `malloc`, or Arduino `String` manipulation).
