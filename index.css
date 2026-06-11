@@ -960,6 +960,14 @@ body.theme-warning .led-ring-inner {
     100% { border-color: #7f1d1d; box-shadow: 0 0 30px #ef4444, inset 0 0 10px #ef4444; }
 }
 
+/* Green toxic skull vapor clouds for counterfeit cartridge warning state */
+body.theme-warning .vapor-clouds-smoke {
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='%2310b981'><path d='M 50,15 C 30,15 20,30 20,45 C 20,53 25,60 30,65 L 35,85 C 35,90 40,92 50,92 C 60,92 65,90 65,85 L 70,65 C 75,60 80,53 80,45 C 80,30 70,15 50,15 Z M 38,40 A 6,6 0 1,1 50,40 A 6,6 0 1,1 38,40 M 56,40 A 6,6 0 1,1 68,40 A 6,6 0 1,1 56,40 M 50,55 L 45,65 H 55 Z'/></svg>") no-repeat center;
+    background-size: contain;
+    border-radius: 0;
+    filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.6));
+}
+
 /* Manual Take Puff button */
 .puff-button-container {
     width: 100%;

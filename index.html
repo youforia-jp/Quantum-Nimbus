@@ -359,6 +359,15 @@
                                     <p class="toxins-desc">Estimated heavy metals and combustion toxic degradation avoided by security clamping.</p>
                                 </div>
                             </div>
+                            
+                            <!-- Custom Daily Limit Slider -->
+                            <div class="wellness-limit-control" style="display: flex; flex-direction: column; gap: 0.35rem; margin-top: 0.9rem; border-top: 1px solid rgba(255, 255, 255, 0.06); padding-top: 0.8rem;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.72rem;">
+                                    <span class="limit-slider-label" style="font-weight: 600; color: var(--text-secondary); letter-spacing: 0.5px; text-transform: uppercase; font-size: 0.6rem;">Adjust Daily mg Limit</span>
+                                    <span id="val-wellness-limit-mg" style="color: var(--accent-color); font-weight: 700; font-family: 'Outfit', sans-serif;">15.0 mg</span>
+                                </div>
+                                <input type="range" id="slider-wellness-limit-mg" min="5" max="50" step="1.0" value="15" style="width: 100%; margin-top: 0.2rem;">
+                            </div>
                         </div>
 
                         <!-- Weekly Puff History Card -->
@@ -525,13 +534,6 @@
                             <input type="checkbox" id="chk-allow-unverified">
                             <span class="slider"></span>
                         </label>
-                    </div>
-                    <div class="sim-mg-row" style="display: flex; flex-direction: column; gap: 0.3rem; margin-top: 0.6rem; border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 0.6rem; margin-bottom: 0.4rem;">
-                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem;">
-                            <span class="toggle-title" style="font-weight: 600; color: var(--text-secondary);">Adjust Daily mg Limit</span>
-                            <span id="val-limit-mg" style="color: var(--accent-color); font-weight: 700;">15.0 mg</span>
-                        </div>
-                        <input type="range" id="slider-limit-mg" min="5" max="50" step="1.0" value="15" style="width: 100%; margin-top: 0.2rem;">
                     </div>
                     <div class="secret-row">
                         <label for="input-secret">Master Signing Secret (Hardware Encrypted)</label>

@@ -904,9 +904,9 @@ function updateWellnessStats() {
     statPuffsLimit.textContent = mgDailyLimit.toFixed(1);
     valToxins.textContent = `${toxinsAvoided.toFixed(1)} mg`;
     
-    // Sync the developer limit adjustment slider
-    const sliderLimitMg = document.getElementById("slider-limit-mg");
-    const valLimitMg = document.getElementById("val-limit-mg");
+    // Sync the Wellness tab limit adjustment slider
+    const sliderLimitMg = document.getElementById("slider-wellness-limit-mg");
+    const valLimitMg = document.getElementById("val-wellness-limit-mg");
     if (sliderLimitMg && valLimitMg) {
         sliderLimitMg.value = mgDailyLimit;
         valLimitMg.textContent = `${mgDailyLimit.toFixed(1)} mg`;
@@ -1341,9 +1341,9 @@ function initLocalStorage() {
 }
 
 // Helper: Setup Simulation controls
-function setupSimulationListeners() {
-    const sliderLimitMg = document.getElementById("slider-limit-mg");
-    const valLimitMg = document.getElementById("val-limit-mg");
+function setupWellnessLimitListener() {
+    const sliderLimitMg = document.getElementById("slider-wellness-limit-mg");
+    const valLimitMg = document.getElementById("val-wellness-limit-mg");
     if (sliderLimitMg && valLimitMg) {
         sliderLimitMg.addEventListener("input", () => {
             const val = parseFloat(sliderLimitMg.value);
@@ -1359,5 +1359,5 @@ function setupSimulationListeners() {
 initLocalStorage();
 setupCustomProfileListeners();
 setupMuteListener();
-setupSimulationListeners();
+setupWellnessLimitListener();
 renderWeeklyChart();
