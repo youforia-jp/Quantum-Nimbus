@@ -474,7 +474,7 @@ async function processCartridgeConnection(cartData) {
         // Disconnected
         authState = false;
         document.body.classList.add("theme-disconnected");
-        btnPuff.disabled = true;
+        btnPuff.setAttribute('disabled', 'true');
         oledState.textContent = "STANDBY";
         oledTarget.textContent = "--";
         oledIndicatorNfc.textContent = "NFC Ready";
@@ -573,7 +573,7 @@ function calculateTemperatures() {
             valTargetTemp.textContent = "LOCKED";
             valSafeMax.textContent = "LOCKED";
             oledTarget.textContent = "LOCK";
-            btnPuff.disabled = true;
+            btnPuff.setAttribute('disabled', 'true');
             return;
         } else {
             // Allowed but heavily capped
@@ -596,7 +596,7 @@ function calculateTemperatures() {
         targetTemp = maxSafety;
     }
     
-    btnPuff.disabled = false;
+    btnPuff.removeAttribute('disabled');
     valBaseTemp.textContent = `${baseTemp.toFixed(1)}°C`;
     valTargetTemp.textContent = `${targetTemp.toFixed(1)}°C`;
     valSafeMax.textContent = `${maxSafety.toFixed(1)}°C`;
@@ -676,7 +676,7 @@ function updateInterface() {
 // ==========================================
 
 function startPuffing() {
-    if (isPuffing || btnPuff.disabled) return;
+    if (isPuffing || btnPuff.hasAttribute('disabled')) return;
     
     isPuffing = true;
     liveTempPoints = [currentTemp];
@@ -719,7 +719,7 @@ function startPuffing() {
         if (batteryLevel <= 0) {
             stopPuffing();
             oledState.textContent = "BAT DEP";
-            btnPuff.disabled = true;
+            btnPuff.setAttribute('disabled', 'true');
         }
     }, 100);
 }

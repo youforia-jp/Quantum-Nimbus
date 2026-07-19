@@ -70,20 +70,38 @@
 </head>
 <body class="bg-nimbusBlack text-slate-300 font-sans antialiased selection:bg-electricBlue selection:text-white">
 
-    <!-- Navbar -->
+        <!-- Navbar -->
     <nav class="fixed w-full z-50 bg-nimbusDark/90 backdrop-blur-md border-b border-nimbusBorder">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
                 <div class="flex-shrink-0 flex items-center gap-3">
-                    <span class="text-electricBlue text-2xl">☁</span>
-                    <span class="font-heading font-bold text-xl text-white tracking-wide">QUANTUM<span class="text-electricBlue">NIMBUS</span> TECH</span>
+                    <a href="index.html" class="flex items-center gap-3">
+                        <span class="text-electricBlue text-2xl">☁</span>
+                        <span class="font-heading font-bold text-xl text-white tracking-wide">QUANTUM<span class="text-electricBlue">NIMBUS</span> TECH</span>
+                    </a>
                 </div>
+                <!-- Desktop Menu -->
                 <div class="hidden md:flex space-x-8 text-sm font-semibold tracking-wider text-slate-400">
                     <a href="index.html#technology" class="hover:text-electricBlue transition-colors">ARCHITECTURE</a>
                     <a href="safety.html" class="hover:text-crimsonRed transition-colors">SAFETY DATA</a>
                     <a href="simulator.html" class="hover:text-electricBlue transition-colors">SIMULATOR</a>
                     <a href="contact.html" class="hover:text-white transition-colors">CONTACT US</a>
                 </div>
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-slate-300 hover:text-white focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu Panel -->
+        <div id="mobile-menu" class="md:hidden hidden bg-nimbusDark border-t border-nimbusBorder">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 flex flex-col">
+                <a href="index.html#technology" class="block px-3 py-2 text-base font-medium text-slate-400 hover:text-electricBlue hover:bg-slate-800 rounded-md">ARCHITECTURE</a>
+                <a href="safety.html" class="block px-3 py-2 text-base font-medium text-slate-400 hover:text-crimsonRed hover:bg-slate-800 rounded-md">SAFETY DATA</a>
+                <a href="simulator.html" class="block px-3 py-2 text-base font-medium text-slate-400 hover:text-electricBlue hover:bg-slate-800 rounded-md">SIMULATOR</a>
+                <a href="contact.html" class="block px-3 py-2 text-base font-medium text-slate-400 hover:text-white hover:bg-slate-800 rounded-md">CONTACT US</a>
             </div>
         </div>
     </nav>
@@ -96,8 +114,30 @@
                 <p class="text-slate-400 text-lg">Scientific and legal data underscoring the critical necessity of hardware provenance and thermal governance.</p>
             </div>
 
+            <!-- New Section: The Financial and Illicit Market Threat -->
+            <div class="mb-12 bg-nimbusDark p-8 rounded-xl border border-nimbusBorder shadow-lg">
+                <h3 class="font-heading font-bold text-2xl text-white mb-4">The Financial and Illicit Market Threat</h3>
+                <p class="text-slate-400 mb-6 leading-relaxed">
+                    The global vaporization landscape is experiencing a structural divergence characterized by a contracting legal market and the exponential growth of unauthorized distribution networks. According to recent federal and industry audits, the illicit market has achieved unprecedented scale.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                    <div class="p-4 bg-slate-900 rounded-lg border border-slate-700">
+                        <div class="text-3xl font-bold text-crimsonRed mb-2">$9.0 Billion</div>
+                        <div class="text-xs font-semibold text-slate-400 uppercase tracking-widest">U.S. Illicit Vape Market</div>
+                    </div>
+                    <div class="p-4 bg-slate-900 rounded-lg border border-slate-700">
+                        <div class="text-3xl font-bold text-crimsonRed mb-2">86.3%</div>
+                        <div class="text-xs font-semibold text-slate-400 uppercase tracking-widest">Retail Sales Market Share</div>
+                    </div>
+                    <div class="p-4 bg-slate-900 rounded-lg border border-slate-700">
+                        <div class="text-3xl font-bold text-crimsonRed mb-2">1,500%</div>
+                        <div class="text-xs font-semibold text-slate-400 uppercase tracking-widest">Increase in Unique Illegal Products (Since 2020)</div>
+                    </div>
+                </div>
+            </div>
+
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                <!-- Data Table -->
+                <!-- Data Table: Heavy Metals -->
                 <div class="bg-nimbusDark rounded-xl border border-nimbusBorder overflow-hidden">
                     <div class="bg-slate-900/50 px-6 py-4 border-b border-nimbusBorder">
                         <h3 class="font-heading font-bold text-white">Analyte Leaching: Regulated vs. Unregulated Hardware</h3>
@@ -108,28 +148,34 @@
                                 <tr>
                                     <th class="px-6 py-4">Heavy Metal</th>
                                     <th class="px-6 py-4">Safe Threshold</th>
-                                    <th class="px-6 py-4">Clone Concentration</th>
-                                    <th class="px-6 py-4 text-crimsonRed">Variance</th>
+                                    <th class="px-6 py-4">Clone Peak Concentration</th>
+                                    <th class="px-6 py-4 text-crimsonRed">Health Impact Metric</th>
                                 </tr>
                             </thead>
                             <tbody class="text-slate-300">
                                 <tr class="hover:bg-slate-800/50 transition-colors">
                                     <td class="px-6 py-4 font-semibold text-white">Lead (Pb)</td>
-                                    <td class="px-6 py-4">0.5 ppm</td>
-                                    <td class="px-6 py-4">50.0 ppm</td>
-                                    <td class="px-6 py-4 text-crimsonRed font-bold">100x Increase</td>
+                                    <td class="px-6 py-4">0.5 µg/g</td>
+                                    <td class="px-6 py-4">50.0 µg/g</td>
+                                    <td class="px-6 py-4 text-crimsonRed font-bold">100-Fold Increase</td>
                                 </tr>
                                 <tr class="hover:bg-slate-800/50 transition-colors">
                                     <td class="px-6 py-4 font-semibold text-white">Nickel (Ni)</td>
-                                    <td class="px-6 py-4">0.2 ppm</td>
-                                    <td class="px-6 py-4">270.8 ppm</td>
-                                    <td class="px-6 py-4 text-crimsonRed font-bold">1,354x Increase</td>
+                                    <td class="px-6 py-4">0.5 µg/g</td>
+                                    <td class="px-6 py-4">677.0 µg/g</td>
+                                    <td class="px-6 py-4 text-crimsonRed font-bold">1,354-Fold Increase</td>
+                                </tr>
+                                <tr class="hover:bg-slate-800/50 transition-colors">
+                                    <td class="px-6 py-4 font-semibold text-white">Zinc (Zn)</td>
+                                    <td class="px-6 py-4">454 µg/g</td>
+                                    <td class="px-6 py-4">1000 mg/kg</td>
+                                    <td class="px-6 py-4 text-crimsonRed font-bold">Rapid Alloy Degradation</td>
                                 </tr>
                                 <tr class="hover:bg-slate-800/50 transition-colors border-b-0">
                                     <td class="px-6 py-4 font-semibold text-white">Copper (Cu)</td>
-                                    <td class="px-6 py-4">3.0 ppm</td>
-                                    <td class="px-6 py-4">483.0 ppm</td>
-                                    <td class="px-6 py-4 text-crimsonRed font-bold">161x Increase</td>
+                                    <td class="px-6 py-4">3.0 µg/g</td>
+                                    <td class="px-6 py-4">485.0 µg/g</td>
+                                    <td class="px-6 py-4 text-crimsonRed font-bold">Systemic Inflammation</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -139,41 +185,43 @@
                     </div>
                 </div>
 
-                <!-- Timelines -->
+                <!-- Timelines & Liabilities -->
                 <div class="space-y-8">
-                    <!-- Authentic Timeline -->
-                    <div class="bg-nimbusDark p-6 rounded-xl border border-nimbusBorder">
-                        <h3 class="font-heading font-bold text-white mb-4">Authentic Hardware Timeline</h3>
+                    <!-- VOC Yield Timeline -->
+                    <div class="bg-nimbusDark p-6 rounded-xl border border-nimbusBorder relative overflow-hidden">
+                        <h3 class="font-heading font-bold text-white mb-4">Thermodynamic Degradation & VOC Yields</h3>
                         <div class="relative pl-6 border-l-2 border-slate-700 space-y-6">
                             <div class="relative">
                                 <div class="absolute -left-[1.8rem] w-4 h-4 rounded-full bg-electricBlue"></div>
-                                <span class="text-electricBlue font-bold text-sm block mb-1">180°C</span>
-                                <p class="text-sm text-slate-400">Safe, regulated vaporization threshold.</p>
+                                <span class="text-electricBlue font-bold text-sm block mb-1">150°C - 180°C</span>
+                                <p class="text-sm text-slate-400"><strong>Restricted Safety Clamp & Balanced Vaporization:</strong> Preserves flavor, minimizes toxic yields. Nimbus IQ hardware dynamically locks at this threshold to protect physiological safety.</p>
                             </div>
-                            <div class="relative">
-                                <div class="absolute -left-[1.8rem] w-4 h-4 rounded-full bg-blue-500/50"></div>
-                                <span class="text-blue-400 font-bold text-sm block mb-1">Temperature Locked</span>
-                                <p class="text-sm text-slate-400">Nimbus IQ actively clamps thermal output, ensuring extreme film boiling never occurs.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Counterfeit Timeline -->
-                    <div class="bg-nimbusDark p-6 rounded-xl border border-red-900/30 relative overflow-hidden">
-                        <div class="absolute top-0 right-0 px-3 py-1 bg-red-900/50 text-crimsonRed text-xs font-bold rounded-bl-lg">COUNTERFEIT</div>
-                        <h3 class="font-heading font-bold text-white mb-4">Unregulated Hardware Timeline</h3>
-                        <div class="relative pl-6 border-l-2 border-slate-700 space-y-6">
                             <div class="relative">
                                 <div class="absolute -left-[1.8rem] w-4 h-4 rounded-full bg-orange-500"></div>
                                 <span class="text-orange-500 font-bold text-sm block mb-1">218°C - 256°C</span>
-                                <p class="text-sm text-slate-400">Carrier pyrolysis initiates; respiratory irritants generated.</p>
+                                <p class="text-sm text-slate-400"><strong>Uncontrolled Combustive Phase:</strong> Carrier pyrolysis initiates. Synthesis of naphthalene and tar; benzene concentrations increase significantly.</p>
                             </div>
                             <div class="relative">
                                 <div class="absolute -left-[1.8rem] w-4 h-4 rounded-full bg-crimsonRed animate-pulse"></div>
                                 <span class="text-crimsonRed font-bold text-sm block mb-1">322°C+</span>
-                                <p class="text-sm text-slate-400">Extreme film boiling. Benzene synthesis peaks in uncalibrated clone hardware.</p>
+                                <p class="text-sm text-slate-400"><strong>Extreme Thermal Runaway (Dry Puffing):</strong> Localized dry wicks trigger thermal spikes. Formaldehyde generation spikes to 4400 µg/15 puffs. Benzene yields reach 5200 µg/m3.</p>
                             </div>
                         </div>
+                    </div>
+
+                    <!-- Civil & Criminal Liabilities -->
+                    <div class="bg-gradient-to-br from-nimbusDark to-slate-900 p-6 rounded-xl border border-slate-700">
+                        <h3 class="font-heading font-bold text-white mb-2 flex items-center gap-2">
+                            <span class="text-crimsonRed">⚖️</span> State AG Enforcement & Legal Liability
+                        </h3>
+                        <p class="text-sm text-slate-400 mb-4 leading-relaxed">
+                            Failure to secure hardware provenance carries immense systemic risk. Recent landmark cases underscore the catastrophic scale of corporate exposure:
+                        </p>
+                        <ul class="text-sm text-slate-300 space-y-3 list-disc list-inside">
+                            <li><strong>$1.0+ Billion Multistate Settlements:</strong> Resolved massive investigations into deceptive trade practices and child-targeted marketing.</li>
+                            <li><strong>RICO Actions & Logistics Enforcement:</strong> $133 Million recovered from major logistics carriers (UPS, FedEx) for trafficking illegal, untaxed products.</li>
+                            <li><strong>Payment Network Revocation:</strong> Retailers processing unauthorized vapor devices face immediate termination of card-processing services and mid-six-figure financial penalties.</li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -181,5 +229,15 @@
     </section>
 
     
+
+    <script>
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        if (btn && menu) {
+            btn.addEventListener('click', () => {
+                menu.classList.toggle('hidden');
+            });
+        }
+    </script>
 </body>
 </html>

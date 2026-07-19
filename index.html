@@ -70,20 +70,38 @@
 </head>
 <body class="bg-nimbusBlack text-slate-300 font-sans antialiased selection:bg-electricBlue selection:text-white">
 
-    <!-- Navbar -->
+        <!-- Navbar -->
     <nav class="fixed w-full z-50 bg-nimbusDark/90 backdrop-blur-md border-b border-nimbusBorder">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
                 <div class="flex-shrink-0 flex items-center gap-3">
-                    <span class="text-electricBlue text-2xl">☁</span>
-                    <span class="font-heading font-bold text-xl text-white tracking-wide">QUANTUM<span class="text-electricBlue">NIMBUS</span> TECH</span>
+                    <a href="index.html" class="flex items-center gap-3">
+                        <span class="text-electricBlue text-2xl">☁</span>
+                        <span class="font-heading font-bold text-xl text-white tracking-wide">QUANTUM<span class="text-electricBlue">NIMBUS</span> TECH</span>
+                    </a>
                 </div>
+                <!-- Desktop Menu -->
                 <div class="hidden md:flex space-x-8 text-sm font-semibold tracking-wider text-slate-400">
                     <a href="index.html#technology" class="hover:text-electricBlue transition-colors">ARCHITECTURE</a>
                     <a href="safety.html" class="hover:text-crimsonRed transition-colors">SAFETY DATA</a>
                     <a href="simulator.html" class="hover:text-electricBlue transition-colors">SIMULATOR</a>
                     <a href="contact.html" class="hover:text-white transition-colors">CONTACT US</a>
                 </div>
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-slate-300 hover:text-white focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu Panel -->
+        <div id="mobile-menu" class="md:hidden hidden bg-nimbusDark border-t border-nimbusBorder">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 flex flex-col">
+                <a href="index.html#technology" class="block px-3 py-2 text-base font-medium text-slate-400 hover:text-electricBlue hover:bg-slate-800 rounded-md">ARCHITECTURE</a>
+                <a href="safety.html" class="block px-3 py-2 text-base font-medium text-slate-400 hover:text-crimsonRed hover:bg-slate-800 rounded-md">SAFETY DATA</a>
+                <a href="simulator.html" class="block px-3 py-2 text-base font-medium text-slate-400 hover:text-electricBlue hover:bg-slate-800 rounded-md">SIMULATOR</a>
+                <a href="contact.html" class="block px-3 py-2 text-base font-medium text-slate-400 hover:text-white hover:bg-slate-800 rounded-md">CONTACT US</a>
             </div>
         </div>
     </nav>
@@ -202,5 +220,15 @@
         });
     </script>
 
+
+    <script>
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        if (btn && menu) {
+            btn.addEventListener('click', () => {
+                menu.classList.toggle('hidden');
+            });
+        }
+    </script>
 </body>
 </html>

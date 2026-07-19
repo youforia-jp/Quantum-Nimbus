@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Use — Quantum Nimbus</title>
+    <meta name="description" content="Step-by-step guide to using the Quantum Nimbus interactive hardware simulator — from pairing to live telemetry.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+</head>
+<body class="theme-disconnected">
+    <div class="background-radial-glow"></div>
+
+    <header class="main-header">
+        <div class="logo">
+            <a href="index.html" style="display:flex;align-items:center;gap:0.8rem;text-decoration:none;color:inherit;">
+                <span class="nimbus-symbol">☁</span>
+                <h1>Quantum <span class="accent-text">Nimbus</span></h1>
+            </a>
+        </div>
+        <nav class="header-nav">
+            <a href="index.html" class="nav-link">Simulator</a>
+            <a href="about.html" class="nav-link">About</a>
+            <a href="how-to-use.html" class="nav-link active-page">How to Use</a>
+        </nav>
+        <div class="badge-container">
+            <span class="header-badge env-badge">DEMO STAGE</span>
+            <span class="header-badge api-badge">WebBLE API v3</span>
+        </div>
+    </header>
+
+    <main class="page-content">
+        <span class="page-eyebrow">Quick-Start Guide</span>
+        <h2 class="page-title">Using the <span class="accent-text">Simulator</span></h2>
+
+        <!-- Overview card -->
+        <div class="page-card" style="margin-bottom:2.5rem;">
+            <p style="font-size:0.95rem;line-height:1.75;color:var(--text-secondary);">
+                The Quantum Nimbus simulator is a fully interactive, browser-based demo of the hardware ecosystem —
+                no physical device required. It reproduces the real BLE pairing flow, NFC cartridge authentication,
+                live temperature telemetry, and wellness analytics exactly as they would appear on the production app.
+                Follow the steps below to explore every feature.
+            </p>
+        </div>
+
+        <!-- Step 1 -->
+        <div class="step-card">
+            <span class="step-number">01</span>
+            <div class="step-body">
+                <h3>Connect via WebBLE (or skip to simulation)</h3>
+                <p>
+                    Click <strong>Scan for Nimbus Device</strong> on the phone mockup. If you have a physical Nimbus
+                    prototype nearby, your browser will surface it via the Web Bluetooth API — select it and pair.
+                    Otherwise, skip directly to Step 2; the simulator panel handles everything offline.
+                </p>
+            </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step-card">
+            <span class="step-number">02</span>
+            <div class="step-body">
+                <h3>Insert a simulated cartridge</h3>
+                <p>
+                    In the <strong>Simulator Controls</strong> panel on the right, click any cartridge button —
+                    <code>🌌 Astro (D9 THC)</code>, <code>🪵 Frontier (Rosin)</code>, <code>☁️ NIMBY (CBD)</code>,
+                    or <code>⚠️ Counterfeit</code>. The entire UI — background theme, LED ring color, mascot state,
+                    and OLED readout — will update instantly to reflect that cartridge's authentication status.
+                </p>
+            </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step-card">
+            <span class="step-number">03</span>
+            <div class="step-body">
+                <h3>Explore the Control tab — temperature &amp; vaporization profiles</h3>
+                <p>
+                    Inside the phone app, the <strong>Control</strong> tab shows the authenticated cartridge info,
+                    three factory presets (Flavor Focus / Balanced / Max Cloud), and a live SVG temperature curve.
+                    Toggle <strong>Advanced Temperature Control</strong> to unlock the fine-tuning slider and watch
+                    the graph re-render in real time. Save custom profiles with the <code>+ Create New</code> button.
+                </p>
+            </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="step-card">
+            <span class="step-number">04</span>
+            <div class="step-body">
+                <h3>Hold to puff &amp; watch live telemetry</h3>
+                <p>
+                    Press and hold the <strong>PRESS &amp; HOLD TO PUFF</strong> button on the device mockup.
+                    The OLED temperature climbs to the target, vapor particles animate from the mouthpiece,
+                    and the wellness counter increments your milligram intake. Release early to simulate a
+                    partial draw — the heater ramps back down accordingly.
+                </p>
+            </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="step-card">
+            <span class="step-number">05</span>
+            <div class="step-body">
+                <h3>Check the Wellness tab — NIMBY companion &amp; daily limits</h3>
+                <p>
+                    Switch to the <strong>Wellness</strong> tab to see the animated NIMBY mascot react to your
+                    session state (sleeping → happy → angry storm when over limit). The circular progress ring
+                    tracks mg consumed today. Adjust your daily limit with the slider, or log a supplement intake
+                    to raise your threshold and shift NIMBY into sunny mode.
+                </p>
+            </div>
+        </div>
+
+        <!-- Step 6 -->
+        <div class="step-card">
+            <span class="step-number">06</span>
+            <div class="step-body">
+                <h3>Test counterfeit detection &amp; security override</h3>
+                <p>
+                    Insert the <code>⚠️ Counterfeit</code> cartridge. A warning modal fires, NIMBY goes toxic,
+                    and the heater is clamped to <strong>150°C</strong> max. In the Developer Options section,
+                    toggle <strong>Allow Unverified Cartridges</strong> or paste a custom NFC JSON payload into
+                    the scan field to test your own HMAC-SHA256 signature against the master signing secret.
+                </p>
+            </div>
+        </div>
+
+        <!-- Step 7 -->
+        <div class="step-card">
+            <span class="step-number">07</span>
+            <div class="step-body">
+                <h3>Reset &amp; repeat</h3>
+                <p>
+                    Hit <strong>🔄 Reset Demo / Wellness Data</strong> at the bottom of the Simulator Controls
+                    panel to wipe the session — daily puff count, history chart, and supplement state all clear.
+                    Great for running a fresh demo for a recruiter or investor without reloading the tab.
+                </p>
+            </div>
+        </div>
+
+        <!-- Nav back -->
+        <div style="text-align:center;margin-top:3rem;">
+            <a href="index.html" class="social-link" id="back-to-sim" style="display:inline-flex;">
+                <span>↗ Launch the Simulator</span>
+            </a>
+        </div>
+    </main>
+
+    <footer class="simulator-footer">
+        <p class="footer-tagline">Quantum Nimbus — Patent Pending NFC-Secure Smart Vaporization</p>
+        <div class="footer-socials">
+            <a href="https://www.linkedin.com/in/juan-pablo-lopez-6728612a8/" target="_blank" rel="noopener noreferrer" class="social-link" id="footer-link-linkedin">
+                <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor" aria-label="LinkedIn">
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                </svg>
+                <span>LinkedIn</span>
+            </a>
+            <a href="https://github.com/youforia-jp" target="_blank" rel="noopener noreferrer" class="social-link" id="footer-link-github">
+                <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor" aria-label="GitHub">
+                    <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+                </svg>
+                <span>GitHub</span>
+            </a>
+        </div>
+        <p class="footer-credit">Purely human-designed firmware demo by Juan Pablo Lopez</p>
+    </footer>
+</body>
+</html>
