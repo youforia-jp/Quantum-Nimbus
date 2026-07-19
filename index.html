@@ -18,6 +18,10 @@
             <span class="nimbus-symbol">☁</span>
             <h1>Quantum <span class="accent-text">Nimbus</span></h1>
         </div>
+        <nav class="header-nav">
+            <a href="about.html" class="nav-link">About</a>
+            <a href="how-to-use.html" class="nav-link">How to Use</a>
+        </nav>
         <div class="badge-container">
             <button id="btn-mute" class="header-badge" style="background: rgba(255, 255, 255, 0.08); color: var(--text-primary); border: 1px solid rgba(255, 255, 255, 0.15); cursor: pointer; transition: background 0.3s; outline: none;">🔊 Sound: On</button>
             <span class="header-badge env-badge">DEMO STAGE</span>
@@ -264,9 +268,41 @@
                                     <!-- Toxic Vapor steam (visible in toxic state) -->
                                     <g class="nimby-toxic-steam">
                                         <!-- Left toxic skull -->
-                                        <path class="toxic-skull left" d="M 54,22 a 6,6 0 1,1 12,0 c 0,2 -0.8,3.2 -1.6,4.4 l 0.4,3.2 c 0,0.8 -0.4,1.2 -1.2,1.2 h -2.4 c -0.8,0 -1.2,-0.4 -1.2,-1.2 l 0.4,-3.2 c -0.8,-1.2 -1.6,-2.4 -1.6,-4.4 z M 57.5,21 a 1,1 0 1,0 2,0 a 1,1 0 1,0 -2,0 M 61.5,21 a 1,1 0 1,0 2,0 a 1,1 0 1,0 -2,0 M 60,23.5 l -0.8,1.6 h 1.6 z" fill="#10b981" fill-rule="evenodd" opacity="0.8" />
+                                        <g class="toxic-skull left">
+                                            <g transform="translate(48, 10) scale(0.24)">
+                                                <path d="M20,20 L80,80 M20,80 L80,20" stroke="#10b981" stroke-width="12" stroke-linecap="round"/>
+                                                <circle cx="20" cy="20" r="8" fill="#10b981"/>
+                                                <circle cx="80" cy="80" r="8" fill="#10b981"/>
+                                                <circle cx="20" cy="80" r="8" fill="#10b981"/>
+                                                <circle cx="80" cy="20" r="8" fill="#10b981"/>
+                                                <circle cx="50" cy="45" r="22" fill="#10b981"/>
+                                                <rect x="38" y="55" width="24" height="16" rx="4" fill="#10b981"/>
+                                                <circle cx="42" cy="43" r="5" fill="#064e3b"/>
+                                                <circle cx="58" cy="43" r="5" fill="#064e3b"/>
+                                                <polygon points="50,49 47,56 53,56" fill="#064e3b"/>
+                                                <line x1="45" y1="63" x2="45" y2="71" stroke="#064e3b" stroke-width="2"/>
+                                                <line x1="50" y1="63" x2="50" y2="71" stroke="#064e3b" stroke-width="2"/>
+                                                <line x1="55" y1="63" x2="55" y2="71" stroke="#064e3b" stroke-width="2"/>
+                                            </g>
+                                        </g>
                                         <!-- Right toxic skull -->
-                                        <path class="toxic-skull right" d="M 134,22 a 6,6 0 1,1 12,0 c 0,2 -0.8,3.2 -1.6,4.4 l 0.4,3.2 c 0,0.8 -0.4,1.2 -1.2,1.2 h -2.4 c -0.8,0 -1.2,-0.4 -1.2,-1.2 l 0.4,-3.2 c -0.8,-1.2 -1.6,-2.4 -1.6,-4.4 z M 137.5,21 a 1,1 0 1,0 2,0 a 1,1 0 1,0 -2,0 M 141.5,21 a 1,1 0 1,0 2,0 a 1,1 0 1,0 -2,0 M 140,23.5 l -0.8,1.6 h 1.6 z" fill="#10b981" fill-rule="evenodd" opacity="0.8" />
+                                        <g class="toxic-skull right">
+                                            <g transform="translate(128, 10) scale(0.24)">
+                                                <path d="M20,20 L80,80 M20,80 L80,20" stroke="#10b981" stroke-width="12" stroke-linecap="round"/>
+                                                <circle cx="20" cy="20" r="8" fill="#10b981"/>
+                                                <circle cx="80" cy="80" r="8" fill="#10b981"/>
+                                                <circle cx="20" cy="80" r="8" fill="#10b981"/>
+                                                <circle cx="80" cy="20" r="8" fill="#10b981"/>
+                                                <circle cx="50" cy="45" r="22" fill="#10b981"/>
+                                                <rect x="38" y="55" width="24" height="16" rx="4" fill="#10b981"/>
+                                                <circle cx="42" cy="43" r="5" fill="#064e3b"/>
+                                                <circle cx="58" cy="43" r="5" fill="#064e3b"/>
+                                                <polygon points="50,49 47,56 53,56" fill="#064e3b"/>
+                                                <line x1="45" y1="63" x2="45" y2="71" stroke="#064e3b" stroke-width="2"/>
+                                                <line x1="50" y1="63" x2="50" y2="71" stroke="#064e3b" stroke-width="2"/>
+                                                <line x1="55" y1="63" x2="55" y2="71" stroke="#064e3b" stroke-width="2"/>
+                                            </g>
+                                        </g>
                                     </g>
 
                                     <!-- Cloud Body -->
@@ -348,7 +384,7 @@
                                     <div class="progress-text">
                                         <span id="stat-puffs-curr">0.0</span>
                                         <span class="divider">/</span>
-                                        <span id="stat-puffs-limit">15.0</span>
+                                        <span id="stat-puffs-limit">35.0</span>
                                     </div>
                                     <span class="circle-label">mg Today</span>
                                 </div>
@@ -364,9 +400,9 @@
                             <div class="wellness-limit-control" style="display: flex; flex-direction: column; gap: 0.35rem; margin-top: 0.9rem; border-top: 1px solid rgba(255, 255, 255, 0.06); padding-top: 0.8rem;">
                                 <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.72rem;">
                                     <span class="limit-slider-label" style="font-weight: 600; color: var(--text-secondary); letter-spacing: 0.5px; text-transform: uppercase; font-size: 0.6rem;">Adjust Daily mg Limit</span>
-                                    <span id="val-wellness-limit-mg" style="color: var(--accent-color); font-weight: 700; font-family: 'Outfit', sans-serif;">15.0 mg</span>
+                                    <span id="val-wellness-limit-mg" style="color: var(--accent-color); font-weight: 700; font-family: 'Outfit', sans-serif;">35.0 mg</span>
                                 </div>
-                                <input type="range" id="slider-wellness-limit-mg" min="5" max="50" step="1.0" value="15" style="width: 100%; margin-top: 0.2rem;">
+                                <input type="range" id="slider-wellness-limit-mg" min="5" max="50" step="1.0" value="35" style="width: 100%; margin-top: 0.2rem;">
                             </div>
                         </div>
 
@@ -438,7 +474,13 @@
                 <!-- Outer Tube and Cartridge Area -->
                 <div class="cartridge-assembly">
                     <div class="mouthpiece-tip">
-                        <div id="vapor-clouds" class="vapor-clouds-smoke"></div>
+                        <div id="vapor-clouds" class="vapor-clouds-smoke">
+                            <div class="cloud-particle p1"></div>
+                            <div class="cloud-particle p2"></div>
+                            <div class="cloud-particle p3"></div>
+                            <div class="cloud-particle p4"></div>
+                            <div class="cloud-particle p5"></div>
+                        </div>
                     </div>
                     <div class="cartridge-chamber">
                         <div class="chamber-glass">
@@ -539,6 +581,11 @@
                         <label for="input-secret">Master Signing Secret (Hardware Encrypted)</label>
                         <input type="text" id="input-secret" value="nimbus_secure_master_secret_2026">
                     </div>
+                    <div style="border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 0.8rem; margin-top: 0.2rem; display: flex; justify-content: flex-end;">
+                        <button id="btn-reset-data" style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); color: #fca5a5; border-radius: 8px; padding: 0.45rem 0.8rem; font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: all 0.2s; outline: none; width: 100%;">
+                            🔄 Reset Demo / Wellness Data
+                        </button>
+                    </div>
                 </div>
             </div>
         </section>
@@ -546,7 +593,22 @@
     </main>
 
     <footer class="simulator-footer">
-        <p>Quantum Nimbus Patent Pending NFC-Secure Smart Vaporization. Purely human-designed firmware demo.</p>
+        <p class="footer-tagline">Quantum Nimbus — Patent Pending NFC-Secure Smart Vaporization</p>
+        <div class="footer-socials">
+            <a href="https://www.linkedin.com/in/juan-pablo-lopez-6728612a8/" target="_blank" rel="noopener noreferrer" class="social-link" id="link-linkedin">
+                <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor" aria-label="LinkedIn">
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                </svg>
+                <span>LinkedIn</span>
+            </a>
+            <a href="https://github.com/youforia-jp" target="_blank" rel="noopener noreferrer" class="social-link" id="link-github">
+                <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor" aria-label="GitHub">
+                    <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+                </svg>
+                <span>GitHub</span>
+            </a>
+        </div>
+        <p class="footer-credit">Purely human-designed firmware demo by Juan Pablo Lopez</p>
     </footer>
 
     <!-- Script Injection -->

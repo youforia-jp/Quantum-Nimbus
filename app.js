@@ -195,7 +195,7 @@ let authState = false;
 
 // Wellness & NIMBY state variables
 let mgConsumed = 0.0;
-let mgDailyLimit = 15.0;
+let mgDailyLimit = 35.0;
 let toxinsAvoided = 0.0;
 let nimbyState = "sleeping"; // 'sleeping' | 'happy' | 'puffing' | 'angry' | 'toxic' | 'sunny'
 let supplementTaken = false;
@@ -838,7 +838,7 @@ btnTakeSupplement.addEventListener("click", () => {
     supplementBadge.className = "supplement-badge badge-taken";
     
     // Custom daily limit extension
-    mgDailyLimit = 20.0;
+    mgDailyLimit += 5.0;
     statPuffsLimit.textContent = mgDailyLimit.toFixed(0);
     
     // Play sweet synth sparkly chime
@@ -1312,14 +1312,6 @@ function initLocalStorage() {
             newHistory.push({ day: dayName, count });
         }
         
-        // Preserve today's current counts if they exist in the previous log
-        if (puffHistory.length > 0) {
-            const prevToday = puffHistory.find(h => h.day === todayName);
-            if (prevToday) {
-                newHistory[newHistory.length - 1].count = prevToday.count;
-            }
-        }
-        
         puffHistory = newHistory;
         localStorage.setItem("nimbus_puff_history", JSON.stringify(puffHistory));
     }
@@ -1355,9 +1347,56 @@ function setupWellnessLimitListener() {
     }
 }
 
+function setupResetButtonListener() {
+    const btnResetData = document.getElementById("btn-reset-data");
+    if (btnResetData) {
+        btnResetData.addEventListener("click", () => {
+            if (confirm("Are you sure you want to reset all simulator, wellness, and custom profile data?")) {
+                localStorage.removeItem("nimbus_puff_history");
+                localStorage.removeItem("nimbus_custom_profiles");
+                
+                // Reset state
+                mgConsumed = 0.0;
+                toxinsAvoided = 0.0;
+                supplementTaken = false;
+                mgDailyLimit = 35.0;
+                customProfiles = [];
+                activeCustomProfile = null;
+                
+                // Reset supplement button and badge
+                if (btnTakeSupplement) {
+                    btnTakeSupplement.disabled = false;
+                    btnTakeSupplement.textContent = "Log Supplement Intake";
+                }
+                if (supplementBadge) {
+                    supplementBadge.textContent = "PENDING INTAKE";
+                    supplementBadge.className = "supplement-badge badge-pending";
+                }
+                
+                // Re-seed history
+                initLocalStorage();
+                
+                // Reset custom profile selector dropdown
+                updateCustomProfilesDropdown();
+                
+                // Recalculate temp settings
+                calculateTemperatures();
+                
+                // Update UI
+                updateWellnessStats();
+                updateNimbyState(determineMascotState());
+                
+                // Play disconnect chime
+                synth.playDisconnectSound();
+            }
+        });
+    }
+}
+
 // Kick off initialization
 initLocalStorage();
 setupCustomProfileListeners();
 setupMuteListener();
 setupWellnessLimitListener();
+setupResetButtonListener();
 renderWeeklyChart();
