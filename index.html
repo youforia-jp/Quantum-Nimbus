@@ -879,24 +879,24 @@
                 <h2 class="font-heading text-3xl font-bold text-white mb-2 text-center">Enterprise Portal</h2>
                 <p class="text-slate-400 text-center text-sm mb-10">Initiate a secure dialogue for corporate partnerships and technical blueprints.</p>
                 
-                <form class="space-y-6" onsubmit="event.preventDefault(); alert('Inquiry submitted securely.');">
+                <form class="space-y-6" action="https://formspree.io/JPlopez@QuantumNimbusTech.com" method="POST">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-xs font-bold text-slate-400 uppercase tracking-wide mb-2">Full Name</label>
-                            <input type="text" required class="w-full bg-slate-900 border border-slate-700 rounded-md py-3 px-4 text-white focus:outline-none focus:border-electricBlue transition-colors" placeholder="Jane Doe">
+                            <input type="text" name="name" required class="w-full bg-slate-900 border border-slate-700 rounded-md py-3 px-4 text-white focus:outline-none focus:border-electricBlue transition-colors" placeholder="Jane Doe">
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-slate-400 uppercase tracking-wide mb-2">Corporate Email</label>
-                            <input type="email" required class="w-full bg-slate-900 border border-slate-700 rounded-md py-3 px-4 text-white focus:outline-none focus:border-electricBlue transition-colors" placeholder="jane@enterprise.com">
+                            <input type="email" name="_replyto" required class="w-full bg-slate-900 border border-slate-700 rounded-md py-3 px-4 text-white focus:outline-none focus:border-electricBlue transition-colors" placeholder="jane@enterprise.com">
                         </div>
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-400 uppercase tracking-wide mb-2">Company Name</label>
-                        <input type="text" required class="w-full bg-slate-900 border border-slate-700 rounded-md py-3 px-4 text-white focus:outline-none focus:border-electricBlue transition-colors" placeholder="Acme Corp">
+                        <input type="text" name="company" required class="w-full bg-slate-900 border border-slate-700 rounded-md py-3 px-4 text-white focus:outline-none focus:border-electricBlue transition-colors" placeholder="Acme Corp">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-400 uppercase tracking-wide mb-2">Inquiry Type</label>
-                        <select class="w-full bg-slate-900 border border-slate-700 rounded-md py-3 px-4 text-white focus:outline-none focus:border-electricBlue transition-colors appearance-none">
+                        <select name="inquiry_type" class="w-full bg-slate-900 border border-slate-700 rounded-md py-3 px-4 text-white focus:outline-none focus:border-electricBlue transition-colors appearance-none">
                             <option>Request Technical Whitepaper</option>
                             <option>Schedule Blueprints Review under MNDA</option>
                             <option>Licensing Inquiry</option>

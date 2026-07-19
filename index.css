@@ -761,23 +761,37 @@ body.theme-warning .liquid-fluid {
     bottom: 16px; /* Exits from the top of the mouthpiece tip */
     left: 50%;
     transform: translateX(-50%);
-    width: 12px;
-    height: 12px;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 0.3) 30%, rgba(255, 255, 255, 0) 70%);
-    border-radius: 50%;
+    width: 120px;
+    height: 120px;
     z-index: 20;
     pointer-events: none;
+    overflow: visible;
+}
+
+/* Base style for individual cloud particles */
+.cloud-particle {
+    position: absolute;
+    bottom: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 12px;
+    height: 12px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.4) 30%, rgba(255, 255, 255, 0) 70%);
+    border-radius: 50%;
+    pointer-events: none;
     opacity: 0;
-    transition: opacity 0.3s ease;
 }
 
-.vapor-clouds-smoke.puffing {
-    animation: vaporDrift 1.5s infinite ease-out;
-}
+/* Staggered particle animations for a rich, high-density cloud ejection */
+.vapor-clouds-smoke.puffing .p1 { animation: vaporDrift1 1.8s infinite ease-out; animation-delay: 0s; }
+.vapor-clouds-smoke.puffing .p2 { animation: vaporDrift2 1.8s infinite ease-out; animation-delay: 0.35s; }
+.vapor-clouds-smoke.puffing .p3 { animation: vaporDrift3 1.8s infinite ease-out; animation-delay: 0.7s; }
+.vapor-clouds-smoke.puffing .p4 { animation: vaporDrift1 1.8s infinite ease-out; animation-delay: 1.05s; }
+.vapor-clouds-smoke.puffing .p5 { animation: vaporDrift2 1.8s infinite ease-out; animation-delay: 1.4s; }
 
-@keyframes vaporDrift {
+@keyframes vaporDrift1 {
     0% {
-        bottom: 16px;
+        bottom: 0px;
         width: 12px;
         height: 12px;
         opacity: 0;
@@ -785,15 +799,59 @@ body.theme-warning .liquid-fluid {
         filter: blur(1px);
     }
     15% {
-        opacity: 0.8;
+        opacity: 0.85;
     }
     100% {
-        bottom: 120px; /* Floats high up */
-        width: 120px;  /* Expands into a cloud */
-        height: 80px;
+        bottom: 130px;
+        width: 130px;
+        height: 90px;
         opacity: 0;
-        transform: translateX(-50%) scale(2.2);
-        filter: blur(8px); /* Becomes soft and spreads out */
+        transform: translateX(-75%) scale(2.4); /* drifts left */
+        filter: blur(10px);
+    }
+}
+
+@keyframes vaporDrift2 {
+    0% {
+        bottom: 0px;
+        width: 12px;
+        height: 12px;
+        opacity: 0;
+        transform: translateX(-50%) scale(1);
+        filter: blur(1px);
+    }
+    15% {
+        opacity: 0.9;
+    }
+    100% {
+        bottom: 145px;
+        width: 140px;
+        height: 95px;
+        opacity: 0;
+        transform: translateX(-25%) scale(2.6); /* drifts right */
+        filter: blur(10px);
+    }
+}
+
+@keyframes vaporDrift3 {
+    0% {
+        bottom: 0px;
+        width: 12px;
+        height: 12px;
+        opacity: 0;
+        transform: translateX(-50%) scale(1);
+        filter: blur(1px);
+    }
+    15% {
+        opacity: 0.85;
+    }
+    100% {
+        bottom: 160px;
+        width: 150px;
+        height: 100px;
+        opacity: 0;
+        transform: translateX(-50%) scale(2.8); /* drifts straight up and expands larger */
+        filter: blur(12px);
     }
 }
 
@@ -962,7 +1020,10 @@ body.theme-warning .led-ring-inner {
 
 /* Green toxic skull vapor clouds for counterfeit cartridge warning state */
 body.theme-warning .vapor-clouds-smoke {
-    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='%2310b981'><path d='M 50,15 C 30,15 20,30 20,45 C 20,53 25,60 30,65 L 35,85 C 35,90 40,92 50,92 C 60,92 65,90 65,85 L 70,65 C 75,60 80,53 80,45 C 80,30 70,15 50,15 Z M 38,40 A 6,6 0 1,1 50,40 A 6,6 0 1,1 38,40 M 56,40 A 6,6 0 1,1 68,40 A 6,6 0 1,1 56,40 M 50,55 L 45,65 H 55 Z'/></svg>") no-repeat center;
+    background: none;
+}
+body.theme-warning .cloud-particle {
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M20,20 L80,80 M20,80 L80,20' stroke='%2310b981' stroke-width='12' stroke-linecap='round'/><circle cx='20' cy='20' r='8' fill='%2310b981'/><circle cx='80' cy='80' r='8' fill='%2310b981'/><circle cx='20' cy='80' r='8' fill='%2310b981'/><circle cx='80' cy='20' r='8' fill='%2310b981'/><circle cx='50' cy='45' r='22' fill='%2310b981'/><rect x='38' y='55' width='24' height='16' rx='4' fill='%2310b981'/><circle cx='42' cy='43' r='5' fill='%23000000'/><circle cx='58' cy='43' r='5' fill='%23000000'/><polygon points='50,49 47,56 53,56' fill='%23000000'/><line x1='45' y1='63' x2='45' y2='71' stroke='%23000000' stroke-width='2'/><line x1='50' y1='63' x2='50' y2='71' stroke='%23000000' stroke-width='2'/><line x1='55' y1='63' x2='55' y2='71' stroke='%23000000' stroke-width='2'/></svg>") no-repeat center;
     background-size: contain;
     border-radius: 0;
     filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.6));
@@ -2010,4 +2071,248 @@ body.theme-warning .vapor-clouds-smoke {
     100% { transform: scale(1.5); opacity: 0; filter: blur(4px); }
 }
 
+/* ==========================================
+   HEADER NAV LINKS
+   ========================================== */
+
+.header-nav {
+    display: flex;
+    gap: 1.8rem;
+    align-items: center;
+}
+
+.nav-link {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    letter-spacing: 0.3px;
+    position: relative;
+    transition: color 0.25s ease;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--primary-glow);
+    border-radius: 2px;
+    transition: width 0.25s ease, background 0.3s ease;
+}
+
+.nav-link:hover {
+    color: var(--accent-color);
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+.nav-link.active-page {
+    color: var(--accent-color);
+}
+
+.nav-link.active-page::after {
+    width: 100%;
+}
+
+/* ==========================================
+   FOOTER WITH SOCIALS
+   ========================================== */
+
+.simulator-footer {
+    z-index: 10;
+    border-top: 1px solid var(--border-color);
+    padding: 2rem 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+}
+
+.footer-tagline {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    letter-spacing: 0.3px;
+    text-align: center;
+}
+
+.footer-socials {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.social-link {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.55rem 1.2rem;
+    border-radius: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: background 0.25s ease, border-color 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
+}
+
+.social-link:hover {
+    background: rgba(var(--primary-glow-rgb), 0.15);
+    border-color: var(--primary-glow);
+    box-shadow: 0 0 16px rgba(var(--primary-glow-rgb), 0.25);
+    transform: translateY(-2px);
+}
+
+.social-icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+.footer-credit {
+    font-size: 0.75rem;
+    color: rgba(160, 174, 192, 0.5);
+    text-align: center;
+}
+
+/* ==========================================
+   SHARED INNER-PAGE LAYOUT (about / how-to-use)
+   ========================================== */
+
+.page-content {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 3.5rem 2rem 5rem;
+    z-index: 10;
+    flex: 1;
+}
+
+.page-eyebrow {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--primary-glow);
+    margin-bottom: 0.8rem;
+    display: block;
+}
+
+.page-title {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.1;
+    margin-bottom: 2.5rem;
+}
+
+.page-title .accent-text {
+    color: var(--primary-glow);
+}
+
+.page-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 2.2rem 2.4rem;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+    margin-bottom: 1.5rem;
+}
+
+/* Step cards for How-to-Use */
+.step-card {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 1.8rem 2.2rem;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+    margin-bottom: 1.2rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.step-card:hover {
+    border-color: rgba(var(--primary-glow-rgb), 0.4);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45), 0 0 20px rgba(var(--primary-glow-rgb), 0.1);
+}
+
+.step-number {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    font-size: 2rem;
+    color: var(--primary-glow);
+    text-shadow: 0 0 12px rgba(var(--primary-glow-rgb), 0.5);
+    line-height: 1;
+    min-width: 40px;
+    opacity: 0.85;
+}
+
+.step-body h3 {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    margin-bottom: 0.45rem;
+}
+
+.step-body p {
+    font-size: 0.9rem;
+    line-height: 1.65;
+    color: var(--text-secondary);
+}
+
+.step-body code {
+    background: rgba(var(--primary-glow-rgb), 0.12);
+    border: 1px solid rgba(var(--primary-glow-rgb), 0.25);
+    border-radius: 5px;
+    padding: 0.1em 0.4em;
+    font-family: monospace;
+    font-size: 0.85em;
+    color: var(--accent-color);
+}
+
+/* About page prose */
+.about-prose {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--text-primary);
+}
+
+.about-prose p {
+    margin-bottom: 1.2rem;
+}
+
+.about-prose p:last-child {
+    margin-bottom: 0;
+}
+
+.about-tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1.8rem;
+}
+
+.about-tag {
+    padding: 0.35rem 0.9rem;
+    border-radius: 50px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    background: rgba(var(--primary-glow-rgb), 0.1);
+    border: 1px solid rgba(var(--primary-glow-rgb), 0.3);
+    color: var(--accent-color);
+}
 
