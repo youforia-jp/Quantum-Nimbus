@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Nimbus Tech | Enterprise Hardware Provenance</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        nimbusDark: '#0a0d14',
+                        nimbusBlack: '#04060a',
+                        nimbusBorder: '#1f2937',
+                        electricBlue: '#3b82f6',
+                        crimsonRed: '#dc2626'
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Existing Vanilla CSS -->
+    <link rel="stylesheet" href="index.css">
+    
+    <!-- Scoped overrides to prevent global index.css from breaking the Tailwind layout -->
+    <style>
+        body { 
+            overflow-x: hidden !important; 
+            height: auto !important; 
+            min-height: 100vh;
+            display: block !important;
+            background-color: #04060a !important;
+        }
+        .background-radial-glow { display: none; } /* Will recreate a generic glow in tailwind */
+        /* Isolate simulator styling */
+        #simulator-section {
+            position: relative;
+            background-color: #080c14; /* Match simulator theme */
+            overflow: hidden;
+            border-radius: 1rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            border: 1px solid #1f2937;
+        }
+        .simulator-container {
+            position: relative !important;
+            top: 0 !important;
+            transform: none !important;
+            margin: 0 auto;
+            padding: 2rem 0;
+            width: 100%;
+        }
+        
+        /* Table Custom Styling */
+        .data-table th, .data-table td {
+            border-bottom: 1px solid #1f2937;
+        }
+    </style>
+</head>
+<body class="bg-nimbusBlack text-slate-300 font-sans antialiased selection:bg-electricBlue selection:text-white">
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 bg-nimbusDark/90 backdrop-blur-md border-b border-nimbusBorder">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 flex items-center gap-3">
+                    <span class="text-electricBlue text-2xl">☁</span>
+                    <span class="font-heading font-bold text-xl text-white tracking-wide">QUANTUM<span class="text-electricBlue">NIMBUS</span> TECH</span>
+                </div>
+                <div class="hidden md:flex space-x-8 text-sm font-semibold tracking-wider text-slate-400">
+                    <a href="index.html#technology" class="hover:text-electricBlue transition-colors">ARCHITECTURE</a>
+                    <a href="safety.html" class="hover:text-crimsonRed transition-colors">SAFETY DATA</a>
+                    <a href="simulator.html" class="hover:text-electricBlue transition-colors">SIMULATOR</a>
+                    <a href="contact.html" class="hover:text-white transition-colors">CONTACT US</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- SECTION 3: SAFETY & COMPLIANCE DATA -->
+    <section id="safety-data" class="py-24 bg-nimbusBlack border-t border-nimbusBorder">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="font-heading text-3xl md:text-5xl font-bold text-white mb-6">Safety & Compliance Data</h2>
+                <p class="text-slate-400 text-lg">Scientific and legal data underscoring the critical necessity of hardware provenance and thermal governance.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- Data Table -->
+                <div class="bg-nimbusDark rounded-xl border border-nimbusBorder overflow-hidden">
+                    <div class="bg-slate-900/50 px-6 py-4 border-b border-nimbusBorder">
+                        <h3 class="font-heading font-bold text-white">Analyte Leaching: Regulated vs. Unregulated Hardware</h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm data-table">
+                            <thead class="text-xs text-slate-500 uppercase bg-nimbusDark">
+                                <tr>
+                                    <th class="px-6 py-4">Heavy Metal</th>
+                                    <th class="px-6 py-4">Safe Threshold</th>
+                                    <th class="px-6 py-4">Clone Concentration</th>
+                                    <th class="px-6 py-4 text-crimsonRed">Variance</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-slate-300">
+                                <tr class="hover:bg-slate-800/50 transition-colors">
+                                    <td class="px-6 py-4 font-semibold text-white">Lead (Pb)</td>
+                                    <td class="px-6 py-4">0.5 ppm</td>
+                                    <td class="px-6 py-4">50.0 ppm</td>
+                                    <td class="px-6 py-4 text-crimsonRed font-bold">100x Increase</td>
+                                </tr>
+                                <tr class="hover:bg-slate-800/50 transition-colors">
+                                    <td class="px-6 py-4 font-semibold text-white">Nickel (Ni)</td>
+                                    <td class="px-6 py-4">0.2 ppm</td>
+                                    <td class="px-6 py-4">270.8 ppm</td>
+                                    <td class="px-6 py-4 text-crimsonRed font-bold">1,354x Increase</td>
+                                </tr>
+                                <tr class="hover:bg-slate-800/50 transition-colors border-b-0">
+                                    <td class="px-6 py-4 font-semibold text-white">Copper (Cu)</td>
+                                    <td class="px-6 py-4">3.0 ppm</td>
+                                    <td class="px-6 py-4">483.0 ppm</td>
+                                    <td class="px-6 py-4 text-crimsonRed font-bold">161x Increase</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="px-6 py-3 bg-red-900/10 border-t border-nimbusBorder text-xs text-slate-500">
+                        * Variance driven by post-assembly alloy leaching in unregulated supply chains.
+                    </div>
+                </div>
+
+                <!-- Timelines -->
+                <div class="space-y-8">
+                    <!-- Authentic Timeline -->
+                    <div class="bg-nimbusDark p-6 rounded-xl border border-nimbusBorder">
+                        <h3 class="font-heading font-bold text-white mb-4">Authentic Hardware Timeline</h3>
+                        <div class="relative pl-6 border-l-2 border-slate-700 space-y-6">
+                            <div class="relative">
+                                <div class="absolute -left-[1.8rem] w-4 h-4 rounded-full bg-electricBlue"></div>
+                                <span class="text-electricBlue font-bold text-sm block mb-1">180°C</span>
+                                <p class="text-sm text-slate-400">Safe, regulated vaporization threshold.</p>
+                            </div>
+                            <div class="relative">
+                                <div class="absolute -left-[1.8rem] w-4 h-4 rounded-full bg-blue-500/50"></div>
+                                <span class="text-blue-400 font-bold text-sm block mb-1">Temperature Locked</span>
+                                <p class="text-sm text-slate-400">Nimbus IQ actively clamps thermal output, ensuring extreme film boiling never occurs.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Counterfeit Timeline -->
+                    <div class="bg-nimbusDark p-6 rounded-xl border border-red-900/30 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 px-3 py-1 bg-red-900/50 text-crimsonRed text-xs font-bold rounded-bl-lg">COUNTERFEIT</div>
+                        <h3 class="font-heading font-bold text-white mb-4">Unregulated Hardware Timeline</h3>
+                        <div class="relative pl-6 border-l-2 border-slate-700 space-y-6">
+                            <div class="relative">
+                                <div class="absolute -left-[1.8rem] w-4 h-4 rounded-full bg-orange-500"></div>
+                                <span class="text-orange-500 font-bold text-sm block mb-1">218°C - 256°C</span>
+                                <p class="text-sm text-slate-400">Carrier pyrolysis initiates; respiratory irritants generated.</p>
+                            </div>
+                            <div class="relative">
+                                <div class="absolute -left-[1.8rem] w-4 h-4 rounded-full bg-crimsonRed animate-pulse"></div>
+                                <span class="text-crimsonRed font-bold text-sm block mb-1">322°C+</span>
+                                <p class="text-sm text-slate-400">Extreme film boiling. Benzene synthesis peaks in uncalibrated clone hardware.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+</body>
+</html>

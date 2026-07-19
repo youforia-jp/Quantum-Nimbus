@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Nimbus Tech | Enterprise Hardware Provenance</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        nimbusDark: '#0a0d14',
+                        nimbusBlack: '#04060a',
+                        nimbusBorder: '#1f2937',
+                        electricBlue: '#3b82f6',
+                        crimsonRed: '#dc2626'
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Existing Vanilla CSS -->
+    <link rel="stylesheet" href="index.css">
+    
+    <!-- Scoped overrides to prevent global index.css from breaking the Tailwind layout -->
+    <style>
+        body { 
+            overflow-x: hidden !important; 
+            height: auto !important; 
+            min-height: 100vh;
+            display: block !important;
+            background-color: #04060a !important;
+        }
+        .background-radial-glow { display: none; } /* Will recreate a generic glow in tailwind */
+        /* Isolate simulator styling */
+        #simulator-section {
+            position: relative;
+            background-color: #080c14; /* Match simulator theme */
+            overflow: hidden;
+            border-radius: 1rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            border: 1px solid #1f2937;
+        }
+        .simulator-container {
+            position: relative !important;
+            top: 0 !important;
+            transform: none !important;
+            margin: 0 auto;
+            padding: 2rem 0;
+            width: 100%;
+        }
+        
+        /* Table Custom Styling */
+        .data-table th, .data-table td {
+            border-bottom: 1px solid #1f2937;
+        }
+    </style>
+</head>
+<body class="bg-nimbusBlack text-slate-300 font-sans antialiased selection:bg-electricBlue selection:text-white">
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 bg-nimbusDark/90 backdrop-blur-md border-b border-nimbusBorder">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 flex items-center gap-3">
+                    <span class="text-electricBlue text-2xl">☁</span>
+                    <span class="font-heading font-bold text-xl text-white tracking-wide">QUANTUM<span class="text-electricBlue">NIMBUS</span> TECH</span>
+                </div>
+                <div class="hidden md:flex space-x-8 text-sm font-semibold tracking-wider text-slate-400">
+                    <a href="index.html#technology" class="hover:text-electricBlue transition-colors">ARCHITECTURE</a>
+                    <a href="safety.html" class="hover:text-crimsonRed transition-colors">SAFETY DATA</a>
+                    <a href="simulator.html" class="hover:text-electricBlue transition-colors">SIMULATOR</a>
+                    <a href="contact.html" class="hover:text-white transition-colors">CONTACT US</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- SECTION 5: CONTACT & ENGAGEMENT -->
+    <section id="contact" class="py-24 bg-nimbusBlack border-t border-nimbusBorder relative overflow-hidden">
+        <!-- Abstract grid bg -->
+        <div class="absolute inset-0 opacity-[0.03] bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9IiNmZmZmZmYiLz48L3N2Zz4=')] [mask-image:linear-gradient(to_bottom,white,transparent)]"></div>
+        
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="bg-nimbusDark border border-slate-700 p-10 rounded-2xl shadow-2xl">
+                <h2 class="font-heading text-3xl font-bold text-white mb-2 text-center">Contact Us</h2>
+                <p class="text-slate-400 text-center text-sm mb-10">Initiate a secure dialogue for corporate partnerships and technical blueprints.</p>
+                
+                <form class="space-y-6" action="https://formspree.io/f/maqrjybz" method="POST">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wide mb-2">Full Name</label>
+                            <input type="text" name="name" required class="w-full bg-slate-900 border border-slate-700 rounded-md py-3 px-4 text-white focus:outline-none focus:border-electricBlue transition-colors" placeholder="Jane Doe">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wide mb-2">Corporate Email</label>
+                            <input type="email" name="_replyto" required class="w-full bg-slate-900 border border-slate-700 rounded-md py-3 px-4 text-white focus:outline-none focus:border-electricBlue transition-colors" placeholder="jane@enterprise.com">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wide mb-2">Company Name</label>
+                        <input type="text" name="company" required class="w-full bg-slate-900 border border-slate-700 rounded-md py-3 px-4 text-white focus:outline-none focus:border-electricBlue transition-colors" placeholder="Acme Corp">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wide mb-2">Inquiry Type</label>
+                        <select name="inquiry_type" class="w-full bg-slate-900 border border-slate-700 rounded-md py-3 px-4 text-white focus:outline-none focus:border-electricBlue transition-colors appearance-none">
+                            <option>Request Technical Whitepaper</option>
+                            <option>Schedule Blueprints Review under MNDA</option>
+                            <option>Licensing Inquiry</option>
+                            <option>Other Business Development</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="w-full py-4 mt-4 bg-white text-nimbusBlack font-bold tracking-wide rounded-md hover:bg-slate-200 transition-colors">
+                        SUBMIT INQUIRY
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
