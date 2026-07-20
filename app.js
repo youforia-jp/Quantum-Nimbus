@@ -3,6 +3,17 @@
 // ==========================================
 
 // Web Audio API Synthesizer Class
+
+// Client-side Event Tracking Utility
+function trackSimulatorEvent(eventName, payload = {}) {
+    const eventPayload = {
+        event: eventName,
+        timestamp: Date.now(),
+        ...payload
+    };
+    console.log("[Nimbus Tracker]", eventPayload);
+}
+
 class SoundSynth {
     constructor() {
         this.ctx = null;
@@ -357,6 +368,7 @@ const graphLiveCurve = document.getElementById("graph-live-curve");
 
 // Initialize Bluetooth simulator
 btnPair.addEventListener("click", () => {
+    trackSimulatorEvent("initialize_scan");
     btnPair.textContent = "Scanning...";
     btnPair.disabled = true;
     
@@ -390,6 +402,7 @@ inputSecret.addEventListener("input", () => {
 
 // Setup modal dialog handlers
 btnModalAccept.addEventListener("click", () => {
+    trackSimulatorEvent("safety_mode_triggered", { clamp: 150 });
     warningModal.classList.remove("active");
     chkAllowUnverified.checked = true; // Set checkbox to true to reflect safety override
     calculateTemperatures();
@@ -438,12 +451,19 @@ document.querySelectorAll(".cart-btn").forEach(btn => {
         const cartKey = e.currentTarget.dataset.cart;
         const cartData = CARTRIDGE_DB[cartKey];
         
+        const isCounterfeit = cartKey === "counterfeit";
+        trackSimulatorEvent("state_toggled", {
+            config: isCounterfeit ? "counterfeit" : (cartKey === "disconnected" ? "disconnected" : "authentic"),
+            cartType: cartKey
+        });
+        
         await processCartridgeConnection(cartData);
     });
 });
 
 // Setup Custom NFC Payload input submission
 btnNfcSubmit.addEventListener("click", async () => {
+    trackSimulatorEvent("scan_tag");
     const rawVal = inputNfcPayload.value.trim();
     if (!rawVal) {
         alert("Please paste a valid signed NFC payload.");
@@ -517,6 +537,11 @@ async function processCartridgeConnection(cartData) {
     
     // Set theme and layout
     if (isAuthentic) {
+        trackSimulatorEvent("cryptographic_handshake_registered", {
+            brand: brand,
+            type: cart_type,
+            batch: batch_id
+        });
         document.body.classList.add(cartData.theme || "theme-astro");
         oledState.textContent = "VERIFIED";
         oledIndicatorNfc.textContent = "Security OK";
