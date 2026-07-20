@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quantum Nimbus Tech | Enterprise Hardware Provenance</title>
-    <!-- Google Fonts -->
+    <title>Hardware Validation Sandbox | Quantum Nimbus Tech</title>
+    <meta name="description" content="Interact with the Nimbus IQ OS directly. Test cryptographic validation, thermal governance, and hardware authentication in the browser.">
+    <!-- Google Fonts: Inter + Outfit -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -16,14 +17,16 @@
             theme: {
                 extend: {
                     colors: {
-                        nimbusDark: '#0a0d14',
-                        nimbusBlack: '#04060a',
-                        nimbusBorder: '#1f2937',
-                        electricBlue: '#3b82f6',
-                        crimsonRed: '#dc2626'
+                        nimbusBase:    '#0c0f17',
+                        nimbusSurface: '#111827',
+                        nimbusBorder:  '#1e2d3d',
+                        nimbusText:    '#8b9cb5',
+                        accentBlue:    '#3b82f6',
+                        accentRed:     '#ef4444',
+                        accentGreen:   '#10b981',
                     },
                     fontFamily: {
-                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        sans:    ['Inter', 'sans-serif'],
                         heading: ['Outfit', 'sans-serif'],
                     }
                 }
@@ -41,17 +44,17 @@
             height: auto !important; 
             min-height: 100vh;
             display: block !important;
-            background-color: #04060a !important;
+            background-color: #0c0f17 !important;
         }
-        .background-radial-glow { display: none; } /* Will recreate a generic glow in tailwind */
-        /* Isolate simulator styling */
+        .background-radial-glow { display: none; }
+        /* Enterprise simulator panel */
         #simulator-section {
             position: relative;
-            background-color: #080c14; /* Match simulator theme */
+            background-color: #0e1320;
             overflow: hidden;
-            border-radius: 1rem;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
-            border: 1px solid #1f2937;
+            border-radius: 12px;
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+            border: 1px solid #1e2d3d;
         }
         .simulator-container {
             position: relative !important;
@@ -61,72 +64,88 @@
             padding: 2rem 0;
             width: 100%;
         }
-        
-        /* Table Custom Styling */
+        /* Nav link */
+        .nav-link { font-size: 0.875rem; font-weight: 500; color: #8b9cb5; transition: color 0.18s; }
+        .nav-link:hover { color: #f1f5f9; }
+        /* Table styling */
         .data-table th, .data-table td {
-            border-bottom: 1px solid #1f2937;
+            border-bottom: 1px solid #1e2d3d;
         }
     </style>
 </head>
-<body class="bg-nimbusBlack text-slate-300 font-sans antialiased selection:bg-electricBlue selection:text-white">
+<body class="bg-nimbusBase text-slate-300 font-sans antialiased">
 
-        <!-- Navbar -->
-    <nav class="fixed w-full z-50 bg-nimbusDark/90 backdrop-blur-md border-b border-nimbusBorder">
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 bg-nimbusBase/95 backdrop-blur-md border-b border-nimbusBorder">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
-                <div class="flex-shrink-0 flex items-center gap-3">
-                    <a href="index.html" class="flex items-center gap-3">
-                        <span class="text-electricBlue text-2xl">☁</span>
-                        <span class="font-heading font-bold text-xl text-white tracking-wide">QUANTUM<span class="text-electricBlue">NIMBUS</span> TECH</span>
+            <div class="flex justify-between items-center h-16">
+                <div class="flex-shrink-0">
+                    <a href="index.html" class="flex items-center gap-2.5">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 3C7.03 3 3 7.03 3 12s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9z" stroke="#3b82f6" stroke-width="1.5" fill="none"/>
+                            <circle cx="12" cy="12" r="3" fill="#3b82f6"/>
+                        </svg>
+                        <span class="font-heading font-bold text-[1.1rem] text-white tracking-tight">Quantum <span class="text-accentBlue">Nimbus</span> Tech</span>
                     </a>
                 </div>
-                <!-- Desktop Menu -->
-                <div class="hidden md:flex space-x-8 text-sm font-semibold tracking-wider text-slate-400">
-                    <a href="index.html#technology" class="hover:text-electricBlue transition-colors">ARCHITECTURE</a>
-                    <a href="safety.html" class="hover:text-crimsonRed transition-colors">SAFETY DATA</a>
-                    <a href="simulator.html" class="hover:text-electricBlue transition-colors">SIMULATOR</a>
-                    <a href="contact.html" class="hover:text-white transition-colors">CONTACT US</a>
+                <!-- Desktop Nav -->
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="index.html#technology" class="nav-link">Technology</a>
+                    <a href="safety.html" class="nav-link">Compliance Data</a>
+                    <a href="simulator.html" class="nav-link" style="color:#f1f5f9;">Developer Console</a>
+                    <a href="contact.html" class="nav-link">Contact</a>
+                    <a href="contact.html" class="ml-2 px-4 py-2 rounded-md bg-accentBlue text-white text-sm font-semibold hover:bg-blue-500 transition-colors">Request Demo</a>
                 </div>
-                <!-- Mobile Menu Button -->
+                <!-- Mobile menu button -->
                 <div class="md:hidden flex items-center">
-                    <button id="mobile-menu-btn" class="text-slate-300 hover:text-white focus:outline-none">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    <button id="mobile-menu-btn" class="text-nimbusText hover:text-white focus:outline-none p-1">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
                     </button>
                 </div>
             </div>
         </div>
-        <!-- Mobile Menu Panel -->
-        <div id="mobile-menu" class="md:hidden hidden bg-nimbusDark border-t border-nimbusBorder">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 flex flex-col">
-                <a href="index.html#technology" class="block px-3 py-2 text-base font-medium text-slate-400 hover:text-electricBlue hover:bg-slate-800 rounded-md">ARCHITECTURE</a>
-                <a href="safety.html" class="block px-3 py-2 text-base font-medium text-slate-400 hover:text-crimsonRed hover:bg-slate-800 rounded-md">SAFETY DATA</a>
-                <a href="simulator.html" class="block px-3 py-2 text-base font-medium text-slate-400 hover:text-electricBlue hover:bg-slate-800 rounded-md">SIMULATOR</a>
-                <a href="contact.html" class="block px-3 py-2 text-base font-medium text-slate-400 hover:text-white hover:bg-slate-800 rounded-md">CONTACT US</a>
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="md:hidden hidden bg-nimbusSurface border-t border-nimbusBorder">
+            <div class="px-4 py-3 space-y-1">
+                <a href="index.html#technology" class="block px-3 py-2 text-sm text-nimbusText hover:text-white hover:bg-slate-800/50 rounded-md">Technology</a>
+                <a href="safety.html" class="block px-3 py-2 text-sm text-nimbusText hover:text-white hover:bg-slate-800/50 rounded-md">Compliance Data</a>
+                <a href="simulator.html" class="block px-3 py-2 text-sm text-white bg-slate-800/30 rounded-md">Developer Console</a>
+                <a href="contact.html" class="block px-3 py-2 text-sm text-nimbusText hover:text-white hover:bg-slate-800/50 rounded-md">Contact</a>
             </div>
         </div>
     </nav>
 
-    <!-- SECTION 4: SIMULATOR INTERFACE -->
-    <section id="simulator" class="py-24 bg-[#05070a]">
+    <!-- HARDWARE VALIDATION SANDBOX -->
+    <section id="simulator" class="py-24" style="background:#0c0f17;">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-10">
-                <h2 class="font-heading text-3xl md:text-5xl font-bold text-white mb-4">Architecture Simulator</h2>
-                <p class="text-slate-400">Interact with the Quantum Nimbus OS directly. Test cryptographic validation, thermal capping, and the Nimbus Elevate wellness logic.</p>
-            </div>
-            
-            <!-- Terminal Wrapper for Simulator -->
-            <div class="mx-auto w-full max-w-6xl shadow-2xl">
-                <div class="bg-slate-900 rounded-t-xl border border-slate-700 border-b-0 px-4 py-3 flex items-center justify-between">
-                    <div class="flex gap-2">
-                        <div class="w-3 h-3 rounded-full bg-red-500"></div>
-                        <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
-                        <div class="w-3 h-3 rounded-full bg-green-500"></div>
-                    </div>
-                    <div class="text-xs font-mono text-slate-400">nimbus-iq-os-v3.2 --live</div>
-                    <div></div>
+            <!-- Page header -->
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <div class="inline-flex items-center gap-2 mb-4 text-xs font-medium text-accentBlue uppercase tracking-widest">
+                    <span class="w-4 h-px bg-accentBlue opacity-60"></span>
+                    Interactive Simulation
                 </div>
-                
-                <div id="simulator-section" class="w-full bg-slate-900/30 backdrop-blur-md rounded-b-xl border border-slate-700">
+                <h1 class="font-heading text-3xl md:text-4xl font-bold text-white mb-4">Hardware Validation Sandbox</h1>
+                <p class="text-nimbusText text-base leading-relaxed">Interact with the Nimbus IQ OS directly. Test cryptographic validation, thermal governance, and the hardware authentication pipeline in real time.</p>
+            </div>
+
+            <!-- Enterprise Panel Wrapper -->
+            <div class="mx-auto w-full max-w-6xl">
+                <!-- Panel Header -->
+                <div class="rounded-t-xl border border-nimbusBorder border-b-0 px-5 py-3.5 flex items-center justify-between" style="background:#0e1320;">
+                    <div class="flex items-center gap-2.5">
+                        <svg class="w-4 h-4 text-accentBlue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/>
+                        </svg>
+                        <span class="text-sm font-medium text-slate-300">Nimbus IQ OS</span>
+                        <span class="font-mono text-xs text-nimbusText">v3.2</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 rounded-full bg-accentGreen animate-pulse"></span>
+                        <span class="text-xs font-medium text-accentGreen">Sandbox Active</span>
+                    </div>
+                </div>
+
+                <div id="simulator-section" class="w-full backdrop-blur-md rounded-b-xl border border-nimbusBorder">
                     <main class="simulator-container">
         
         <!-- ================= SMARTPHONE APP PANE ================= -->
@@ -645,46 +664,44 @@
                     </div>
 
 
-                </div>
-            </div>
-
-            <!-- Controller Console to Simulate Cartridge Insertion -->
+            <!-- Validation Console -->
             <div class="console-card">
-                <h3>Simulator Controls & Developer Options</h3>
-                <p class="console-desc">Simulate NFC pen connections and toggle hardware-level security override settings.</p>
-                
-                <div class="cartridge-buttons">
-                    <button class="cart-btn active" data-cart="disconnected">
-                        ❌ Eject Cartridge
-                    </button>
-                    <button class="cart-btn" data-cart="astro">
-                        🌌 Astro (D9 THC)
-                    </button>
-                    <button class="cart-btn" data-cart="frontier">
-                        🪵 Frontier (Rosin)
-                    </button>
-                    <button class="cart-btn" data-cart="nimby">
-                        ☁️ NIMBY (CBD)
-                    </button>
-                    <button class="cart-btn" data-cart="counterfeit">
-                        ⚠️ Counterfeit
-                    </button>
+                <!-- Console header -->
+                <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.25rem;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="color:#8b9cb5; flex-shrink:0;">
+                        <path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <h3>Validation Console</h3>
                 </div>
+                <p class="console-desc">Simulate hardware payload connections and configure authentication override settings for testing purposes.</p>
 
-                <!-- Custom NFC input for generated JSONs -->
-                <div class="custom-nfc-input">
-                    <span class="console-sublabel">Scan / Paste Custom NFC Payload</span>
-                    <div class="nfc-input-row">
-                        <input type="text" id="input-nfc-payload" placeholder='{"b":"Brand","y":"Type","i":"Batch","s":"sig"}'>
-                        <button id="btn-nfc-submit" class="btn-nfc-action">Scan Tag</button>
+                <!-- Hardware payload selector -->
+                <div style="margin-bottom:0.75rem;">
+                    <div style="font-size:0.7rem; font-weight:600; color:#8b9cb5; margin-bottom:0.6rem; letter-spacing:0.03em;">Select Hardware Profile</div>
+                    <div class="cartridge-buttons">
+                        <button class="cart-btn active" data-cart="disconnected">No Cartridge (Idle)</button>
+                        <button class="cart-btn" data-cart="astro">Astro — D9 THC</button>
+                        <button class="cart-btn" data-cart="frontier">Frontier — Rosin</button>
+                        <button class="cart-btn" data-cart="nimby">Nimby — CBD</button>
+                        <button class="cart-btn" data-cart="counterfeit">Unverified Hardware</button>
                     </div>
                 </div>
 
+                <!-- Custom hardware payload input -->
+                <div class="custom-nfc-input">
+                    <span class="console-sublabel">Scan / Paste Custom Hardware Payload</span>
+                    <div class="nfc-input-row">
+                        <input type="text" id="input-nfc-payload" placeholder='{"b":"Brand","y":"Type","i":"Batch","s":"sig"}'>
+                        <button id="btn-nfc-submit" class="btn-nfc-action">Validate</button>
+                    </div>
+                </div>
+
+                <!-- Developer settings -->
                 <div class="developer-settings">
                     <div class="toggle-row">
                         <div class="toggle-info">
-                            <span class="toggle-title">Allow Unverified Cartridges</span>
-                            <span class="toggle-desc">Restricts output to 150°C safety cap</span>
+                            <span class="toggle-title">Permit Unverified Cartridges</span>
+                            <span class="toggle-desc">Enforces 150°C thermal safety ceiling on unverified hardware</span>
                         </div>
                         <label class="switch">
                             <input type="checkbox" id="chk-allow-unverified">
@@ -692,14 +709,18 @@
                         </label>
                     </div>
                     <div class="secret-row">
-                        <label for="input-secret">Master Signing Secret (Hardware Encrypted)</label>
+                        <label for="input-secret">HMAC Signing Key
+                            <svg style="display:inline; width:11px; height:11px; margin-left:4px; opacity:0.5; vertical-align:middle;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                        </label>
                         <input type="text" id="input-secret" value="nimbus_secure_master_secret_2026">
                     </div>
-                    <div style="border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 0.8rem; margin-top: 0.2rem; display: flex; justify-content: flex-end;">
-                        <button id="btn-reset-data" style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); color: #fca5a5; border-radius: 8px; padding: 0.45rem 0.8rem; font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: all 0.2s; outline: none; width: 100%;">
-                            🔄 Reset Demo / Wellness Data
+                    <div style="border-top:1px solid #1e2d3d; padding-top:0.875rem; margin-top:0.25rem;">
+                        <button id="btn-reset-data" style="background:transparent; border:1px solid rgba(239,68,68,0.3); color:#f87171; border-radius:8px; padding:0.5rem 0.875rem; font-size:0.78rem; font-weight:500; cursor:pointer; transition:all 0.18s; outline:none; width:100%; font-family:inherit;">
+                            Reset Demo Data &amp; Wellness Logs
                         </button>
                     </div>
+                </div>
+            </div>    </div>
                 </div>
             </div>
         </section>
@@ -710,14 +731,20 @@
         </div>
     </section>
     <!-- Footer -->
-    <footer class="bg-nimbusBlack border-t border-nimbusBorder py-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4 text-slate-500 text-sm">
-            <div>
-                © 2026 Quantum Nimbus Tech. All rights reserved.
-            </div>
-            <div class="text-xs md:text-right text-slate-400">
-                U.S. Patent Pending (Application No. 64/114,968) <br class="hidden md:inline">
-                "Systems and Methods for Dynamic Vaporization Parameter Configuration and Authentication via Cryptographic Near Field Communication"
+    <footer class="border-t border-nimbusBorder py-10" style="background:#0c0f17;">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-5 text-sm">
+                <div class="flex items-center gap-2.5">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 3C7.03 3 3 7.03 3 12s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9z" stroke="#3b82f6" stroke-width="1.5" fill="none"/>
+                        <circle cx="12" cy="12" r="3" fill="#3b82f6"/>
+                    </svg>
+                    <span class="text-nimbusText">© 2026 Quantum Nimbus Tech. All rights reserved.</span>
+                </div>
+                <div class="text-xs text-nimbusText text-center md:text-right max-w-md leading-relaxed">
+                    U.S. Patent Pending — App. No. 64/114,968<br class="hidden md:inline">
+                    <span class="opacity-70">"Systems and Methods for Dynamic Vaporization Parameter Configuration and Authentication via Cryptographic Near Field Communication"</span>
+                </div>
             </div>
         </div>
     </footer>

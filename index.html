@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quantum Nimbus Tech | Enterprise Hardware Provenance</title>
-    <!-- Google Fonts -->
+    <title>Quantum Nimbus Tech | Cryptographic Hardware Compliance</title>
+    <meta name="description" content="Quantum Nimbus Tech provides secure cryptographic hardware verification, thermal safety governance, and anti-counterfeit compliance for advanced vaporization hardware.">
+    <!-- Google Fonts: Inter + Outfit -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -16,43 +16,32 @@
             theme: {
                 extend: {
                     colors: {
-                        nimbusDark: '#0a0d14',
-                        nimbusBlack: '#04060a',
-                        nimbusBorder: '#1f2937',
-                        electricBlue: '#3b82f6',
-                        crimsonRed: '#dc2626'
+                        nimbusBase:   '#0c0f17',
+                        nimbusSurface:'#111827',
+                        nimbusBorder: '#1e2d3d',
+                        nimbusText:   '#8b9cb5',
+                        accentBlue:   '#3b82f6',
+                        accentRed:    '#ef4444',
+                        accentGreen:  '#10b981',
                     },
                     fontFamily: {
-                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        sans:    ['Inter', 'sans-serif'],
                         heading: ['Outfit', 'sans-serif'],
                     }
                 }
             }
         }
     </script>
-    
-    <!-- Existing Vanilla CSS -->
     <link rel="stylesheet" href="index.css">
-    
-    <!-- Scoped overrides to prevent global index.css from breaking the Tailwind layout -->
     <style>
-        body { 
-            overflow-x: hidden !important; 
-            height: auto !important; 
+        body {
+            overflow-x: hidden !important;
+            height: auto !important;
             min-height: 100vh;
             display: block !important;
-            background-color: #04060a !important;
+            background-color: #0c0f17 !important;
         }
-        .background-radial-glow { display: none; } /* Will recreate a generic glow in tailwind */
-        /* Isolate simulator styling */
-        #simulator-section {
-            position: relative;
-            background-color: #080c14; /* Match simulator theme */
-            overflow: hidden;
-            border-radius: 1rem;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
-            border: 1px solid #1f2937;
-        }
+        .background-radial-glow { display: none; }
         .simulator-container {
             position: relative !important;
             top: 0 !important;
@@ -61,193 +50,284 @@
             padding: 2rem 0;
             width: 100%;
         }
-        
-        /* Table Custom Styling */
+        /* Refined table borders */
         .data-table th, .data-table td {
-            border-bottom: 1px solid #1f2937;
+            border-bottom: 1px solid #1e2d3d;
+        }
+        /* Enterprise nav link style */
+        .nav-link {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #8b9cb5;
+            letter-spacing: 0;
+            transition: color 0.18s;
+        }
+        .nav-link:hover { color: #f1f5f9; }
+        .nav-link.active { color: #f1f5f9; }
+        /* Pillar card hover */
+        .pillar-card {
+            transition: border-color 0.2s, transform 0.2s;
+        }
+        .pillar-card:hover {
+            border-color: #2d4466;
+            transform: translateY(-2px);
+        }
+        /* Step number circle */
+        .step-num {
+            flex-shrink: 0;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.875rem;
         }
     </style>
 </head>
-<body class="bg-nimbusBlack text-slate-300 font-sans antialiased selection:bg-electricBlue selection:text-white">
+<body class="bg-nimbusBase text-slate-300 font-sans antialiased">
 
-        <!-- Navbar -->
-    <nav class="fixed w-full z-50 bg-nimbusDark/90 backdrop-blur-md border-b border-nimbusBorder">
+    <!-- ============================================================
+         NAVBAR
+    ============================================================ -->
+    <nav class="fixed w-full z-50 bg-nimbusBase/95 backdrop-blur-md border-b border-nimbusBorder">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
-                <div class="flex-shrink-0 flex items-center gap-3">
-                    <a href="index.html" class="flex items-center gap-3">
-                        <span class="text-electricBlue text-2xl">☁</span>
-                        <span class="font-heading font-bold text-xl text-white tracking-wide">QUANTUM<span class="text-electricBlue">NIMBUS</span> TECH</span>
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex-shrink-0">
+                    <a href="index.html" class="flex items-center gap-2.5">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z" fill="#3b82f6" opacity="0.2"/>
+                            <path d="M12 3C7.03 3 3 7.03 3 12s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9z" stroke="#3b82f6" stroke-width="1.5" fill="none"/>
+                            <circle cx="12" cy="12" r="3" fill="#3b82f6"/>
+                        </svg>
+                        <span class="font-heading font-bold text-[1.1rem] text-white tracking-tight">Quantum <span class="text-accentBlue">Nimbus</span> Tech</span>
                     </a>
                 </div>
-                <!-- Desktop Menu -->
-                <div class="hidden md:flex space-x-8 text-sm font-semibold tracking-wider text-slate-400">
-                    <a href="index.html#technology" class="hover:text-electricBlue transition-colors">ARCHITECTURE</a>
-                    <a href="safety.html" class="hover:text-crimsonRed transition-colors">SAFETY DATA</a>
-                    <a href="simulator.html" class="hover:text-electricBlue transition-colors">SIMULATOR</a>
-                    <a href="contact.html" class="hover:text-white transition-colors">CONTACT US</a>
+                <!-- Desktop Nav -->
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="index.html#technology" class="nav-link">Technology</a>
+                    <a href="safety.html" class="nav-link">Compliance Data</a>
+                    <a href="simulator.html" class="nav-link">Developer Console</a>
+                    <a href="contact.html" class="nav-link">Contact</a>
+                    <a href="contact.html" id="nav-cta" class="ml-2 px-4 py-2 rounded-md bg-accentBlue text-white text-sm font-semibold hover:bg-blue-500 transition-colors">
+                        Request Demo
+                    </a>
                 </div>
-                <!-- Mobile Menu Button -->
+                <!-- Mobile menu button -->
                 <div class="md:hidden flex items-center">
-                    <button id="mobile-menu-btn" class="text-slate-300 hover:text-white focus:outline-none">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    <button id="mobile-menu-btn" class="text-nimbusText hover:text-white focus:outline-none p-1">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
                     </button>
                 </div>
             </div>
         </div>
-        <!-- Mobile Menu Panel -->
-        <div id="mobile-menu" class="md:hidden hidden bg-nimbusDark border-t border-nimbusBorder">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 flex flex-col">
-                <a href="index.html#technology" class="block px-3 py-2 text-base font-medium text-slate-400 hover:text-electricBlue hover:bg-slate-800 rounded-md">ARCHITECTURE</a>
-                <a href="safety.html" class="block px-3 py-2 text-base font-medium text-slate-400 hover:text-crimsonRed hover:bg-slate-800 rounded-md">SAFETY DATA</a>
-                <a href="simulator.html" class="block px-3 py-2 text-base font-medium text-slate-400 hover:text-electricBlue hover:bg-slate-800 rounded-md">SIMULATOR</a>
-                <a href="contact.html" class="block px-3 py-2 text-base font-medium text-slate-400 hover:text-white hover:bg-slate-800 rounded-md">CONTACT US</a>
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="md:hidden hidden bg-nimbusSurface border-t border-nimbusBorder">
+            <div class="px-4 py-3 space-y-1">
+                <a href="index.html#technology" class="block px-3 py-2 text-sm text-nimbusText hover:text-white hover:bg-slate-800/50 rounded-md">Technology</a>
+                <a href="safety.html" class="block px-3 py-2 text-sm text-nimbusText hover:text-white hover:bg-slate-800/50 rounded-md">Compliance Data</a>
+                <a href="simulator.html" class="block px-3 py-2 text-sm text-nimbusText hover:text-white hover:bg-slate-800/50 rounded-md">Developer Console</a>
+                <a href="contact.html" class="block px-3 py-2 text-sm text-nimbusText hover:text-white hover:bg-slate-800/50 rounded-md">Contact</a>
             </div>
         </div>
     </nav>
 
-    <!-- SECTION 1: LANDING PAGE -->
-    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-nimbusDark via-nimbusBlack to-nimbusBlack">
+    <!-- ============================================================
+         HERO SECTION
+    ============================================================ -->
+    <section class="relative pt-36 pb-24 lg:pt-52 lg:pb-36 overflow-hidden">
+        <!-- Subtle background gradient -->
+        <div class="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-10%,rgba(59,130,246,0.08),transparent)]"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(ellipse_60%_40%_at_80%_60%,rgba(16,185,129,0.04),transparent)]"></div>
+
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="text-center max-w-4xl mx-auto">
-                <div class="flex flex-wrap justify-center gap-3 mb-8">
-                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 text-electricBlue text-xs md:text-sm font-semibold tracking-widest uppercase">
-                        <span class="w-2 h-2 rounded-full bg-electricBlue animate-pulse"></span>
+                <!-- Status badges -->
+                <div class="flex flex-wrap justify-center gap-2.5 mb-8">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/8 border border-blue-500/20 text-accentBlue text-xs font-medium">
+                        <span class="w-1.5 h-1.5 rounded-full bg-accentBlue animate-pulse"></span>
                         Verified Hardware Protection
                     </div>
-                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs md:text-sm font-semibold tracking-widest uppercase" title="U.S. Patent Application No. 64/114,968">
-                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                        U.S. PATENT PENDING
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/8 border border-emerald-500/20 text-accentGreen text-xs font-medium" title="U.S. Patent Application No. 64/114,968">
+                        <span class="w-1.5 h-1.5 rounded-full bg-accentGreen animate-pulse"></span>
+                        U.S. Patent Pending
                     </div>
                 </div>
-                <h1 class="font-heading text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-8 leading-tight">
-                    Stop Counterfeits. <span class="text-transparent bg-clip-text bg-gradient-to-r from-electricBlue to-blue-300">Protect Your Brand.</span>
+
+                <!-- Headline -->
+                <h1 class="font-heading text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-6 leading-[1.08]">
+                    Stop Counterfeits.<br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-accentBlue to-blue-300">Protect Your Brand.</span>
                 </h1>
-                <p class="mt-4 text-xl text-slate-400 max-w-3xl mx-auto mb-10 leading-relaxed">
-                    The Quantum Nimbus IQ System uses secure hardware authorization to lock out fake cartridges instantly, ensuring your customers only get authentic, safe products.
+
+                <p class="mt-4 text-lg md:text-xl text-nimbusText max-w-3xl mx-auto mb-10 leading-relaxed">
+                    The Quantum Nimbus IQ System embeds secure cryptographic authorization directly into hardware — locking out counterfeit cartridges instantly and ensuring your customers receive only authentic, safe, verified products.
                 </p>
-                <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <a href="index.html#technology" class="px-8 py-4 rounded-md bg-electricBlue text-white font-bold tracking-wide hover:bg-blue-600 transition-all shadow-[0_0_20px_rgba(59,130,246,0.3)]">
-                        REVIEW TECHNICAL BLUEPRINT
+
+                <!-- CTAs -->
+                <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                    <a href="index.html#technology" id="hero-primary-cta" class="px-7 py-3.5 rounded-md bg-accentBlue text-white font-semibold text-sm hover:bg-blue-500 transition-all shadow-[0_0_24px_rgba(59,130,246,0.25)]">
+                        View Technical Architecture
                     </a>
-                    <a href="simulator.html" class="px-8 py-4 rounded-md bg-transparent border border-slate-700 text-slate-300 font-bold tracking-wide hover:bg-slate-800 transition-all">
-                        LAUNCH ARCHITECTURE SIMULATOR
+                    <a href="simulator.html" id="hero-secondary-cta" class="px-7 py-3.5 rounded-md border border-nimbusBorder text-slate-300 font-semibold text-sm hover:bg-nimbusSurface hover:border-slate-600 transition-all">
+                        Launch Developer Console
                     </a>
                 </div>
             </div>
 
-            <!-- 3-Pillar Value Grid -->
-            <div class="mt-24 grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="p-8 rounded-xl bg-nimbusDark border border-nimbusBorder hover:border-slate-600 transition-colors">
-                    <div class="w-12 h-12 rounded-lg bg-slate-800 flex items-center justify-center mb-6 text-xl">📉</div>
-                    <h3 class="text-xl font-bold text-white mb-3 font-heading">Stop Revenue Loss</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed">
-                        Don't let the $9B shadow market cut into your profits. Our hardware instantly locks out counterfeit cartridges, so users can only buy and use your authentic, approved products.
+            <!-- ─── 3-Pillar Value Grid ─── -->
+            <div class="mt-24 grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div id="pillar-revenue" class="pillar-card p-8 rounded-xl bg-nimbusSurface border border-nimbusBorder">
+                    <div class="w-10 h-10 rounded-lg bg-blue-500/10 border border-blue-500/15 flex items-center justify-center mb-5">
+                        <!-- Revenue icon -->
+                        <svg class="w-5 h-5 text-accentBlue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-base font-semibold text-white mb-2.5 font-heading">Stop Revenue Loss</h3>
+                    <p class="text-nimbusText text-sm leading-relaxed">
+                        Don't let the $9B shadow market erode your margins. Our hardware instantly locks out counterfeit cartridges, ensuring users can only purchase and use your authentic, approved products.
                     </p>
                 </div>
-                <div class="p-8 rounded-xl bg-nimbusDark border border-nimbusBorder hover:border-slate-600 transition-colors">
-                    <div class="w-12 h-12 rounded-lg bg-slate-800 flex items-center justify-center mb-6 text-xl">🛡️</div>
-                    <h3 class="text-xl font-bold text-white mb-3 font-heading">Secure Your Supply Chain</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed">
-                        Avoid costly customs seizures and payment processing blocks. We provide 100% transparency from the manufacturer to the end-user, proving your products are legitimate and traceable.
+                <!-- Card 2 -->
+                <div id="pillar-supply-chain" class="pillar-card p-8 rounded-xl bg-nimbusSurface border border-nimbusBorder">
+                    <div class="w-10 h-10 rounded-lg bg-blue-500/10 border border-blue-500/15 flex items-center justify-center mb-5">
+                        <!-- Shield icon -->
+                        <svg class="w-5 h-5 text-accentBlue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-base font-semibold text-white mb-2.5 font-heading">Secure Your Supply Chain</h3>
+                    <p class="text-nimbusText text-sm leading-relaxed">
+                        Avoid costly customs seizures and payment processing blocks. We provide end-to-end transparency from manufacturer to end-user — proving your products are legitimate and fully traceable.
                     </p>
                 </div>
-                <div class="p-8 rounded-xl bg-nimbusDark border border-nimbusBorder hover:border-crimsonRed/50 transition-colors group">
-                    <div class="w-12 h-12 rounded-lg bg-red-900/20 text-crimsonRed flex items-center justify-center mb-6 text-xl group-hover:bg-red-900/40 transition-colors">☣️</div>
-                    <h3 class="text-xl font-bold text-white mb-3 font-heading">Eliminate Health Liabilities</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed">
-                        Protect your company from lawsuits. Our smart temperature control prevents toxic heavy metal exposure and stops harmful chemicals like benzene from ever forming in the hardware.
+                <!-- Card 3 -->
+                <div id="pillar-health" class="pillar-card p-8 rounded-xl bg-nimbusSurface border border-red-500/10">
+                    <div class="w-10 h-10 rounded-lg bg-red-500/8 border border-red-500/15 flex items-center justify-center mb-5">
+                        <!-- Health/shield icon -->
+                        <svg class="w-5 h-5 text-accentRed" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-base font-semibold text-white mb-2.5 font-heading">Eliminate Health Liabilities</h3>
+                    <p class="text-nimbusText text-sm leading-relaxed">
+                        Protect your company from litigation. Our intelligent thermal governance prevents toxic heavy metal exposure and stops harmful chemical formation — before it reaches the consumer.
                     </p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- SECTION 2: ABOUT THE TECHNOLOGY -->
-    <section id="technology" class="py-24 bg-[#07090f] border-t border-nimbusBorder">
+    <!-- ============================================================
+         SECTION 2: PLATFORM OVERVIEW (HOW IT WORKS)
+    ============================================================ -->
+    <section id="technology" class="py-28 border-t border-nimbusBorder" style="background:#0e1320;">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row gap-16 items-center">
-                <div class="w-full md:w-1/2">
-                    <h2 class="font-heading text-3xl md:text-5xl font-bold text-white mb-6">How It Works</h2>
-                    <p class="text-slate-400 mb-8 leading-relaxed text-lg">
-                        We build secure, cryptographic technology directly into the hardware, solving the safety risks and vulnerabilities of standard 510-thread metallic batteries.
+            <div class="flex flex-col lg:flex-row gap-16 items-center">
+
+                <!-- Left: Text -->
+                <div class="w-full lg:w-1/2">
+                    <div class="inline-flex items-center gap-2 mb-4 text-xs font-medium text-accentBlue uppercase tracking-widest">
+                        <span class="w-4 h-px bg-accentBlue opacity-60"></span>
+                        Platform Overview
+                    </div>
+                    <h2 class="font-heading text-3xl md:text-4xl font-bold text-white mb-5 leading-tight">
+                        How the IQ System Works
+                    </h2>
+                    <p class="text-nimbusText mb-10 leading-relaxed text-base">
+                        We embed secure cryptographic technology directly into hardware, resolving the safety vulnerabilities and supply-chain opacity of conventional 510-thread metallic batteries.
                     </p>
-                    
+
                     <div class="space-y-8">
+                        <!-- Step 1 -->
                         <div class="flex gap-4">
-                            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-electricBlue font-bold">1</div>
+                            <div class="step-num bg-blue-500/10 border border-blue-500/25 text-accentBlue">1</div>
                             <div>
-                                <h4 class="text-lg font-bold text-white mb-2">Advanced Ceramic Hardware</h4>
-                                <p class="text-sm text-slate-400">Our circuits are printed directly onto stable ceramic materials. This ensures perfect signal transparency and eliminates the connection issues you get with standard metallic threads.</p>
+                                <h4 class="text-sm font-semibold text-white mb-1.5">Advanced Ceramic Substrate</h4>
+                                <p class="text-sm text-nimbusText leading-relaxed">Circuits are printed directly onto stable ceramic materials, ensuring perfect signal transparency and eliminating the intermittent connection failures common to standard metallic threads.</p>
                             </div>
                         </div>
+                        <!-- Step 2 -->
                         <div class="flex gap-4">
-                            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-electricBlue font-bold">2</div>
+                            <div class="step-num bg-blue-500/10 border border-blue-500/25 text-accentBlue">2</div>
                             <div>
-                                <h4 class="text-lg font-bold text-white mb-2">Secure Hardware Verification</h4>
-                                <p class="text-sm text-slate-400">The battery contains an embedded security key that verifies the cartridge instantly upon connection. No internet or apps are required for this security check to run.</p>
+                                <h4 class="text-sm font-semibold text-white mb-1.5">Secure Hardware Verification</h4>
+                                <p class="text-sm text-nimbusText leading-relaxed">An embedded security key verifies cartridge authenticity upon connection using HMAC-SHA256 cryptography — with zero internet dependency or companion applications required.</p>
                             </div>
                         </div>
+                        <!-- Step 3 -->
                         <div class="flex gap-4">
-                            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-red-500/10 border border-red-500/30 flex items-center justify-center text-crimsonRed font-bold">3</div>
+                            <div class="step-num bg-red-500/10 border border-red-500/25 text-accentRed">3</div>
                             <div>
-                                <h4 class="text-lg font-bold text-white mb-2">Automatic Safety Limits</h4>
-                                <p class="text-sm text-slate-400">If an unverified or counterfeit cartridge is inserted, the battery restricts the temperature to a safe <span class="text-crimsonRed font-bold">150°C maximum</span>. This prevents harmful chemicals like benzene from being generated while maintaining basic utility.</p>
+                                <h4 class="text-sm font-semibold text-white mb-1.5">Automatic Thermal Safety Governance</h4>
+                                <p class="text-sm text-nimbusText leading-relaxed">Unverified or counterfeit cartridges trigger an automatic temperature restriction to a <span class="text-accentRed font-semibold">150°C hard ceiling</span> — preventing toxic chemical formation while maintaining minimal device utility.</p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="w-full md:w-1/2">
-                    <div class="relative rounded-2xl border border-slate-700 bg-nimbusDark p-2 shadow-2xl">
-                        <div class="absolute inset-0 bg-gradient-to-tr from-electricBlue/10 to-transparent rounded-2xl pointer-events-none"></div>
-                        <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070&auto=format&fit=crop" alt="Circuit Board Architecture" class="rounded-xl opacity-60 mix-blend-screen filter grayscale contrast-125">
-                        <!-- Abstract overlay overlay -->
-                        <div class="absolute inset-0 flex items-center justify-center flex-col pointer-events-none">
-                            <div class="w-32 h-32 border border-electricBlue/30 rounded-full flex items-center justify-center animate-[spin_10s_linear_infinite]">
-                                <div class="w-24 h-24 border border-dashed border-electricBlue/50 rounded-full"></div>
-                            </div>
-                            <div class="mt-4 text-xs font-mono text-electricBlue tracking-widest bg-nimbusBlack px-2 py-1 border border-electricBlue/30">HMAC-SHA256 SECURED</div>
+
+                <!-- Right: Visual -->
+                <div class="w-full lg:w-1/2">
+                    <div class="relative rounded-2xl border border-nimbusBorder bg-nimbusSurface p-3 shadow-2xl">
+                        <div class="absolute inset-0 bg-gradient-to-tr from-accentBlue/5 to-transparent rounded-2xl pointer-events-none"></div>
+                        <img
+                            src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070&auto=format&fit=crop"
+                            alt="Quantum Nimbus IQ — Ceramic Circuit Architecture"
+                            class="rounded-xl opacity-50 mix-blend-screen filter grayscale contrast-110 w-full"
+                        >
+                        <!-- Authentication chip overlay -->
+                        <div class="absolute bottom-6 left-6 flex items-center gap-2.5 bg-nimbusBase/90 border border-accentBlue/25 rounded-lg px-3 py-2 backdrop-blur-sm">
+                            <span class="w-2 h-2 rounded-full bg-accentGreen animate-pulse"></span>
+                            <span class="font-mono text-xs text-accentBlue tracking-wider">HMAC-SHA256 · Verified</span>
+                        </div>
+                        <!-- Patent badge -->
+                        <div class="absolute top-6 right-6 bg-nimbusBase/90 border border-nimbusBorder rounded-md px-2.5 py-1 backdrop-blur-sm">
+                            <span class="text-xs text-nimbusText font-medium">U.S. Patent Pending</span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <!-- Footer -->
-    <footer class="bg-nimbusBlack border-t border-nimbusBorder py-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4 text-slate-500 text-sm">
-            <div>
-                © 2026 Quantum Nimbus Tech. All rights reserved.
-            </div>
-            <div class="text-xs md:text-right text-slate-400">
-                U.S. Patent Pending (Application No. 64/114,968) <br class="hidden md:inline">
-                "Systems and Methods for Dynamic Vaporization Parameter Configuration and Authentication via Cryptographic Near Field Communication"
+
+    <!-- ============================================================
+         FOOTER
+    ============================================================ -->
+    <footer class="border-t border-nimbusBorder py-10" style="background:#0c0f17;">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-5 text-sm">
+                <div class="flex items-center gap-2.5">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 3C7.03 3 3 7.03 3 12s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9z" stroke="#3b82f6" stroke-width="1.5" fill="none"/>
+                        <circle cx="12" cy="12" r="3" fill="#3b82f6"/>
+                    </svg>
+                    <span class="text-nimbusText">© 2026 Quantum Nimbus Tech. All rights reserved.</span>
+                </div>
+                <div class="text-xs text-nimbusText text-center md:text-right max-w-md leading-relaxed">
+                    U.S. Patent Pending — App. No. 64/114,968<br class="hidden md:inline">
+                    <span class="opacity-70">"Systems and Methods for Dynamic Vaporization Parameter Configuration and Authentication via Cryptographic Near Field Communication"</span>
+                </div>
             </div>
         </div>
     </footer>
 
-
-    
+    <!-- Scripts -->
     <script>
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener("click", function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute("href")).scrollIntoView({
-                    behavior: "smooth"
-                });
+            anchor.addEventListener("click", function(e) {
+                const target = document.querySelector(this.getAttribute("href"));
+                if (target) { e.preventDefault(); target.scrollIntoView({ behavior: "smooth" }); }
             });
         });
-    </script>
-
-
-    <script>
         const btn = document.getElementById('mobile-menu-btn');
         const menu = document.getElementById('mobile-menu');
-        if (btn && menu) {
-            btn.addEventListener('click', () => {
-                menu.classList.toggle('hidden');
-            });
-        }
+        if (btn && menu) btn.addEventListener('click', () => menu.classList.toggle('hidden'));
     </script>
 </body>
 </html>
