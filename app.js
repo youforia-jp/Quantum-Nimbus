@@ -1161,12 +1161,49 @@ function renderTemperatureGraph() {
 
 // Helper: Custom Profile logic and events
 function setupCustomProfileListeners() {
+    // Slider linked changes
+    const customProfileOpt = document.getElementById("custom-profile-opt");
+    const customProfileMax = document.getElementById("custom-profile-max");
+    const customProfileOptVal = document.getElementById("custom-profile-opt-val");
+    const customProfileMaxVal = document.getElementById("custom-profile-max-val");
+    if (customProfileOpt && customProfileMax) {
+        customProfileOpt.addEventListener("input", () => {
+            let optVal = parseInt(customProfileOpt.value);
+            let maxVal = parseInt(customProfileMax.value);
+            if (optVal > maxVal) {
+                customProfileMax.value = optVal;
+                customProfileMaxVal.textContent = `${optVal}°C`;
+            }
+            customProfileOptVal.textContent = `${optVal}°C`;
+        });
+        customProfileMax.addEventListener("input", () => {
+            let optVal = parseInt(customProfileOpt.value);
+            let maxVal = parseInt(customProfileMax.value);
+            if (maxVal < optVal) {
+                customProfileOpt.value = maxVal;
+                customProfileOptVal.textContent = `${maxVal}°C`;
+            }
+            customProfileMaxVal.textContent = `${maxVal}°C`;
+        });
+    }
     if (!btnToggleDesigner || !profileDesignerForm || !selectCustomProfile) return;
     
     // Toggle form display
     btnToggleDesigner.addEventListener("click", () => {
         profileDesignerForm.style.display = "flex";
         customProfileName.value = "";
+        
+        // Reset inputs
+        const customProfileOpt = document.getElementById("custom-profile-opt");
+        const customProfileMax = document.getElementById("custom-profile-max");
+        const customProfileOptVal = document.getElementById("custom-profile-opt-val");
+        const customProfileMaxVal = document.getElementById("custom-profile-max-val");
+        if (customProfileOpt && customProfileMax) {
+            customProfileOpt.value = 180;
+            customProfileMax.value = 210;
+            customProfileOptVal.textContent = "180°C";
+            customProfileMaxVal.textContent = "210°C";
+        }
         
         // Hide selector row
         const selectorRow = document.getElementById("custom-profiles-selector");
@@ -1188,8 +1225,11 @@ function setupCustomProfileListeners() {
             return;
         }
         
+        const optVal = customProfileOpt ? parseInt(customProfileOpt.value) : 180;
+        const maxVal = customProfileMax ? parseInt(customProfileMax.value) : 210;
+
         // Add to profiles
-        const newProfile = { name, optimal: 180, safetyMax: 200 };
+        const newProfile = { name, optimal: optVal, safetyMax: maxVal };
         customProfiles.push(newProfile);
         localStorage.setItem("nimbus_custom_profiles", JSON.stringify(customProfiles));
         

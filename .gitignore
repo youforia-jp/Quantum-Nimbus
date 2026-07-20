@@ -55,3 +55,6 @@ pip-delete-this-directory.txt
 # OS metadata
 .DS_Store
 Thumbs.db
+
+# Local Netlify folder
+.netlify
