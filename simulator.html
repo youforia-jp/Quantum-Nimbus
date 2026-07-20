@@ -235,16 +235,22 @@
                                 <div class="form-group" style="display: flex; flex-direction: column; gap: 0.25rem;">
                                     <div style="display: flex; justify-content: space-between; align-items: center;">
                                         <label style="font-size: 0.65rem; color: var(--text-secondary); font-weight: 600;">OPTIMAL TARGET TEMP</label>
-                                        <span id="custom-profile-opt-val" style="font-size: 0.7rem; color: var(--primary-glow); font-weight: bold;">180°C</span>
+                                        <div style="display: flex; align-items: center; gap: 0.2rem;">
+                                            <input type="number" id="custom-profile-opt-val" min="150" max="220" value="180" style="background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; color: var(--primary-glow); font-weight: bold; font-size: 0.7rem; width: 45px; text-align: center; outline: none; padding: 2px;">
+                                            <span style="font-size: 0.7rem; color: var(--text-secondary);">°C</span>
+                                        </div>
                                     </div>
                                     <input type="range" id="custom-profile-opt" min="150" max="220" value="180" style="width: 100%; accent-color: var(--primary-glow);">
                                 </div>
                                 <div class="form-group" style="display: flex; flex-direction: column; gap: 0.25rem;">
                                     <div style="display: flex; justify-content: space-between; align-items: center;">
                                         <label style="font-size: 0.65rem; color: var(--text-secondary); font-weight: 600;">SAFETY TEMP CEILING</label>
-                                        <span id="custom-profile-max-val" style="font-size: 0.7rem; color: var(--warning-glow); font-weight: bold;">210°C</span>
+                                        <div style="display: flex; align-items: center; gap: 0.2rem;">
+                                            <input type="number" id="custom-profile-max-val" min="150" max="250" value="210" style="background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; color: var(--warning-glow); font-weight: bold; font-size: 0.7rem; width: 45px; text-align: center; outline: none; padding: 2px;">
+                                            <span style="font-size: 0.7rem; color: var(--text-secondary);">°C</span>
+                                        </div>
                                     </div>
-                                    <input type="range" id="custom-profile-max" min="180" max="250" value="210" style="width: 100%; accent-color: var(--warning-glow);">
+                                    <input type="range" id="custom-profile-max" min="150" max="250" value="210" style="width: 100%; accent-color: var(--warning-glow);">
                                 </div>
                                 <div style="display: flex; gap: 0.5rem; margin-top: 0.2rem;">
                                     <button id="btn-save-profile" style="flex: 1; background: var(--primary-glow); border: none; color: white; border-radius: 8px; padding: 0.5rem; font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: background 0.3s; outline: none;">Save Profile</button>

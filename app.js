@@ -1172,18 +1172,38 @@ function setupCustomProfileListeners() {
             let maxVal = parseInt(customProfileMax.value);
             if (optVal > maxVal) {
                 customProfileMax.value = optVal;
-                customProfileMaxVal.textContent = `${optVal}°C`;
+                customProfileMaxVal.value = optVal;
             }
-            customProfileOptVal.textContent = `${optVal}°C`;
+            customProfileOptVal.value = optVal;
         });
         customProfileMax.addEventListener("input", () => {
             let optVal = parseInt(customProfileOpt.value);
             let maxVal = parseInt(customProfileMax.value);
             if (maxVal < optVal) {
                 customProfileOpt.value = maxVal;
-                customProfileOptVal.textContent = `${maxVal}°C`;
+                customProfileOptVal.value = maxVal;
             }
-            customProfileMaxVal.textContent = `${maxVal}°C`;
+            customProfileMaxVal.value = maxVal;
+        });
+        customProfileOptVal.addEventListener("input", () => {
+            let optVal = parseInt(customProfileOptVal.value) || 150;
+            let maxVal = parseInt(customProfileMaxVal.value) || 210;
+            if (optVal > maxVal) {
+                maxVal = optVal;
+                customProfileMaxVal.value = maxVal;
+                customProfileMax.value = maxVal;
+            }
+            customProfileOpt.value = optVal;
+        });
+        customProfileMaxVal.addEventListener("input", () => {
+            let optVal = parseInt(customProfileOptVal.value) || 150;
+            let maxVal = parseInt(customProfileMaxVal.value) || 210;
+            if (maxVal < optVal) {
+                optVal = maxVal;
+                customProfileOptVal.value = optVal;
+                customProfileOpt.value = optVal;
+            }
+            customProfileMax.value = maxVal;
         });
     }
     if (!btnToggleDesigner || !profileDesignerForm || !selectCustomProfile) return;
@@ -1201,8 +1221,8 @@ function setupCustomProfileListeners() {
         if (customProfileOpt && customProfileMax) {
             customProfileOpt.value = 180;
             customProfileMax.value = 210;
-            customProfileOptVal.textContent = "180°C";
-            customProfileMaxVal.textContent = "210°C";
+            customProfileOptVal.value = 180;
+            customProfileMaxVal.value = 210;
         }
         
         // Hide selector row

@@ -6,8 +6,6 @@
 
 [dev]
   port = 8888
-  # Mimic target port for local developer server (e.g., if using python -m http.server 8080)
-  targetPort = 8080
   publish = "."
 
 # Inject mock environment variables for local testing
@@ -20,4 +18,19 @@
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/simulator"
+  to = "/simulator.html"
+  status = 200
+
+[[redirects]]
+  from = "/safety"
+  to = "/safety.html"
+  status = 200
+
+[[redirects]]
+  from = "/contact"
+  to = "/contact.html"
   status = 200
