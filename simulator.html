@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
@@ -92,9 +92,8 @@
                 <div class="hidden md:flex items-center gap-8">
                     <a href="index.html#technology" class="nav-link">Technology</a>
                     <a href="safety.html" class="nav-link">Compliance Data</a>
-                    <a href="simulator.html" class="nav-link" style="color:#f1f5f9;">Developer Console</a>
+                    <a href="simulator.html" class="nav-link" style="color:#f1f5f9;">Simulation</a>
                     <a href="contact.html" class="nav-link">Contact</a>
-                    <a href="contact.html" class="ml-2 px-4 py-2 rounded-md bg-accentBlue text-white text-sm font-semibold hover:bg-blue-500 transition-colors">Request Demo</a>
                 </div>
                 <!-- Mobile menu button -->
                 <div class="md:hidden flex items-center">
@@ -109,7 +108,7 @@
             <div class="px-4 py-3 space-y-1">
                 <a href="index.html#technology" class="block px-3 py-2 text-sm text-nimbusText hover:text-white hover:bg-slate-800/50 rounded-md">Technology</a>
                 <a href="safety.html" class="block px-3 py-2 text-sm text-nimbusText hover:text-white hover:bg-slate-800/50 rounded-md">Compliance Data</a>
-                <a href="simulator.html" class="block px-3 py-2 text-sm text-white bg-slate-800/30 rounded-md">Developer Console</a>
+                <a href="simulator.html" class="block px-3 py-2 text-sm text-white bg-slate-800/30 rounded-md">Simulation</a>
                 <a href="contact.html" class="block px-3 py-2 text-sm text-nimbusText hover:text-white hover:bg-slate-800/50 rounded-md">Contact</a>
             </div>
         </div>
@@ -145,9 +144,9 @@
                     </div>
                 </div>
 
-                <div id="simulator-section" class="w-full backdrop-blur-md rounded-b-xl border border-nimbusBorder">
-                    <main class="simulator-container">
-        
+                <div id="simulator-section" class="w-full rounded-b-xl border border-nimbusBorder" style="background:#0e1320; overflow:visible;">
+                    <main class="simulator-container" style="display:flex; justify-content:center; align-items:flex-start; gap:2.5rem; flex-wrap:nowrap; padding:2rem 1.5rem;">
+
         <!-- ================= SMARTPHONE APP PANE ================= -->
         <section class="phone-mockup card">
             <div class="phone-notch"></div>
@@ -245,7 +244,7 @@
                                 <button id="btn-delete-profile" style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); color: #fca5a5; border-radius: 8px; padding: 0 0.6rem; font-size: 0.75rem; cursor: pointer; display: none; outline: none;">Delete</button>
                             </div>
 
-                                                        <!-- Simplified Designer Form -->
+                            <!-- Simplified Designer Form -->
                             <div id="profile-designer-form" style="display: none; flex-direction: column; gap: 0.6rem; border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 0.6rem; margin-top: 0.6rem;">
                                 <div class="form-group" style="display: flex; flex-direction: column; gap: 0.25rem;">
                                     <label style="font-size: 0.65rem; color: var(--text-secondary); font-weight: 600;">NEW PROFILE NAME</label>
@@ -279,7 +278,7 @@
                             </div>
                         </div>
 
-                        <!-- Heating Insights Panel (Interactive SVG Graph + Live Telemetry) -->
+                        <!-- Heating Insights Panel -->
                         <div class="app-card heating-insights-card">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
                                 <span class="card-label" style="margin-bottom: 0;">HEATING INSIGHTS</span>
@@ -289,24 +288,15 @@
                             <!-- SVG Temperature Curve Graph -->
                             <div class="temp-graph-container" style="position: relative; width: 100%; height: 110px; background: rgba(0, 0, 0, 0.25); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.05); margin-bottom: 0.8rem; overflow: hidden;">
                                 <svg id="temp-curve-svg" width="100%" height="100%" viewBox="0 0 300 110" style="display: block;">
-                                    <!-- Grid Lines -->
                                     <line x1="0" y1="27.5" x2="300" y2="27.5" stroke="rgba(255, 255, 255, 0.03)" stroke-width="1" />
                                     <line x1="0" y1="55" x2="300" y2="55" stroke="rgba(255, 255, 255, 0.03)" stroke-width="1" />
                                     <line x1="0" y1="82.5" x2="300" y2="82.5" stroke="rgba(255, 255, 255, 0.03)" stroke-width="1" />
-                                    
-                                    <!-- Reference lines for target and safety -->
                                     <line id="graph-limit-line" x1="0" y1="20" x2="300" y2="20" stroke="rgba(239, 68, 68, 0.25)" stroke-dasharray="3,3" stroke-width="1.2" />
                                     <line id="graph-target-line" x1="0" y1="50" x2="300" y2="50" stroke="rgba(var(--primary-glow-rgb), 0.5)" stroke-dasharray="3,3" stroke-width="1.2" />
-                                    
-                                    <!-- Text indicators inside graph -->
                                     <text id="graph-limit-label" x="5" y="15" fill="rgba(239, 68, 68, 0.6)" font-size="7" font-weight="600">LIMIT: --</text>
                                     <text id="graph-target-label" x="5" y="45" fill="var(--accent-color)" font-size="7" font-weight="600">TARGET: --</text>
-                                    
-                                    <!-- Static/Preview curve path -->
                                     <path id="graph-preview-curve" d="" fill="none" stroke="rgba(255, 255, 255, 0.15)" stroke-dasharray="2,2" stroke-width="1.5" />
-                                    <!-- Live Temperature curve path -->
                                     <path id="graph-live-curve" d="" fill="none" stroke="url(#tempGlowGrad)" stroke-width="2.5" stroke-linecap="round" filter="url(#tempGlow)" />
-                                    
                                     <defs>
                                         <linearGradient id="tempGlowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
                                             <stop offset="0%" stop-color="var(--accent-color)" />
@@ -314,10 +304,7 @@
                                         </linearGradient>
                                         <filter id="tempGlow">
                                             <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
-                                            <feMerge>
-                                                <feMergeNode in="coloredBlur"/>
-                                                <feMergeNode in="SourceGraphic"/>
-                                            </feMerge>
+                                            <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
                                         </filter>
                                     </defs>
                                 </svg>
@@ -368,142 +355,20 @@
                                         </radialGradient>
                                         <filter id="glow">
                                             <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-                                            <feMerge>
-                                                <feMergeNode in="coloredBlur"/>
-                                                <feMergeNode in="SourceGraphic"/>
-                                            </feMerge>
+                                            <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
                                         </filter>
                                     </defs>
-
-                                    <!-- Sun (visible in sunny state) -->
-                                    <g class="nimby-sun">
-                                        <circle cx="150" cy="40" r="22" fill="#f59e0b" filter="url(#glow)" />
-                                        <g class="sun-rays">
-                                            <line x1="150" y1="8" x2="150" y2="15" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" />
-                                            <line x1="150" y1="65" x2="150" y2="72" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" />
-                                            <line x1="118" y1="40" x2="125" y2="40" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" />
-                                            <line x1="175" y1="40" x2="182" y2="40" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" />
-                                            <line x1="127" y1="17" x2="132" y2="22" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" />
-                                            <line x1="168" y1="58" x2="173" y2="63" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" />
-                                            <line x1="127" y1="63" x2="132" y2="58" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" />
-                                            <line x1="168" y1="22" x2="173" y2="17" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" />
-                                        </g>
-                                    </g>
-
-                                    <!-- Sleeping Zzz (visible in sleeping state) -->
-                                    <g class="nimby-zzz">
-                                        <text x="135" y="65" class="zzz z1">z</text>
-                                        <text x="150" y="50" class="zzz z2">z</text>
-                                        <text x="165" y="35" class="zzz z3">Z</text>
-                                    </g>
-
-                                    <!-- Lightning Bolts (visible in angry state) -->
-                                    <g class="nimby-lightning">
-                                        <path d="M 70,110 L 60,128 L 72,128 L 65,142" stroke="#fbbf24" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)" />
-                                        <path d="M 130,110 L 120,128 L 132,128 L 125,142" stroke="#fbbf24" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)" />
-                                    </g>
-
-                                    <!-- Toxic Vapor steam (visible in toxic state) -->
-                                    <g class="nimby-toxic-steam">
-                                        <!-- Left toxic skull -->
-                                        <g class="toxic-skull left">
-                                            <g transform="translate(48, 10) scale(0.24)">
-                                                <path d="M20,20 L80,80 M20,80 L80,20" stroke="#10b981" stroke-width="12" stroke-linecap="round"/>
-                                                <circle cx="20" cy="20" r="8" fill="#10b981"/>
-                                                <circle cx="80" cy="80" r="8" fill="#10b981"/>
-                                                <circle cx="20" cy="80" r="8" fill="#10b981"/>
-                                                <circle cx="80" cy="20" r="8" fill="#10b981"/>
-                                                <circle cx="50" cy="45" r="22" fill="#10b981"/>
-                                                <rect x="38" y="55" width="24" height="16" rx="4" fill="#10b981"/>
-                                                <circle cx="42" cy="43" r="5" fill="#064e3b"/>
-                                                <circle cx="58" cy="43" r="5" fill="#064e3b"/>
-                                                <polygon points="50,49 47,56 53,56" fill="#064e3b"/>
-                                                <line x1="45" y1="63" x2="45" y2="71" stroke="#064e3b" stroke-width="2"/>
-                                                <line x1="50" y1="63" x2="50" y2="71" stroke="#064e3b" stroke-width="2"/>
-                                                <line x1="55" y1="63" x2="55" y2="71" stroke="#064e3b" stroke-width="2"/>
-                                            </g>
-                                        </g>
-                                        <!-- Right toxic skull -->
-                                        <g class="toxic-skull right">
-                                            <g transform="translate(128, 10) scale(0.24)">
-                                                <path d="M20,20 L80,80 M20,80 L80,20" stroke="#10b981" stroke-width="12" stroke-linecap="round"/>
-                                                <circle cx="20" cy="20" r="8" fill="#10b981"/>
-                                                <circle cx="80" cy="80" r="8" fill="#10b981"/>
-                                                <circle cx="20" cy="80" r="8" fill="#10b981"/>
-                                                <circle cx="80" cy="20" r="8" fill="#10b981"/>
-                                                <circle cx="50" cy="45" r="22" fill="#10b981"/>
-                                                <rect x="38" y="55" width="24" height="16" rx="4" fill="#10b981"/>
-                                                <circle cx="42" cy="43" r="5" fill="#064e3b"/>
-                                                <circle cx="58" cy="43" r="5" fill="#064e3b"/>
-                                                <polygon points="50,49 47,56 53,56" fill="#064e3b"/>
-                                                <line x1="45" y1="63" x2="45" y2="71" stroke="#064e3b" stroke-width="2"/>
-                                                <line x1="50" y1="63" x2="50" y2="71" stroke="#064e3b" stroke-width="2"/>
-                                                <line x1="55" y1="63" x2="55" y2="71" stroke="#064e3b" stroke-width="2"/>
-                                            </g>
-                                        </g>
-                                    </g>
-
-                                    <!-- Cloud Body -->
+                                    <g class="nimby-sun"><circle cx="150" cy="40" r="22" fill="#f59e0b" filter="url(#glow)" /><g class="sun-rays"><line x1="150" y1="8" x2="150" y2="15" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" /><line x1="150" y1="65" x2="150" y2="72" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" /><line x1="118" y1="40" x2="125" y2="40" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" /><line x1="175" y1="40" x2="182" y2="40" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" /><line x1="127" y1="17" x2="132" y2="22" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" /><line x1="168" y1="58" x2="173" y2="63" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" /><line x1="127" y1="63" x2="132" y2="58" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" /><line x1="168" y1="22" x2="173" y2="17" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" /></g></g>
+                                    <g class="nimby-zzz"><text x="135" y="65" class="zzz z1">z</text><text x="150" y="50" class="zzz z2">z</text><text x="165" y="35" class="zzz z3">Z</text></g>
+                                    <g class="nimby-lightning"><path d="M 70,110 L 60,128 L 72,128 L 65,142" stroke="#fbbf24" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)" /><path d="M 130,110 L 120,128 L 132,128 L 125,142" stroke="#fbbf24" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)" /></g>
+                                    <g class="nimby-toxic-steam"><g class="toxic-skull left"><g transform="translate(48, 10) scale(0.24)"><path d="M20,20 L80,80 M20,80 L80,20" stroke="#10b981" stroke-width="12" stroke-linecap="round"/><circle cx="20" cy="20" r="8" fill="#10b981"/><circle cx="80" cy="80" r="8" fill="#10b981"/><circle cx="20" cy="80" r="8" fill="#10b981"/><circle cx="80" cy="20" r="8" fill="#10b981"/><circle cx="50" cy="45" r="22" fill="#10b981"/><rect x="38" y="55" width="24" height="16" rx="4" fill="#10b981"/><circle cx="42" cy="43" r="5" fill="#064e3b"/><circle cx="58" cy="43" r="5" fill="#064e3b"/><polygon points="50,49 47,56 53,56" fill="#064e3b"/><line x1="45" y1="63" x2="45" y2="71" stroke="#064e3b" stroke-width="2"/><line x1="50" y1="63" x2="50" y2="71" stroke="#064e3b" stroke-width="2"/><line x1="55" y1="63" x2="55" y2="71" stroke="#064e3b" stroke-width="2"/></g></g><g class="toxic-skull right"><g transform="translate(128, 10) scale(0.24)"><path d="M20,20 L80,80 M20,80 L80,20" stroke="#10b981" stroke-width="12" stroke-linecap="round"/><circle cx="20" cy="20" r="8" fill="#10b981"/><circle cx="80" cy="80" r="8" fill="#10b981"/><circle cx="20" cy="80" r="8" fill="#10b981"/><circle cx="80" cy="20" r="8" fill="#10b981"/><circle cx="50" cy="45" r="22" fill="#10b981"/><rect x="38" y="55" width="24" height="16" rx="4" fill="#10b981"/><circle cx="42" cy="43" r="5" fill="#064e3b"/><circle cx="58" cy="43" r="5" fill="#064e3b"/><polygon points="50,49 47,56 53,56" fill="#064e3b"/><line x1="45" y1="63" x2="45" y2="71" stroke="#064e3b" stroke-width="2"/><line x1="50" y1="63" x2="50" y2="71" stroke="#064e3b" stroke-width="2"/><line x1="55" y1="63" x2="55" y2="71" stroke="#064e3b" stroke-width="2"/></g></g></g>
                                     <path class="cloud-body" d="M 45,95 A 25,25 0 0,1 55,50 A 32,32 0 0,1 110,35 A 32,32 0 0,1 155,55 A 25,25 0 0,1 155,95 A 15,15 0 0,1 145,110 L 55,110 A 15,15 0 0,1 45,95 Z" fill="url(#cloudGrad)" />
-
-                                    <!-- Rosy Cheeks -->
                                     <circle cx="72" cy="84" r="6" fill="#f43f5e" opacity="0.4" class="blush" />
                                     <circle cx="128" cy="84" r="6" fill="#f43f5e" opacity="0.4" class="blush" />
-
-                                    <!-- Face Elements -->
-                                    <!-- Eyes -->
-                                    <g class="face-eye eye-left">
-                                        <!-- Sleeping -->
-                                        <path class="eye-sleep" d="M 67,80 Q 72,83 77,80" stroke="#475569" stroke-width="2.2" fill="none" stroke-linecap="round" />
-                                        <!-- Happy -->
-                                        <circle class="eye-happy" cx="72" cy="78" r="3" fill="#1e293b" />
-                                        <!-- Angry -->
-                                        <g class="eye-angry">
-                                            <line x1="66" y1="74" x2="76" y2="78" stroke="#1e293b" stroke-width="2.2" stroke-linecap="round" />
-                                            <circle cx="71" cy="80" r="2.5" fill="#1e293b" />
-                                        </g>
-                                        <!-- Toxic -->
-                                        <g class="eye-toxic">
-                                            <line x1="68" y1="76" x2="76" y2="82" stroke="#047857" stroke-width="2.2" stroke-linecap="round" />
-                                            <line x1="76" y1="76" x2="68" y2="82" stroke="#047857" stroke-width="2.2" stroke-linecap="round" />
-                                        </g>
-                                    </g>
-                                    <g class="face-eye eye-right">
-                                        <!-- Sleeping -->
-                                        <path class="eye-sleep" d="M 123,80 Q 128,83 133,80" stroke="#475569" stroke-width="2.2" fill="none" stroke-linecap="round" />
-                                        <!-- Happy -->
-                                        <circle class="eye-happy" cx="128" cy="78" r="3" fill="#1e293b" />
-                                        <!-- Angry -->
-                                        <g class="eye-angry">
-                                            <line x1="134" y1="74" x2="124" y2="78" stroke="#1e293b" stroke-width="2.2" stroke-linecap="round" />
-                                            <circle cx="129" cy="80" r="2.5" fill="#1e293b" />
-                                        </g>
-                                        <!-- Toxic -->
-                                        <g class="eye-toxic">
-                                            <line x1="124" y1="76" x2="132" y2="82" stroke="#047857" stroke-width="2.2" stroke-linecap="round" />
-                                            <line x1="132" y1="76" x2="124" y2="82" stroke="#047857" stroke-width="2.2" stroke-linecap="round" />
-                                        </g>
-                                    </g>
-
-                                    <!-- Mouth -->
-                                    <g class="face-mouth">
-                                        <!-- Happy smile -->
-                                        <path class="mouth-happy" d="M 96,86 Q 100,90 104,86" stroke="#1e293b" stroke-width="2.2" fill="none" stroke-linecap="round" />
-                                        <!-- Sleeping snore circle -->
-                                        <circle class="mouth-sleep" cx="100" cy="86" r="2" fill="#475569" />
-                                        <!-- Angry squiggly -->
-                                        <path class="mouth-angry" d="M 95,87 Q 97.5,85 100,87 T 105,87" stroke="#1e293b" stroke-width="2.2" fill="none" stroke-linecap="round" />
-                                        <!-- Toxic sad face -->
-                                        <path class="mouth-toxic" d="M 96,88 Q 100,84 104,88" stroke="#047857" stroke-width="2.2" fill="none" stroke-linecap="round" />
-                                        <!-- Puffing blow circle -->
-                                        <circle class="mouth-puff" cx="100" cy="86" r="3.5" stroke="#1e293b" stroke-width="2.2" fill="none" />
-                                    </g>
-                                    <!-- Exhaled smoke (visible in puffing state) -->
-                                    <g class="nimby-puff-smoke">
-                                        <circle cx="100" cy="90" r="8" fill="#ffffff" opacity="0" class="nimby-smoke-bubble" />
-                                        <circle cx="109" cy="90" r="5" fill="#ffffff" opacity="0" class="nimby-smoke-bubble" />
-                                        <circle cx="91" cy="90" r="5" fill="#ffffff" opacity="0" class="nimby-smoke-bubble" />
-                                    </g>
+                                    <g class="face-eye eye-left"><path class="eye-sleep" d="M 67,80 Q 72,83 77,80" stroke="#475569" stroke-width="2.2" fill="none" stroke-linecap="round" /><circle class="eye-happy" cx="72" cy="78" r="3" fill="#1e293b" /><g class="eye-angry"><line x1="66" y1="74" x2="76" y2="78" stroke="#1e293b" stroke-width="2.2" stroke-linecap="round" /><circle cx="71" cy="80" r="2.5" fill="#1e293b" /></g><g class="eye-toxic"><line x1="68" y1="76" x2="76" y2="82" stroke="#047857" stroke-width="2.2" stroke-linecap="round" /><line x1="76" y1="76" x2="68" y2="82" stroke="#047857" stroke-width="2.2" stroke-linecap="round" /></g></g>
+                                    <g class="face-eye eye-right"><path class="eye-sleep" d="M 123,80 Q 128,83 133,80" stroke="#475569" stroke-width="2.2" fill="none" stroke-linecap="round" /><circle class="eye-happy" cx="128" cy="78" r="3" fill="#1e293b" /><g class="eye-angry"><line x1="134" y1="74" x2="124" y2="78" stroke="#1e293b" stroke-width="2.2" stroke-linecap="round" /><circle cx="129" cy="80" r="2.5" fill="#1e293b" /></g><g class="eye-toxic"><line x1="124" y1="76" x2="132" y2="82" stroke="#047857" stroke-width="2.2" stroke-linecap="round" /><line x1="132" y1="76" x2="124" y2="82" stroke="#047857" stroke-width="2.2" stroke-linecap="round" /></g></g>
+                                    <g class="face-mouth"><path class="mouth-happy" d="M 96,86 Q 100,90 104,86" stroke="#1e293b" stroke-width="2.2" fill="none" stroke-linecap="round" /><circle class="mouth-sleep" cx="100" cy="86" r="2" fill="#475569" /><path class="mouth-angry" d="M 95,87 Q 97.5,85 100,87 T 105,87" stroke="#1e293b" stroke-width="2.2" fill="none" stroke-linecap="round" /><path class="mouth-toxic" d="M 96,88 Q 100,84 104,88" stroke="#047857" stroke-width="2.2" fill="none" stroke-linecap="round" /><circle class="mouth-puff" cx="100" cy="86" r="3.5" stroke="#1e293b" stroke-width="2.2" fill="none" /></g>
+                                    <g class="nimby-puff-smoke"><circle cx="100" cy="90" r="8" fill="#ffffff" opacity="0" class="nimby-smoke-bubble" /><circle cx="109" cy="90" r="5" fill="#ffffff" opacity="0" class="nimby-smoke-bubble" /><circle cx="91" cy="90" r="5" fill="#ffffff" opacity="0" class="nimby-smoke-bubble" /></g>
                                 </svg>
                             </div>
                             <div id="nimby-speech" class="nimby-speech-bubble">Zzz... Companion is sleeping. Insert a cartridge to activate.</div>
@@ -513,7 +378,6 @@
                         <div class="app-card stats-card">
                             <span class="card-label">WELLNESS METRICS</span>
                             <div class="stats-container">
-                                <!-- Circular Puff Progress -->
                                 <div class="stat-circle-box">
                                     <svg class="progress-ring" width="80" height="80">
                                         <circle class="progress-ring__circle-bg" stroke="rgba(255, 255, 255, 0.05)" stroke-width="6" fill="transparent" r="34" cx="40" cy="40"/>
@@ -526,7 +390,6 @@
                                     </div>
                                     <span class="circle-label">mg Today</span>
                                 </div>
-                                <!-- Toxins Avoided Card -->
                                 <div class="stat-toxins-box">
                                     <span class="toxins-title">Toxins Blocked</span>
                                     <span id="val-toxins" class="toxins-val highlight-val">0.0 mg</span>
@@ -534,7 +397,6 @@
                                 </div>
                             </div>
                             
-                            <!-- Custom Daily Limit Slider -->
                             <div class="wellness-limit-control" style="display: flex; flex-direction: column; gap: 0.35rem; margin-top: 0.9rem; border-top: 1px solid rgba(255, 255, 255, 0.06); padding-top: 0.8rem;">
                                 <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.72rem;">
                                     <span class="limit-slider-label" style="font-weight: 600; color: var(--text-secondary); letter-spacing: 0.5px; text-transform: uppercase; font-size: 0.6rem;">Adjust Daily mg Limit</span>
@@ -547,9 +409,7 @@
                         <!-- Weekly Puff History Card -->
                         <div class="app-card history-card">
                             <span class="card-label">7-DAY CONSUMPTION HISTORY</span>
-                            <div id="chart-container" style="width: 100%; height: 110px; display: flex; align-items: flex-end; justify-content: space-between; margin-top: 0.8rem; position: relative;">
-                                <!-- Dynamic SVG chart will be injected here -->
-                            </div>
+                            <div id="chart-container" style="width: 100%; height: 110px; display: flex; align-items: flex-end; justify-content: space-between; margin-top: 0.8rem; position: relative;"></div>
                         </div>
 
                         <!-- Supplement Integration Panel -->
@@ -585,15 +445,13 @@
                 <div class="modal-content">
                     <span class="warning-icon">⚠️</span>
                     <h3>UNVERIFIED CARTRIDGE DETECTED</h3>
-                    <p class="warning-text">
-                        This cartridge has failed cryptographic authentication. Running unverified hardware or non-compliant oils at standard temperatures may release toxic heavy metals (lead, cadmium) or hazardous chemical vapor.
-                    </p>
+                    <p class="warning-text">This cartridge has failed cryptographic authentication. Running unverified hardware or non-compliant oils at standard temperatures may release toxic heavy metals (lead, cadmium) or hazardous chemical vapor.</p>
                     <div class="warning-benefits">
                         <strong>Restricted Safety Mode will:</strong>
                         <ul>
                             <li>Clamp maximum temperature to 150°C.</li>
                             <li>Reduce toxic degradation risk.</li>
-                            <li>Disable Flavor Focus & Max Cloud modes.</li>
+                            <li>Disable Flavor Focus &amp; Max Cloud modes.</li>
                         </ul>
                     </div>
                     <div class="modal-actions">
@@ -606,10 +464,9 @@
 
         <!-- ================= PHYSICAL VAPE DEVICE PANE ================= -->
         <section class="device-mockup card">
-            <div class="device-section-title">NIMBUS FRONTIER VAPE MOCKUP</div>
+            <div class="device-section-title" style="font-size:0.65rem; font-weight:600; letter-spacing:0.1em; color:#4b5e78; text-transform:uppercase;">Nimbus Frontier — Hardware Mockup</div>
             
             <div class="device-chassis">
-                <!-- Outer Tube and Cartridge Area -->
                 <div class="cartridge-assembly">
                     <div class="mouthpiece-tip">
                         <div id="vapor-clouds" class="vapor-clouds-smoke">
@@ -630,14 +487,11 @@
                     </div>
                 </div>
 
-                <!-- Walnut / Premium Accents Band -->
                 <div class="accent-band">
                     <span class="wood-grain-label">NIMBUS LABS</span>
                 </div>
 
-                <!-- Core Body -->
                 <div class="device-core">
-                    <!-- OLED Screen -->
                     <div class="oled-screen">
                         <div class="oled-header">
                             <span id="oled-state">STANDBY</span>
@@ -656,15 +510,24 @@
                         </div>
                     </div>
 
-                    <!-- LED Glowing Control Ring -->
-                    <div class="led-ring-outer" id="btn-puff" title="Press & Hold to Puff" style="cursor: pointer; position: relative;">
+                    <div class="led-ring-outer" id="btn-puff" title="Press &amp; Hold to Puff" style="cursor: pointer; position: relative;">
                         <div id="led-ring" class="led-ring-inner">
                             <div class="led-glow-overlay"></div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </section>
 
+                    </main>
+                </div>
+            </div>
+        </div>
+    </section>
 
-            <!-- Validation Console -->
+    <!-- ================= VALIDATION CONSOLE (below simulator panel) ================= -->
+    <section class="py-12" style="background:#0c0f17;">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="console-card">
                 <!-- Console header -->
                 <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.25rem;">
@@ -675,61 +538,61 @@
                 </div>
                 <p class="console-desc">Simulate hardware payload connections and configure authentication override settings for testing purposes.</p>
 
-                <!-- Hardware payload selector -->
-                <div style="margin-bottom:0.75rem;">
-                    <div style="font-size:0.7rem; font-weight:600; color:#8b9cb5; margin-bottom:0.6rem; letter-spacing:0.03em;">Select Hardware Profile</div>
-                    <div class="cartridge-buttons">
-                        <button class="cart-btn active" data-cart="disconnected">No Cartridge (Idle)</button>
-                        <button class="cart-btn" data-cart="astro">Astro — D9 THC</button>
-                        <button class="cart-btn" data-cart="frontier">Frontier — Rosin</button>
-                        <button class="cart-btn" data-cart="nimby">Nimby — CBD</button>
-                        <button class="cart-btn" data-cart="counterfeit">Unverified Hardware</button>
-                    </div>
-                </div>
-
-                <!-- Custom hardware payload input -->
-                <div class="custom-nfc-input">
-                    <span class="console-sublabel">Scan / Paste Custom Hardware Payload</span>
-                    <div class="nfc-input-row">
-                        <input type="text" id="input-nfc-payload" placeholder='{"b":"Brand","y":"Type","i":"Batch","s":"sig"}'>
-                        <button id="btn-nfc-submit" class="btn-nfc-action">Validate</button>
-                    </div>
-                </div>
-
-                <!-- Developer settings -->
-                <div class="developer-settings">
-                    <div class="toggle-row">
-                        <div class="toggle-info">
-                            <span class="toggle-title">Permit Unverified Cartridges</span>
-                            <span class="toggle-desc">Enforces 150°C thermal safety ceiling on unverified hardware</span>
+                <!-- Two-column layout for console controls -->
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem;">
+                    <!-- Left: Hardware profile selector -->
+                    <div>
+                        <div style="font-size:0.7rem; font-weight:600; color:#8b9cb5; margin-bottom:0.6rem; letter-spacing:0.03em;">Select Hardware Profile</div>
+                        <div class="cartridge-buttons">
+                            <button class="cart-btn active" data-cart="disconnected">No Cartridge (Idle)</button>
+                            <button class="cart-btn" data-cart="astro">Astro — D9 THC</button>
+                            <button class="cart-btn" data-cart="frontier">Frontier — Rosin</button>
+                            <button class="cart-btn" data-cart="nimby">Nimby — CBD</button>
+                            <button class="cart-btn" data-cart="counterfeit">Unverified Hardware</button>
                         </div>
-                        <label class="switch">
-                            <input type="checkbox" id="chk-allow-unverified">
-                            <span class="slider"></span>
-                        </label>
                     </div>
-                    <div class="secret-row">
-                        <label for="input-secret">HMAC Signing Key
-                            <svg style="display:inline; width:11px; height:11px; margin-left:4px; opacity:0.5; vertical-align:middle;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-                        </label>
-                        <input type="text" id="input-secret" value="nimbus_secure_master_secret_2026">
-                    </div>
-                    <div style="border-top:1px solid #1e2d3d; padding-top:0.875rem; margin-top:0.25rem;">
-                        <button id="btn-reset-data" style="background:transparent; border:1px solid rgba(239,68,68,0.3); color:#f87171; border-radius:8px; padding:0.5rem 0.875rem; font-size:0.78rem; font-weight:500; cursor:pointer; transition:all 0.18s; outline:none; width:100%; font-family:inherit;">
-                            Reset Demo Data &amp; Wellness Logs
-                        </button>
-                    </div>
-                </div>
-            </div>    </div>
-                </div>
-            </div>
-        </section>
 
-    </main>
+                    <!-- Right: Payload input + developer settings -->
+                    <div style="display:flex; flex-direction:column; gap:1rem;">
+                        <!-- Custom hardware payload input -->
+                        <div class="custom-nfc-input">
+                            <span class="console-sublabel">Scan / Paste Custom Hardware Payload</span>
+                            <div class="nfc-input-row">
+                                <input type="text" id="input-nfc-payload" placeholder='{"b":"Brand","y":"Type","i":"Batch","s":"sig"}'>
+                                <button id="btn-nfc-submit" class="btn-nfc-action">Validate</button>
+                            </div>
+                        </div>
+
+                        <!-- Developer settings -->
+                        <div class="developer-settings" style="margin-top:0; border-top:none; padding-top:0;">
+                            <div class="toggle-row">
+                                <div class="toggle-info">
+                                    <span class="toggle-title">Permit Unverified Cartridges</span>
+                                    <span class="toggle-desc">Enforces 150°C thermal safety ceiling on unverified hardware</span>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" id="chk-allow-unverified">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="secret-row">
+                                <label for="input-secret">HMAC Signing Key
+                                    <svg style="display:inline; width:11px; height:11px; margin-left:4px; opacity:0.5; vertical-align:middle;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                                </label>
+                                <input type="text" id="input-secret" value="nimbus_secure_master_secret_2026">
+                            </div>
+                            <div style="border-top:1px solid #1e2d3d; padding-top:0.875rem;">
+                                <button id="btn-reset-data" style="background:transparent; border:1px solid rgba(239,68,68,0.3); color:#f87171; border-radius:8px; padding:0.5rem 0.875rem; font-size:0.78rem; font-weight:500; cursor:pointer; transition:all 0.18s; outline:none; width:100%; font-family:inherit;">
+                                    Reset Demo Data &amp; Wellness Logs
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
+
     <!-- Footer -->
     <footer class="border-t border-nimbusBorder py-10" style="background:#0c0f17;">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -749,8 +612,6 @@
         </div>
     </footer>
 
-
-    
 <script src="app.js"></script>
 
     <script>
