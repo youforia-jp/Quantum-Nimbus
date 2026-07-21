@@ -953,143 +953,97 @@
     <!-- INTERACTIVE JAVASCRIPT LOGIC WITH WEB AUDIO SYNTHESIS -->
     <script>
         // --- Web Audio API Synthesizer Class ---
-        if (typeof SoundSynth === "undefined") {
-        window.SoundSynth = class SoundSynth {
-            constructor() {
-                this.ctx = null;
-                this.isMuted = false;
-            }
-
-            init() {
-                if (!this.ctx) {
-                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        if (typeof window.SoundSynth === 'undefined') {
+            window.SoundSynth = class SoundSynth {
+                constructor() {
+                    this.ctx = null;
+                    this.isMuted = false;
                 }
-                if (this.ctx.state === 'suspended') {
-                    this.ctx.resume();
+                init() {
+                    if (!this.ctx) {
+                        this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                    }
+                    if (this.ctx.state === 'suspended') {
+                        this.ctx.resume();
+                    }
                 }
-            }
-
-            // High chime / tone on connecting or slotting authentic cartridge
-            playPairSound() {
-                if (this.isMuted) return;
-                this.init();
-                const now = this.ctx.currentTime;
-                const notes = [440, 554.37]; // A4 -> C#5
-                const durations = [0.12, 0.25];
-                notes.forEach((freq, index) => {
+                playPairSound() {
+                    if (this.isMuted) return;
+                    this.init();
+                    const now = this.ctx.currentTime;
+                    const notes = [440, 554.37];
+                    const durations = [0.12, 0.25];
+                    notes.forEach((freq, index) => {
+                        const osc = this.ctx.createOscillator();
+                        const gain = this.ctx.createGain();
+                        osc.type = "sine";
+                        osc.frequency.setValueAtTime(freq, now + (index * 0.1));
+                        gain.gain.setValueAtTime(0.08, now + (index * 0.1));
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + (index * 0.1) + durations[index]);
+                        osc.connect(gain);
+                        gain.connect(this.ctx.destination);
+                        osc.start(now + (index * 0.1));
+                        osc.stop(now + (index * 0.1) + durations[index]);
+                    });
+                }
+                playDisconnectSound() {
+                    if (this.isMuted) return;
+                    this.init();
+                    const now = this.ctx.currentTime;
                     const osc = this.ctx.createOscillator();
                     const gain = this.ctx.createGain();
-                    osc.type = "sine";
-                    osc.frequency.setValueAtTime(freq, now + (index * 0.1));
-                    gain.gain.setValueAtTime(0.08, now + (index * 0.1));
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + (index * 0.1) + durations[index]);
+                    osc.type = "triangle";
+                    osc.frequency.setValueAtTime(330, now);
+                    osc.frequency.exponentialRampToValueAtTime(110, now + 0.35);
+                    gain.gain.setValueAtTime(0.08, now);
+                    gain.gain.linearRampToValueAtTime(0.001, now + 0.35);
                     osc.connect(gain);
                     gain.connect(this.ctx.destination);
-                    osc.start(now + (index * 0.1));
-                    osc.stop(now + (index * 0.1) + durations[index]);
-                });
-            }
-
-            // Pitch drop sound on eject / disconnect
-            playDisconnectSound() {
-                if (this.isMuted) return;
-                this.init();
-                const now = this.ctx.currentTime;
-                const osc = this.ctx.createOscillator();
-                const gain = this.ctx.createGain();
-                osc.type = "triangle";
-                osc.frequency.setValueAtTime(330, now);
-                osc.frequency.exponentialRampToValueAtTime(110, now + 0.35);
-                gain.gain.setValueAtTime(0.08, now);
-                gain.gain.linearRampToValueAtTime(0.001, now + 0.35);
-                osc.connect(gain);
-                gain.connect(this.ctx.destination);
-                osc.start(now);
-                osc.stop(now + 0.35);
-            }
-
-            // Sawtooth alarm sound on replay attack / counterfeit detection
-            playWarningAlarm() {
-                if (this.isMuted) return;
-                this.init();
-                const now = this.ctx.currentTime;
-                const duration = 0.45;
-                const osc = this.ctx.createOscillator();
-                const gain = this.ctx.createGain();
-                osc.type = "sawtooth";
-                osc.frequency.setValueAtTime(220, now); 
-                osc.frequency.setValueAtTime(293.66, now + 0.15); 
-                osc.frequency.setValueAtTime(220, now + 0.3); 
-                gain.gain.setValueAtTime(0.07, now);
-                gain.gain.linearRampToValueAtTime(0.001, now + duration);
-                osc.connect(gain);
-                gain.connect(this.ctx.destination);
-                osc.start(now);
-                osc.stop(now + duration);
-            }
-
-            // Major arpeggio sparkle chime on successful authentic verification
-            playSupplementSpark() {
-                if (this.isMuted) return;
-                this.init();
-                const now = this.ctx.currentTime;
-                const freqs = [523.25, 659.25, 783.99, 1046.50]; // C Major arpeggio
-                const noteDur = 0.1;
-                freqs.forEach((freq, index) => {
+                    osc.start(now);
+                    osc.stop(now + 0.35);
+                }
+                playWarningAlarm() {
+                    if (this.isMuted) return;
+                    this.init();
+                    const now = this.ctx.currentTime;
+                    const duration = 0.45;
                     const osc = this.ctx.createOscillator();
                     const gain = this.ctx.createGain();
-                    osc.type = "sine";
-                    osc.frequency.setValueAtTime(freq, now + (index * 0.07));
-                    gain.gain.setValueAtTime(0.06, now + (index * 0.07));
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + (index * 0.07) + noteDur);
+                    osc.type = "sawtooth";
+                    osc.frequency.setValueAtTime(220, now); 
+                    osc.frequency.setValueAtTime(293.66, now + 0.15); 
+                    osc.frequency.setValueAtTime(220, now + 0.3); 
+                    gain.gain.setValueAtTime(0.07, now);
+                    gain.gain.linearRampToValueAtTime(0.001, now + duration);
                     osc.connect(gain);
                     gain.connect(this.ctx.destination);
-                    osc.start(now + (index * 0.07));
-                    osc.stop(now + (index * 0.07) + noteDur);
-                });
-            }
+                    osc.start(now);
+                    osc.stop(now + duration);
+                }
+                playSupplementSpark() {
+                    if (this.isMuted) return;
+                    this.init();
+                    const now = this.ctx.currentTime;
+                    const freqs = [523.25, 659.25, 783.99, 1046.50];
+                    const noteDur = 0.1;
+                    freqs.forEach((freq, index) => {
+                        const osc = this.ctx.createOscillator();
+                        const gain = this.ctx.createGain();
+                        osc.type = "sine";
+                        osc.frequency.setValueAtTime(freq, now + (index * 0.07));
+                        gain.gain.setValueAtTime(0.06, now + (index * 0.07));
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + (index * 0.07) + noteDur);
+                        osc.connect(gain);
+                        gain.connect(this.ctx.destination);
+                        osc.start(now + (index * 0.07));
+                        osc.stop(now + (index * 0.07) + noteDur);
+                    });
+                }
+            };
         }
+        var synth = window.synth || new window.SoundSynth();
 
-                // --- Tab Navigation Logic ---
-        function switchTab(tabId) {
-            const btnNfc = document.getElementById('tab-btn-nfc');
-            const btnPen = document.getElementById('tab-btn-pen');
-            const contentNfc = document.getElementById('tab-content-nfc');
-            const contentPen = document.getElementById('tab-content-pen');
-
-            // Reset all styles
-            btnNfc.className = 'flex-1 py-4 text-sm font-semibold tracking-wide transition-all border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex flex-col items-center justify-center gap-1';
-            btnPen.className = 'flex-1 py-4 text-sm font-semibold tracking-wide transition-all border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex flex-col items-center justify-center gap-1';
-            contentNfc.className = 'tab-pane hidden max-w-xl mx-auto flex-col items-center justify-start space-y-6';
-            contentPen.className = 'tab-pane hidden max-w-xl mx-auto flex-col items-center justify-start space-y-6';
-
-            if (tabId === 'nfc') {
-                btnNfc.className = 'flex-1 py-4 text-sm font-semibold tracking-wide transition-all border-b-2 bg-slate-800 border-cyan-500/50 text-cyan-400 flex flex-col items-center justify-center gap-1';
-                contentNfc.className = 'tab-pane active max-w-5xl mx-auto flex-col items-center justify-start space-y-6';
-            } else if (tabId === 'pen') {
-                btnPen.className = 'flex-1 py-4 text-sm font-semibold tracking-wide transition-all border-b-2 bg-slate-800 border-cyan-500/50 text-cyan-400 flex flex-col items-center justify-center gap-1';
-                contentPen.className = 'tab-pane active max-w-xl mx-auto flex-col items-center justify-start space-y-6';
-            }
-        }
-
-                // --- Incident Report Modal Helper ---
-        function toggleIncidentModal() {
-            const modal = document.getElementById('incident-report-modal');
-            if (modal) {
-                modal.classList.toggle('hidden');
-            }
-        }
-
-        function submitIncidentReport() {
-            const modal = document.getElementById('incident-report-modal');
-            if (modal) {
-                modal.classList.add('hidden');
-            }
-            alert('🚨 Incident Report Submitted to Quantum Nimbus Security Operations!');
-        }
-
-        } // End SoundSynth guard
-        const synth = window.synth || new SoundSynth();
 
         // Mobile Menu Toggle
         const mobileBtn = document.getElementById('mobile-menu-btn');
