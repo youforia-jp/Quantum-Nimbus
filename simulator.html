@@ -277,16 +277,16 @@
                                     </div>
 
                                     <!-- ACCURATE 3D VAPE CARTRIDGE DIAGRAM CANVAS AREA -->
-                                    <div class="relative w-full h-[320px] flex flex-col items-center justify-between py-4 overflow-hidden border border-slate-800/80 rounded-xl bg-gradient-to-b from-slate-900/90 to-slate-950/90 shadow-inner">
+                                    <div class="relative w-full h-[330px] flex flex-col items-center justify-between py-4 overflow-hidden border border-slate-800/80 rounded-xl bg-gradient-to-b from-slate-900/90 to-slate-950/90 shadow-inner">
                                         
-                                        <!-- 3D CARTRIDGE GRAPHIC (REAL VAPE CARTRIDGE: Flat ceramic mouthpiece top, glass body, 510 metallic base bottom) -->
-                                        <div id="diagram-cartridge" class="transition-all duration-500 ease-out transform translate-y-0 z-20 flex flex-col items-center drop-shadow-[0_12px_24px_rgba(6,182,212,0.4)]">
+                                        <!-- 3D CARTRIDGE GRAPHIC (REAL VAPE CARTRIDGE: Flat ceramic mouthpiece top, glass body, cylindrical screwable 510 metallic base bottom) -->
+                                        <div id="diagram-cartridge" class="transition-all duration-500 ease-out transform translate-y-0 z-20 flex flex-col items-center drop-shadow-[0_14px_28px_rgba(6,182,212,0.45)]">
                                             <!-- Top Black Duckbill Ceramic Mouthpiece -->
-                                            <div class="w-8 h-8 bg-gradient-to-b from-slate-800 via-slate-900 to-black rounded-t-xl border-t border-slate-600 shadow-md flex items-center justify-center">
-                                                <div class="w-3 h-1 bg-slate-950 rounded-full"></div>
+                                            <div class="w-8 h-8 bg-gradient-to-b from-slate-700 via-slate-900 to-black rounded-t-xl border-t border-slate-500 shadow-md flex items-center justify-center">
+                                                <div class="w-3.5 h-1 bg-slate-950 rounded-full border border-slate-800"></div>
                                             </div>
                                             <!-- Stainless Steel Top Collar Band -->
-                                            <div class="w-10 h-2 bg-gradient-to-r from-slate-400 via-slate-200 to-slate-500 border-x border-slate-600"></div>
+                                            <div class="w-10 h-2.5 bg-gradient-to-r from-slate-400 via-slate-200 to-slate-500 border-x border-slate-600"></div>
                                             <!-- Glass Cylinder Chamber with Golden Rosin Extract -->
                                             <div class="w-10 h-24 bg-slate-950/80 border-x-2 border-slate-600/80 relative overflow-hidden flex items-end justify-center shadow-inner">
                                                 <!-- Golden Extract Liquid -->
@@ -294,11 +294,23 @@
                                                 <!-- Center Airway Post -->
                                                 <div class="w-2.5 h-full bg-gradient-to-r from-slate-300 via-white to-slate-400 z-10 border-x border-slate-500"></div>
                                             </div>
-                                            <!-- Bottom Metallic 510 Thread Contact Base (Clean Pin - NO mouthpiece here!) -->
-                                            <div class="w-10 h-2 bg-gradient-to-r from-slate-400 via-slate-200 to-slate-500 border-x border-slate-600"></div>
-                                            <div class="w-7 h-4 bg-gradient-to-b from-slate-500 via-slate-700 to-slate-900 rounded-b-md border-b-2 border-amber-400 flex items-center justify-center shadow-md relative">
-                                                <!-- NTAG 424 Cryptographic NFC Chip Indicator -->
-                                                <span class="w-2 h-2 rounded-full bg-cyan-300 animate-ping" title="Embedded NTAG 424 DNA NFC Chip"></span>
+                                            <!-- Stainless Steel Base Collar Ring -->
+                                            <div class="w-10 h-2 bg-gradient-to-r from-slate-400 via-slate-100 to-slate-500 border-x border-slate-600"></div>
+                                            
+                                            <!-- SCREWABLE CYLINDRICAL 510 THREAD CONNECTOR PIN -->
+                                            <div class="flex flex-col items-center">
+                                                <!-- 510 Thread Ridges / Grooves (Screw Threads) -->
+                                                <div class="w-6 h-5 bg-gradient-to-b from-slate-400 via-slate-600 to-slate-800 flex flex-col justify-between p-0.5 border-x border-slate-500 rounded-b-sm shadow-inner relative">
+                                                    <div class="w-full h-0.5 bg-slate-300"></div>
+                                                    <div class="w-full h-0.5 bg-slate-950"></div>
+                                                    <div class="w-full h-0.5 bg-slate-300"></div>
+                                                    <div class="w-full h-0.5 bg-slate-950"></div>
+                                                    <div class="w-full h-0.5 bg-slate-300"></div>
+                                                </div>
+                                                <!-- Center Gold Contact Pin & NTAG 424 NFC Chip Highlight -->
+                                                <div class="w-3 h-2 bg-gradient-to-b from-yellow-500 to-amber-600 rounded-b flex items-center justify-center border-b border-amber-300 shadow relative">
+                                                    <span class="w-1.5 h-1.5 rounded-full bg-cyan-300 animate-ping" title="Embedded NTAG 424 DNA NFC Tag"></span>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -358,7 +370,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- RAW API JSON RESPONSE BOX (MOVED TO BOTTOM OF LEFT COLUMN) -->
+                                    <!-- RAW API JSON RESPONSE BOX (LEFT COLUMN BOTTOM) -->
                                     <div class="w-full pt-2 border-t border-slate-800/80">
                                         <div class="flex items-center justify-between mb-1.5">
                                             <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Raw API JSON Response</span>
@@ -376,9 +388,9 @@
                                     </div>
                                 </div>
 
-                                <!-- RIGHT SIDE: FULL-SIZE SLEEK IPHONE VERIFICATION DISPLAY -->
+                                <!-- RIGHT SIDE: FULL-SIZE SLEEK IPHONE VERIFICATION DISPLAY WITH INCIDENT REPORT & CONTACT MOCKUP -->
                                 <div class="flex flex-col items-center justify-start w-full">
-                                    <div class="phone-mockup mx-auto shadow-2xl relative w-full max-w-[360px] h-[680px] flex flex-col justify-between overflow-hidden border-[10px] border-slate-800 rounded-[44px] bg-slate-950">
+                                    <div class="phone-mockup mx-auto shadow-2xl relative w-full max-w-[360px] h-[720px] flex flex-col justify-between overflow-hidden border-[10px] border-slate-800 rounded-[44px] bg-slate-950">
                                         <!-- iPhone Notch / Dynamic Island Header -->
                                         <div class="phone-notch"></div>
                                         <div class="phone-header px-6">
@@ -398,9 +410,9 @@
                                         </div>
                                         
                                         <!-- Phone Screen Inner View (Full-sized scrollable container) -->
-                                        <div class="phone-screen-content p-4 flex-1 overflow-y-auto relative flex flex-col justify-between" id="phone-screen-view">
+                                        <div class="phone-screen-content p-3.5 flex-1 overflow-y-auto relative flex flex-col justify-between space-y-3" id="phone-screen-view">
                                             <!-- Dynamic Verification Card View -->
-                                            <div id="phone-card-container" class="animate-card-pop space-y-4">
+                                            <div id="phone-card-container" class="animate-card-pop space-y-3">
                                                 <!-- Header Status Badge -->
                                                 <div class="flex items-center justify-between border-b border-slate-800 pb-2">
                                                     <span class="text-[10px] font-mono uppercase text-slate-400 tracking-wider">AUTHENTICATION STATUS</span>
@@ -410,11 +422,11 @@
                                                 </div>
 
                                                 <!-- Main Product Details Card -->
-                                                <div id="phone-card-body" class="bg-slate-900/90 border border-slate-800 rounded-xl p-4 space-y-3">
+                                                <div id="phone-card-body" class="bg-slate-900/90 border border-slate-800 rounded-xl p-3.5 space-y-2.5">
                                                     <div class="text-xs font-mono text-cyan-400 uppercase tracking-widest" id="phone-brand-title">Hometown Hero CBD</div>
-                                                    <div class="text-base font-bold text-white leading-tight" id="phone-product-title">THCa Live Rosin Cartridge - Maui Wowie</div>
+                                                    <div class="text-sm font-bold text-white leading-tight" id="phone-product-title">THCa Live Rosin Cartridge - Maui Wowie</div>
                                                     
-                                                    <div class="space-y-1.5 pt-1 text-xs font-mono">
+                                                    <div class="space-y-1 pt-1 text-xs font-mono">
                                                         <div class="flex justify-between text-slate-400">
                                                             <span>Strain:</span>
                                                             <span class="text-slate-200 font-semibold" id="phone-strain-val">Maui Wowie</span>
@@ -429,8 +441,8 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="pt-2">
-                                                        <a id="phone-coa-link" href="https://hometownhero.com/coa/mw-001.pdf" target="_blank" class="block w-full text-center py-2 bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/40 rounded-lg text-xs font-bold text-emerald-300 transition shadow">
+                                                    <div class="pt-1.5">
+                                                        <a id="phone-coa-link" href="https://hometownhero.com/coa/mw-001.pdf" target="_blank" class="block w-full text-center py-1.5 bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/40 rounded-lg text-xs font-bold text-emerald-300 transition shadow">
                                                             📄 View Certified COA PDF
                                                         </a>
                                                     </div>
@@ -447,6 +459,65 @@
                                                         <span class="text-emerald-400 font-bold">VALID (AES-128 SUN)</span>
                                                     </div>
                                                 </div>
+                                            </div>
+
+                                            <!-- SECURITY INCIDENT REPORT & CONSUMER / ENTERPRISE CONTACT SECTION -->
+                                            <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3 space-y-2">
+                                                <div class="flex items-center justify-between text-[10px] font-mono text-slate-400 border-b border-slate-800/80 pb-1.5">
+                                                    <span class="font-bold text-slate-300">CONSUMER &amp; ENTERPRISE SUPPORT</span>
+                                                    <span class="text-emerald-400 font-bold">● ONLINE</span>
+                                                </div>
+                                                
+                                                <!-- Report Security Incident Button -->
+                                                <button onclick="toggleIncidentModal()" class="w-full flex items-center justify-between px-3 py-2 bg-rose-950/40 hover:bg-rose-900/50 border border-rose-800/60 rounded-lg text-xs text-rose-200 transition active:scale-95 text-left">
+                                                    <div class="flex items-center gap-2">
+                                                        <span class="text-sm">🚨</span>
+                                                        <span class="font-bold text-rose-300 text-[11px]">Report Security Incident</span>
+                                                    </div>
+                                                    <span class="text-[9px] font-mono text-rose-400 bg-rose-950 border border-rose-800 px-1.5 py-0.5 rounded font-bold">REPORT</span>
+                                                </button>
+
+                                                <!-- Enterprise & Consumer Support Contact Button -->
+                                                <a href="contact.html" target="_blank" class="w-full flex items-center justify-between px-3 py-2 bg-slate-800/80 hover:bg-slate-700 border border-slate-700 rounded-lg text-xs text-slate-200 transition active:scale-95">
+                                                    <div class="flex items-center gap-2">
+                                                        <span class="text-sm">💬</span>
+                                                        <span class="font-bold text-slate-200 text-[11px]">Contact Security Team</span>
+                                                    </div>
+                                                    <span class="text-[9px] font-mono text-cyan-400 bg-slate-900 border border-slate-700 px-1.5 py-0.5 rounded font-bold">DIRECT</span>
+                                                </a>
+                                            </div>
+
+                                            <!-- INCIDENT REPORTING MODAL OVERLAY (Inside Phone Screen) -->
+                                            <div id="incident-report-modal" class="hidden absolute inset-0 bg-slate-950/95 backdrop-blur-md z-30 p-4 flex flex-col justify-between animate-card-pop">
+                                                <div class="space-y-3">
+                                                    <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                                                        <div class="flex items-center gap-2 text-rose-400 text-xs font-bold font-mono">
+                                                            <span>🚨</span>
+                                                            <span>SECURITY INCIDENT REPORT</span>
+                                                        </div>
+                                                        <button onclick="toggleIncidentModal()" class="text-slate-400 hover:text-white text-xs font-mono p-1">✕ Close</button>
+                                                    </div>
+                                                    <p class="text-[11px] text-slate-300 leading-relaxed">
+                                                        Report suspected tag cloning, counterfeit packaging, or tampered hardware signatures directly to Nimbus Threat Intelligence.
+                                                    </p>
+                                                    <div class="space-y-2 font-mono text-xs">
+                                                        <div>
+                                                            <label class="block text-[9px] text-slate-400 uppercase mb-1">Issue Category:</label>
+                                                            <select class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-slate-200 text-[11px]">
+                                                                <option>Duplicate Counter / Replay Attack</option>
+                                                                <option>Unregistered / Counterfeit Tag</option>
+                                                                <option>Physical Hardware Tampering</option>
+                                                            </select>
+                                                        </div>
+                                                        <div>
+                                                            <label class="block text-[9px] text-slate-400 uppercase mb-1">Incident Notes / Dispensary Location:</label>
+                                                            <textarea class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-slate-200 text-[11px] h-16" placeholder="Describe where you purchased or scanned this item..."></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <button onclick="submitIncidentReport()" class="w-full py-2 bg-rose-600 hover:bg-rose-500 text-white rounded-lg text-xs font-bold font-mono transition shadow-lg">
+                                                    Submit Incident Telemetry Report
+                                                </button>
                                             </div>
 
                                             <!-- NFC RADAR RIPPLE ANIMATION OVERLAY -->
@@ -753,6 +824,22 @@
                 btnPen.className = 'flex-1 py-4 text-sm font-semibold tracking-wide transition-all border-b-2 bg-slate-800 border-cyan-500/50 text-cyan-400 flex flex-col items-center justify-center gap-1';
                 contentPen.className = 'tab-pane active max-w-xl mx-auto flex-col items-center justify-start space-y-6';
             }
+        }
+
+                // --- Incident Report Modal Helper ---
+        function toggleIncidentModal() {
+            const modal = document.getElementById('incident-report-modal');
+            if (modal) {
+                modal.classList.toggle('hidden');
+            }
+        }
+
+        function submitIncidentReport() {
+            const modal = document.getElementById('incident-report-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+            }
+            alert('🚨 Incident Report Submitted to Quantum Nimbus Security Operations!');
         }
 
         const synth = new SoundSynth();
