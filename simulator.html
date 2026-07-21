@@ -423,6 +423,56 @@
                         </div>
                     </div>
 
+                    </div>
+
+                    <!-- ================= TAB: NFC AUTH ================= -->
+                    <div id="tab-nfc" class="tab-view">
+                        <!-- Auth Result Card -->
+                        <div class="app-card" style="padding: 0.8rem;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+                                <span class="card-label" style="margin-bottom:0;">NFC VERIFICATION</span>
+                                <span id="nfc-badge" style="font-size:0.6rem; font-weight:700; padding:0.15rem 0.5rem; border-radius:4px; background:rgba(100,116,139,0.2); color:#64748b; border:1px solid rgba(100,116,139,0.3); letter-spacing:0.05em;">IDLE</span>
+                            </div>
+                            <div id="nfc-result-idle" style="text-align:center; padding:0.8rem 0; color:#4b5e78; font-size:0.7rem;">
+                                <div style="font-size:1.5rem; margin-bottom:0.3rem;">📡</div>
+                                Tap a simulation button to verify a tag
+                            </div>
+                            <div id="nfc-result-loading" style="display:none; text-align:center; padding:0.8rem 0;">
+                                <div style="font-size:1.3rem; animation:spin 1s linear infinite; display:inline-block;">⏳</div>
+                                <div style="font-size:0.65rem; color:#64748b; margin-top:0.3rem;">Verifying tag...</div>
+                            </div>
+                            <div id="nfc-result-authentic" style="display:none;">
+                                <div style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); border-radius:8px; padding:0.6rem; margin-bottom:0.5rem;">
+                                    <div style="font-size:0.65rem; font-weight:700; color:#10b981; margin-bottom:0.4rem;">✅ VERIFIED AUTHENTIC</div>
+                                    <div style="font-size:0.7rem; color:#94a3b8;"><span style="color:#64748b;">Brand:</span> <span id="nfc-brand">—</span></div>
+                                    <div style="font-size:0.7rem; color:#94a3b8; margin-top:0.2rem;"><span style="color:#64748b;">Product:</span> <span id="nfc-product">—</span></div>
+                                    <div style="font-size:0.7rem; color:#94a3b8; margin-top:0.2rem;"><span style="color:#64748b;">Batch:</span> <span id="nfc-batch">—</span></div>
+                                    <div style="font-size:0.7rem; color:#94a3b8; margin-top:0.2rem;"><span style="color:#64748b;">Scan #:</span> <span id="nfc-scan-num">—</span></div>
+                                </div>
+                            </div>
+                            <div id="nfc-result-replay" style="display:none;">
+                                <div style="background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.3); border-radius:8px; padding:0.6rem;">
+                                    <div style="font-size:0.65rem; font-weight:700; color:#f59e0b; margin-bottom:0.3rem;">⚠️ REPLAY ATTACK</div>
+                                    <div style="font-size:0.65rem; color:#a1a1aa;">Duplicate counter detected. This tag has already been scanned. Possible clone attempt.</div>
+                                </div>
+                            </div>
+                            <div id="nfc-result-invalid" style="display:none;">
+                                <div style="background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); border-radius:8px; padding:0.6rem;">
+                                    <div style="font-size:0.65rem; font-weight:700; color:#ef4444; margin-bottom:0.3rem;">❌ UNREGISTERED TAG</div>
+                                    <div style="font-size:0.65rem; color:#a1a1aa;">UID not found in the database. Counterfeit or unregistered hardware.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Counter display -->
+                        <div class="app-card" style="padding:0.7rem 0.8rem; margin-top:0.6rem;">
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <span class="card-label" style="margin-bottom:0; font-size:0.55rem;">SIMULATED COUNTER</span>
+                                <span id="nfc-counter-display" style="font-family:'JetBrains Mono',monospace; font-size:0.85rem; font-weight:700; color:#3b82f6;">0</span>
+                            </div>
+                            <div style="font-size:0.6rem; color:#4b5e78; margin-top:0.2rem;">Auto-increments on valid authentic taps</div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
@@ -435,6 +485,10 @@
                 <button class="nav-btn" data-tab="wellness">
                     <span class="nav-icon">☁️</span>
                     <span class="nav-label">Wellness</span>
+                </button>
+                <button class="nav-btn" data-tab="nfc">
+                    <span class="nav-icon">🔐</span>
+                    <span class="nav-label">NFC Auth</span>
                 </button>
             </div>
 
@@ -517,39 +571,116 @@
                     </div>
                 </div>
             </div>
-            <!-- Controller Console to Simulate Cartridge Insertion -->
-            <div class="console-card" style="margin-top: 2rem; width: 100%;">
-                <h3>Simulator Controls & Developer Options</h3>
-                <p class="console-desc">Simulate NFC pen connections and toggle hardware-level security override settings.</p>
-                
-                <div class="cartridge-buttons">
-                    <button class="cart-btn active" data-cart="disconnected">
-                        Eject Cartridge
-                    </button>
-                    <button class="cart-btn" data-cart="astro">
-                        Astro (D9 THC)
-                    </button>
-                    <button class="cart-btn" data-cart="frontier">
-                        Frontier (Rosin)
-                    </button>
-                    <button class="cart-btn" data-cart="nimby">
-                        NIMBY (CBD)
-                    </button>
-                    <button class="cart-btn" data-cart="counterfeit">
-                        Counterfeit
-                    </button>
+            </div>
+
+            <!-- ================= NFC AUTHENTICATION SIMULATOR PANEL ================= -->
+            <div class="console-card" style="margin-top:2rem; width:100%;">
+                <!-- Dual-Mode Sub-Tabs -->
+                <div style="display:flex; gap:0; margin-bottom:1.2rem; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.06); border-radius:10px; padding:3px;">
+                    <button id="nfc-mode-soft" onclick="switchNfcMode('soft')" style="flex:1; padding:0.45rem 0.5rem; border-radius:8px; font-size:0.7rem; font-weight:600; background:rgba(59,130,246,0.2); color:#60a5fa; border:1px solid rgba(59,130,246,0.3); cursor:pointer; transition:all 0.2s; outline:none;">Mode 1: Soft API Simulation</button>
+                    <button id="nfc-mode-hw" onclick="switchNfcMode('hw')" style="flex:1; padding:0.45rem 0.5rem; border-radius:8px; font-size:0.7rem; font-weight:600; background:transparent; color:#4b5e78; border:none; cursor:pointer; transition:all 0.2s; outline:none;">Mode 2: NTAG 424 Hardware Sim</button>
                 </div>
 
-                <!-- Custom NFC input for generated JSONs -->
-                <div class="custom-nfc-input">
-                    <span class="console-sublabel">SCAN / PASTE CUSTOM NFC PAYLOAD</span>
-                    <div class="nfc-input-row">
-                        <input type="text" id="input-nfc-payload" placeholder='{"b":"Brand","y":"Type","i":"Batch","s":"sig"}'>
-                        <button id="btn-nfc-submit" class="btn-nfc-action">Scan Tag</button>
+                <!-- Mode 1: Soft API Simulation -->
+                <div id="nfc-panel-soft">
+                    <h3 style="font-size:0.8rem; color:#94a3b8; margin-bottom:0.4rem;">Direct API Verification</h3>
+                    <p class="console-desc" style="margin-bottom:1rem;">Directly construct and fire requests against <code style="color:#60a5fa; font-size:0.7rem;">/api/v1/verify</code> with configurable UID, counter, and CMAC. Results update the phone NFC Auth tab in real-time.</p>
+
+                    <!-- UID Selector -->
+                    <div style="margin-bottom:0.8rem;">
+                        <label style="display:block; font-size:0.65rem; font-weight:600; color:#64748b; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:0.35rem;">Active Tag UID</label>
+                        <div style="display:flex; gap:0.5rem;">
+                            <input type="text" id="nfc-uid-input" value="04A1B2C3D4E5F6" style="flex:1; background:rgba(0,0,0,0.35); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:0.45rem 0.6rem; color:white; font-family:monospace; font-size:0.75rem; outline:none;">
+                            <button onclick="document.getElementById('nfc-uid-input').value='04A1B2C3D4E5F6'" style="padding:0 0.6rem; background:rgba(59,130,246,0.1); border:1px solid rgba(59,130,246,0.25); color:#60a5fa; border-radius:8px; font-size:0.65rem; cursor:pointer; outline:none; white-space:nowrap;">Reset UID</button>
+                        </div>
+                    </div>
+
+                    <!-- Counter Display -->
+                    <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(0,0,0,0.2); border:1px solid rgba(255,255,255,0.05); border-radius:8px; padding:0.5rem 0.7rem; margin-bottom:1rem;">
+                        <span style="font-size:0.65rem; color:#64748b; text-transform:uppercase; letter-spacing:0.06em; font-weight:600;">Simulated Counter</span>
+                        <span id="console-counter" style="font-family:monospace; font-size:1.1rem; font-weight:700; color:#3b82f6;">0</span>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div style="display:flex; flex-direction:column; gap:0.5rem;">
+                        <button id="console-btn-authentic" style="display:flex; align-items:center; gap:0.7rem; width:100%; padding:0.7rem 0.9rem; background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); border-radius:10px; cursor:pointer; transition:all 0.2s; outline:none; text-align:left;">
+                            <div style="width:28px; height:28px; border-radius:8px; background:rgba(16,185,129,0.15); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                                <svg width="14" height="14" fill="#10b981" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                            </div>
+                            <div>
+                                <div style="font-size:0.75rem; font-weight:700; color:#34d399;">Simulate Authentic Tap</div>
+                                <div style="font-size:0.62rem; color:#475569; margin-top:0.1rem; font-family:monospace;">Valid UID · scan_count++</div>
+                            </div>
+                        </button>
+
+                        <button id="console-btn-replay" style="display:flex; align-items:center; gap:0.7rem; width:100%; padding:0.7rem 0.9rem; background:rgba(245,158,11,0.08); border:1px solid rgba(245,158,11,0.25); border-radius:10px; cursor:pointer; transition:all 0.2s; outline:none; text-align:left;">
+                            <div style="width:28px; height:28px; border-radius:8px; background:rgba(245,158,11,0.12); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                                <svg width="14" height="14" fill="none" stroke="#f59e0b" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                            </div>
+                            <div>
+                                <div style="font-size:0.75rem; font-weight:700; color:#fbbf24;">Simulate Replay Attack</div>
+                                <div style="font-size:0.62rem; color:#475569; margin-top:0.1rem; font-family:monospace;">Valid UID · scan_count=1 (stale)</div>
+                            </div>
+                        </button>
+
+                        <button id="console-btn-counterfeit" style="display:flex; align-items:center; gap:0.7rem; width:100%; padding:0.7rem 0.9rem; background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.25); border-radius:10px; cursor:pointer; transition:all 0.2s; outline:none; text-align:left;">
+                            <div style="width:28px; height:28px; border-radius:8px; background:rgba(239,68,68,0.12); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                                <svg width="14" height="14" fill="none" stroke="#ef4444" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                            </div>
+                            <div>
+                                <div style="font-size:0.75rem; font-weight:700; color:#f87171;">Simulate Counterfeit Tag</div>
+                                <div style="font-size:0.62rem; color:#475569; margin-top:0.1rem; font-family:monospace;">UID: 00000000000000 · corrupted CMAC</div>
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- Response Log -->
+                    <div style="margin-top:1rem;">
+                        <div style="font-size:0.6rem; font-weight:600; color:#64748b; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:0.35rem;">Live API Response</div>
+                        <pre id="nfc-api-log" style="background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.05); border-radius:8px; padding:0.7rem; font-size:0.65rem; color:#94a3b8; min-height:60px; overflow-x:auto; white-space:pre-wrap; font-family:monospace;">Awaiting simulation...</pre>
                     </div>
                 </div>
 
-                <div class="developer-settings">
+                <!-- Mode 2: NTAG 424 Hardware Sim -->
+                <div id="nfc-panel-hw" style="display:none;">
+                    <h3 style="font-size:0.8rem; color:#94a3b8; margin-bottom:0.4rem;">NTAG 424 DNA Hardware Simulation</h3>
+                    <p class="console-desc" style="margin-bottom:1rem;">Simulates the SUN (Secure Unique NFC) message URL construction as it would be generated by a physical NTAG 424 DNA chip, including PICCData and CMAC fields.</p>
+
+                    <!-- Hardware UID -->
+                    <div style="margin-bottom:0.8rem;">
+                        <label style="display:block; font-size:0.65rem; font-weight:600; color:#64748b; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:0.35rem;">Hardware UID</label>
+                        <input type="text" id="hw-uid" value="04A1B2C3D4E5F6" style="width:100%; background:rgba(0,0,0,0.35); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:0.45rem 0.6rem; color:white; font-family:monospace; font-size:0.75rem; outline:none; box-sizing:border-box;">
+                    </div>
+
+                    <!-- Simulated Counter -->
+                    <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(0,0,0,0.2); border:1px solid rgba(255,255,255,0.05); border-radius:8px; padding:0.5rem 0.7rem; margin-bottom:0.8rem;">
+                        <span style="font-size:0.65rem; color:#64748b; text-transform:uppercase; font-weight:600;">NFC Counter (SDMCnt)</span>
+                        <div style="display:flex; align-items:center; gap:0.5rem;">
+                            <span id="hw-counter" style="font-family:monospace; font-size:1rem; font-weight:700; color:#8b5cf6;">000001</span>
+                            <button onclick="nfcSim.hwCounter++; document.getElementById('hw-counter').textContent=String(nfcSim.hwCounter).padStart(6,'0'); buildSunUrl();" style="background:rgba(139,92,246,0.15); border:1px solid rgba(139,92,246,0.3); color:#a78bfa; border-radius:6px; padding:0.2rem 0.4rem; font-size:0.65rem; cursor:pointer; outline:none;">+1</button>
+                        </div>
+                    </div>
+
+                    <!-- Generated SUN URL -->
+                    <div style="margin-bottom:0.8rem;">
+                        <label style="display:block; font-size:0.65rem; font-weight:600; color:#64748b; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:0.35rem;">Generated SUN URL</label>
+                        <div id="hw-sun-url" style="background:rgba(0,0,0,0.4); border:1px solid rgba(139,92,246,0.2); border-radius:8px; padding:0.6rem; font-size:0.6rem; color:#a78bfa; font-family:monospace; word-break:break-all; min-height:40px;">Building...</div>
+                    </div>
+
+                    <div style="display:flex; gap:0.5rem;">
+                        <button id="hw-btn-fire" style="flex:1; padding:0.6rem; background:rgba(139,92,246,0.15); border:1px solid rgba(139,92,246,0.35); color:#a78bfa; border-radius:10px; font-size:0.75rem; font-weight:700; cursor:pointer; outline:none; transition:all 0.2s;">🔮 Fire SUN Request</button>
+                        <button onclick="nfcSim.hwCounter++; document.getElementById('hw-counter').textContent=String(nfcSim.hwCounter).padStart(6,'0'); buildSunUrl();" style="padding:0.6rem 0.8rem; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); color:#64748b; border-radius:10px; font-size:0.75rem; cursor:pointer; outline:none;">Increment Counter</button>
+                    </div>
+
+                    <!-- Hardware Response Log -->
+                    <div style="margin-top:1rem;">
+                        <div style="font-size:0.6rem; font-weight:600; color:#64748b; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:0.35rem;">Hardware Verification Response</div>
+                        <pre id="hw-api-log" style="background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.05); border-radius:8px; padding:0.7rem; font-size:0.65rem; color:#94a3b8; min-height:60px; overflow-x:auto; white-space:pre-wrap; font-family:monospace;">Awaiting SUN request...</pre>
+                    </div>
+                </div>
+
+                <!-- Existing developer settings preserved below -->
+                <div class="developer-settings" style="margin-top:1.2rem; border-top:1px solid rgba(255,255,255,0.06); padding-top:0.9rem;">
                     <div class="toggle-row">
                         <div class="toggle-info">
                             <span class="toggle-title">Allow Unverified Cartridges</span>
@@ -561,13 +692,11 @@
                         </label>
                     </div>
                     <div class="secret-row">
-                        <label for="input-secret" style="display: block; margin-bottom: 0.3rem;">Master Signing Secret (Hardware Encrypted)</label>
+                        <label for="input-secret" style="display:block; margin-bottom:0.3rem;">Master Signing Secret</label>
                         <input type="text" id="input-secret" value="nimbus_secure_master_secret_2026">
                     </div>
-                    <div style="border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 0.8rem; margin-top: 0.2rem; display: flex; justify-content: flex-end;">
-                        <button id="btn-reset-data" style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); color: #fca5a5; border-radius: 8px; padding: 0.45rem 0.8rem; font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: all 0.2s; outline: none; width: 100%;">
-                            Reset Demo / Wellness Data
-                        </button>
+                    <div style="border-top:1px solid rgba(255,255,255,0.08); padding-top:0.8rem; margin-top:0.2rem; display:flex; justify-content:flex-end;">
+                        <button id="btn-reset-data" style="background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.3); color:#fca5a5; border-radius:8px; padding:0.45rem 0.8rem; font-size:0.75rem; font-weight:700; cursor:pointer; transition:all 0.2s; outline:none; width:100%;">Reset Demo / Wellness Data</button>
                     </div>
                 </div>
             </div>
@@ -608,6 +737,134 @@
                 menu.classList.toggle('hidden');
             });
         }
+    </script>
+
+    <!-- NFC Simulator Engine -->
+    <script>
+        const nfcSim = {
+            counter: 0,
+            hwCounter: 1,
+
+            getAllPanels() {
+                return ['nfc-result-idle','nfc-result-loading','nfc-result-authentic','nfc-result-replay','nfc-result-invalid'];
+            },
+
+            showPhonePanel(id) {
+                this.getAllPanels().forEach(p => document.getElementById(p).style.display = 'none');
+                document.getElementById(id).style.display = 'block';
+            },
+
+            setBadge(text, color) {
+                const b = document.getElementById('nfc-badge');
+                const colors = { idle:'rgba(100,116,139,0.2)', loading:'rgba(59,130,246,0.2)', authentic:'rgba(16,185,129,0.2)', replay:'rgba(245,158,11,0.2)', invalid:'rgba(239,68,68,0.2)' };
+                const tc = { idle:'#64748b', loading:'#60a5fa', authentic:'#10b981', replay:'#f59e0b', invalid:'#ef4444' };
+                const bc = { idle:'rgba(100,116,139,0.3)', loading:'rgba(59,130,246,0.3)', authentic:'rgba(16,185,129,0.3)', replay:'rgba(245,158,11,0.3)', invalid:'rgba(239,68,68,0.3)' };
+                b.textContent = text; b.style.background = colors[color]; b.style.color = tc[color]; b.style.borderColor = bc[color];
+            },
+
+            setLog(elId, data, ok) {
+                const el = document.getElementById(elId);
+                el.textContent = JSON.stringify(data, null, 2);
+                el.style.color = ok ? '#34d399' : '#f87171';
+                el.style.borderColor = ok ? 'rgba(16,185,129,0.2)' : 'rgba(239,68,68,0.2)';
+            },
+
+            updateCounterDisplay() {
+                document.getElementById('nfc-counter-display').textContent = this.counter;
+                document.getElementById('console-counter').textContent = this.counter;
+            },
+
+            async verify(uid, scanCount, piccData, cmac, logEl) {
+                // Switch phone to NFC tab
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                document.querySelector('[data-tab="nfc"]').classList.add('active');
+                document.querySelectorAll('.tab-view').forEach(v => v.classList.remove('active'));
+                document.getElementById('tab-nfc').classList.add('active');
+
+                this.showPhonePanel('nfc-result-loading');
+                this.setBadge('SCANNING', 'loading');
+
+                try {
+                    const url = `/api/v1/verify?uid=${encodeURIComponent(uid)}&scan_count=${encodeURIComponent(scanCount)}&picc_data=${encodeURIComponent(piccData)}&cmac=${encodeURIComponent(cmac)}`;
+                    const res = await fetch(url);
+                    const data = await res.json();
+                    this.setLog(logEl, data, res.ok);
+
+                    if (res.ok && data.status === 'AUTHENTIC') {
+                        document.getElementById('nfc-brand').textContent = data.brand || '—';
+                        document.getElementById('nfc-product').textContent = data.product || '—';
+                        document.getElementById('nfc-batch').textContent = data.batch || '—';
+                        document.getElementById('nfc-scan-num').textContent = scanCount;
+                        this.showPhonePanel('nfc-result-authentic');
+                        this.setBadge('AUTHENTIC', 'authentic');
+                    } else if (data.status === 'REPLAY_ATTACK') {
+                        this.showPhonePanel('nfc-result-replay');
+                        this.setBadge('REPLAY', 'replay');
+                    } else {
+                        this.showPhonePanel('nfc-result-invalid');
+                        this.setBadge('INVALID', 'invalid');
+                    }
+                    return data;
+                } catch (err) {
+                    this.setLog(logEl, { error: err.message }, false);
+                    this.showPhonePanel('nfc-result-invalid');
+                    this.setBadge('ERROR', 'invalid');
+                }
+            }
+        };
+
+        // Mode toggle
+        function switchNfcMode(mode) {
+            const isSoft = mode === 'soft';
+            document.getElementById('nfc-panel-soft').style.display = isSoft ? 'block' : 'none';
+            document.getElementById('nfc-panel-hw').style.display = isSoft ? 'none' : 'block';
+            document.getElementById('nfc-mode-soft').style.background = isSoft ? 'rgba(59,130,246,0.2)' : 'transparent';
+            document.getElementById('nfc-mode-soft').style.color = isSoft ? '#60a5fa' : '#4b5e78';
+            document.getElementById('nfc-mode-soft').style.border = isSoft ? '1px solid rgba(59,130,246,0.3)' : 'none';
+            document.getElementById('nfc-mode-hw').style.background = !isSoft ? 'rgba(139,92,246,0.2)' : 'transparent';
+            document.getElementById('nfc-mode-hw').style.color = !isSoft ? '#a78bfa' : '#4b5e78';
+            document.getElementById('nfc-mode-hw').style.border = !isSoft ? '1px solid rgba(139,92,246,0.3)' : 'none';
+        }
+
+        function buildSunUrl() {
+            const uid = document.getElementById('hw-uid').value.trim() || '04A1B2C3D4E5F6';
+            const cnt = String(nfcSim.hwCounter).padStart(6, '0');
+            const mockPicc = btoa(`${uid}:${cnt}`).replace(/=/g,'');
+            const mockCmac = btoa(`CMAC:${uid}:${cnt}`).substring(0, 16).toUpperCase();
+            const url = `https://quantumnimbustech.com/v?uid=${uid}&scan_count=${nfcSim.hwCounter}&picc_data=${mockPicc}&cmac=${mockCmac}`;
+            document.getElementById('hw-sun-url').textContent = url;
+            return { uid, cnt: nfcSim.hwCounter, picc: mockPicc, cmac: mockCmac };
+        }
+
+        // Soft API buttons
+        document.getElementById('console-btn-authentic').addEventListener('click', async () => {
+            const uid = document.getElementById('nfc-uid-input').value.trim();
+            nfcSim.counter++;
+            nfcSim.updateCounterDisplay();
+            await nfcSim.verify(uid, nfcSim.counter, 'mock', 'mock', 'nfc-api-log');
+        });
+
+        document.getElementById('console-btn-replay').addEventListener('click', async () => {
+            const uid = document.getElementById('nfc-uid-input').value.trim();
+            await nfcSim.verify(uid, 1, 'mock', 'mock', 'nfc-api-log');
+        });
+
+        document.getElementById('console-btn-counterfeit').addEventListener('click', async () => {
+            await nfcSim.verify('00000000000000', 1, 'corrupted', 'INVALID_CMAC', 'nfc-api-log');
+        });
+
+        // Hardware Sim fire button
+        document.getElementById('hw-btn-fire').addEventListener('click', async () => {
+            const { uid, cnt, picc, cmac } = buildSunUrl();
+            await nfcSim.verify(uid, cnt, picc, cmac, 'hw-api-log');
+            nfcSim.hwCounter++;
+            document.getElementById('hw-counter').textContent = String(nfcSim.hwCounter).padStart(6, '0');
+            buildSunUrl();
+        });
+
+        // Init
+        buildSunUrl();
+        nfcSim.updateCounterDisplay();
     </script>
 </body>
 </html>
