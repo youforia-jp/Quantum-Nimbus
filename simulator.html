@@ -221,7 +221,7 @@
                 </div>
 
                 <!-- TAB CONTENT CONTAINER -->
-                <div class="p-6 sm:p-8 relative min-h-[850px] bg-slate-900/30">
+                <div class="p-6 sm:p-8 relative bg-slate-900/30">
                     
                     <!-- ============================================================
                          TAB 1: NFC SECURITY ENGINE (DEFAULT ACTIVE)
@@ -383,7 +383,6 @@
 }</pre>
                                 </div>
                             </div>
-                        </div>
                             <!-- Footer Info -->
                             <div class="text-[11px] text-slate-500 border-t border-slate-800/80 pt-3 mt-5 w-full text-center sm:text-left">
                                 🔒 Integrated scan buttons execute live queries against /api/v1/verify directly within the phone UI.
@@ -394,36 +393,33 @@
                     <!-- ============================================================
                          TAB 2: SMART PEN TELEMETRY (HIDDEN)
                     ============================================================ -->
-                    <div id="tab-content-pen" class="tab-pane hidden max-w-xl mx-auto flex-col items-center justify-start space-y-6">
+                    <div id="tab-content-pen" class="tab-pane hidden max-w-xl mx-auto flex-col items-center justify-start space-y-4">
                         <div class="w-full bg-slate-900/60 border border-nimbusBorder rounded-xl p-5 sm:p-6">
-                            <!-- Section Header -->
-                            <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-5 w-full">
-                                <div class="flex items-center gap-2">
-                                    <span class="text-xs font-mono text-accentBlue font-bold uppercase tracking-wider">Tab 2</span>
-                                    <span class="text-slate-600">•</span>
-                                    <h3 class="text-sm font-bold text-white uppercase tracking-wider">WebBLE &amp; Hardware Pen</h3>
-                                </div>
-                                <div id="webble-badge" class="flex items-center gap-1.5 bg-slate-800 border border-slate-700 px-2.5 py-1 rounded-md text-[11px] font-mono text-slate-400">
-                                    <span id="webble-dot" class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
-                                    <span id="webble-text">WebBLE Ready</span>
-                                </div>
-                            </div>
-
-                            <!-- WebBLE Connection Bar -->
-                            <div class="flex items-center justify-between bg-slate-950/80 border border-slate-800 rounded-xl p-3 mb-6">
+                            <!-- Section Header with Integrated WebBLE Controller -->
+                            <div class="flex flex-wrap items-center justify-between border-b border-slate-800 pb-3 mb-4 w-full gap-2">
                                 <div>
-                                    <div class="text-[10px] font-mono uppercase text-slate-500">Bluetooth LE Controller</div>
-                                    <div class="text-xs font-mono text-slate-200 font-bold" id="webble-dev-name">Nimbus Frontier v3</div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-mono text-accentBlue font-bold uppercase tracking-wider">Tab 2</span>
+                                        <span class="text-slate-600">•</span>
+                                        <h3 class="text-sm font-bold text-white uppercase tracking-wider">WebBLE &amp; Smart Pen</h3>
+                                    </div>
+                                    <div class="text-[10px] font-mono text-slate-400 mt-0.5" id="webble-dev-name">Nimbus Frontier v3</div>
                                 </div>
-                                <button id="btn-webble-connect" onclick="toggleWebBle()" class="px-3 py-1.5 bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/40 rounded-lg text-xs font-bold text-blue-300 transition active:scale-95 flex items-center gap-1.5">
-                                    <span>⚡</span>
-                                    <span id="btn-webble-label">Connect via WebBLE</span>
-                                </button>
+                                <div class="flex items-center gap-2.5">
+                                    <div id="webble-badge" class="hidden sm:flex items-center gap-1.5 bg-slate-800 border border-slate-700 px-2.5 py-1 rounded-md text-[11px] font-mono text-slate-400">
+                                        <span id="webble-dot" class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+                                        <span id="webble-text">WebBLE Ready</span>
+                                    </div>
+                                    <button id="btn-webble-connect" onclick="toggleWebBle()" class="px-3 py-1.5 bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/40 rounded-lg text-xs font-bold text-blue-300 transition active:scale-95 flex items-center gap-1.5">
+                                        <span>⚡</span>
+                                        <span id="btn-webble-label">Connect via WebBLE</span>
+                                    </button>
+                                </div>
                             </div>
 
                             <!-- PHYSICAL VAPE PEN MOCKUP -->
-                            <div class="device-mockup card flex flex-col items-center py-6 px-4 mx-auto max-w-[280px]">
-                                <div class="device-section-title text-[10px] font-mono font-bold tracking-widest text-slate-500 uppercase mb-4">
+                            <div class="device-mockup card flex flex-col items-center py-2 px-4 mx-auto max-w-[280px]">
+                                <div class="device-section-title text-[10px] font-mono font-bold tracking-widest text-slate-500 uppercase mb-2">
                                     Nimbus Frontier — Hardware Chassis
                                 </div>
                                 
