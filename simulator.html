@@ -107,6 +107,22 @@
         .animate-card-pop {
             animation: cardPop 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
+
+        /* 5. Tab Pane Fade In */
+        @keyframes fadeInTab {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .tab-pane {
+            display: none;
+            opacity: 0;
+            width: 100%;
+        }
+        .tab-pane.active {
+            display: flex;
+            opacity: 1;
+            animation: fadeInTab 0.4s ease-in-out forwards;
+        }
     </style>
 </head>
 <body class="bg-nimbusBase text-slate-300 font-sans antialiased">
@@ -192,155 +208,30 @@
                     </div>
                 </div>
 
-                <!-- TWO DISTINCT MODULE COLUMNS -->
-                <div class="p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                <!-- SUB-TAB NAVIGATION BAR -->
+                <div class="flex flex-col sm:flex-row border-b border-nimbusBorder bg-slate-900/40">
+                    <button id="tab-btn-nfc" onclick="switchTab('nfc')" class="flex-1 py-4 text-sm font-semibold tracking-wide transition-all border-b-2 bg-slate-800 border-cyan-500/50 text-cyan-400 flex flex-col items-center justify-center gap-1">
+                        <span>🏷️ NFC Security Engine</span>
+                        <span class="px-2 py-0.5 rounded text-[9px] font-mono bg-emerald-950/60 text-emerald-400 border border-emerald-800/50">Production / Active</span>
+                    </button>
+                    <button id="tab-btn-pen" onclick="switchTab('pen')" class="flex-1 py-4 text-sm font-semibold tracking-wide transition-all border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex flex-col items-center justify-center gap-1">
+                        <span>⚡ Smart Pen Telemetry</span>
+                        <span class="px-2 py-0.5 rounded text-[9px] font-mono bg-slate-800 text-slate-500 border border-slate-700/50">Hardware Concept / WebBLE</span>
+                    </button>
+                </div>
+
+                <!-- TAB CONTENT CONTAINER -->
+                <div class="p-6 sm:p-8 relative min-h-[850px] bg-slate-900/30">
                     
                     <!-- ============================================================
-                         MODULE 1 (LEFT): WEBBLE INTEGRATION & PHYSICAL PEN MOCKUP
+                         TAB 1: NFC SECURITY ENGINE (DEFAULT ACTIVE)
                     ============================================================ -->
-                    <div class="bg-slate-900/60 border border-nimbusBorder rounded-xl p-5 sm:p-6 flex flex-col items-center justify-between space-y-6">
-                        <div class="w-full">
+                    <div id="tab-content-nfc" class="tab-pane active max-w-xl mx-auto flex-col items-center justify-start space-y-6">
+                        <div class="w-full bg-slate-900/60 border border-nimbusBorder rounded-xl p-5 sm:p-6">
                             <!-- Section Header -->
                             <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-5 w-full">
                                 <div class="flex items-center gap-2">
-                                    <span class="text-xs font-mono text-accentBlue font-bold uppercase tracking-wider">Module 1</span>
-                                    <span class="text-slate-600">•</span>
-                                    <h3 class="text-sm font-bold text-white uppercase tracking-wider">WebBLE &amp; Hardware Pen</h3>
-                                </div>
-                                <div id="webble-badge" class="flex items-center gap-1.5 bg-slate-800 border border-slate-700 px-2.5 py-1 rounded-md text-[11px] font-mono text-slate-400">
-                                    <span id="webble-dot" class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
-                                    <span id="webble-text">WebBLE Ready</span>
-                                </div>
-                            </div>
-
-                            <!-- WebBLE Connection Bar -->
-                            <div class="flex items-center justify-between bg-slate-950/80 border border-slate-800 rounded-xl p-3 mb-6">
-                                <div>
-                                    <div class="text-[10px] font-mono uppercase text-slate-500">Bluetooth LE Controller</div>
-                                    <div class="text-xs font-mono text-slate-200 font-bold" id="webble-dev-name">Nimbus Frontier v3</div>
-                                </div>
-                                <button id="btn-webble-connect" onclick="toggleWebBle()" class="px-3 py-1.5 bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/40 rounded-lg text-xs font-bold text-blue-300 transition active:scale-95 flex items-center gap-1.5">
-                                    <span>⚡</span>
-                                    <span id="btn-webble-label">Connect via WebBLE</span>
-                                </button>
-                            </div>
-
-                            <!-- PHYSICAL VAPE PEN MOCKUP -->
-                            <div class="device-mockup card flex flex-col items-center py-6 px-4 mx-auto max-w-[280px]">
-                                <div class="device-section-title text-[10px] font-mono font-bold tracking-widest text-slate-500 uppercase mb-4">
-                                    Nimbus Frontier — Hardware Chassis
-                                </div>
-                                
-                                <div class="device-chassis flex flex-col items-center">
-                                    <!-- Cartridge Assembly with Slotting Animation Container -->
-                                    <div id="cart-assembly-wrapper" class="cartridge-assembly">
-                                        <div class="mouthpiece-tip">
-                                            <div id="vapor-clouds" class="vapor-clouds-smoke">
-                                                <div class="cloud-particle p1"></div>
-                                                <div class="cloud-particle p2"></div>
-                                                <div class="cloud-particle p3"></div>
-                                                <div class="cloud-particle p4"></div>
-                                                <div class="cloud-particle p5"></div>
-                                            </div>
-                                        </div>
-                                        <div class="cartridge-chamber">
-                                            <div class="chamber-glass">
-                                                <div id="liquid-vapor" class="liquid-fluid fluid-rosin transition-all duration-500"></div>
-                                            </div>
-                                            <div class="cartridge-connector">
-                                                <div class="thread-510"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Walnut Accent Band -->
-                                    <div class="accent-band">
-                                        <span class="wood-grain-label">NIMBUS LABS</span>
-                                    </div>
-
-                                    <!-- Core Metal Body -->
-                                    <div class="device-core">
-                                        <!-- OLED Display -->
-                                        <div class="oled-screen">
-                                            <div class="oled-header">
-                                                <span id="oled-state">STANDBY</span>
-                                                <span id="oled-battery">100%</span>
-                                            </div>
-                                            <div class="oled-main">
-                                                <div class="oled-temp-display">
-                                                    <span id="oled-curr-temp">185.0</span><span class="oled-unit">°C</span>
-                                                </div>
-                                                <div class="oled-target-sub">
-                                                    TARGET: <span id="oled-target">FLAVOR</span>
-                                                </div>
-                                            </div>
-                                            <div class="oled-indicator-dots">
-                                                <span id="oled-indicator-nfc">NFC Ready</span>
-                                            </div>
-                                        </div>
-
-                                        <!-- Base LED Sensor Ring with Breathing Glow -->
-                                        <div class="led-ring-outer" id="btn-puff" title="Nimbus Hardware Sensor Ring">
-                                            <div id="led-ring" class="led-ring-inner animate-ring-pulse">
-                                                <div class="led-glow-overlay"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Current Slot Info Badge -->
-                                <div class="mt-5 w-full bg-slate-950/80 border border-slate-800 rounded-lg p-2.5 text-center font-mono">
-                                    <div class="text-[9px] text-slate-500 uppercase">Loaded Cartridge Slot</div>
-                                    <div id="hw-slot-title" class="text-xs font-bold text-amber-400 mt-0.5">Live Rosin (Maui Wowie)</div>
-                                    <div id="hw-slot-detail" class="text-[10px] text-slate-400">Batch: B-MW-001 • 85% THCa</div>
-                                </div>
-                            </div>
-
-                            <!-- Cartridge Slotting Buttons -->
-                            <div class="mt-6">
-                                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2.5 text-center sm:text-left">
-                                    Slot Cartridge into Pen Tip:
-                                </label>
-                                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                                    <!-- Eject -->
-                                    <button onclick="slotCartridge('eject')" class="cart-btn flex flex-col items-center justify-center p-2.5 bg-slate-800/80 hover:bg-slate-700 border border-slate-700 rounded-xl text-xs font-medium text-slate-300 transition active:scale-95 shadow">
-                                        <span class="text-base mb-1">⚪</span>
-                                        <span>Eject</span>
-                                    </button>
-                                    <!-- Live Rosin -->
-                                    <button onclick="slotCartridge('rosin')" class="cart-btn flex flex-col items-center justify-center p-2.5 bg-amber-950/40 hover:bg-amber-900/50 border border-amber-800/50 rounded-xl text-xs font-medium text-amber-300 transition active:scale-95 shadow">
-                                        <span class="text-base mb-1">🌿</span>
-                                        <span class="text-[11px] text-center">Live Rosin</span>
-                                    </button>
-                                    <!-- D9 THC -->
-                                    <button onclick="slotCartridge('d9')" class="cart-btn flex flex-col items-center justify-center p-2.5 bg-purple-950/40 hover:bg-purple-900/50 border border-purple-800/50 rounded-xl text-xs font-medium text-purple-300 transition active:scale-95 shadow">
-                                        <span class="text-base mb-1">⚡</span>
-                                        <span class="text-[11px]">D9 THC</span>
-                                    </button>
-                                    <!-- CBD -->
-                                    <button onclick="slotCartridge('cbd')" class="cart-btn flex flex-col items-center justify-center p-2.5 bg-cyan-950/40 hover:bg-cyan-900/50 border border-cyan-800/50 rounded-xl text-xs font-medium text-cyan-300 transition active:scale-95 shadow">
-                                        <span class="text-base mb-1">💧</span>
-                                        <span class="text-[11px]">CBD</span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Footer Info -->
-                        <div class="text-[11px] text-slate-500 border-t border-slate-800/80 pt-3 w-full text-center sm:text-left flex items-center justify-between">
-                            <span>💡 WebBLE handles real-time temperature telemetry via Bluetooth LE.</span>
-                        </div>
-                    </div>
-
-                    <!-- ============================================================
-                         MODULE 2 (RIGHT): PHONE MOCKUP WITH INTEGRATED SCAN CONTROLS
-                    ============================================================ -->
-                    <div class="bg-slate-900/60 border border-nimbusBorder rounded-xl p-5 sm:p-6 flex flex-col items-center justify-between space-y-6">
-                        <div class="w-full">
-                            <!-- Section Header -->
-                            <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-5 w-full">
-                                <div class="flex items-center gap-2">
-                                    <span class="text-xs font-mono text-accentGreen font-bold uppercase tracking-wider">Module 2</span>
+                                    <span class="text-xs font-mono text-cyan-400 font-bold uppercase tracking-wider">Tab 1</span>
                                     <span class="text-slate-600">•</span>
                                     <h3 class="text-sm font-bold text-white uppercase tracking-wider">Mobile Verification (/v)</h3>
                                 </div>
@@ -348,7 +239,7 @@
                                     Endpoint: <code class="text-cyan-400 font-bold">/api/v1/verify</code>
                                 </div>
                             </div>
-
+                            
                             <!-- SLEEK SMARTPHONE OUTLINE CONTAINER WITH INTEGRATED SCAN CONTROLS -->
                             <div class="phone-mockup mx-auto shadow-2xl relative w-full max-w-[360px] h-[700px] flex flex-col justify-between overflow-hidden border-[10px] border-slate-800 rounded-[40px] bg-slate-950">
                                 <div class="phone-notch"></div>
@@ -493,14 +384,151 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Footer Info -->
-                        <div class="text-[11px] text-slate-500 border-t border-slate-800/80 pt-3 w-full text-center sm:text-left">
-                            🔒 Integrated scan buttons execute live queries against /api/v1/verify directly within the phone UI.
+                            <!-- Footer Info -->
+                            <div class="text-[11px] text-slate-500 border-t border-slate-800/80 pt-3 mt-5 w-full text-center sm:text-left">
+                                🔒 Integrated scan buttons execute live queries against /api/v1/verify directly within the phone UI.
+                            </div>
                         </div>
                     </div>
 
+                    <!-- ============================================================
+                         TAB 2: SMART PEN TELEMETRY (HIDDEN)
+                    ============================================================ -->
+                    <div id="tab-content-pen" class="tab-pane hidden max-w-xl mx-auto flex-col items-center justify-start space-y-6">
+                        <div class="w-full bg-slate-900/60 border border-nimbusBorder rounded-xl p-5 sm:p-6">
+                            <!-- Section Header -->
+                            <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-5 w-full">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xs font-mono text-accentBlue font-bold uppercase tracking-wider">Tab 2</span>
+                                    <span class="text-slate-600">•</span>
+                                    <h3 class="text-sm font-bold text-white uppercase tracking-wider">WebBLE &amp; Hardware Pen</h3>
+                                </div>
+                                <div id="webble-badge" class="flex items-center gap-1.5 bg-slate-800 border border-slate-700 px-2.5 py-1 rounded-md text-[11px] font-mono text-slate-400">
+                                    <span id="webble-dot" class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+                                    <span id="webble-text">WebBLE Ready</span>
+                                </div>
+                            </div>
+
+                            <!-- WebBLE Connection Bar -->
+                            <div class="flex items-center justify-between bg-slate-950/80 border border-slate-800 rounded-xl p-3 mb-6">
+                                <div>
+                                    <div class="text-[10px] font-mono uppercase text-slate-500">Bluetooth LE Controller</div>
+                                    <div class="text-xs font-mono text-slate-200 font-bold" id="webble-dev-name">Nimbus Frontier v3</div>
+                                </div>
+                                <button id="btn-webble-connect" onclick="toggleWebBle()" class="px-3 py-1.5 bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/40 rounded-lg text-xs font-bold text-blue-300 transition active:scale-95 flex items-center gap-1.5">
+                                    <span>⚡</span>
+                                    <span id="btn-webble-label">Connect via WebBLE</span>
+                                </button>
+                            </div>
+
+                            <!-- PHYSICAL VAPE PEN MOCKUP -->
+                            <div class="device-mockup card flex flex-col items-center py-6 px-4 mx-auto max-w-[280px]">
+                                <div class="device-section-title text-[10px] font-mono font-bold tracking-widest text-slate-500 uppercase mb-4">
+                                    Nimbus Frontier — Hardware Chassis
+                                </div>
+                                
+                                <div class="device-chassis flex flex-col items-center">
+                                    <!-- Cartridge Assembly with Slotting Animation Container -->
+                                    <div id="cart-assembly-wrapper" class="cartridge-assembly">
+                                        <div class="mouthpiece-tip">
+                                            <div id="vapor-clouds" class="vapor-clouds-smoke">
+                                                <div class="cloud-particle p1"></div>
+                                                <div class="cloud-particle p2"></div>
+                                                <div class="cloud-particle p3"></div>
+                                                <div class="cloud-particle p4"></div>
+                                                <div class="cloud-particle p5"></div>
+                                            </div>
+                                        </div>
+                                        <div class="cartridge-chamber">
+                                            <div class="chamber-glass">
+                                                <div id="liquid-vapor" class="liquid-fluid fluid-rosin transition-all duration-500"></div>
+                                            </div>
+                                            <div class="cartridge-connector">
+                                                <div class="thread-510"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Walnut Accent Band -->
+                                    <div class="accent-band">
+                                        <span class="wood-grain-label">NIMBUS LABS</span>
+                                    </div>
+
+                                    <!-- Core Metal Body -->
+                                    <div class="device-core">
+                                        <!-- OLED Display -->
+                                        <div class="oled-screen">
+                                            <div class="oled-header">
+                                                <span id="oled-state">STANDBY</span>
+                                                <span id="oled-battery">100%</span>
+                                            </div>
+                                            <div class="oled-main">
+                                                <div class="oled-temp-display">
+                                                    <span id="oled-curr-temp">185.0</span><span class="oled-unit">°C</span>
+                                                </div>
+                                                <div class="oled-target-sub">
+                                                    TARGET: <span id="oled-target">FLAVOR</span>
+                                                </div>
+                                            </div>
+                                            <div class="oled-indicator-dots">
+                                                <span id="oled-indicator-nfc">NFC Ready</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Base LED Sensor Ring with Breathing Glow -->
+                                        <div class="led-ring-outer" id="btn-puff" title="Nimbus Hardware Sensor Ring">
+                                            <div id="led-ring" class="led-ring-inner animate-ring-pulse">
+                                                <div class="led-glow-overlay"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Current Slot Info Badge -->
+                                <div class="mt-5 w-full bg-slate-950/80 border border-slate-800 rounded-lg p-2.5 text-center font-mono">
+                                    <div class="text-[9px] text-slate-500 uppercase">Loaded Cartridge Slot</div>
+                                    <div id="hw-slot-title" class="text-xs font-bold text-amber-400 mt-0.5">Live Rosin (Maui Wowie)</div>
+                                    <div id="hw-slot-detail" class="text-[10px] text-slate-400">Batch: B-MW-001 • 85% THCa</div>
+                                </div>
+                            </div>
+
+                            <!-- Cartridge Slotting Buttons -->
+                            <div class="mt-6">
+                                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2.5 text-center sm:text-left">
+                                    Slot Cartridge into Pen Tip:
+                                </label>
+                                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                    <!-- Eject -->
+                                    <button onclick="slotCartridge('eject')" class="cart-btn flex flex-col items-center justify-center p-2.5 bg-slate-800/80 hover:bg-slate-700 border border-slate-700 rounded-xl text-xs font-medium text-slate-300 transition active:scale-95 shadow">
+                                        <span class="text-base mb-1">⚪</span>
+                                        <span>Eject</span>
+                                    </button>
+                                    <!-- Live Rosin -->
+                                    <button onclick="slotCartridge('rosin')" class="cart-btn flex flex-col items-center justify-center p-2.5 bg-amber-950/40 hover:bg-amber-900/50 border border-amber-800/50 rounded-xl text-xs font-medium text-amber-300 transition active:scale-95 shadow">
+                                        <span class="text-base mb-1">🌿</span>
+                                        <span class="text-[11px] text-center">Live Rosin</span>
+                                    </button>
+                                    <!-- D9 THC -->
+                                    <button onclick="slotCartridge('d9')" class="cart-btn flex flex-col items-center justify-center p-2.5 bg-purple-950/40 hover:bg-purple-900/50 border border-purple-800/50 rounded-xl text-xs font-medium text-purple-300 transition active:scale-95 shadow">
+                                        <span class="text-base mb-1">⚡</span>
+                                        <span class="text-[11px]">D9 THC</span>
+                                    </button>
+                                    <!-- CBD -->
+                                    <button onclick="slotCartridge('cbd')" class="cart-btn flex flex-col items-center justify-center p-2.5 bg-cyan-950/40 hover:bg-cyan-900/50 border border-cyan-800/50 rounded-xl text-xs font-medium text-cyan-300 transition active:scale-95 shadow">
+                                        <span class="text-base mb-1">💧</span>
+                                        <span class="text-[11px]">CBD</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                            <!-- Footer Info -->
+                            <div class="text-[11px] text-slate-500 border-t border-slate-800/80 pt-3 mt-5 w-full text-center sm:text-left flex items-center justify-between">
+                                <span>💡 WebBLE handles real-time temperature telemetry via Bluetooth LE.</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+</div>
             </div>
         </div>
     </section>
@@ -620,6 +648,28 @@
                     osc.start(now + (index * 0.07));
                     osc.stop(now + (index * 0.07) + noteDur);
                 });
+            }
+        }
+
+                // --- Tab Navigation Logic ---
+        function switchTab(tabId) {
+            const btnNfc = document.getElementById('tab-btn-nfc');
+            const btnPen = document.getElementById('tab-btn-pen');
+            const contentNfc = document.getElementById('tab-content-nfc');
+            const contentPen = document.getElementById('tab-content-pen');
+
+            // Reset all styles
+            btnNfc.className = 'flex-1 py-4 text-sm font-semibold tracking-wide transition-all border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex flex-col items-center justify-center gap-1';
+            btnPen.className = 'flex-1 py-4 text-sm font-semibold tracking-wide transition-all border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex flex-col items-center justify-center gap-1';
+            contentNfc.className = 'tab-pane hidden max-w-xl mx-auto flex-col items-center justify-start space-y-6';
+            contentPen.className = 'tab-pane hidden max-w-xl mx-auto flex-col items-center justify-start space-y-6';
+
+            if (tabId === 'nfc') {
+                btnNfc.className = 'flex-1 py-4 text-sm font-semibold tracking-wide transition-all border-b-2 bg-slate-800 border-cyan-500/50 text-cyan-400 flex flex-col items-center justify-center gap-1';
+                contentNfc.className = 'tab-pane active max-w-xl mx-auto flex-col items-center justify-start space-y-6';
+            } else if (tabId === 'pen') {
+                btnPen.className = 'flex-1 py-4 text-sm font-semibold tracking-wide transition-all border-b-2 bg-slate-800 border-cyan-500/50 text-cyan-400 flex flex-col items-center justify-center gap-1';
+                contentPen.className = 'tab-pane active max-w-xl mx-auto flex-col items-center justify-start space-y-6';
             }
         }
 
