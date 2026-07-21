@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
@@ -83,10 +83,7 @@
             <div class="flex justify-between items-center h-16">
                 <div class="flex-shrink-0">
                     <a href="index.html" class="flex items-center gap-2.5">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                            <path d="M12 3C7.03 3 3 7.03 3 12s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9z" stroke="#3b82f6" stroke-width="1.5" fill="none"/>
-                            <circle cx="12" cy="12" r="3" fill="#3b82f6"/>
-                        </svg>
+                        <img src="nimbus_linkedin_logo.png" alt="Quantum Nimbus Logo" class="w-8 h-8 rounded-full border border-blue-500/40 object-cover shadow-[0_0_10px_rgba(59,130,246,0.3)]">
                         <span class="font-heading font-bold text-[1.1rem] text-white tracking-tight">Quantum <span class="text-accentBlue">Nimbus</span> Tech</span>
                     </a>
                 </div>
@@ -95,7 +92,6 @@
                     <a href="safety.html" class="nav-link">Compliance Data</a>
                     <a href="simulator.html" class="nav-link">Simulation</a>
                     <a href="contact.html" class="nav-link" style="color:#f1f5f9;">Contact</a>
-                    
                 </div>
                 <div class="md:hidden flex items-center">
                     <button id="mobile-menu-btn" class="text-nimbusText hover:text-white focus:outline-none p-1">
@@ -123,10 +119,21 @@
             <div class="mb-10">
                 <div class="inline-flex items-center gap-2 mb-4 text-xs font-medium text-accentBlue uppercase tracking-widest">
                     <span class="w-4 h-px bg-accentBlue opacity-60"></span>
-                    Enterprise Partnerships
+                    Enterprise & Consumer Support
                 </div>
-                <h1 class="font-heading text-3xl font-bold text-white mb-2">Contact Our Team</h1>
-                <p class="text-nimbusText text-sm leading-relaxed">Initiate a secure dialogue for corporate partnerships, technical blueprints, and licensing inquiries.</p>
+                <h1 class="font-heading text-3xl font-bold text-white mb-2">Contact Quantum Nimbus</h1>
+                <p class="text-nimbusText text-sm leading-relaxed">Initiate a dialogue for corporate partnerships, technical licensing, or submit a consumer hardware verification report.</p>
+            </div>
+
+            <!-- Consumer Alert Banner -->
+            <div class="mb-6 bg-red-950/40 border border-red-900/40 p-4 rounded-xl flex items-start space-x-3 text-xs text-red-200">
+                <svg class="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                </svg>
+                <div>
+                    <span class="font-bold text-red-300">Reporting a Security Incident or Cloned Tag?</span>
+                    <p class="text-red-300/80 mt-0.5">Select <span class="underline font-semibold">"Report a Security Incident / Counterfeit Tag"</span> in the inquiry dropdown below to route your message directly to our hardware compliance team.</p>
+                </div>
             </div>
 
             <!-- Contact form card -->
@@ -138,25 +145,31 @@
                             <input type="text" name="name" required class="ent-input" placeholder="Jane Doe">
                         </div>
                         <div>
-                            <label class="ent-label">Corporate email</label>
-                            <input type="email" name="_replyto" required class="ent-input" placeholder="jane@enterprise.com">
+                            <label class="ent-label">Email address</label>
+                            <input type="email" name="_replyto" required class="ent-input" placeholder="jane@example.com">
                         </div>
                     </div>
                     <div>
-                        <label class="ent-label">Company name</label>
-                        <input type="text" name="company" required class="ent-input" placeholder="Acme Corp">
+                        <label class="ent-label">Company / Brand Name <span class="text-gray-500 font-normal">(Optional for Consumers)</span></label>
+                        <input type="text" name="company" class="ent-input" placeholder="Acme Corp or N/A">
                     </div>
                     <div>
                         <label class="ent-label">Inquiry type</label>
                         <select name="inquiry_type" class="ent-input">
+                            <option>🚨 Report a Security Incident / Counterfeit Tag</option>
+                            <option>Consumer Support & Product Inquiry</option>
                             <option>Request Technical Whitepaper</option>
                             <option>Schedule Blueprint Review under MNDA</option>
-                            <option>Licensing Inquiry</option>
+                            <option>Licensing & Brand Integration</option>
                             <option>Other Business Development</option>
                         </select>
                     </div>
+                    <div>
+                        <label class="ent-label">Message / Incident details</label>
+                        <textarea name="message" rows="4" required class="ent-input" placeholder="Describe your inquiry or security incident details..."></textarea>
+                    </div>
                     <button type="submit" id="contact-submit" class="w-full py-3.5 mt-2 bg-accentBlue text-white font-semibold text-sm rounded-md hover:bg-blue-500 transition-colors shadow-[0_0_20px_rgba(59,130,246,0.2)]">
-                        Submit Inquiry
+                        Submit Message
                     </button>
                 </form>
             </div>
