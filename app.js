@@ -367,7 +367,7 @@ const graphPreviewCurve = document.getElementById("graph-preview-curve");
 const graphLiveCurve = document.getElementById("graph-live-curve");
 
 // Initialize Bluetooth simulator
-btnPair.addEventListener("click", () => {
+btnPair?.addEventListener("click", () => {
     trackSimulatorEvent("initialize_scan");
     btnPair.textContent = "Scanning...";
     btnPair.disabled = true;
@@ -385,7 +385,7 @@ btnPair.addEventListener("click", () => {
 });
 
 // Capture switch and input changes
-chkAllowUnverified.addEventListener("change", () => {
+chkAllowUnverified?.addEventListener("change", () => {
     if (activeCartridge) {
         calculateTemperatures();
         updateInterface();
@@ -394,14 +394,14 @@ chkAllowUnverified.addEventListener("change", () => {
     }
 });
 
-inputSecret.addEventListener("input", () => {
+inputSecret?.addEventListener("input", () => {
     if (activeCartridge) {
         processCartridgeConnection(activeCartridge);
     }
 });
 
 // Setup modal dialog handlers
-btnModalAccept.addEventListener("click", () => {
+btnModalAccept?.addEventListener("click", () => {
     trackSimulatorEvent("safety_mode_triggered", { clamp: 150 });
     warningModal.classList.remove("active");
     chkAllowUnverified.checked = true; // Set checkbox to true to reflect safety override
@@ -411,7 +411,7 @@ btnModalAccept.addEventListener("click", () => {
     updateWellnessStats();
 });
 
-btnModalReject.addEventListener("click", () => {
+btnModalReject?.addEventListener("click", () => {
     warningModal.classList.remove("active");
     chkAllowUnverified.checked = false;
     // Trigger disconnection
@@ -420,7 +420,7 @@ btnModalReject.addEventListener("click", () => {
 
 // Setup mode buttons
 document.querySelectorAll(".mode-btn").forEach(btn => {
-    btn.addEventListener("click", (e) => {
+    btn?.addEventListener("click", (e) => {
         document.querySelectorAll(".mode-btn").forEach(b => b.classList.remove("active"));
         const targetBtn = e.currentTarget;
         targetBtn.classList.add("active");
@@ -444,7 +444,7 @@ document.querySelectorAll(".mode-btn").forEach(btn => {
 
 // Setup cartridge selection buttons
 document.querySelectorAll(".cart-btn").forEach(btn => {
-    btn.addEventListener("click", async (e) => {
+    btn?.addEventListener("click", async (e) => {
         document.querySelectorAll(".cart-btn").forEach(b => b.classList.remove("active"));
         e.currentTarget.classList.add("active");
         
@@ -462,7 +462,7 @@ document.querySelectorAll(".cart-btn").forEach(btn => {
 });
 
 // Setup Custom NFC Payload input submission
-btnNfcSubmit.addEventListener("click", async () => {
+btnNfcSubmit?.addEventListener("click", async () => {
     trackSimulatorEvent("scan_tag");
     const rawVal = inputNfcPayload.value.trim();
     if (!rawVal) {
@@ -817,16 +817,16 @@ function updateLiveTelemetry() {
 }
 
 // Button action triggers
-btnPuff.addEventListener("mousedown", startPuffing);
-btnPuff.addEventListener("mouseup", stopPuffing);
-btnPuff.addEventListener("mouseleave", stopPuffing);
+btnPuff?.addEventListener("mousedown", startPuffing);
+btnPuff?.addEventListener("mouseup", stopPuffing);
+btnPuff?.addEventListener("mouseleave", stopPuffing);
 
 // Touch Support for mobile phone screen testing
-btnPuff.addEventListener("touchstart", (e) => {
+btnPuff?.addEventListener("touchstart", (e) => {
     e.preventDefault();
     startPuffing();
 });
-btnPuff.addEventListener("touchend", (e) => {
+btnPuff?.addEventListener("touchend", (e) => {
     e.preventDefault();
     stopPuffing();
 });
@@ -837,7 +837,7 @@ btnPuff.addEventListener("touchend", (e) => {
 
 // Tab navigation handler
 navBtns.forEach(btn => {
-    btn.addEventListener("click", (e) => {
+    btn?.addEventListener("click", (e) => {
         const targetTab = e.currentTarget.dataset.tab;
         
         // Update active class on nav buttons
@@ -852,7 +852,7 @@ navBtns.forEach(btn => {
 });
 
 // Nootropic supplement click handler
-btnTakeSupplement.addEventListener("click", () => {
+btnTakeSupplement?.addEventListener("click", () => {
     if (supplementTaken) return;
     
     supplementTaken = true;
@@ -996,7 +996,7 @@ function setupMuteListener() {
     btnMute.style.background = savedMute ? "rgba(239, 68, 68, 0.1)" : "rgba(255, 255, 255, 0.08)";
     btnMute.style.borderColor = savedMute ? "rgba(239, 68, 68, 0.3)" : "rgba(255, 255, 255, 0.15)";
     
-    btnMute.addEventListener("click", () => {
+    btnMute?.addEventListener("click", () => {
         const muted = !synth.isMuted;
         synth.toggleMute(muted);
         localStorage.setItem("nimbus_muted", muted);
@@ -1167,7 +1167,7 @@ function setupCustomProfileListeners() {
     const customProfileOptVal = document.getElementById("custom-profile-opt-val");
     const customProfileMaxVal = document.getElementById("custom-profile-max-val");
     if (customProfileOpt && customProfileMax) {
-        customProfileOpt.addEventListener("input", () => {
+        customProfileOpt?.addEventListener("input", () => {
             let optVal = parseInt(customProfileOpt.value);
             let maxVal = parseInt(customProfileMax.value);
             if (optVal > maxVal) {
@@ -1176,7 +1176,7 @@ function setupCustomProfileListeners() {
             }
             customProfileOptVal.value = optVal;
         });
-        customProfileMax.addEventListener("input", () => {
+        customProfileMax?.addEventListener("input", () => {
             let optVal = parseInt(customProfileOpt.value);
             let maxVal = parseInt(customProfileMax.value);
             if (maxVal < optVal) {
@@ -1185,7 +1185,7 @@ function setupCustomProfileListeners() {
             }
             customProfileMaxVal.value = maxVal;
         });
-        customProfileOptVal.addEventListener("input", () => {
+        customProfileOptVal?.addEventListener("input", () => {
             let optVal = parseInt(customProfileOptVal.value) || 150;
             let maxVal = parseInt(customProfileMaxVal.value) || 210;
             if (optVal > maxVal) {
@@ -1195,7 +1195,7 @@ function setupCustomProfileListeners() {
             }
             customProfileOpt.value = optVal;
         });
-        customProfileMaxVal.addEventListener("input", () => {
+        customProfileMaxVal?.addEventListener("input", () => {
             let optVal = parseInt(customProfileOptVal.value) || 150;
             let maxVal = parseInt(customProfileMaxVal.value) || 210;
             if (maxVal < optVal) {
@@ -1209,7 +1209,7 @@ function setupCustomProfileListeners() {
     if (!btnToggleDesigner || !profileDesignerForm || !selectCustomProfile) return;
     
     // Toggle form display
-    btnToggleDesigner.addEventListener("click", () => {
+    btnToggleDesigner?.addEventListener("click", () => {
         profileDesignerForm.style.display = "flex";
         customProfileName.value = "";
         
@@ -1230,14 +1230,14 @@ function setupCustomProfileListeners() {
         if (selectorRow) selectorRow.style.display = "none";
     });
     
-    btnCancelProfile.addEventListener("click", () => {
+    btnCancelProfile?.addEventListener("click", () => {
         profileDesignerForm.style.display = "none";
         const selectorRow = document.getElementById("custom-profiles-selector");
         if (selectorRow) selectorRow.style.display = "flex";
     });
     
     // Save new profile
-    btnSaveProfile.addEventListener("click", () => {
+    btnSaveProfile?.addEventListener("click", () => {
         const name = customProfileName.value.trim();
         
         if (!name) {
@@ -1279,7 +1279,7 @@ function setupCustomProfileListeners() {
     });
     
     // Delete profile
-    btnDeleteProfile.addEventListener("click", () => {
+    btnDeleteProfile?.addEventListener("click", () => {
         const selectedName = selectCustomProfile.value;
         if (!selectedName) return;
         
@@ -1303,7 +1303,7 @@ function setupCustomProfileListeners() {
     });
     
     // Select custom profile change trigger
-    selectCustomProfile.addEventListener("change", () => {
+    selectCustomProfile?.addEventListener("change", () => {
         const val = selectCustomProfile.value;
         if (!val) {
             activeCustomProfile = null;
@@ -1326,7 +1326,7 @@ function setupCustomProfileListeners() {
     
     // Advanced Slider input event
     if (tempTunerSlider) {
-        tempTunerSlider.addEventListener("input", () => {
+        tempTunerSlider?.addEventListener("input", () => {
             const val = parseFloat(tempTunerSlider.value);
             if (valTunerTemp) {
                 valTunerTemp.textContent = `${val.toFixed(0)}°C`;
@@ -1422,7 +1422,7 @@ function setupWellnessLimitListener() {
     const sliderLimitMg = document.getElementById("slider-wellness-limit-mg");
     const valLimitMg = document.getElementById("val-wellness-limit-mg");
     if (sliderLimitMg && valLimitMg) {
-        sliderLimitMg.addEventListener("input", () => {
+        sliderLimitMg?.addEventListener("input", () => {
             const val = parseFloat(sliderLimitMg.value);
             valLimitMg.textContent = `${val.toFixed(1)} mg`;
             mgDailyLimit = val;
@@ -1435,7 +1435,7 @@ function setupWellnessLimitListener() {
 function setupResetButtonListener() {
     const btnResetData = document.getElementById("btn-reset-data");
     if (btnResetData) {
-        btnResetData.addEventListener("click", () => {
+        btnResetData?.addEventListener("click", () => {
             if (confirm("Are you sure you want to reset all simulator, wellness, and custom profile data?")) {
                 localStorage.removeItem("nimbus_puff_history");
                 localStorage.removeItem("nimbus_custom_profiles");
