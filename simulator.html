@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
@@ -275,7 +275,6 @@
                                     <button id="btn-cancel-profile" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08); color: var(--text-secondary); border-radius: 8px; padding: 0.5rem 0.8rem; font-size: 0.75rem; cursor: pointer; outline: none;">Cancel</button>
                                 </div>
                             </div>
-                            </div>
                         </div>
 
                         <!-- Heating Insights Panel -->
@@ -517,77 +516,63 @@
                     </div>
                 </div>
             </div>
+            <!-- Controller Console to Simulate Cartridge Insertion -->
+            <div class="console-card" style="margin-top: 2rem; width: 100%;">
+                <h3>Simulator Controls & Developer Options</h3>
+                <p class="console-desc">Simulate NFC pen connections and toggle hardware-level security override settings.</p>
+                
+                <div class="cartridge-buttons">
+                    <button class="cart-btn active" data-cart="disconnected">
+                        Eject Cartridge
+                    </button>
+                    <button class="cart-btn" data-cart="astro">
+                        Astro (D9 THC)
+                    </button>
+                    <button class="cart-btn" data-cart="frontier">
+                        Frontier (Rosin)
+                    </button>
+                    <button class="cart-btn" data-cart="nimby">
+                        NIMBY (CBD)
+                    </button>
+                    <button class="cart-btn" data-cart="counterfeit">
+                        Counterfeit
+                    </button>
+                </div>
+
+                <!-- Custom NFC input for generated JSONs -->
+                <div class="custom-nfc-input">
+                    <span class="console-sublabel">SCAN / PASTE CUSTOM NFC PAYLOAD</span>
+                    <div class="nfc-input-row">
+                        <input type="text" id="input-nfc-payload" placeholder='{"b":"Brand","y":"Type","i":"Batch","s":"sig"}'>
+                        <button id="btn-nfc-submit" class="btn-nfc-action">Scan Tag</button>
+                    </div>
+                </div>
+
+                <div class="developer-settings">
+                    <div class="toggle-row">
+                        <div class="toggle-info">
+                            <span class="toggle-title">Allow Unverified Cartridges</span>
+                            <span class="toggle-desc">Restricts output to 150°C safety cap</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="chk-allow-unverified">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="secret-row">
+                        <label for="input-secret" style="display: block; margin-bottom: 0.3rem;">Master Signing Secret (Hardware Encrypted)</label>
+                        <input type="text" id="input-secret" value="nimbus_secure_master_secret_2026">
+                    </div>
+                    <div style="border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 0.8rem; margin-top: 0.2rem; display: flex; justify-content: flex-end;">
+                        <button id="btn-reset-data" style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); color: #fca5a5; border-radius: 8px; padding: 0.45rem 0.8rem; font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: all 0.2s; outline: none; width: 100%;">
+                            Reset Demo / Wellness Data
+                        </button>
+                    </div>
+                </div>
+            </div>
         </section>
 
                     </main>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ================= VALIDATION CONSOLE (below simulator panel) ================= -->
-    <section class="py-12" style="background:#0c0f17;">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="console-card">
-                <!-- Console header -->
-                <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.25rem;">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="color:#8b9cb5; flex-shrink:0;">
-                        <path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    <h3>Validation Console</h3>
-                </div>
-                <p class="console-desc">Simulate hardware payload connections and configure authentication override settings for testing purposes.</p>
-
-                <!-- Two-column layout for console controls -->
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem;">
-                    <!-- Left: Hardware profile selector -->
-                    <div>
-                        <div style="font-size:0.7rem; font-weight:600; color:#8b9cb5; margin-bottom:0.6rem; letter-spacing:0.03em;">Select Hardware Profile</div>
-                        <div class="cartridge-buttons">
-                            <button class="cart-btn active" data-cart="disconnected">No Cartridge (Idle)</button>
-                            <button class="cart-btn" data-cart="astro">Astro — D9 THC</button>
-                            <button class="cart-btn" data-cart="frontier">Frontier — Rosin</button>
-                            <button class="cart-btn" data-cart="nimby">Nimby — CBD</button>
-                            <button class="cart-btn" data-cart="counterfeit">Unverified Hardware</button>
-                        </div>
-                    </div>
-
-                    <!-- Right: Payload input + developer settings -->
-                    <div style="display:flex; flex-direction:column; gap:1rem;">
-                        <!-- Custom hardware payload input -->
-                        <div class="custom-nfc-input">
-                            <span class="console-sublabel">Scan / Paste Custom Hardware Payload</span>
-                            <div class="nfc-input-row">
-                                <input type="text" id="input-nfc-payload" placeholder='{"b":"Brand","y":"Type","i":"Batch","s":"sig"}'>
-                                <button id="btn-nfc-submit" class="btn-nfc-action">Validate</button>
-                            </div>
-                        </div>
-
-                        <!-- Developer settings -->
-                        <div class="developer-settings" style="margin-top:0; border-top:none; padding-top:0;">
-                            <div class="toggle-row">
-                                <div class="toggle-info">
-                                    <span class="toggle-title">Permit Unverified Cartridges</span>
-                                    <span class="toggle-desc">Enforces 150°C thermal safety ceiling on unverified hardware</span>
-                                </div>
-                                <label class="switch">
-                                    <input type="checkbox" id="chk-allow-unverified">
-                                    <span class="slider"></span>
-                                </label>
-                            </div>
-                            <div class="secret-row">
-                                <label for="input-secret">HMAC Signing Key
-                                    <svg style="display:inline; width:11px; height:11px; margin-left:4px; opacity:0.5; vertical-align:middle;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-                                </label>
-                                <input type="text" id="input-secret" value="nimbus_secure_master_secret_2026">
-                            </div>
-                            <div style="border-top:1px solid #1e2d3d; padding-top:0.875rem;">
-                                <button id="btn-reset-data" style="background:transparent; border:1px solid rgba(239,68,68,0.3); color:#f87171; border-radius:8px; padding:0.5rem 0.875rem; font-size:0.78rem; font-weight:500; cursor:pointer; transition:all 0.18s; outline:none; width:100%; font-family:inherit;">
-                                    Reset Demo Data &amp; Wellness Logs
-                                </button>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
