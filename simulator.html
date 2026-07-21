@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nimbus Labs Sandbox | Quantum Nimbus Tech</title>
-    <meta name="description" content="Interactive hardware validation sandbox. Test physical vape pen WebBLE telemetry and mobile cryptographic NFC verification in real time.">
+    <meta name="description" content="Interactive hardware validation sandbox. Test physical vape pen WebBLE telemetry and mobile cryptographic NFC verification in real time with Web Audio API sound synthesis.">
     <!-- Google Fonts: Inter + Outfit + JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -159,13 +159,13 @@
             <div class="text-center max-w-3xl mx-auto mb-10">
                 <div class="inline-flex items-center gap-2 mb-3 text-xs font-medium text-accentCyan uppercase tracking-widest">
                     <span class="w-2 h-2 rounded-full bg-accentCyan animate-pulse"></span>
-                    Live WebBLE Telemetry &amp; Mobile NFC Verification
+                    Live WebBLE Telemetry &amp; Audio Synthesized NFC Verification
                 </div>
                 <h1 class="font-heading text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-3">
                     Hardware Validation Sandbox
                 </h1>
                 <p class="text-slate-400 text-sm sm:text-base leading-relaxed">
-                    Test Nimbus Frontier WebBLE Bluetooth telemetry, slot physical cartridges into the pen tip, and execute mobile NFC verification scans directly inside the phone UI.
+                    Test Nimbus Frontier WebBLE Bluetooth telemetry, slot physical cartridges into the pen tip, and execute mobile NFC verification scans directly inside the phone UI with interactive Web Audio synthesis.
                 </p>
             </div>
 
@@ -188,7 +188,7 @@
                             <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                             <span class="text-xs font-semibold text-emerald-400">Sandbox Active</span>
                         </div>
-                        <span class="hidden sm:inline text-xs font-mono text-slate-500">v3.6-prod</span>
+                        <span class="hidden sm:inline text-xs font-mono text-slate-500">v3.7-prod</span>
                     </div>
                 </div>
 
@@ -327,8 +327,8 @@
                         </div>
 
                         <!-- Footer Info -->
-                        <div class="text-[11px] text-slate-500 border-t border-slate-800/80 pt-3 w-full text-center sm:text-left">
-                            💡 WebBLE handles real-time temperature telemetry &amp; hardware safety clamps via Bluetooth LE.
+                        <div class="text-[11px] text-slate-500 border-t border-slate-800/80 pt-3 w-full text-center sm:text-left flex items-center justify-between">
+                            <span>💡 WebBLE handles real-time temperature telemetry via Bluetooth LE.</span>
                         </div>
                     </div>
 
@@ -524,8 +524,107 @@
         </div>
     </footer>
 
-    <!-- INTERACTIVE JAVASCRIPT LOGIC -->
+    <!-- INTERACTIVE JAVASCRIPT LOGIC WITH WEB AUDIO SYNTHESIS -->
     <script>
+        // --- Web Audio API Synthesizer Class ---
+        class SoundSynth {
+            constructor() {
+                this.ctx = null;
+                this.isMuted = false;
+            }
+
+            init() {
+                if (!this.ctx) {
+                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (this.ctx.state === 'suspended') {
+                    this.ctx.resume();
+                }
+            }
+
+            // High chime / tone on connecting or slotting authentic cartridge
+            playPairSound() {
+                if (this.isMuted) return;
+                this.init();
+                const now = this.ctx.currentTime;
+                const notes = [440, 554.37]; // A4 -> C#5
+                const durations = [0.12, 0.25];
+                notes.forEach((freq, index) => {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = "sine";
+                    osc.frequency.setValueAtTime(freq, now + (index * 0.1));
+                    gain.gain.setValueAtTime(0.08, now + (index * 0.1));
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + (index * 0.1) + durations[index]);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(now + (index * 0.1));
+                    osc.stop(now + (index * 0.1) + durations[index]);
+                });
+            }
+
+            // Pitch drop sound on eject / disconnect
+            playDisconnectSound() {
+                if (this.isMuted) return;
+                this.init();
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = "triangle";
+                osc.frequency.setValueAtTime(330, now);
+                osc.frequency.exponentialRampToValueAtTime(110, now + 0.35);
+                gain.gain.setValueAtTime(0.08, now);
+                gain.gain.linearRampToValueAtTime(0.001, now + 0.35);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start(now);
+                osc.stop(now + 0.35);
+            }
+
+            // Sawtooth alarm sound on replay attack / counterfeit detection
+            playWarningAlarm() {
+                if (this.isMuted) return;
+                this.init();
+                const now = this.ctx.currentTime;
+                const duration = 0.45;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = "sawtooth";
+                osc.frequency.setValueAtTime(220, now); 
+                osc.frequency.setValueAtTime(293.66, now + 0.15); 
+                osc.frequency.setValueAtTime(220, now + 0.3); 
+                gain.gain.setValueAtTime(0.07, now);
+                gain.gain.linearRampToValueAtTime(0.001, now + duration);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start(now);
+                osc.stop(now + duration);
+            }
+
+            // Major arpeggio sparkle chime on successful authentic verification
+            playSupplementSpark() {
+                if (this.isMuted) return;
+                this.init();
+                const now = this.ctx.currentTime;
+                const freqs = [523.25, 659.25, 783.99, 1046.50]; // C Major arpeggio
+                const noteDur = 0.1;
+                freqs.forEach((freq, index) => {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = "sine";
+                    osc.frequency.setValueAtTime(freq, now + (index * 0.07));
+                    gain.gain.setValueAtTime(0.06, now + (index * 0.07));
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + (index * 0.07) + noteDur);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(now + (index * 0.07));
+                    osc.stop(now + (index * 0.07) + noteDur);
+                });
+            }
+        }
+
+        const synth = new SoundSynth();
+
         // Mobile Menu Toggle
         const mobileBtn = document.getElementById('mobile-menu-btn');
         const mobileNav = document.getElementById('mobile-menu');
@@ -556,6 +655,8 @@
                     badge.className = 'flex items-center gap-1.5 bg-emerald-950/60 border border-emerald-800 px-2.5 py-1 rounded-md text-[11px] font-mono text-emerald-300';
                     dot.className = 'w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse';
                     devName.textContent = 'Nimbus Frontier v3 (BLE Active)';
+                    
+                    synth.playPairSound();
                 }, 700);
             } else {
                 // Disconnecting state
@@ -565,6 +666,8 @@
                 badge.className = 'flex items-center gap-1.5 bg-slate-800 border border-slate-700 px-2.5 py-1 rounded-md text-[11px] font-mono text-slate-400';
                 dot.className = 'w-1.5 h-1.5 rounded-full bg-slate-500';
                 devName.textContent = 'Nimbus Frontier v3';
+                
+                synth.playDisconnectSound();
             }
         }
 
@@ -611,6 +714,13 @@
         function slotCartridge(type) {
             const data = cartridges[type] || cartridges.eject;
             
+            // Trigger Audio Feedback
+            if (type === 'eject') {
+                synth.playDisconnectSound();
+            } else {
+                synth.playPairSound();
+            }
+
             // Trigger Drop-In Animation on Cartridge Tip Wrapper
             const wrapper = document.getElementById('cart-assembly-wrapper');
             wrapper.classList.remove('animate-slot-cartridge');
@@ -633,7 +743,7 @@
             ring.style.boxShadow = data.ringGlow;
         }
 
-        // --- Module 2: Phone Verification Simulation Logic & Radar Ripple Animation ---
+        // --- Module 2: Phone Verification Simulation Logic & Audio Synthesis ---
         function getScanCounter() {
             const stored = parseInt(localStorage.getItem('nfc_sim_counter') || '0', 10);
             const epochBase = Math.floor(Date.now() / 1000) - 1700000000;
@@ -690,6 +800,9 @@
                     jsonBox.textContent = JSON.stringify(data, null, 2);
 
                     if (response.ok && data.status === 'AUTHENTIC') {
+                        // Play Victory Chime
+                        synth.playSupplementSpark();
+
                         statusPill.className = 'text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800';
                         statusPill.textContent = `200 OK • ${latency}ms`;
 
@@ -743,6 +856,9 @@
                         slotCartridge('rosin');
 
                     } else if (data.status === 'REPLAY_ATTACK') {
+                        // Play Warning Alarm Sound
+                        synth.playWarningAlarm();
+
                         statusPill.className = 'text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-amber-950 text-amber-400 border border-amber-800';
                         statusPill.textContent = `200 REPLAY • ${latency}ms`;
 
@@ -769,6 +885,9 @@
                         `;
 
                     } else {
+                        // Play Warning Alarm Sound
+                        synth.playWarningAlarm();
+
                         statusPill.className = 'text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-rose-950 text-rose-400 border border-rose-800';
                         statusPill.textContent = `${response.status} REJECTED • ${latency}ms`;
 
@@ -799,6 +918,7 @@
             } catch (err) {
                 const latency = Math.round(performance.now() - startTime);
                 radarOverlay.classList.add('hidden');
+                synth.playWarningAlarm();
                 statusPill.className = 'text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-rose-950 text-rose-400 border border-rose-800';
                 statusPill.textContent = `ERROR • ${latency}ms`;
                 jsonBox.textContent = JSON.stringify({ error: err.message }, null, 2);
