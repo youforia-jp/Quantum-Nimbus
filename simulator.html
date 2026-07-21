@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nimbus Labs Sandbox | Quantum Nimbus Tech</title>
-    <meta name="description" content="Interactive hardware telemetry & NFC security suite. Test cryptographic validation, WebBLE connection, and hardware authentication in real time.">
+    <meta name="description" content="Interactive hardware validation sandbox. Test physical vape pen telemetry and customer-facing cryptographic NFC verification in real time.">
     <!-- Google Fonts: Inter + Outfit + JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,7 +38,7 @@
         }
     </script>
     
-    <!-- Existing Vanilla CSS -->
+    <!-- Existing Design System CSS -->
     <link rel="stylesheet" href="index.css">
     
     <style>
@@ -51,18 +51,18 @@
         .background-radial-glow { display: none; }
         .nav-link { font-size: 0.875rem; font-weight: 500; color: #8b9cb5; transition: color 0.18s; }
         .nav-link:hover { color: #f1f5f9; }
-        
-        /* Custom Glowing Elements */
-        .glow-cyan { box-shadow: 0 0 20px rgba(6, 182, 212, 0.15); }
-        .glow-emerald { box-shadow: 0 0 20px rgba(16, 185, 129, 0.15); }
-        .glow-amber { box-shadow: 0 0 20px rgba(245, 158, 11, 0.15); }
-        .glow-rose { box-shadow: 0 0 20px rgba(239, 68, 68, 0.15); }
-        
-        /* OLED Screen simulation */
-        .oled-display {
-            background: radial-gradient(circle at center, #020617 0%, #000000 100%);
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.9), 0 0 15px rgba(59, 130, 246, 0.1);
+
+        /* Hardware Cartridge Chamber Custom Styles */
+        .fluid-empty { background: rgba(30, 41, 59, 0.3) !important; height: 0% !important; }
+        .fluid-rosin { background: linear-gradient(to top, #d97706, #fbbf24) !important; height: 85% !important; box-shadow: 0 0 15px rgba(245,158,11,0.5); }
+        .fluid-d9 { background: linear-gradient(to top, #7c3aed, #c084fc) !important; height: 90% !important; box-shadow: 0 0 15px rgba(168,85,247,0.5); }
+        .fluid-cbd { background: linear-gradient(to top, #0284c7, #38bdf8) !important; height: 80% !important; box-shadow: 0 0 15px rgba(14,165,233,0.5); }
+
+        /* Smartphone Screen Animations */
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
@@ -116,13 +116,13 @@
             <div class="text-center max-w-3xl mx-auto mb-10">
                 <div class="inline-flex items-center gap-2 mb-3 text-xs font-medium text-accentCyan uppercase tracking-widest">
                     <span class="w-2 h-2 rounded-full bg-accentCyan animate-pulse"></span>
-                    Live Hardware &amp; Cryptographic Pipeline
+                    Live Physical Hardware &amp; Verification Suite
                 </div>
                 <h1 class="font-heading text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-3">
                     Hardware Validation Sandbox
                 </h1>
                 <p class="text-slate-400 text-sm sm:text-base leading-relaxed">
-                    Test Nimbus Pen WebBLE telemetry, simulate physical cartridge insertion, and fire live NTAG 424 DNA anti-replay scans against our backend database.
+                    Test Nimbus Frontier physical pen cartridge insertion in real-time, and simulate customer NFC scans against our live cryptographic verification engine.
                 </p>
             </div>
 
@@ -137,7 +137,7 @@
                         </div>
                         <div>
                             <h2 class="font-heading font-bold text-lg text-white tracking-tight">Nimbus Labs Sandbox</h2>
-                            <p class="text-xs text-nimbusText">Interactive hardware telemetry &amp; NFC security suite.</p>
+                            <p class="text-xs text-nimbusText">Interactive physical hardware telemetry &amp; NFC verification pipeline.</p>
                         </div>
                     </div>
                     <div class="flex items-center gap-3">
@@ -145,223 +145,298 @@
                             <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                             <span class="text-xs font-semibold text-emerald-400">Sandbox Active</span>
                         </div>
-                        <span class="hidden sm:inline text-xs font-mono text-slate-500">v3.4-prod</span>
+                        <span class="hidden sm:inline text-xs font-mono text-slate-500">v3.5-prod</span>
                     </div>
                 </div>
 
                 <!-- TWO DISTINCT MODULE COLUMNS -->
-                <div class="p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
                     
                     <!-- ============================================================
-                         MODULE 1: HARDWARE & WEBBLE PEN (LEFT COLUMN)
+                         MODULE 1 (LEFT): PHYSICAL VAPE PEN HARDWARE MOCKUP
                     ============================================================ -->
-                    <div class="bg-slate-900/60 border border-nimbusBorder rounded-xl p-5 sm:p-6 flex flex-col justify-between space-y-6">
-                        <div>
+                    <div class="bg-slate-900/60 border border-nimbusBorder rounded-xl p-5 sm:p-6 flex flex-col items-center justify-between space-y-6">
+                        <div class="w-full">
                             <!-- Section Header -->
-                            <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-5">
+                            <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-6 w-full">
                                 <div class="flex items-center gap-2">
                                     <span class="text-xs font-mono text-accentBlue font-bold uppercase tracking-wider">Module 1</span>
                                     <span class="text-slate-600">•</span>
-                                    <h3 class="text-sm font-bold text-white uppercase tracking-wider">Hardware &amp; WebBLE Pen</h3>
+                                    <h3 class="text-sm font-bold text-white uppercase tracking-wider">Physical Vape Pen Hardware</h3>
                                 </div>
-                                <!-- WebBLE connection status -->
-                                <div id="webble-status-pill" class="flex items-center gap-2 bg-cyan-950/50 border border-cyan-800/60 px-2.5 py-1 rounded-md text-[11px] font-mono text-cyan-300">
-                                    <span id="webble-dot" class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
-                                    <span id="webble-text">WebBLE Connected</span>
-                                </div>
-                            </div>
-
-                            <!-- Telemetry Meta Strip -->
-                            <div class="grid grid-cols-3 gap-2 bg-slate-950/60 border border-slate-800/80 rounded-lg p-2.5 mb-5 text-[11px] font-mono text-slate-400 text-center">
-                                <div>
-                                    <div class="text-[9px] uppercase text-slate-500">Device MAC</div>
-                                    <div class="text-slate-200 font-bold truncate">04:A1:B2:C3:D4:E5</div>
-                                </div>
-                                <div class="border-x border-slate-800 px-1">
-                                    <div class="text-[9px] uppercase text-slate-500">Protocol</div>
-                                    <div class="text-cyan-400 font-bold">BLE 5.2 (AES)</div>
-                                </div>
-                                <div>
-                                    <div class="text-[9px] uppercase text-slate-500">Signal</div>
-                                    <div class="text-emerald-400 font-bold">-48 dBm 📶</div>
+                                <div class="flex items-center gap-1.5 bg-cyan-950/50 border border-cyan-800/60 px-2.5 py-1 rounded-md text-[11px] font-mono text-cyan-300">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+                                    <span>WebBLE Active</span>
                                 </div>
                             </div>
 
-                            <!-- Nimbus Pen Screen UI (OLED Mockup Display) -->
-                            <div class="relative bg-slate-950 border border-slate-800 rounded-2xl p-5 shadow-2xl overflow-hidden mb-6 glow-cyan">
-                                <div class="text-[10px] font-mono uppercase tracking-widest text-slate-500 mb-3 flex items-center justify-between">
-                                    <span>Nimbus Frontier OLED Display</span>
-                                    <span id="pen-battery" class="text-emerald-400 font-bold">🔋 100%</span>
+                            <!-- PHYSICAL VAPE PEN DEVICE SILHOUETTE MOCKUP -->
+                            <div class="device-mockup card flex flex-col items-center py-6 px-4 mx-auto max-w-[280px]">
+                                <div class="device-section-title text-[10px] font-mono font-bold tracking-widest text-slate-500 uppercase mb-4">
+                                    Nimbus Frontier — Hardware Chassis
                                 </div>
                                 
-                                <div class="oled-display rounded-xl p-4 text-center border border-blue-500/20">
-                                    <div class="text-[11px] font-mono text-cyan-400 uppercase tracking-widest mb-1" id="oled-state-label">STANDBY MODE</div>
-                                    
-                                    <!-- Temp Readout -->
-                                    <div class="font-heading font-extrabold text-3xl sm:text-4xl text-white tracking-tight my-2">
-                                        <span id="oled-temp-val">20.0</span><span class="text-lg text-cyan-400">°C</span>
-                                    </div>
-                                    
-                                    <!-- Cartridge Info Display inside Pen Screen -->
-                                    <div class="bg-slate-900/80 border border-slate-800 rounded-lg p-2.5 mt-3 text-left">
-                                        <div class="flex items-center justify-between text-[10px] text-slate-400 font-mono mb-1">
-                                            <span>CARTRIDGE SLOT</span>
-                                            <span id="cart-status-badge" class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-800 text-slate-400">EJECTED</span>
+                                <div class="device-chassis flex flex-col items-center">
+                                    <!-- Cartridge Assembly at top tip -->
+                                    <div class="cartridge-assembly">
+                                        <div class="mouthpiece-tip">
+                                            <div id="vapor-clouds" class="vapor-clouds-smoke">
+                                                <div class="cloud-particle p1"></div>
+                                                <div class="cloud-particle p2"></div>
+                                                <div class="cloud-particle p3"></div>
+                                                <div class="cloud-particle p4"></div>
+                                                <div class="cloud-particle p5"></div>
+                                            </div>
                                         </div>
-                                        <div id="cart-name-val" class="text-xs font-semibold text-slate-200 truncate">No Cartridge Loaded</div>
-                                        <div id="cart-formula-val" class="text-[10px] text-slate-400 font-mono mt-0.5">Please insert a cartridge to initialize hardware verification.</div>
+                                        <div class="cartridge-chamber">
+                                            <div class="chamber-glass">
+                                                <div id="liquid-vapor" class="liquid-fluid fluid-rosin transition-all duration-500"></div>
+                                            </div>
+                                            <div class="cartridge-connector">
+                                                <div class="thread-510"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Walnut / Wood Accent Band -->
+                                    <div class="accent-band">
+                                        <span class="wood-grain-label">NIMBUS LABS</span>
+                                    </div>
+
+                                    <!-- Core Metal Body Chassis -->
+                                    <div class="device-core">
+                                        <!-- OLED Display -->
+                                        <div class="oled-screen">
+                                            <div class="oled-header">
+                                                <span id="oled-state">STANDBY</span>
+                                                <span id="oled-battery">100%</span>
+                                            </div>
+                                            <div class="oled-main">
+                                                <div class="oled-temp-display">
+                                                    <span id="oled-curr-temp">185.0</span><span class="oled-unit">°C</span>
+                                                </div>
+                                                <div class="oled-target-sub">
+                                                    TARGET: <span id="oled-target">FLAVOR</span>
+                                                </div>
+                                            </div>
+                                            <div class="oled-indicator-dots">
+                                                <span id="oled-indicator-nfc">NFC Ready</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- LED Ring Button -->
+                                        <div class="led-ring-outer" id="btn-puff" title="Nimbus Hardware Sensor Ring">
+                                            <div id="led-ring" class="led-ring-inner">
+                                                <div class="led-glow-overlay"></div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <!-- Base LED Ring Display -->
-                                <div class="mt-4 flex items-center justify-between text-xs text-slate-400 font-mono">
-                                    <span>Base LED Ring:</span>
-                                    <div class="flex items-center gap-2">
-                                        <div id="led-ring-light" class="w-3.5 h-3.5 rounded-full bg-slate-700 transition-all duration-300"></div>
-                                        <span id="led-ring-text" class="text-slate-400">Idle / Dim</span>
-                                    </div>
+                                <!-- Current Slot Info Badge -->
+                                <div class="mt-5 w-full bg-slate-950/80 border border-slate-800 rounded-lg p-2.5 text-center font-mono">
+                                    <div class="text-[9px] text-slate-500 uppercase">Loaded Cartridge Slot</div>
+                                    <div id="hw-slot-title" class="text-xs font-bold text-amber-400 mt-0.5">Live Rosin (Maui Wowie)</div>
+                                    <div id="hw-slot-detail" class="text-[10px] text-slate-400">Batch: B-MW-001 • 85% THCa</div>
                                 </div>
                             </div>
 
-                            <!-- Cartridge Insertion Buttons -->
-                            <div>
-                                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2.5">
-                                    Simulate Cartridge Insertion:
+                            <!-- Cartridge Slotting Buttons -->
+                            <div class="mt-6">
+                                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2.5 text-center sm:text-left">
+                                    Slot Cartridge into Pen Tip:
                                 </label>
-                                <div class="grid grid-cols-2 gap-2.5">
+                                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
                                     <!-- Eject -->
-                                    <button id="btn-cart-eject" onclick="insertCartridge('eject')" class="cart-btn flex items-center gap-2 px-3.5 py-2.5 bg-slate-800/80 hover:bg-slate-700 border border-slate-700 rounded-xl text-xs font-medium text-slate-300 transition active:scale-95 shadow">
-                                        <span>⚪</span>
+                                    <button onclick="slotCartridge('eject')" class="cart-btn flex flex-col items-center justify-center p-2.5 bg-slate-800/80 hover:bg-slate-700 border border-slate-700 rounded-xl text-xs font-medium text-slate-300 transition active:scale-95 shadow">
+                                        <span class="text-base mb-1">⚪</span>
                                         <span>Eject</span>
                                     </button>
                                     <!-- Live Rosin -->
-                                    <button id="btn-cart-rosin" onclick="insertCartridge('rosin')" class="cart-btn flex items-center gap-2 px-3.5 py-2.5 bg-emerald-950/40 hover:bg-emerald-900/50 border border-emerald-800/50 rounded-xl text-xs font-medium text-emerald-300 transition active:scale-95 shadow">
-                                        <span>🌿</span>
-                                        <span class="truncate">Live Rosin (Maui Wowie)</span>
+                                    <button onclick="slotCartridge('rosin')" class="cart-btn flex flex-col items-center justify-center p-2.5 bg-amber-950/40 hover:bg-amber-900/50 border border-amber-800/50 rounded-xl text-xs font-medium text-amber-300 transition active:scale-95 shadow">
+                                        <span class="text-base mb-1">🌿</span>
+                                        <span class="text-[11px] text-center">Live Rosin</span>
                                     </button>
                                     <!-- D9 THC -->
-                                    <button id="btn-cart-d9" onclick="insertCartridge('d9')" class="cart-btn flex items-center gap-2 px-3.5 py-2.5 bg-amber-950/40 hover:bg-amber-900/50 border border-amber-800/50 rounded-xl text-xs font-medium text-amber-300 transition active:scale-95 shadow">
-                                        <span>⚡</span>
-                                        <span>D9 THC</span>
+                                    <button onclick="slotCartridge('d9')" class="cart-btn flex flex-col items-center justify-center p-2.5 bg-purple-950/40 hover:bg-purple-900/50 border border-purple-800/50 rounded-xl text-xs font-medium text-purple-300 transition active:scale-95 shadow">
+                                        <span class="text-base mb-1">⚡</span>
+                                        <span class="text-[11px]">D9 THC</span>
                                     </button>
                                     <!-- CBD -->
-                                    <button id="btn-cart-cbd" onclick="insertCartridge('cbd')" class="cart-btn flex items-center gap-2 px-3.5 py-2.5 bg-cyan-950/40 hover:bg-cyan-900/50 border border-cyan-800/50 rounded-xl text-xs font-medium text-cyan-300 transition active:scale-95 shadow">
-                                        <span>💧</span>
-                                        <span>CBD</span>
+                                    <button onclick="slotCartridge('cbd')" class="cart-btn flex flex-col items-center justify-center p-2.5 bg-cyan-950/40 hover:bg-cyan-900/50 border border-cyan-800/50 rounded-xl text-xs font-medium text-cyan-300 transition active:scale-95 shadow">
+                                        <span class="text-base mb-1">💧</span>
+                                        <span class="text-[11px]">CBD</span>
                                     </button>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Info note -->
-                        <div class="text-[11px] text-slate-500 border-t border-slate-800/80 pt-3">
-                            💡 WebBLE handles real-time temperature telemetry &amp; hardware safety clamps via Bluetooth LE.
+                        <!-- Footer Info -->
+                        <div class="text-[11px] text-slate-500 border-t border-slate-800/80 pt-3 w-full text-center sm:text-left">
+                            💡 Slotting a cartridge changes physical fluid levels, OLED target temperature, and LED ring glow in real time.
                         </div>
                     </div>
 
                     <!-- ============================================================
-                         MODULE 2: CRYPTOGRAPHIC NFC PIPELINE (RIGHT COLUMN)
+                         MODULE 2 (RIGHT): MOBILE PHONE VERIFICATION SCREEN
                     ============================================================ -->
-                    <div class="bg-slate-900/60 border border-nimbusBorder rounded-xl p-5 sm:p-6 flex flex-col justify-between space-y-6">
-                        <div>
+                    <div class="bg-slate-900/60 border border-nimbusBorder rounded-xl p-5 sm:p-6 flex flex-col items-center justify-between space-y-6">
+                        <div class="w-full">
                             <!-- Section Header -->
-                            <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-5">
+                            <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-6 w-full">
                                 <div class="flex items-center gap-2">
                                     <span class="text-xs font-mono text-accentGreen font-bold uppercase tracking-wider">Module 2</span>
                                     <span class="text-slate-600">•</span>
-                                    <h3 class="text-sm font-bold text-white uppercase tracking-wider">Cryptographic NFC Pipeline</h3>
+                                    <h3 class="text-sm font-bold text-white uppercase tracking-wider">Mobile Verification (/v)</h3>
                                 </div>
                                 <div class="text-[11px] font-mono text-slate-400">
                                     Endpoint: <code class="text-cyan-400 font-bold">/api/v1/verify</code>
                                 </div>
                             </div>
 
-                            <!-- Live Scan Counter Bar -->
-                            <div class="flex items-center justify-between bg-slate-950/80 border border-slate-800 rounded-xl p-3 mb-5">
-                                <div>
-                                    <div class="text-[10px] font-mono uppercase text-slate-500">Active Tag UID</div>
-                                    <div class="text-xs font-mono text-slate-200 font-bold" id="current-uid-display">04A1B2C3D4E5F6</div>
+                            <!-- SLEEK SMARTPHONE OUTLINE CONTAINER ("NIMBUS IQ") -->
+                            <div class="phone-mockup mx-auto shadow-2xl relative">
+                                <div class="phone-notch"></div>
+                                <div class="phone-header">
+                                    <span class="phone-time">18:42</span>
+                                    <div class="phone-icons">
+                                        <span>📶 5G</span>
+                                        <span>100%</span>
+                                    </div>
                                 </div>
-                                <div class="text-right">
-                                    <div class="text-[10px] font-mono uppercase text-slate-500">Scan Counter (SDMCnt)</div>
-                                    <div class="text-sm font-mono text-accentBlue font-bold" id="counter-val-display">26,482,901</div>
+                                
+                                <!-- App Brand Header -->
+                                <div class="app-brand flex items-center justify-center gap-2">
+                                    <div class="w-5 h-5 rounded bg-blue-500/20 text-blue-400 flex items-center justify-center text-xs">
+                                        ☁️
+                                    </div>
+                                    <span class="brand-text text-sm">NIMBUS <span class="sub-brand text-accentBlue">IQ</span></span>
+                                </div>
+                                
+                                <!-- Phone Screen Content displaying Live Verification Result -->
+                                <div class="phone-screen-content py-4 px-3 flex flex-col justify-between" id="phone-screen-view">
+                                    
+                                    <!-- Dynamic Verification Card View -->
+                                    <div id="phone-card-container" class="fade-in space-y-3">
+                                        
+                                        <!-- Header Badge -->
+                                        <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                                            <span class="text-[9px] font-mono uppercase text-slate-400 tracking-wider">AUTHENTICATION STATUS</span>
+                                            <span id="phone-status-badge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-950 text-emerald-400 border border-emerald-800">
+                                                VERIFIED AUTHENTIC
+                                            </span>
+                                        </div>
+
+                                        <!-- Main Product Details Card -->
+                                        <div id="phone-card-body" class="bg-slate-900/90 border border-slate-800 rounded-xl p-3.5 space-y-2">
+                                            <div class="text-[10px] font-mono text-cyan-400 uppercase tracking-widest" id="phone-brand-title">Hometown Hero CBD</div>
+                                            <div class="text-sm font-bold text-white" id="phone-product-title">THCa Live Rosin Cartridge - Maui Wowie</div>
+                                            
+                                            <div class="space-y-1 pt-1 text-xs font-mono">
+                                                <div class="flex justify-between text-slate-400">
+                                                    <span>Strain:</span>
+                                                    <span class="text-slate-200 font-semibold" id="phone-strain-val">Maui Wowie</span>
+                                                </div>
+                                                <div class="flex justify-between text-slate-400">
+                                                    <span>Batch ID:</span>
+                                                    <span class="text-slate-200 font-semibold" id="phone-batch-val">B-MW-001</span>
+                                                </div>
+                                                <div class="flex justify-between text-slate-400">
+                                                    <span>Scan Counter:</span>
+                                                    <span class="text-emerald-400 font-bold" id="phone-scan-count">#26,482,901</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="pt-2">
+                                                <a id="phone-coa-link" href="https://hometownhero.com/coa/mw-001.pdf" target="_blank" class="block w-full text-center py-2 bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/40 rounded-lg text-xs font-bold text-emerald-300 transition">
+                                                    📄 View Certified COA PDF
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        <!-- Technical Audit Bar -->
+                                        <div class="bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-[10px] font-mono space-y-1 text-slate-400">
+                                            <div class="flex justify-between">
+                                                <span>Tag UID:</span>
+                                                <span id="phone-uid-val" class="text-slate-200">04A1B2C3D4E5F6</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span>Crypto MAC:</span>
+                                                <span class="text-emerald-400">VALID (AES-128 SUN)</span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <!-- Bottom Home Indicator -->
+                                    <div class="w-24 h-1 bg-slate-700 rounded-full mx-auto mt-4"></div>
                                 </div>
                             </div>
 
-                            <!-- 1-Click Test Actions -->
-                            <div class="space-y-3 mb-6">
+                            <!-- 1-CLICK SIMULATION ACTION BUTTONS -->
+                            <div class="mt-6 space-y-2.5 w-full">
                                 <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider">
-                                    1-Click Test Actions:
+                                    Simulate Verification Scans:
                                 </label>
 
-                                <!-- 🟢 Test Authentic NFC Tap -->
-                                <button id="btn-test-authentic" onclick="runNfcTest('authentic')" class="w-full flex items-center justify-between p-3.5 bg-emerald-950/30 hover:bg-emerald-900/40 border border-emerald-800/50 hover:border-emerald-600/60 rounded-xl transition-all group active:scale-[0.99] text-left">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-sm group-hover:scale-110 transition">
-                                            🟢
-                                        </div>
+                                <!-- 🟢 Test Authentic Tap -->
+                                <button onclick="runSimulation('authentic')" class="w-full flex items-center justify-between p-3 bg-emerald-950/30 hover:bg-emerald-900/40 border border-emerald-800/50 hover:border-emerald-600/60 rounded-xl transition-all group active:scale-[0.99] text-left">
+                                    <div class="flex items-center gap-2.5">
+                                        <span class="text-sm">🟢</span>
                                         <div>
-                                            <div class="text-xs font-bold text-emerald-300">Test Authentic NFC Tap</div>
-                                            <div class="text-[11px] text-slate-400">Valid registered UID &bull; Increments counter &bull; Updates database</div>
+                                            <div class="text-xs font-bold text-emerald-300">Test Authentic Tap</div>
+                                            <div class="text-[10px] text-slate-400">Registered UID &bull; Auto-increment counter</div>
                                         </div>
                                     </div>
-                                    <span class="text-xs font-mono text-emerald-400 font-bold bg-emerald-950/80 border border-emerald-800/60 px-2 py-1 rounded">200 AUTHENTIC</span>
+                                    <span class="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-950 border border-emerald-800 px-2 py-0.5 rounded">200 AUTHENTIC</span>
                                 </button>
 
-                                <!-- 🟠 Test Replay Attack -->
-                                <button id="btn-test-replay" onclick="runNfcTest('replay')" class="w-full flex items-center justify-between p-3.5 bg-amber-950/30 hover:bg-amber-900/40 border border-amber-800/50 hover:border-amber-600/60 rounded-xl transition-all group active:scale-[0.99] text-left">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400 text-sm group-hover:scale-110 transition">
-                                            🟠
-                                        </div>
+                                <!-- 🟠 Test Dual-IP Clone Anomaly / Replay -->
+                                <button onclick="runSimulation('replay')" class="w-full flex items-center justify-between p-3 bg-amber-950/30 hover:bg-amber-900/40 border border-amber-800/50 hover:border-amber-600/60 rounded-xl transition-all group active:scale-[0.99] text-left">
+                                    <div class="flex items-center gap-2.5">
+                                        <span class="text-sm">🟠</span>
                                         <div>
-                                            <div class="text-xs font-bold text-amber-300">Test Replay Attack</div>
-                                            <div class="text-[11px] text-slate-400">Valid UID &bull; Sends duplicate/stale counter (scan_count=1)</div>
+                                            <div class="text-xs font-bold text-amber-300">Test Dual-IP Clone Anomaly</div>
+                                            <div class="text-[10px] text-slate-400">Duplicate counter (scan_count=1) &bull; Replay attack</div>
                                         </div>
                                     </div>
-                                    <span class="text-xs font-mono text-amber-400 font-bold bg-amber-950/80 border border-amber-800/60 px-2 py-1 rounded">REPLAY_ATTACK</span>
+                                    <span class="text-[10px] font-mono font-bold text-amber-400 bg-amber-950 border border-amber-800 px-2 py-0.5 rounded">REPLAY_ATTACK</span>
                                 </button>
 
-                                <!-- 🔴 Test Counterfeit Tag -->
-                                <button id="btn-test-counterfeit" onclick="runNfcTest('counterfeit')" class="w-full flex items-center justify-between p-3.5 bg-rose-950/30 hover:bg-rose-900/40 border border-rose-800/50 hover:border-rose-600/60 rounded-xl transition-all group active:scale-[0.99] text-left">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-8 h-8 rounded-lg bg-rose-500/20 border border-rose-500/30 flex items-center justify-center text-rose-400 text-sm group-hover:scale-110 transition">
-                                            🔴
-                                        </div>
+                                <!-- 🔴 Test Counterfeit -->
+                                <button onclick="runSimulation('counterfeit')" class="w-full flex items-center justify-between p-3 bg-rose-950/30 hover:bg-rose-900/40 border border-rose-800/50 hover:border-rose-600/60 rounded-xl transition-all group active:scale-[0.99] text-left">
+                                    <div class="flex items-center gap-2.5">
+                                        <span class="text-sm">🔴</span>
                                         <div>
                                             <div class="text-xs font-bold text-rose-300">Test Counterfeit Tag</div>
-                                            <div class="text-[11px] text-slate-400">Unregistered UID (00000000000000) &bull; Corrupted signature</div>
+                                            <div class="text-[10px] text-slate-400">Unregistered UID (00000000000000)</div>
                                         </div>
                                     </div>
-                                    <span class="text-xs font-mono text-rose-400 font-bold bg-rose-950/80 border border-rose-800/60 px-2 py-1 rounded">404 UNREGISTERED</span>
+                                    <span class="text-[10px] font-mono font-bold text-rose-400 bg-rose-950 border border-rose-800 px-2 py-0.5 rounded">404 UNREGISTERED</span>
                                 </button>
                             </div>
 
                             <!-- RAW API JSON RESPONSE BOX -->
-                            <div>
+                            <div class="mt-5 w-full">
                                 <div class="flex items-center justify-between mb-2">
                                     <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Raw API JSON Response</span>
-                                    <span id="response-status-badge" class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-slate-800 text-slate-400">
+                                    <span id="response-status-pill" class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-slate-800 text-slate-400">
                                         READY &bull; HTTP ---
                                     </span>
                                 </div>
 
-                                <!-- Summary Card -->
-                                <div id="response-summary-card" class="hidden p-3 rounded-lg border text-xs mb-3 transition-all"></div>
-
-                                <!-- Monospace JSON Box -->
-                                <div class="relative bg-slate-950 border border-slate-800 rounded-xl p-4 overflow-hidden shadow-inner">
-                                    <pre id="api-json-box" class="font-mono text-xs text-emerald-400 whitespace-pre-wrap break-all max-h-60 overflow-y-auto leading-relaxed">{
+                                <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 shadow-inner">
+                                    <pre id="api-json-box" class="font-mono text-xs text-emerald-400 whitespace-pre-wrap break-all max-h-48 overflow-y-auto leading-relaxed">{
   "status": "IDLE",
-  "message": "Click a 1-click test button above to execute live API verification against Supabase."
+  "message": "Click a simulation button above to fire live API verification."
 }</pre>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Footer Info -->
-                        <div class="text-[11px] text-slate-500 border-t border-slate-800/80 pt-3">
-                            🔒 Protected by NTAG 424 DNA SUN cryptographic MAC verification &amp; atomic PostgreSQL counters.
+                        <div class="text-[11px] text-slate-500 border-t border-slate-800/80 pt-3 w-full text-center sm:text-left">
+                            🔒 Phone screen renders live customer verification state synced with /api/v1/verify.
                         </div>
                     </div>
 
@@ -389,77 +464,72 @@
         </div>
     </footer>
 
-    <!-- INTERACTIVE JAVASCRIPT LOGIC -->
+    <!-- INTERACTIVE SCRIPT -->
     <script>
-        // --- Mobile Menu Toggle ---
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        if (mobileMenuBtn && mobileMenu) {
-            mobileMenuBtn.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
+        // Mobile Menu Toggle
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileNav = document.getElementById('mobile-menu');
+        if (mobileBtn && mobileNav) {
+            mobileBtn.addEventListener('click', () => mobileNav.classList.toggle('hidden'));
         }
 
-        // --- Module 1: Cartridge Insertion Logic ---
-        const cartridgeData = {
+        // --- Module 1: Cartridge Slotting Logic ---
+        const cartridges = {
             eject: {
-                badge: 'EJECTED',
-                badgeClass: 'bg-slate-800 text-slate-400',
-                name: 'No Cartridge Loaded',
-                formula: 'Please insert a cartridge to initialize hardware verification.',
+                title: 'No Cartridge Loaded',
+                detail: 'Please slot a cartridge to initialize hardware',
+                fluidClass: 'fluid-empty',
                 temp: '20.0',
-                ledColor: 'bg-slate-700 shadow-none',
-                ledText: 'Idle / Dim',
-                stateLabel: 'STANDBY MODE'
+                target: '--',
+                state: 'STANDBY',
+                ringGlow: '0 0 0px transparent'
             },
             rosin: {
-                badge: 'VERIFIED AUTHENTIC',
-                badgeClass: 'bg-emerald-950 text-emerald-400 border border-emerald-800',
-                name: 'Hometown Hero - Live Rosin',
-                formula: 'THCa Live Rosin (Maui Wowie) • Batch: B-MW-001',
+                title: 'Live Rosin (Maui Wowie)',
+                detail: 'Batch: B-MW-001 • 85% THCa Rosin',
+                fluidClass: 'fluid-rosin',
                 temp: '185.0',
-                ledColor: 'bg-emerald-400 shadow-[0_0_12px_#10b981]',
-                ledText: 'Emerald Glow (Optimal)',
-                stateLabel: 'READY • FLAVOR FOCUS'
+                target: 'FLAVOR',
+                state: 'READY',
+                ringGlow: '0 0 20px rgba(245, 158, 11, 0.8)'
             },
             d9: {
-                badge: 'VERIFIED AUTHENTIC',
-                badgeClass: 'bg-emerald-950 text-emerald-400 border border-emerald-800',
-                name: 'Quantum - D9 THC Extract',
-                formula: 'Delta-9 THC Vaporization Formula • Batch: B-D9-882',
+                title: 'D9 THC Extract',
+                detail: 'Batch: B-D9-882 • 92% D9 THC',
+                fluidClass: 'fluid-d9',
                 temp: '195.0',
-                ledColor: 'bg-amber-400 shadow-[0_0_12px_#f59e0b]',
-                ledText: 'Amber Glow (Cloud Mode)',
-                stateLabel: 'READY • MAX CLOUD'
+                target: 'CLOUD',
+                state: 'READY',
+                ringGlow: '0 0 20px rgba(168, 85, 247, 0.8)'
             },
             cbd: {
-                badge: 'VERIFIED AUTHENTIC',
-                badgeClass: 'bg-emerald-950 text-emerald-400 border border-emerald-800',
-                name: 'Nimbus Wellness - CBD Broad Spectrum',
-                formula: 'Broad Spectrum CBD + Terpenes • Batch: B-CBD-104',
+                title: 'CBD Broad Spectrum',
+                detail: 'Batch: B-CBD-104 • Full Spectrum CBD',
+                fluidClass: 'fluid-cbd',
                 temp: '175.0',
-                ledColor: 'bg-cyan-400 shadow-[0_0_12px_#06b6d4]',
-                ledText: 'Cyan Glow (Wellness)',
-                stateLabel: 'READY • SMOOTH DRAW'
+                target: 'SMOOTH',
+                state: 'READY',
+                ringGlow: '0 0 20px rgba(14, 165, 233, 0.8)'
             }
         };
 
-        function insertCartridge(type) {
-            const data = cartridgeData[type] || cartridgeData.eject;
+        function slotCartridge(type) {
+            const data = cartridges[type] || cartridges.eject;
             
-            document.getElementById('cart-status-badge').textContent = data.badge;
-            document.getElementById('cart-status-badge').className = `px-1.5 py-0.5 rounded text-[9px] font-bold ${data.badgeClass}`;
-            document.getElementById('cart-name-val').textContent = data.name;
-            document.getElementById('cart-formula-val').textContent = data.formula;
-            document.getElementById('oled-temp-val').textContent = data.temp;
-            document.getElementById('oled-state-label').textContent = data.stateLabel;
+            document.getElementById('hw-slot-title').textContent = data.title;
+            document.getElementById('hw-slot-detail').textContent = data.detail;
+            document.getElementById('oled-curr-temp').textContent = data.temp;
+            document.getElementById('oled-target').textContent = data.target;
+            document.getElementById('oled-state').textContent = data.state;
             
-            const ledLight = document.getElementById('led-ring-light');
-            ledLight.className = `w-3.5 h-3.5 rounded-full transition-all duration-300 ${data.ledColor}`;
-            document.getElementById('led-ring-text').textContent = data.ledText;
+            const fluid = document.getElementById('liquid-vapor');
+            fluid.className = `liquid-fluid transition-all duration-500 ${data.fluidClass}`;
+
+            const ring = document.getElementById('led-ring');
+            ring.style.boxShadow = data.ringGlow;
         }
 
-        // --- Module 2: NFC Cryptographic Pipeline Logic ---
+        // --- Module 2: Phone Verification Simulation Logic ---
         function getScanCounter() {
             const stored = parseInt(localStorage.getItem('nfc_sim_counter') || '0', 10);
             const epochBase = Math.floor(Date.now() / 1000) - 1700000000;
@@ -468,43 +538,33 @@
             return current;
         }
 
-        let currentCounter = getScanCounter();
+        let simCounter = getScanCounter();
 
-        function updateCounterDisplay() {
-            const display = document.getElementById('counter-val-display');
-            if (display) display.textContent = currentCounter.toLocaleString();
-        }
-        updateCounterDisplay();
-
-        async function runNfcTest(mode) {
+        async function runSimulation(mode) {
             const jsonBox = document.getElementById('api-json-box');
-            const statusBadge = document.getElementById('response-status-badge');
-            const summaryCard = document.getElementById('response-summary-card');
-            
-            statusBadge.className = 'text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-blue-950 text-blue-400 border border-blue-800 animate-pulse';
-            statusBadge.textContent = 'EXECUTING API FETCH...';
-            
-            jsonBox.textContent = '// Sending request to /api/v1/verify...';
-            
+            const statusPill = document.getElementById('response-status-pill');
+            const phoneCard = document.getElementById('phone-card-container');
+
+            statusPill.className = 'text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-blue-950 text-blue-400 border border-blue-800 animate-pulse';
+            statusPill.textContent = 'EXECUTING VERIFY FETCH...';
+            jsonBox.textContent = '// Querying /api/v1/verify endpoint...';
+
             let uid = '04A1B2C3D4E5F6';
-            let scanCount = currentCounter;
+            let scanCount = simCounter;
             let piccData = 'mock';
             let cmac = 'mock';
 
             if (mode === 'authentic') {
-                currentCounter++;
-                localStorage.setItem('nfc_sim_counter', currentCounter);
-                scanCount = currentCounter;
-                updateCounterDisplay();
+                simCounter++;
+                localStorage.setItem('nfc_sim_counter', simCounter);
+                scanCount = simCounter;
             } else if (mode === 'replay') {
-                scanCount = 1; // Duplicate / stale counter
+                scanCount = 1; // Forces REPLAY_ATTACK
             } else if (mode === 'counterfeit') {
                 uid = '00000000000000';
                 scanCount = 1;
                 cmac = 'INVALID_SIGNATURE';
             }
-
-            document.getElementById('current-uid-display').textContent = uid;
 
             const startTime = performance.now();
             try {
@@ -516,37 +576,115 @@
                 jsonBox.textContent = JSON.stringify(data, null, 2);
 
                 if (response.ok && data.status === 'AUTHENTIC') {
-                    statusBadge.className = 'text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800';
-                    statusBadge.textContent = `200 OK • ${latency}ms`;
+                    statusPill.className = 'text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800';
+                    statusPill.textContent = `200 OK • ${latency}ms`;
 
-                    summaryCard.className = 'p-3 rounded-lg border text-xs mb-3 bg-emerald-950/40 border-emerald-800/60 text-emerald-300';
-                    summaryCard.innerHTML = `<strong>✅ AUTHENTIC HARDWARE VERIFIED</strong><br>Brand: <b>${data.brand}</b> • Product: <b>${data.product}</b> • Batch: <b>${data.batch}</b>`;
-                    summaryCard.classList.remove('hidden');
+                    // Update Phone Card to Authentic State
+                    phoneCard.className = 'fade-in space-y-3';
+                    phoneCard.innerHTML = `
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                            <span class="text-[9px] font-mono uppercase text-slate-400 tracking-wider">AUTHENTICATION STATUS</span>
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-950 text-emerald-400 border border-emerald-800">
+                                VERIFIED AUTHENTIC
+                            </span>
+                        </div>
+                        <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3.5 space-y-2">
+                            <div class="text-[10px] font-mono text-cyan-400 uppercase tracking-widest">${data.brand || 'Hometown Hero CBD'}</div>
+                            <div class="text-sm font-bold text-white">${data.product || 'THCa Live Rosin Cartridge'}</div>
+                            
+                            <div class="space-y-1 pt-1 text-xs font-mono">
+                                <div class="flex justify-between text-slate-400">
+                                    <span>Strain:</span>
+                                    <span class="text-slate-200 font-semibold">${data.strain || 'Maui Wowie'}</span>
+                                </div>
+                                <div class="flex justify-between text-slate-400">
+                                    <span>Batch ID:</span>
+                                    <span class="text-slate-200 font-semibold">${data.batch || 'B-MW-001'}</span>
+                                </div>
+                                <div class="flex justify-between text-slate-400">
+                                    <span>Scan Counter:</span>
+                                    <span class="text-emerald-400 font-bold">#${scanCount.toLocaleString()}</span>
+                                </div>
+                            </div>
 
-                    // Auto insert rosin in pen preview
-                    insertCartridge('rosin');
+                            <div class="pt-2">
+                                <a href="${data.coa || 'https://hometownhero.com/coa/mw-001.pdf'}" target="_blank" class="block w-full text-center py-2 bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/40 rounded-lg text-xs font-bold text-emerald-300 transition">
+                                    📄 View Certified COA PDF
+                                </a>
+                            </div>
+                        </div>
+                        <div class="bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-[10px] font-mono space-y-1 text-slate-400">
+                            <div class="flex justify-between">
+                                <span>Tag UID:</span>
+                                <span class="text-slate-200">${uid}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Crypto MAC:</span>
+                                <span class="text-emerald-400">VALID (AES-128 SUN)</span>
+                            </div>
+                        </div>
+                    `;
+
+                    // Also slot Rosin in physical pen
+                    slotCartridge('rosin');
 
                 } else if (data.status === 'REPLAY_ATTACK') {
-                    statusBadge.className = 'text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-amber-950 text-amber-400 border border-amber-800';
-                    statusBadge.textContent = `200 REPLAY • ${latency}ms`;
+                    statusPill.className = 'text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-amber-950 text-amber-400 border border-amber-800';
+                    statusPill.textContent = `200 REPLAY • ${latency}ms`;
 
-                    summaryCard.className = 'p-3 rounded-lg border text-xs mb-3 bg-amber-950/40 border-amber-800/60 text-amber-300';
-                    summaryCard.innerHTML = `<strong>⚠️ REPLAY ATTACK WARNING</strong><br>${data.message}`;
-                    summaryCard.classList.remove('hidden');
+                    // Update Phone Card to Replay Attack Warning
+                    phoneCard.className = 'fade-in space-y-3';
+                    phoneCard.innerHTML = `
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                            <span class="text-[9px] font-mono uppercase text-slate-400 tracking-wider">SECURITY WARNING</span>
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-950 text-amber-400 border border-amber-800">
+                                REPLAY ATTACK
+                            </span>
+                        </div>
+                        <div class="bg-amber-950/40 border border-amber-800/60 rounded-xl p-3.5 space-y-2 text-amber-200">
+                            <div class="text-xs font-bold text-amber-400 flex items-center gap-1.5">
+                                ⚠️ DUPLICATE SCAN COUNTER DETECTED
+                            </div>
+                            <div class="text-xs text-slate-300 leading-relaxed">
+                                ${data.message || 'This NFC tag counter has already been scanned previously. High probability of tag cloning.'}
+                            </div>
+                            <div class="text-[10px] font-mono text-slate-400 pt-1 border-t border-amber-900/50">
+                                Security Action: Temperature output restricted for consumer safety.
+                            </div>
+                        </div>
+                    `;
 
                 } else {
-                    statusBadge.className = 'text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-rose-950 text-rose-400 border border-rose-800';
-                    statusBadge.textContent = `${response.status} REJECTED • ${latency}ms`;
+                    statusPill.className = 'text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-rose-950 text-rose-400 border border-rose-800';
+                    statusPill.textContent = `${response.status} REJECTED • ${latency}ms`;
 
-                    summaryCard.className = 'p-3 rounded-lg border text-xs mb-3 bg-rose-950/40 border-rose-800/60 text-rose-300';
-                    summaryCard.innerHTML = `<strong>🔴 UNREGISTERED / COUNTERFEIT TAG</strong><br>${data.error || data.message || 'Tag verification rejected.'}`;
-                    summaryCard.classList.remove('hidden');
+                    // Update Phone Card to Counterfeit Warning
+                    phoneCard.className = 'fade-in space-y-3';
+                    phoneCard.innerHTML = `
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                            <span class="text-[9px] font-mono uppercase text-slate-400 tracking-wider">AUTHENTICATION FAILED</span>
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-950 text-rose-400 border border-rose-800">
+                                UNREGISTERED
+                            </span>
+                        </div>
+                        <div class="bg-rose-950/40 border border-rose-800/60 rounded-xl p-3.5 space-y-2 text-rose-200">
+                            <div class="text-xs font-bold text-rose-400 flex items-center gap-1.5">
+                                🔴 COUNTERFEIT OR MODIFIED TAG
+                            </div>
+                            <div class="text-xs text-slate-300 leading-relaxed">
+                                ${data.error || data.message || 'The cryptographic signature could not be verified against the Quantum Nimbus database.'}
+                            </div>
+                            <div class="text-[10px] font-mono text-slate-400 pt-1 border-t border-rose-900/50">
+                                UID: ${uid} (Not registered in master product ledger)
+                            </div>
+                        </div>
+                    `;
                 }
 
             } catch (err) {
                 const latency = Math.round(performance.now() - startTime);
-                statusBadge.className = 'text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-rose-950 text-rose-400 border border-rose-800';
-                statusBadge.textContent = `ERROR • ${latency}ms`;
+                statusPill.className = 'text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-rose-950 text-rose-400 border border-rose-800';
+                statusPill.textContent = `ERROR • ${latency}ms`;
                 jsonBox.textContent = JSON.stringify({ error: err.message }, null, 2);
             }
         }
