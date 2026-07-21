@@ -1,18 +1,18 @@
 # Local Netlify Configuration mimicking production environment
 [build]
-  # To completely prevent automatic Netlify builds on push, uncomment the line below.
-  # This tells Netlify to skip any automated build execution.
-  ignore = "exit 0"
+  functions = "netlify/functions"
+  # Uncomment the line below to completely disable automatic Netlify builds on push.
+  # ignore = "exit 0"
 
 [dev]
   port = 8888
   publish = "."
 
-# Inject mock environment variables for local testing
+# Non-secret local dev settings. NIMBUS_NFC_MASTER_SECRET must be set via a local
+# .env file (gitignored) or the Netlify dashboard, not committed here.
 [context.development.environment]
   NIMBUS_API_URL = "http://localhost:8888/api"
   NIMBUS_DEV_MODE = "true"
-  NIMBUS_NFC_MASTER_SECRET = "nimbus_secure_master_secret_2026_local"
 
 # Example redirect rules for clean routing redirects
 [[redirects]]
