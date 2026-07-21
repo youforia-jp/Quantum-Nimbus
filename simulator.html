@@ -679,7 +679,6 @@
                                     <button id="btn-cancel-profile" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08); color: var(--text-secondary); border-radius: 8px; padding: 0.5rem 0.8rem; font-size: 0.75rem; cursor: pointer; outline: none;">Cancel</button>
                                 </div>
                             </div>
-                            </div>
                         </div>
 
                         <!-- Heating Insights Panel -->
@@ -948,10 +947,14 @@
         </div>
     </footer>
 
+    <!-- APP.JS LOGIC INTEGRATION -->
+    <script src="app.js"></script>
+
     <!-- INTERACTIVE JAVASCRIPT LOGIC WITH WEB AUDIO SYNTHESIS -->
     <script>
         // --- Web Audio API Synthesizer Class ---
-        class SoundSynth {
+        if (typeof SoundSynth === "undefined") {
+        window.SoundSynth = class SoundSynth {
             constructor() {
                 this.ctx = null;
                 this.isMuted = false;
@@ -1085,7 +1088,8 @@
             alert('🚨 Incident Report Submitted to Quantum Nimbus Security Operations!');
         }
 
-        const synth = new SoundSynth();
+        } // End SoundSynth guard
+        const synth = window.synth || new SoundSynth();
 
         // Mobile Menu Toggle
         const mobileBtn = document.getElementById('mobile-menu-btn');
@@ -1369,17 +1373,7 @@
                                 </div>
                             </div>
 
-                            <div class="flex flex-col items-center justify-center py-4 opacity-90 animate-pulse">
-                                <div class="text-[10px] font-bold font-mono text-emerald-500/70 tracking-widest uppercase mb-1">NIMBY COMPANION</div>
-                                <div class="relative flex justify-center items-center w-24 h-24">
-                                    <div class="absolute inset-0 bg-emerald-500/20 blur-xl rounded-full"></div>
-                                    <svg class="relative w-24 h-24 text-emerald-500/90 drop-shadow-[0_0_15px_rgba(16,185,129,0.4)]" viewBox="0 0 24 24">
-                                        <path fill="currentColor" d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/>
-                                        <path d="M8 13l2 2M10 13l-2 2M14 13l2 2M16 13l-2 2" stroke="#7f1d1d" stroke-width="1.5" stroke-linecap="round"/>
-                                        <path d="M11 16.5q1 -1.5 2 0" stroke="#7f1d1d" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-                                    </svg>
-                                </div>
-                            </div>
+                            
 
                         `;
 
@@ -1414,17 +1408,7 @@
                                 </div>
                             </div>
 
-                            <div class="flex flex-col items-center justify-center py-4 opacity-90 animate-pulse">
-                                <div class="text-[10px] font-bold font-mono text-emerald-500/70 tracking-widest uppercase mb-1">NIMBY COMPANION</div>
-                                <div class="relative flex justify-center items-center w-24 h-24">
-                                    <div class="absolute inset-0 bg-emerald-500/20 blur-xl rounded-full"></div>
-                                    <svg class="relative w-24 h-24 text-emerald-500/90 drop-shadow-[0_0_15px_rgba(16,185,129,0.4)]" viewBox="0 0 24 24">
-                                        <path fill="currentColor" d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/>
-                                        <path d="M8 13l2 2M10 13l-2 2M14 13l2 2M16 13l-2 2" stroke="#7f1d1d" stroke-width="1.5" stroke-linecap="round"/>
-                                        <path d="M11 16.5q1 -1.5 2 0" stroke="#7f1d1d" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-                                    </svg>
-                                </div>
-                            </div>
+                            
 
                         `;
                     }
