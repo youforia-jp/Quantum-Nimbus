@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hardware Authentication | Quantum Nimbus Tech</title>
+    <meta name="description" content="NFC Hardware Cryptographic Tag Verification Powered by NTAG 424 DNA and Quantum Nimbus Security Architecture.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS (via CDN for rapid utility rendering) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        nimbusBg: '#0B0F19',
+                        nimbusCard: '#111827',
+                        accentBlue: '#3B82F6',
+                        accentGreen: '#10B981',
+                        accentRed: '#EF4444'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0B0F19;
+            color: #F3F4F6;
+            font-family: 'Inter', sans-serif;
+            background-image: 
+                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(59, 130, 246, 0.15), transparent),
+                radial-gradient(ellipse 60% 40% at 80% 80%, rgba(16, 185, 129, 0.08), transparent);
+        }
+
+        .glass-card {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-card-success {
+            background: rgba(6, 78, 59, 0.15);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            box-shadow: 0 0 40px rgba(16, 185, 129, 0.12);
+        }
+
+        .glass-card-error {
+            background: rgba(127, 29, 29, 0.18);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(239, 68, 68, 0.35);
+            box-shadow: 0 0 40px rgba(239, 68, 68, 0.15);
+        }
+
+        .badge-verified {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34D399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+        }
+
+        .badge-warning {
+            background: rgba(239, 68, 68, 0.15);
+            color: #F87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.2);
+        }
+
+        @keyframes pulseBeam {
+            0%, 100% { opacity: 0.3; transform: scale(0.98); }
+            50% { opacity: 0.9; transform: scale(1.02); }
+        }
+
+        .pulse-scan {
+            animation: pulseBeam 2s infinite ease-in-out;
+        }
+
+        @keyframes scanRadar {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        .scan-line {
+            animation: scanRadar 1.8s infinite linear;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between items-center p-4 sm:p-6">
+
+    <!-- Header Navigation -->
+    <header class="w-full max-w-md flex items-center justify-between py-4">
+        <a href="/index.html" class="flex items-center space-x-2">
+            <div class="w-8 h-8 rounded-lg bg-blue-600/20 border border-blue-500/40 flex items-center justify-center text-blue-400 font-bold text-sm">
+                QN
+            </div>
+            <span class="font-bold text-lg tracking-tight text-white">Quantum<span class="text-blue-500">Nimbus</span></span>
+        </a>
+        <div class="flex items-center space-x-2 bg-gray-900/60 border border-gray-800 px-3 py-1 rounded-full">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="text-xs font-mono text-gray-300">SUN Spec active</span>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main id="app-container" class="w-full max-w-md my-auto py-6">
+
+        <!-- 1. LOADING STATE -->
+        <div id="state-loading" class="glass-card rounded-2xl p-8 text-center flex flex-col items-center justify-center space-y-6">
+            <div class="relative w-24 h-24 flex items-center justify-center">
+                <!-- Outer Glowing Radar -->
+                <div class="absolute inset-0 rounded-full border border-blue-500/30 pulse-scan"></div>
+                <div class="absolute inset-2 rounded-full border border-blue-400/20 animate-ping"></div>
+                <!-- Shield Icon -->
+                <svg class="w-12 h-12 text-blue-400 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                </svg>
+            </div>
+
+            <div>
+                <h2 class="text-xl font-bold text-white mb-1">Verifying Hardware Tag...</h2>
+                <p class="text-xs font-mono text-gray-400">Performing NTAG 424 DNA Anti-Replay Check</p>
+            </div>
+
+            <div class="w-full bg-gray-800/60 rounded-full h-1.5 overflow-hidden">
+                <div class="bg-blue-500 h-1.5 rounded-full animate-pulse w-3/4"></div>
+            </div>
+        </div>
+
+        <!-- 2. AUTHENTIC STATE -->
+        <div id="state-authentic" class="hidden glass-card-success rounded-2xl p-6 sm:p-8 space-y-6 relative overflow-hidden">
+            <!-- Background Glow Decor -->
+            <div class="absolute -top-12 -right-12 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl"></div>
+
+            <!-- Status Badge Header -->
+            <div class="flex items-center justify-between">
+                <div class="badge-verified px-3.5 py-1.5 rounded-full text-xs font-bold tracking-wide flex items-center space-x-2">
+                    <svg class="w-4 h-4 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                    </svg>
+                    <span>VERIFIED AUTHENTIC</span>
+                </div>
+                <span class="text-[10px] font-mono text-emerald-400/80 bg-emerald-950/60 border border-emerald-800/40 px-2.5 py-1 rounded-md">
+                    SUN SPEC VALID
+                </span>
+            </div>
+
+            <!-- Brand & Product Info -->
+            <div class="space-y-2 pt-2 border-b border-gray-800/80 pb-5">
+                <div class="text-xs font-semibold uppercase tracking-wider text-emerald-400" id="res-brand">
+                    Brand Name
+                </div>
+                <h1 class="text-2xl font-extrabold text-white leading-tight" id="res-product">
+                    Product Title
+                </h1>
+            </div>
+
+            <!-- Verification Metadata Grid -->
+            <div class="grid grid-cols-2 gap-3 text-left">
+                <div class="bg-gray-900/60 border border-gray-800/80 rounded-xl p-3">
+                    <span class="text-[11px] font-medium text-gray-400 uppercase tracking-wider block">Strain</span>
+                    <span class="text-sm font-semibold text-gray-200 mt-0.5 block" id="res-strain">N/A</span>
+                </div>
+
+                <div class="bg-gray-900/60 border border-gray-800/80 rounded-xl p-3">
+                    <span class="text-[11px] font-medium text-gray-400 uppercase tracking-wider block">Batch ID</span>
+                    <span class="text-sm font-mono text-blue-400 mt-0.5 block" id="res-batch">N/A</span>
+                </div>
+            </div>
+
+            <!-- Security Assurance Checklist -->
+            <div class="bg-gray-900/40 border border-emerald-900/30 rounded-xl p-4 space-y-2 text-xs text-gray-300">
+                <div class="flex items-center space-x-2">
+                    <svg class="w-4 h-4 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    <span>Dynamic Scan Counter Verified (Anti-Clone)</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <svg class="w-4 h-4 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    <span>Hardware Ceramic Tag Authenticated</span>
+                </div>
+            </div>
+
+            <!-- Action CTA: Certificate of Analysis -->
+            <div class="pt-2">
+                <a id="res-coa-btn" href="#" target="_blank" rel="noopener noreferrer" 
+                   class="w-full inline-flex items-center justify-center space-x-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-semibold py-3 px-4 rounded-xl shadow-lg shadow-emerald-900/30 transition-all duration-200 text-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    <span>View Lab Results (COA PDF)</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- 3. REPLAY / INVALID WARNING STATE -->
+        <div id="state-warning" class="hidden glass-card-error rounded-2xl p-6 sm:p-8 space-y-6 relative overflow-hidden text-center">
+            <!-- Warning Badge Header -->
+            <div class="inline-flex badge-warning px-4 py-1.5 rounded-full text-xs font-bold tracking-wide items-center space-x-2">
+                <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                </svg>
+                <span id="warn-title">SECURITY REJECTED</span>
+            </div>
+
+            <div class="space-y-2">
+                <h2 class="text-xl font-extrabold text-white" id="warn-heading">Potential Counterfeit / Clone Detected</h2>
+                <p class="text-xs text-red-300 leading-relaxed max-w-xs mx-auto" id="warn-message">
+                    This NFC hardware tag signature has already been scanned or tampered with. The cryptographic counter does not match expected sequence.
+                </p>
+            </div>
+
+            <!-- Caution Details -->
+            <div class="bg-gray-950/60 border border-red-900/40 rounded-xl p-4 text-left space-y-2 text-xs text-gray-300">
+                <div class="font-semibold text-red-400 uppercase tracking-wider text-[10px]">Security Advisory:</div>
+                <ul class="list-disc list-inside space-y-1 text-gray-400">
+                    <li>Do not consume product if package seal is broken.</li>
+                    <li>Report this vendor if purchased as authentic hardware.</li>
+                    <li>Scan log recorded for compliance auditing.</li>
+                </ul>
+            </div>
+
+            <div class="pt-2">
+                <a href="/contact.html" class="w-full inline-block bg-gray-800 hover:bg-gray-700 text-gray-200 font-semibold py-2.5 px-4 rounded-xl text-xs transition">
+                    Report Security Incident
+                </a>
+            </div>
+        </div>
+
+        <!-- 4. MISSING QUERY PARAMS STATE -->
+        <div id="state-invalid" class="hidden glass-card rounded-2xl p-8 text-center space-y-4">
+            <div class="w-12 h-12 rounded-full bg-gray-800 border border-gray-700 text-gray-400 flex items-center justify-center mx-auto">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+            <h2 class="text-lg font-bold text-white">No Tag Parameters Detected</h2>
+            <p class="text-xs text-gray-400 max-w-xs mx-auto">
+                Please scan an authentic Quantum Nimbus NFC hardware tag with your mobile device to initiate cryptographic verification.
+            </p>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full max-w-md text-center py-4 text-[11px] text-gray-500 font-mono space-y-1 border-t border-gray-900">
+        <div>Quantum Nimbus Tech &copy; 2026</div>
+        <div>U.S. Patent Pending (App. No. 64/114,968)</div>
+    </footer>
+
+    <!-- Logic Script to Parse Query Params and Consume /api/v1/verify -->
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const loadingState = document.getElementById('state-loading');
+            const authenticState = document.getElementById('state-authentic');
+            const warningState = document.getElementById('state-warning');
+            const invalidState = document.getElementById('state-invalid');
+
+            // Parse Query Parameters from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const uid = urlParams.get('uid');
+            const scanCount = urlParams.get('scan_count');
+            const piccData = urlParams.get('picc_data');
+            const cmac = urlParams.get('cmac');
+
+            // Validate that required params exist
+            if (!uid || !scanCount) {
+                loadingState.classList.add('hidden');
+                invalidState.classList.remove('hidden');
+                return;
+            }
+
+            try {
+                // Fetch status from backend API route
+                const apiUrl = `/api/v1/verify?uid=${encodeURIComponent(uid)}&scan_count=${encodeURIComponent(scanCount)}&picc_data=${encodeURIComponent(piccData || '')}&cmac=${encodeURIComponent(cmac || '')}`;
+                
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                loadingState.classList.add('hidden');
+
+                if (response.ok && data.status === 'AUTHENTIC') {
+                    // Render Authentic Product Details
+                    document.getElementById('res-brand').textContent = data.brand || 'Verified Brand';
+                    document.getElementById('res-product').textContent = data.product || 'Quantum Nimbus Authenticated Hardware';
+                    document.getElementById('res-strain').textContent = data.strain || 'N/A';
+                    document.getElementById('res-batch').textContent = data.batch || 'N/A';
+
+                    const coaBtn = document.getElementById('res-coa-btn');
+                    if (data.coa) {
+                        coaBtn.href = data.coa;
+                    } else {
+                        coaBtn.classList.add('hidden');
+                    }
+
+                    authenticState.classList.remove('hidden');
+
+                } else if (data.status === 'REPLAY_ATTACK') {
+                    // Render Replay Attack Warning
+                    document.getElementById('warn-title').textContent = 'REPLAY ATTACK DETECTED';
+                    document.getElementById('warn-heading').textContent = 'Duplicate Scan Counter Warning';
+                    document.getElementById('warn-message').textContent = data.message || 'This NFC tag counter has already been scanned previously. High probability of tag cloning.';
+                    warningState.classList.remove('hidden');
+
+                } else {
+                    // Render General Invalid / Rejected Warning
+                    document.getElementById('warn-title').textContent = 'AUTHENTICATION FAILED';
+                    document.getElementById('warn-heading').textContent = 'Unregistered or Modified Hardware';
+                    document.getElementById('warn-message').textContent = data.message || data.error || 'The cryptographic signature could not be verified against the Quantum Nimbus database.';
+                    warningState.classList.remove('hidden');
+                }
+
+            } catch (err) {
+                console.error('Verification error:', err);
+                loadingState.classList.add('hidden');
+                document.getElementById('warn-title').textContent = 'SYSTEM ERROR';
+                document.getElementById('warn-heading').textContent = 'Verification Network Error';
+                document.getElementById('warn-message').textContent = 'Unable to connect to verification server. Please try scanning again.';
+                warningState.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
