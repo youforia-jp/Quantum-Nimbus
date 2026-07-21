@@ -192,7 +192,8 @@ class SoundSynth {
 }
 
 // Global state variables
-const synth = new SoundSynth();
+window.synth = window.synth || new SoundSynth();
+var synth = window.synth;
 let activePuffSound = null;
 
 let isPaired = false;
@@ -412,10 +413,10 @@ btnModalAccept?.addEventListener("click", () => {
 });
 
 btnModalReject?.addEventListener("click", () => {
-    warningModal.classList.remove("active");
-    chkAllowUnverified.checked = false;
+    warningModal?.classList.remove("active");
+    if (chkAllowUnverified) chkAllowUnverified.checked = false;
     // Trigger disconnection
-    document.querySelector(".cart-btn[data-cart='disconnected']").click();
+    document.querySelector(".cart-btn[data-cart='disconnected']")?.click();
 });
 
 // Setup mode buttons
@@ -508,10 +509,10 @@ async function processCartridgeConnection(cartData) {
     }
     
     // Reset unverified allowance on initial cartridge insertion to force safety warning prompt
-    chkAllowUnverified.checked = false;
+    if (chkAllowUnverified) chkAllowUnverified.checked = false;
     
     // Generate true cryptographic signature dynamically to verify connection
-    const secret = inputSecret.value || "nimbus_secure_master_secret_2026";
+    const secret = inputSecret?.value || "nimbus_secure_master_secret_2026";
     let isAuthentic = false;
     
     const brand = cartData.brand || cartData.b || "Unknown";

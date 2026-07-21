@@ -40,6 +40,46 @@
     
     <!-- Existing Design System CSS -->
     <link rel="stylesheet" href="index.css">
+
+    <!-- Global Tab Switch Handler -->
+    <script>
+        function switchTab(tabId) {
+            const btnNfc = document.getElementById('tab-btn-nfc');
+            const btnPen = document.getElementById('tab-btn-pen');
+            const contentNfc = document.getElementById('tab-content-nfc');
+            const contentPen = document.getElementById('tab-content-pen');
+
+            if (!btnNfc || !btnPen || !contentNfc || !contentPen) return;
+
+            if (tabId === 'nfc') {
+                btnNfc.className = 'cursor-pointer flex-1 py-4 text-sm font-semibold tracking-wide transition-all border-b-2 bg-slate-800 border-cyan-500/50 text-cyan-400 flex flex-col items-center justify-center gap-1';
+                btnPen.className = 'cursor-pointer flex-1 py-4 text-sm font-semibold tracking-wide transition-all border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex flex-col items-center justify-center gap-1';
+                contentNfc.style.display = 'flex';
+                contentNfc.classList.remove('hidden');
+                contentNfc.classList.add('active');
+                contentPen.style.display = 'none';
+                contentPen.classList.add('hidden');
+                contentPen.classList.remove('active');
+            } else if (tabId === 'pen') {
+                btnPen.className = 'cursor-pointer flex-1 py-4 text-sm font-semibold tracking-wide transition-all border-b-2 bg-slate-800 border-cyan-500/50 text-cyan-400 flex flex-col items-center justify-center gap-1';
+                btnNfc.className = 'cursor-pointer flex-1 py-4 text-sm font-semibold tracking-wide transition-all border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex flex-col items-center justify-center gap-1';
+                contentPen.style.display = 'block';
+                contentPen.classList.remove('hidden');
+                contentPen.classList.add('active');
+                contentNfc.style.display = 'none';
+                contentNfc.classList.add('hidden');
+                contentNfc.classList.remove('active');
+            }
+        }
+        window.switchTab = switchTab;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const btnNfc = document.getElementById('tab-btn-nfc');
+            const btnPen = document.getElementById('tab-btn-pen');
+            if (btnNfc) btnNfc.onclick = (e) => { e.preventDefault(); switchTab('nfc'); };
+            if (btnPen) btnPen.onclick = (e) => { e.preventDefault(); switchTab('pen'); };
+        });
+    </script>
     
     <style>
         body { 
@@ -919,6 +959,62 @@
                         </div>
                     </div>
                 </div>
+            <!-- VALIDATION CONSOLE & HARDWARE PROFILE SELECTOR (UNDER THE PEN CHASSIS) -->
+            <div class="w-full mt-6 pt-5 border-t border-slate-800/80">
+                <div class="console-header flex items-center gap-2 mb-2.5">
+                    <svg class="w-4 h-4 text-cyan-400" viewBox="0 0 24 24" fill="none">
+                        <path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <h3 class="text-xs font-bold text-white uppercase tracking-wider">Validation Console</h3>
+                </div>
+                <p class="console-desc text-[11px] text-slate-400 mb-3 leading-snug">Slot hardware cartridges or simulate custom NFC cryptographic payloads.</p>
+
+                <!-- Hardware profile selector -->
+                <div class="mb-4">
+                    <div class="text-[10px] font-semibold text-slate-400 mb-2 tracking-wide uppercase">Select Hardware Profile</div>
+                    <div class="cartridge-buttons flex flex-col gap-1.5">
+                        <button class="cart-btn active" data-cart="disconnected">No Cartridge (Idle)</button>
+                        <button class="cart-btn" data-cart="astro">Astro — D9 THC</button>
+                        <button class="cart-btn" data-cart="frontier">Frontier — Rosin</button>
+                        <button class="cart-btn" data-cart="nimby">Nimby — CBD</button>
+                        <button class="cart-btn" data-cart="counterfeit">Unverified Hardware</button>
+                    </div>
+                </div>
+
+                <!-- Payload input + developer settings -->
+                <div class="flex flex-col gap-3">
+                    <div class="custom-nfc-input flex flex-col gap-1">
+                        <span class="console-sublabel text-[10px] font-semibold text-slate-400">Scan / Paste Custom Hardware Payload</span>
+                        <div class="nfc-input-row flex gap-1.5">
+                            <input type="text" id="input-nfc-payload" placeholder='{"b":"Brand","y":"Type","i":"Batch","s":"sig"}' class="flex-1 bg-slate-950/80 border border-slate-700/60 rounded-lg px-2.5 py-1.5 text-[11px] text-white placeholder-slate-500 outline-none focus:border-cyan-500/60">
+                            <button id="btn-nfc-submit" class="btn-nfc-action px-3 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg text-[11px] font-semibold transition-colors">Validate</button>
+                        </div>
+                    </div>
+
+                    <div class="developer-settings pt-2.5 border-t border-slate-800/80 flex flex-col gap-2.5">
+                        <div class="toggle-row flex items-center justify-between">
+                            <div class="toggle-info flex flex-col">
+                                <span class="toggle-title text-[11px] font-semibold text-white">Permit Unverified Cartridges</span>
+                                <span class="toggle-desc text-[10px] text-slate-400">Enforces 150°C thermal ceiling</span>
+                            </div>
+                            <label class="switch relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="chk-allow-unverified" class="sr-only peer">
+                                <div class="w-8 h-4 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-emerald-600"></div>
+                            </label>
+                        </div>
+                        <div class="secret-row flex flex-col gap-1">
+                            <label for="input-secret" class="text-[10px] font-semibold text-slate-400 flex items-center gap-1">
+                                HMAC Signing Key
+                            </label>
+                            <input type="text" id="input-secret" value="nimbus_secure_master_secret_2026" class="bg-slate-950/80 border border-slate-700/60 rounded-lg px-2.5 py-1 text-[10px] font-mono text-cyan-300 outline-none">
+                        </div>
+                        <div class="pt-1">
+                            <button id="btn-reset-data" class="w-full bg-rose-950/30 hover:bg-rose-900/40 border border-rose-800/40 text-rose-300 rounded-lg px-2.5 py-1.5 text-[11px] font-medium transition-colors">
+                                Reset Demo Data &amp; Wellness Logs
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -952,6 +1048,32 @@
 
     <!-- INTERACTIVE JAVASCRIPT LOGIC WITH WEB AUDIO SYNTHESIS -->
     <script>
+        // --- Sub-Tab Navigation Handler ---
+        function switchTab(tabId) {
+            const btnNfc = document.getElementById('tab-btn-nfc');
+            const btnPen = document.getElementById('tab-btn-pen');
+            const contentNfc = document.getElementById('tab-content-nfc');
+            const contentPen = document.getElementById('tab-content-pen');
+
+            if (!btnNfc || !btnPen || !contentNfc || !contentPen) return;
+
+            if (tabId === 'nfc') {
+                btnNfc.className = 'flex-1 py-4 text-sm font-semibold tracking-wide transition-all border-b-2 bg-slate-800 border-cyan-500/50 text-cyan-400 flex flex-col items-center justify-center gap-1';
+                btnPen.className = 'flex-1 py-4 text-sm font-semibold tracking-wide transition-all border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex flex-col items-center justify-center gap-1';
+                contentNfc.classList.remove('hidden');
+                contentNfc.classList.add('active');
+                contentPen.classList.add('hidden');
+                contentPen.classList.remove('active');
+            } else if (tabId === 'pen') {
+                btnPen.className = 'flex-1 py-4 text-sm font-semibold tracking-wide transition-all border-b-2 bg-slate-800 border-cyan-500/50 text-cyan-400 flex flex-col items-center justify-center gap-1';
+                btnNfc.className = 'flex-1 py-4 text-sm font-semibold tracking-wide transition-all border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex flex-col items-center justify-center gap-1';
+                contentPen.classList.remove('hidden');
+                contentPen.classList.add('active');
+                contentNfc.classList.add('hidden');
+                contentNfc.classList.remove('active');
+            }
+        }
+
         // --- Web Audio API Synthesizer Class ---
         
         if (typeof window.SoundSynth === 'undefined') {
@@ -1041,8 +1163,10 @@
                     });
                 }
             };
+        if (typeof window.synth === 'undefined') {
+            window.synth = new (window.SoundSynth || SoundSynth)();
         }
-        var synth = window.synth || new window.SoundSynth();
+        var synth = window.synth;
 
 
         // Mobile Menu Toggle
@@ -1136,31 +1260,38 @@
             
             // Trigger Audio Feedback
             if (type === 'eject') {
-                synth.playDisconnectSound();
+                if (typeof synth !== 'undefined') synth.playDisconnectSound();
             } else {
-                synth.playPairSound();
+                if (typeof synth !== 'undefined') synth.playPairSound();
             }
 
             // Trigger Drop-In Animation on Cartridge Tip Wrapper
             const wrapper = document.getElementById('cart-assembly-wrapper');
-            wrapper.classList.remove('animate-slot-cartridge');
-            void wrapper.offsetWidth; // Reflow trigger
-            wrapper.classList.add('animate-slot-cartridge');
+            if (wrapper) {
+                wrapper.classList.remove('animate-slot-cartridge');
+                void wrapper.offsetWidth; // Reflow trigger
+                wrapper.classList.add('animate-slot-cartridge');
+            }
 
             // Update Text Readouts
-            document.getElementById('hw-slot-title').textContent = data.title;
-            document.getElementById('hw-slot-detail').textContent = data.detail;
-            document.getElementById('oled-curr-temp').textContent = data.temp;
-            document.getElementById('oled-target').textContent = data.target;
-            document.getElementById('oled-state').textContent = data.state;
+            const titleEl = document.getElementById('hw-slot-title');
+            if (titleEl) titleEl.textContent = data.title;
+            const detailEl = document.getElementById('hw-slot-detail');
+            if (detailEl) detailEl.textContent = data.detail;
+            const currTempEl = document.getElementById('oled-curr-temp');
+            if (currTempEl) currTempEl.textContent = data.temp;
+            const targetEl = document.getElementById('oled-target');
+            if (targetEl) targetEl.textContent = data.target;
+            const stateEl = document.getElementById('oled-state');
+            if (stateEl) stateEl.textContent = data.state;
             
             // Update Fluid Level & Color
             const fluid = document.getElementById('liquid-vapor');
-            fluid.className = `liquid-fluid transition-all duration-500 ${data.fluidClass}`;
+            if (fluid) fluid.className = `liquid-fluid transition-all duration-500 ${data.fluidClass}`;
 
             // Update Base LED Ring Glow
             const ring = document.getElementById('led-ring');
-            ring.style.boxShadow = data.ringGlow;
+            if (ring) ring.style.boxShadow = data.ringGlow;
         }
 
         // --- Module 2: Phone Verification Simulation Logic & Audio Synthesis ---
