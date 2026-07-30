@@ -512,7 +512,7 @@ async function processCartridgeConnection(cartData) {
     if (chkAllowUnverified) chkAllowUnverified.checked = false;
     
     // Generate true cryptographic signature dynamically to verify connection
-    const secret = inputSecret?.value || "nimbus_secure_master_secret_2026";
+    const secret = inputSecret?.value || "mock_master_secret_placeholder";
     let isAuthentic = false;
     
     const brand = cartData.brand || cartData.b || "Unknown";

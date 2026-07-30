@@ -62,15 +62,21 @@ node_modules/
 
 # Firmware & Hardware Logic
 nimbus_geek_firmware/
+*.ino
+*.cpp
+*.h
 nfc_tag_generator.py
 nimbus_iq_simulator.py
+*.py
 
 # Backend & Database Logic
-netlify/functions/verify.ts
-lib/db/tags.ts
+netlify/functions/
+lib/db/
+*.ts
 
 # Secrets & Environment
 .env
 .env.*
 !.env.example
+
 
