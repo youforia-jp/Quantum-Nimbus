@@ -59,3 +59,18 @@ node_modules/
 
 # Local Netlify folder
 .netlify
+
+# Firmware & Hardware Logic
+nimbus_geek_firmware/
+nfc_tag_generator.py
+nimbus_iq_simulator.py
+
+# Backend & Database Logic
+netlify/functions/verify.ts
+lib/db/tags.ts
+
+# Secrets & Environment
+.env
+.env.*
+!.env.example
+
