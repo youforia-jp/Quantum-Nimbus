@@ -233,8 +233,11 @@
                 </ul>
             </div>
 
-            <div class="pt-2">
-                <a href="/contact.html" class="w-full inline-block bg-gray-800 hover:bg-gray-700 text-gray-200 font-semibold py-2.5 px-4 rounded-xl text-xs transition">
+            <div class="pt-2 flex flex-col gap-2">
+                <div id="warn-coa-btn" class="w-full text-center py-2.5 px-4 bg-amber-950/50 border border-amber-800/60 rounded-xl text-xs font-bold text-amber-300 opacity-80 cursor-not-allowed pointer-events-none">
+                    🔒 COA Locked (Re-Tap to Unlock)
+                </div>
+                <a href="/contact.html" class="w-full inline-block bg-gray-800 hover:bg-gray-700 text-gray-200 font-semibold py-2.5 px-4 rounded-xl text-xs transition text-center">
                     Report Security Incident
                 </a>
             </div>
@@ -261,7 +264,6 @@
         <div>U.S. Patent Pending (App. No. 64/114,968)</div>
     </footer>
 
-    <!-- Logic Script to Parse Query Params and Consume /api/v1/verify -->
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
             const loadingState = document.getElementById('state-loading');
@@ -269,14 +271,12 @@
             const warningState = document.getElementById('state-warning');
             const invalidState = document.getElementById('state-invalid');
 
-            // Parse Query Parameters from URL
             const urlParams = new URLSearchParams(window.location.search);
-            const uid = urlParams.get('uid');
-            const scanCount = urlParams.get('scan_count');
+            const uid = urlParams.get('uid') || urlParams.get('tag_id');
+            const scanCount = urlParams.get('scan_count') || urlParams.get('counter');
             const piccData = urlParams.get('picc_data');
-            const cmac = urlParams.get('cmac');
+            const cmac = urlParams.get('cmac') || urlParams.get('payload_hash');
 
-            // Validate that required params exist
             if (!uid || !scanCount) {
                 loadingState.classList.add('hidden');
                 invalidState.classList.remove('hidden');
@@ -284,42 +284,50 @@
             }
 
             try {
-                // Fetch status from backend API route
-                const apiUrl = `/api/v1/verify?uid=${encodeURIComponent(uid)}&scan_count=${encodeURIComponent(scanCount)}&picc_data=${encodeURIComponent(piccData || '')}&cmac=${encodeURIComponent(cmac || '')}`;
+                const apiUrl = `/.netlify/functions/verify?uid=${encodeURIComponent(uid)}&scan_count=${encodeURIComponent(scanCount)}&picc_data=${encodeURIComponent(piccData || '')}&cmac=${encodeURIComponent(cmac || '')}`;
                 
                 const response = await fetch(apiUrl);
                 const data = await response.json();
 
                 loadingState.classList.add('hidden');
 
-                if (response.ok && data.status === 'AUTHENTIC') {
-                    // Render Authentic Product Details
+                if (response.ok && (data.status === 'AUTHENTIC' || data.status === 'VERIFIED')) {
                     document.getElementById('res-brand').textContent = data.brand || 'Verified Brand';
                     document.getElementById('res-product').textContent = data.product || 'Quantum Nimbus Authenticated Hardware';
                     document.getElementById('res-strain').textContent = data.strain || 'N/A';
                     document.getElementById('res-batch').textContent = data.batch || 'N/A';
 
                     const coaBtn = document.getElementById('res-coa-btn');
-                    if (data.coa) {
-                        coaBtn.href = data.coa;
-                    } else {
-                        coaBtn.classList.add('hidden');
+                    if (coaBtn) {
+                        coaBtn.textContent = '📄 View Certified COA PDF';
+                        coaBtn.href = data.coa || '#';
+                        coaBtn.className = 'w-full inline-flex items-center justify-center space-x-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-semibold py-3 px-4 rounded-xl shadow-lg shadow-emerald-900/30 transition-all duration-200 text-sm';
                     }
 
                     authenticState.classList.remove('hidden');
 
-                } else if (data.status === 'REPLAY_ATTACK') {
-                    // Render Replay Attack Warning
-                    document.getElementById('warn-title').textContent = 'REPLAY ATTACK DETECTED';
-                    document.getElementById('warn-heading').textContent = 'Duplicate Scan Counter Warning';
-                    document.getElementById('warn-message').textContent = data.message || 'This NFC tag counter has already been scanned previously. High probability of tag cloning.';
+                } else if (data.status === 'FLAGGED' || data.velocity_flag === 'IMPOSSIBLE_TRANSIT') {
+                    document.getElementById('warn-title').textContent = 'SUSPICIOUS SCAN FLAGGED';
+                    document.getElementById('warn-heading').textContent = '⚠️ SECURITY CHALLENGE REQUIRED';
+                    document.getElementById('warn-message').textContent = 'A simultaneous scan was detected from another location. If you possess this physical product, please tap your phone again to confirm physical ownership.';
+                    
+                    const warnCoa = document.getElementById('warn-coa-btn');
+                    if (warnCoa) {
+                        warnCoa.textContent = '🔒 COA Locked (Re-Tap to Unlock)';
+                        warnCoa.className = 'w-full text-center py-2.5 px-4 bg-amber-950/50 border border-amber-800/60 rounded-xl text-xs font-bold text-amber-300 opacity-80 cursor-not-allowed pointer-events-none';
+                    }
                     warningState.classList.remove('hidden');
 
                 } else {
-                    // Render General Invalid / Rejected Warning
-                    document.getElementById('warn-title').textContent = 'AUTHENTICATION FAILED';
-                    document.getElementById('warn-heading').textContent = 'Unregistered or Modified Hardware';
-                    document.getElementById('warn-message').textContent = data.message || data.error || 'The cryptographic signature could not be verified against the Quantum Nimbus database.';
+                    document.getElementById('warn-title').textContent = 'HARDWARE LOCKED';
+                    document.getElementById('warn-heading').textContent = '🚫 INVALID SILICON DETECTED';
+                    document.getElementById('warn-message').textContent = 'This tag failed dynamic cryptographic authentication. The product identity could not be verified.';
+                    
+                    const warnCoa = document.getElementById('warn-coa-btn');
+                    if (warnCoa) {
+                        warnCoa.textContent = '🚫 Lab Results Withheld';
+                        warnCoa.className = 'w-full text-center py-2.5 px-4 bg-rose-950/50 border border-rose-800/60 rounded-xl text-xs font-bold text-rose-400 opacity-70 cursor-not-allowed pointer-events-none';
+                    }
                     warningState.classList.remove('hidden');
                 }
 
