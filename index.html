@@ -5,7 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quantum Nimbus Tech | Cryptographic Hardware Compliance</title>
     <meta name="description" content="Quantum Nimbus Tech provides secure cryptographic hardware verification, thermal safety governance, and anti-counterfeit compliance for advanced vaporization hardware.">
-    <!-- Google Fonts: Inter + Outfit -->
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" href="/favicon.png">
+    <!-- Google Fonts: Inter + Outfit with font-display: swap -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -480,76 +484,109 @@
                     <span class="text-accentBlue font-bold">● EDGE RUNTIME READY</span>
                 </div>
             </div>
+        </div>
 
         <!-- 4-STEP BEHAVIORAL AI PIPELINE PROCESS DIAGRAM -->
-        <div class="mb-14 bg-slate-900/80 border border-slate-800 rounded-2xl p-6 sm:p-8 backdrop-blur-xl shadow-2xl space-y-6">
+        <div class="mb-14 bg-slate-900/80 border border-slate-800 rounded-2xl p-6 sm:p-8 backdrop-blur-xl shadow-2xl space-y-6" role="region" aria-label="Behavioral AI Verification Pipeline Workflow">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-4">
                 <div class="flex items-center gap-2.5">
-                    <span class="text-xl">⚡</span>
+                    <span class="text-xl" aria-hidden="true">⚡</span>
                     <div>
                         <h3 class="text-lg font-heading font-bold text-white tracking-tight">Behavioral AI Verification Pipeline</h3>
                         <p class="text-xs text-slate-400">Sequential zero-trust evaluation pipeline executed on every NFC product tap.</p>
                     </div>
                 </div>
                 <span class="text-xs font-mono text-cyan-400 bg-cyan-950/80 border border-cyan-800/80 px-3 py-1 rounded-lg font-bold w-fit">
-                    4-STEP VERIFICATION FLOW
+                    HORIZONTAL PIPELINE FLOW
                 </span>
             </div>
 
-            <!-- 4-Step Flowchart Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+            <!-- 4-Step Horizontal Pipeline Flow -->
+            <ol class="grid grid-cols-1 md:grid-cols-4 gap-4 relative list-none p-0 m-0">
                 <!-- Step 1 -->
-                <div class="bg-slate-950/70 border border-slate-800 rounded-xl p-5 relative group hover:border-cyan-500/50 transition-all duration-300 shadow-md">
-                    <div class="flex items-center justify-between mb-3">
-                        <span class="text-[10px] font-mono font-bold text-cyan-400 bg-cyan-950 border border-cyan-800 px-2 py-0.5 rounded">STEP 01</span>
-                        <span class="text-lg">📱</span>
+                <li class="bg-slate-950/70 border border-slate-800 rounded-xl p-5 relative group hover:border-cyan-500/50 transition-all duration-300 shadow-md flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-3 border-b border-slate-800/80 pb-2.5">
+                            <div class="flex items-center gap-2">
+                                <span class="text-[10px] font-mono font-bold text-cyan-400 bg-cyan-950 border border-cyan-800 px-2 py-0.5 rounded">STEP 01</span>
+                                <span class="text-xs font-bold text-white font-heading">Physical Tap</span>
+                            </div>
+                            <span class="text-lg" aria-hidden="true">📱</span>
+                        </div>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            NTAG 424 Dynamic SUN Digest generated upon NFC reader contact.
+                        </p>
                     </div>
-                    <h4 class="text-sm font-bold text-white mb-1.5 font-heading">Physical Tap</h4>
-                    <p class="text-xs text-slate-400 leading-relaxed">
-                        NTAG 424 Dynamic SUN Digest generated upon NFC reader contact.
-                    </p>
-                </div>
+                    <div class="mt-4 pt-2 border-t border-slate-900 flex items-center justify-between text-[11px] font-mono text-cyan-400">
+                        <span>INPUT SIGNAL</span>
+                        <span aria-hidden="true">➔</span>
+                    </div>
+                </li>
 
                 <!-- Step 2 -->
-                <div class="bg-slate-950/70 border border-slate-800 rounded-xl p-5 relative group hover:border-emerald-500/50 transition-all duration-300 shadow-md">
-                    <div class="flex items-center justify-between mb-3">
-                        <span class="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-950 border border-emerald-800 px-2 py-0.5 rounded">STEP 02</span>
-                        <span class="text-lg">🔐</span>
+                <li class="bg-slate-950/70 border border-slate-800 rounded-xl p-5 relative group hover:border-emerald-500/50 transition-all duration-300 shadow-md flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-3 border-b border-slate-800/80 pb-2.5">
+                            <div class="flex items-center gap-2">
+                                <span class="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-950 border border-emerald-800 px-2 py-0.5 rounded">STEP 02</span>
+                                <span class="text-xs font-bold text-white font-heading">Silicon Check</span>
+                            </div>
+                            <span class="text-lg" aria-hidden="true">🔐</span>
+                        </div>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            Cryptographic MAC signature validated via AES-128 hardware key.
+                        </p>
                     </div>
-                    <h4 class="text-sm font-bold text-white mb-1.5 font-heading">Silicon Check</h4>
-                    <p class="text-xs text-slate-400 leading-relaxed">
-                        Cryptographic MAC signature validated via AES-128 hardware key.
-                    </p>
-                </div>
+                    <div class="mt-4 pt-2 border-t border-slate-900 flex items-center justify-between text-[11px] font-mono text-emerald-400">
+                        <span>HARDWARE AUTH</span>
+                        <span aria-hidden="true">➔</span>
+                    </div>
+                </li>
 
                 <!-- Step 3 -->
-                <div class="bg-slate-950/70 border border-slate-800 rounded-xl p-5 relative group hover:border-amber-500/50 transition-all duration-300 shadow-md">
-                    <div class="flex items-center justify-between mb-3">
-                        <span class="text-[10px] font-mono font-bold text-amber-400 bg-amber-950 border border-amber-800 px-2 py-0.5 rounded">STEP 03</span>
-                        <span class="text-lg">🧠</span>
+                <li class="bg-slate-950/70 border border-slate-800 rounded-xl p-5 relative group hover:border-amber-500/50 transition-all duration-300 shadow-md flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-3 border-b border-slate-800/80 pb-2.5">
+                            <div class="flex items-center gap-2">
+                                <span class="text-[10px] font-mono font-bold text-amber-400 bg-amber-950 border border-amber-800 px-2 py-0.5 rounded">STEP 03</span>
+                                <span class="text-xs font-bold text-white font-heading">Edge AI Inference</span>
+                            </div>
+                            <span class="text-lg" aria-hidden="true">🧠</span>
+                        </div>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            ONNX Isolation Forest evaluates 4D Telemetry Vector <span class="font-mono text-[10px] text-amber-300 font-bold">[Δt, distance, velocity, ip_shift]</span>.
+                        </p>
                     </div>
-                    <h4 class="text-sm font-bold text-white mb-1.5 font-heading">Edge AI Inference</h4>
-                    <p class="text-xs text-slate-400 leading-relaxed">
-                        ONNX Isolation Forest evaluates 4D Telemetry Vector <span class="font-mono text-[10px] text-amber-300 font-bold">[Δt, distance, velocity, ip_shift]</span>.
-                    </p>
-                </div>
+                    <div class="mt-4 pt-2 border-t border-slate-900 flex items-center justify-between text-[11px] font-mono text-amber-400">
+                        <span>BEHAVIORAL AI</span>
+                        <span aria-hidden="true">➔</span>
+                    </div>
+                </li>
 
                 <!-- Step 4 -->
-                <div class="bg-slate-950/70 border border-slate-800 rounded-xl p-5 relative group hover:border-blue-500/50 transition-all duration-300 shadow-md">
-                    <div class="flex items-center justify-between mb-3">
-                        <span class="text-[10px] font-mono font-bold text-blue-400 bg-blue-950 border border-blue-800 px-2 py-0.5 rounded">STEP 04</span>
-                        <span class="text-lg">🛡️</span>
+                <li class="bg-slate-950/70 border border-slate-800 rounded-xl p-5 relative group hover:border-blue-500/50 transition-all duration-300 shadow-md flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-3 border-b border-slate-800/80 pb-2.5">
+                            <div class="flex items-center gap-2">
+                                <span class="text-[10px] font-mono font-bold text-blue-400 bg-blue-950 border border-blue-800 px-2 py-0.5 rounded">STEP 04</span>
+                                <span class="text-xs font-bold text-white font-heading">Real-Time Decision</span>
+                            </div>
+                            <span class="text-lg" aria-hidden="true">🛡️</span>
+                        </div>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            System issues HTTP 200 (Verified) or HTTP 403 (Hardware Lock).
+                        </p>
                     </div>
-                    <h4 class="text-sm font-bold text-white mb-1.5 font-heading">Real-Time Decision</h4>
-                    <p class="text-xs text-slate-400 leading-relaxed">
-                        System issues HTTP 200 (Verified) or HTTP 403 (Hardware Lock).
-                    </p>
-                </div>
-            </div>
+                    <div class="mt-4 pt-2 border-t border-slate-900 flex items-center justify-between text-[11px] font-mono text-blue-400">
+                        <span>VERDICT OUTPUT</span>
+                        <span class="text-emerald-400 font-bold">● COMPLETE</span>
+                    </div>
+                </li>
+            </ol>
         </div>
 
-        <!-- VERDICT MATRIX TABLE / CARDS -->
-        <div class="bg-nimbusSurface/80 border border-nimbusBorder rounded-2xl p-6 sm:p-8 space-y-6 backdrop-blur-xl">
+        <!-- VERDICT MATRIX TABLE -->
+        <div class="bg-nimbusSurface/80 border border-nimbusBorder rounded-2xl p-6 sm:p-8 space-y-6 backdrop-blur-xl" role="region" aria-label="Security Verdict Decision Matrix">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-nimbusBorder pb-4">
                 <div>
                     <h3 class="text-xl font-bold text-white tracking-tight">Security Verdict Decision Matrix</h3>
@@ -560,78 +597,89 @@
                 </span>
             </div>
 
-            <!-- Decision Cards Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 font-mono">
-                
-                <!-- VERDICT 1: VERIFIED AUTHENTIC -->
-                <div class="bg-nimbusBase border border-emerald-900/60 rounded-xl p-5 space-y-3 relative overflow-hidden">
-                    <div class="flex items-center justify-between">
-                        <span class="px-2.5 py-1 rounded text-xs font-bold bg-emerald-950 text-emerald-400 border border-emerald-800">
-                            🟢 VERIFIED AUTHENTIC
-                        </span>
-                        <span class="text-xs text-nimbusText">HTTP 200</span>
-                    </div>
-                    <div class="space-y-1 text-xs text-slate-300">
-                        <div class="flex justify-between">
-                            <span class="text-nimbusText">Silicon Crypto:</span>
-                            <span class="text-emerald-400 font-bold">VALID MATCH</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-nimbusText">AI Threat Score:</span>
-                            <span class="text-emerald-400 font-bold">&lt; 0.40 (INLIER)</span>
-                        </div>
-                    </div>
-                    <p class="text-[11px] text-nimbusText font-sans leading-relaxed pt-1 border-t border-nimbusBorder">
-                        Genuine product scan. Certified COA lab results unlocked and full consumer authentication granted.
-                    </p>
-                </div>
+            <!-- Decision Matrix Horizontal Comparative Table -->
+            <div class="overflow-x-auto rounded-xl border border-nimbusBorder bg-nimbusBase shadow-inner">
+                <table class="w-full text-left font-mono text-xs min-w-[700px] border-collapse" aria-label="Security Verdict Matrix Table">
+                    <thead>
+                        <tr class="border-b border-nimbusBorder bg-slate-950/80 text-nimbusText uppercase tracking-wider text-[11px]">
+                            <th scope="col" class="py-3.5 px-4 font-bold text-white">Security Verdict</th>
+                            <th scope="col" class="py-3.5 px-4 font-bold text-white">Silicon Crypto (Layer 1)</th>
+                            <th scope="col" class="py-3.5 px-4 font-bold text-white">AI Threat Score (Layer 2)</th>
+                            <th scope="col" class="py-3.5 px-4 font-bold text-white">HTTP Code</th>
+                            <th scope="col" class="py-3.5 px-4 font-bold text-white font-sans">Enforcement & User Impact</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-nimbusBorder/60">
+                        <!-- VERDICT 1: VERIFIED AUTHENTIC -->
+                        <tr class="hover:bg-emerald-950/20 transition-colors">
+                            <td class="py-4 px-4 whitespace-nowrap">
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-bold bg-emerald-950 text-emerald-400 border border-emerald-800">
+                                    🟢 VERIFIED AUTHENTIC
+                                </span>
+                            </td>
+                            <td class="py-4 px-4 whitespace-nowrap">
+                                <span class="text-emerald-400 font-bold">VALID MATCH</span>
+                                <div class="text-[10px] text-nimbusText">AES-128 SUN CMAC</div>
+                            </td>
+                            <td class="py-4 px-4 whitespace-nowrap">
+                                <span class="text-emerald-400 font-bold">&lt; 0.40 (INLIER)</span>
+                                <div class="text-[10px] text-nimbusText">Normal Behavior Pattern</div>
+                            </td>
+                            <td class="py-4 px-4 whitespace-nowrap">
+                                <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-950/80 text-emerald-300 border border-emerald-800">HTTP 200</span>
+                            </td>
+                            <td class="py-4 px-4 font-sans text-xs text-slate-300 leading-relaxed max-w-xs">
+                                Genuine product scan. Certified COA lab results unlocked and full consumer authentication granted.
+                            </td>
+                        </tr>
 
-                <!-- VERDICT 2: SECURITY CHALLENGE -->
-                <div class="bg-nimbusBase border border-amber-900/60 rounded-xl p-5 space-y-3 relative overflow-hidden">
-                    <div class="flex items-center justify-between">
-                        <span class="px-2.5 py-1 rounded text-xs font-bold bg-amber-950 text-amber-300 border border-amber-800">
-                            🟡 SECURITY CHALLENGE
-                        </span>
-                        <span class="text-xs text-nimbusText">HTTP 200</span>
-                    </div>
-                    <div class="space-y-1 text-xs text-slate-300">
-                        <div class="flex justify-between">
-                            <span class="text-nimbusText">Silicon Crypto:</span>
-                            <span class="text-emerald-400 font-bold">VALID MATCH</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-nimbusText">AI Threat Score:</span>
-                            <span class="text-amber-300 font-bold">0.40 - 0.69 (OUTLIER)</span>
-                        </div>
-                    </div>
-                    <p class="text-[11px] text-nimbusText font-sans leading-relaxed pt-1 border-t border-nimbusBorder">
-                        Simultaneous multi-location scan detected. COA locked until physical product owner completes a 2-second re-tap.
-                    </p>
-                </div>
+                        <!-- VERDICT 2: SECURITY CHALLENGE -->
+                        <tr class="hover:bg-amber-950/20 transition-colors">
+                            <td class="py-4 px-4 whitespace-nowrap">
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-bold bg-amber-950 text-amber-300 border border-amber-800">
+                                    🟡 SECURITY CHALLENGE
+                                </span>
+                            </td>
+                            <td class="py-4 px-4 whitespace-nowrap">
+                                <span class="text-emerald-400 font-bold">VALID MATCH</span>
+                                <div class="text-[10px] text-nimbusText">AES-128 SUN CMAC</div>
+                            </td>
+                            <td class="py-4 px-4 whitespace-nowrap">
+                                <span class="text-amber-300 font-bold">0.40 - 0.69 (OUTLIER)</span>
+                                <div class="text-[10px] text-nimbusText">Impossible Speed / Subnet Jump</div>
+                            </td>
+                            <td class="py-4 px-4 whitespace-nowrap">
+                                <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-amber-950/80 text-amber-300 border border-amber-800">HTTP 200</span>
+                            </td>
+                            <td class="py-4 px-4 font-sans text-xs text-slate-300 leading-relaxed max-w-xs">
+                                Simultaneous multi-location scan detected. COA locked until physical product owner completes a 2-second re-tap.
+                            </td>
+                        </tr>
 
-                <!-- VERDICT 3: HARDWARE LOCKED -->
-                <div class="bg-nimbusBase border border-rose-900/60 rounded-xl p-5 space-y-3 relative overflow-hidden">
-                    <div class="flex items-center justify-between">
-                        <span class="px-2.5 py-1 rounded text-xs font-bold bg-rose-950 text-rose-400 border border-rose-800">
-                            🔴 HARDWARE LOCKED
-                        </span>
-                        <span class="text-xs text-nimbusText">HTTP 403</span>
-                    </div>
-                    <div class="space-y-1 text-xs text-slate-300">
-                        <div class="flex justify-between">
-                            <span class="text-nimbusText">Silicon Crypto:</span>
-                            <span class="text-rose-400 font-bold">FAILED / INVALID</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-nimbusText">AI Evaluation:</span>
-                            <span class="text-rose-400 font-bold">BYPASSED</span>
-                        </div>
-                    </div>
-                    <p class="text-[11px] text-nimbusText font-sans leading-relaxed pt-1 border-t border-nimbusBorder">
-                        Counterfeit silicon signature or tampered chip detected. Immediate hardware lock with lab results withheld.
-                    </p>
-                </div>
-
+                        <!-- VERDICT 3: HARDWARE LOCKED -->
+                        <tr class="hover:bg-rose-950/20 transition-colors">
+                            <td class="py-4 px-4 whitespace-nowrap">
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-bold bg-rose-950 text-rose-400 border border-rose-800">
+                                    🔴 HARDWARE LOCKED
+                                </span>
+                            </td>
+                            <td class="py-4 px-4 whitespace-nowrap">
+                                <span class="text-rose-400 font-bold">FAILED / INVALID</span>
+                                <div class="text-[10px] text-nimbusText">Counterfeit / Replay Signature</div>
+                            </td>
+                            <td class="py-4 px-4 whitespace-nowrap">
+                                <span class="text-rose-400 font-bold">BYPASSED</span>
+                                <div class="text-[10px] text-nimbusText">Hardware Layer Halt</div>
+                            </td>
+                            <td class="py-4 px-4 whitespace-nowrap">
+                                <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-rose-950/80 text-rose-300 border border-rose-800">HTTP 403</span>
+                            </td>
+                            <td class="py-4 px-4 font-sans text-xs text-slate-300 leading-relaxed max-w-xs">
+                                Counterfeit silicon signature or tampered chip detected. Immediate hardware lock with lab results withheld.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 

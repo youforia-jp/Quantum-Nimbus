@@ -129,8 +129,8 @@
 
     </div>
 
-    <!-- VERDICT MATRIX TABLE / CARDS -->
-    <div class="bg-nimbusSurface/80 border border-nimbusBorder rounded-2xl p-6 sm:p-8 space-y-6 backdrop-blur-xl">
+    <!-- VERDICT MATRIX TABLE -->
+    <div class="bg-nimbusSurface/80 border border-nimbusBorder rounded-2xl p-6 sm:p-8 space-y-6 backdrop-blur-xl" role="region" aria-label="Security Verdict Decision Matrix">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-nimbusBorder pb-4">
             <div>
                 <h3 class="text-xl font-bold text-white tracking-tight">Security Verdict Decision Matrix</h3>
@@ -141,78 +141,89 @@
             </span>
         </div>
 
-        <!-- Decision Cards Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 font-mono">
-            
-            <!-- VERDICT 1: VERIFIED AUTHENTIC -->
-            <div class="bg-nimbusBase border border-emerald-900/60 rounded-xl p-5 space-y-3 relative overflow-hidden">
-                <div class="flex items-center justify-between">
-                    <span class="px-2.5 py-1 rounded text-xs font-bold bg-emerald-950 text-emerald-400 border border-emerald-800">
-                        🟢 VERIFIED AUTHENTIC
-                    </span>
-                    <span class="text-xs text-nimbusText">HTTP 200</span>
-                </div>
-                <div class="space-y-1 text-xs text-slate-300">
-                    <div class="flex justify-between">
-                        <span class="text-nimbusText">Silicon Crypto:</span>
-                        <span class="text-emerald-400 font-bold">VALID MATCH</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span class="text-nimbusText">AI Threat Score:</span>
-                        <span class="text-emerald-400 font-bold">&lt; 0.40 (INLIER)</span>
-                    </div>
-                </div>
-                <p class="text-[11px] text-nimbusText font-sans leading-relaxed pt-1 border-t border-nimbusBorder">
-                    Genuine product scan. Certified COA lab results unlocked and full consumer authentication granted.
-                </p>
-            </div>
+        <!-- Decision Matrix Horizontal Comparative Table -->
+        <div class="overflow-x-auto rounded-xl border border-nimbusBorder bg-nimbusBase shadow-inner">
+            <table class="w-full text-left font-mono text-xs min-w-[700px] border-collapse" aria-label="Security Verdict Matrix Table">
+                <thead>
+                    <tr class="border-b border-nimbusBorder bg-slate-950/80 text-nimbusText uppercase tracking-wider text-[11px]">
+                        <th scope="col" class="py-3.5 px-4 font-bold text-white">Security Verdict</th>
+                        <th scope="col" class="py-3.5 px-4 font-bold text-white">Silicon Crypto (Layer 1)</th>
+                        <th scope="col" class="py-3.5 px-4 font-bold text-white">AI Threat Score (Layer 2)</th>
+                        <th scope="col" class="py-3.5 px-4 font-bold text-white">HTTP Code</th>
+                        <th scope="col" class="py-3.5 px-4 font-bold text-white font-sans">Enforcement & User Impact</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-nimbusBorder/60">
+                    <!-- VERDICT 1: VERIFIED AUTHENTIC -->
+                    <tr class="hover:bg-emerald-950/20 transition-colors">
+                        <td class="py-4 px-4 whitespace-nowrap">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-bold bg-emerald-950 text-emerald-400 border border-emerald-800">
+                                🟢 VERIFIED AUTHENTIC
+                            </span>
+                        </td>
+                        <td class="py-4 px-4 whitespace-nowrap">
+                            <span class="text-emerald-400 font-bold">VALID MATCH</span>
+                            <div class="text-[10px] text-nimbusText">AES-128 SUN CMAC</div>
+                        </td>
+                        <td class="py-4 px-4 whitespace-nowrap">
+                            <span class="text-emerald-400 font-bold">&lt; 0.40 (INLIER)</span>
+                            <div class="text-[10px] text-nimbusText">Normal Behavior Pattern</div>
+                        </td>
+                        <td class="py-4 px-4 whitespace-nowrap">
+                            <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-950/80 text-emerald-300 border border-emerald-800">HTTP 200</span>
+                        </td>
+                        <td class="py-4 px-4 font-sans text-xs text-slate-300 leading-relaxed max-w-xs">
+                            Genuine product scan. Certified COA lab results unlocked and full consumer authentication granted.
+                        </td>
+                    </tr>
 
-            <!-- VERDICT 2: SECURITY CHALLENGE -->
-            <div class="bg-nimbusBase border border-amber-900/60 rounded-xl p-5 space-y-3 relative overflow-hidden">
-                <div class="flex items-center justify-between">
-                    <span class="px-2.5 py-1 rounded text-xs font-bold bg-amber-950 text-amber-300 border border-amber-800">
-                        🟡 SECURITY CHALLENGE
-                    </span>
-                    <span class="text-xs text-nimbusText">HTTP 200</span>
-                </div>
-                <div class="space-y-1 text-xs text-slate-300">
-                    <div class="flex justify-between">
-                        <span class="text-nimbusText">Silicon Crypto:</span>
-                        <span class="text-emerald-400 font-bold">VALID MATCH</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span class="text-nimbusText">AI Threat Score:</span>
-                        <span class="text-amber-300 font-bold">0.40 - 0.69 (OUTLIER)</span>
-                    </div>
-                </div>
-                <p class="text-[11px] text-nimbusText font-sans leading-relaxed pt-1 border-t border-nimbusBorder">
-                    Simultaneous multi-location scan detected. COA locked until physical product owner completes a 2-second re-tap.
-                </p>
-            </div>
+                    <!-- VERDICT 2: SECURITY CHALLENGE -->
+                    <tr class="hover:bg-amber-950/20 transition-colors">
+                        <td class="py-4 px-4 whitespace-nowrap">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-bold bg-amber-950 text-amber-300 border border-amber-800">
+                                🟡 SECURITY CHALLENGE
+                            </span>
+                        </td>
+                        <td class="py-4 px-4 whitespace-nowrap">
+                            <span class="text-emerald-400 font-bold">VALID MATCH</span>
+                            <div class="text-[10px] text-nimbusText">AES-128 SUN CMAC</div>
+                        </td>
+                        <td class="py-4 px-4 whitespace-nowrap">
+                            <span class="text-amber-300 font-bold">0.40 - 0.69 (OUTLIER)</span>
+                            <div class="text-[10px] text-nimbusText">Impossible Speed / Subnet Jump</div>
+                        </td>
+                        <td class="py-4 px-4 whitespace-nowrap">
+                            <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-amber-950/80 text-amber-300 border border-amber-800">HTTP 200</span>
+                        </td>
+                        <td class="py-4 px-4 font-sans text-xs text-slate-300 leading-relaxed max-w-xs">
+                            Simultaneous multi-location scan detected. COA locked until physical product owner completes a 2-second re-tap.
+                        </td>
+                    </tr>
 
-            <!-- VERDICT 3: HARDWARE LOCKED -->
-            <div class="bg-nimbusBase border border-rose-900/60 rounded-xl p-5 space-y-3 relative overflow-hidden">
-                <div class="flex items-center justify-between">
-                    <span class="px-2.5 py-1 rounded text-xs font-bold bg-rose-950 text-rose-400 border border-rose-800">
-                        🔴 HARDWARE LOCKED
-                    </span>
-                    <span class="text-xs text-nimbusText">HTTP 403</span>
-                </div>
-                <div class="space-y-1 text-xs text-slate-300">
-                    <div class="flex justify-between">
-                        <span class="text-nimbusText">Silicon Crypto:</span>
-                        <span class="text-rose-400 font-bold">FAILED / INVALID</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span class="text-nimbusText">AI Evaluation:</span>
-                        <span class="text-rose-400 font-bold">BYPASSED</span>
-                    </div>
-                </div>
-                <p class="text-[11px] text-nimbusText font-sans leading-relaxed pt-1 border-t border-nimbusBorder">
-                    Counterfeit silicon signature or tampered chip detected. Immediate hardware lock with lab results withheld.
-                </p>
-            </div>
-
+                    <!-- VERDICT 3: HARDWARE LOCKED -->
+                    <tr class="hover:bg-rose-950/20 transition-colors">
+                        <td class="py-4 px-4 whitespace-nowrap">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-bold bg-rose-950 text-rose-400 border border-rose-800">
+                                🔴 HARDWARE LOCKED
+                            </span>
+                        </td>
+                        <td class="py-4 px-4 whitespace-nowrap">
+                            <span class="text-rose-400 font-bold">FAILED / INVALID</span>
+                            <div class="text-[10px] text-nimbusText">Counterfeit / Replay Signature</div>
+                        </td>
+                        <td class="py-4 px-4 whitespace-nowrap">
+                            <span class="text-rose-400 font-bold">BYPASSED</span>
+                            <div class="text-[10px] text-nimbusText">Hardware Layer Halt</div>
+                        </td>
+                        <td class="py-4 px-4 whitespace-nowrap">
+                            <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-rose-950/80 text-rose-300 border border-rose-800">HTTP 403</span>
+                        </td>
+                        <td class="py-4 px-4 font-sans text-xs text-slate-300 leading-relaxed max-w-xs">
+                            Counterfeit silicon signature or tampered chip detected. Immediate hardware lock with lab results withheld.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
