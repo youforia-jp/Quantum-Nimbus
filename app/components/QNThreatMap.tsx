@@ -16,6 +16,7 @@ export interface LocationNode {
 export interface TelemetryPayload {
   id: string;
   timestamp: string;
+  timestampMs: number;
   tag_id: string;
   origin: LocationNode;
   destination: LocationNode | null;
@@ -27,6 +28,7 @@ export interface TelemetryPayload {
 }
 
 interface ActiveArc {
+  id: string;
   origin: LocationNode;
   destination: LocationNode;
   startTime: number;
@@ -63,7 +65,7 @@ export default function QNThreatMap() {
   const [filterMode, setFilterMode] = useState<'all' | 'threats' | 'us'>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   
-  const [scrubberValue, setScrubberValue] = useState<number>(100);
+  const [scrubberValue, setScrubberValue] = useState<number>(60);
   const [isLiveStreaming, setIsLiveStreaming] = useState<boolean>(true);
 
   const [hoveredNode, setHoveredNode] = useState<LocationNode | null>(null);
@@ -120,10 +122,11 @@ export default function QNThreatMap() {
     };
   };
 
-  const processPayload = (rawPayload: TelemetryPayload) => {
+  const processPayload = (rawPayload: Omit<TelemetryPayload, 'timestampMs'>) => {
     if (!isLiveStreaming) return;
 
-    const evaluated = evaluateSecurityThreat(rawPayload);
+    const now = Date.now();
+    const evaluated = evaluateSecurityThreat({ ...rawPayload, timestampMs: now });
 
     setTotalScans((prev) => prev + 1);
     if (evaluated.status === 'FLAGGED THREAT') {
@@ -134,29 +137,30 @@ export default function QNThreatMap() {
     setHistoricalAuditBuffer((prev) => [evaluated, ...prev.slice(0, 199)]);
 
     activePinsRef.current.push({
-      id: `${evaluated.origin.city}-${Date.now()}`,
+      id: `${evaluated.origin.city}-${now}`,
       city: evaluated.origin.city,
       lat: evaluated.origin.lat,
       lng: evaluated.origin.lng,
       isThreat: evaluated.status === 'FLAGGED THREAT',
-      spawnTime: Date.now()
+      spawnTime: now
     });
 
     if (evaluated.tap_sequence === 2 && evaluated.destination) {
       activeArcsRef.current.push({
+        id: `arc-${now}`,
         origin: evaluated.origin,
         destination: evaluated.destination,
-        startTime: Date.now(),
+        startTime: now,
         isThreat: evaluated.status === 'FLAGGED THREAT'
       });
 
       activePinsRef.current.push({
-        id: `${evaluated.destination.city}-${Date.now()}`,
+        id: `${evaluated.destination.city}-${now}`,
         city: evaluated.destination.city,
         lat: evaluated.destination.lat,
         lng: evaluated.destination.lng,
         isThreat: evaluated.status === 'FLAGGED THREAT',
-        spawnTime: Date.now()
+        spawnTime: now
       });
     }
   };
@@ -233,7 +237,60 @@ export default function QNThreatMap() {
     return () => clearInterval(interval);
   }, [isLiveStreaming]);
 
-  // Hover Detection on Canvas
+  // Handle Scrubber Change in Seconds
+  const handleScrubberChange = (val: number) => {
+    setScrubberValue(val);
+    if (val === 60) {
+      setIsLiveStreaming(true);
+    } else {
+      setIsLiveStreaming(false);
+      const auditSecondsAgo = 60 - val;
+      const targetTimeMs = Date.now() - (auditSecondsAgo * 1000);
+
+      const historicalSlice = historicalAuditBuffer.filter((evt) => evt.timestampMs <= targetTimeMs);
+
+      // Update Map Arcs & Pins for historical snapshot
+      activePinsRef.current = [];
+      activeArcsRef.current = [];
+
+      const now = Date.now();
+      historicalSlice.slice(0, 8).forEach((evt) => {
+        activePinsRef.current.push({
+          id: `audit-pin-${evt.id}`,
+          city: evt.origin.city,
+          lat: evt.origin.lat,
+          lng: evt.origin.lng,
+          isThreat: evt.status === 'FLAGGED THREAT',
+          spawnTime: now
+        });
+
+        if (evt.destination) {
+          activeArcsRef.current.push({
+            id: `audit-arc-${evt.id}`,
+            origin: evt.origin,
+            destination: evt.destination,
+            startTime: now,
+            isThreat: evt.status === 'FLAGGED THREAT'
+          });
+          activePinsRef.current.push({
+            id: `audit-pin-dest-${evt.id}`,
+            city: evt.destination.city,
+            lat: evt.destination.lat,
+            lng: evt.destination.lng,
+            isThreat: evt.status === 'FLAGGED THREAT',
+            spawnTime: now
+          });
+        }
+      });
+    }
+  };
+
+  const resumeLiveStream = () => {
+    setScrubberValue(60);
+    setIsLiveStreaming(true);
+  };
+
+  // Canvas Mouse Move Hover
   const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -330,15 +387,15 @@ export default function QNThreatMap() {
       const now = Date.now();
 
       // Render Active Pins
-      activePinsRef.current = activePinsRef.current.filter((pin) => now - pin.spawnTime < 5000);
+      activePinsRef.current = activePinsRef.current.filter((pin) => !isLiveStreaming || now - pin.spawnTime < 5000);
       activePinsRef.current.forEach((pin) => {
         const pt = projection([pin.lng, pin.lat]);
         if (!pt) return;
         const [x, y] = pt;
 
         const age = now - pin.spawnTime;
-        const fade = 1 - age / 5000;
-        const radius = (age / 5000) * 28;
+        const fade = isLiveStreaming ? 1 - age / 5000 : 0.95;
+        const radius = isLiveStreaming ? (age / 5000) * 28 : 16;
 
         ctx.beginPath();
         ctx.arc(x, y, radius, 0, Math.PI * 2);
@@ -360,13 +417,13 @@ export default function QNThreatMap() {
       });
 
       // Render Quadratic Arcs
-      activeArcsRef.current = activeArcsRef.current.filter((arc) => now - arc.startTime < 2400);
+      activeArcsRef.current = activeArcsRef.current.filter((arc) => !isLiveStreaming || now - arc.startTime < 2400);
       activeArcsRef.current.forEach((arc) => {
         const p1 = projection([arc.origin.lng, arc.origin.lat]);
         const p2 = projection([arc.destination.lng, arc.destination.lat]);
         if (!p1 || !p2) return;
 
-        const progress = Math.min((now - arc.startTime) / 2400, 1.0);
+        const progress = isLiveStreaming ? Math.min((now - arc.startTime) / 2400, 1.0) : 0.5;
         const midX = (p1[0] + p2[0]) / 2;
         const midY = Math.min(p1[1], p2[1]) - Math.abs(p1[0] - p2[0]) * 0.28;
 
@@ -399,29 +456,14 @@ export default function QNThreatMap() {
 
     render();
     return () => cancelAnimationFrame(animFrameId);
-  }, [projectionMode]);
+  }, [projectionMode, isLiveStreaming]);
 
-  // Handle Scrubber Change
-  const handleScrubberChange = (val: number) => {
-    setScrubberValue(val);
-    if (val === 100) {
-      setIsLiveStreaming(true);
-    } else {
-      setIsLiveStreaming(false);
-    }
-  };
-
-  const resumeLiveStream = () => {
-    setScrubberValue(100);
-    setIsLiveStreaming(true);
-  };
-
-  // Determine displayed list
+  // Determine active feed list
+  const auditSecondsAgo = 60 - scrubberValue;
+  const targetTimeMs = Date.now() - (auditSecondsAgo * 1000);
   const activeFeedList = isLiveStreaming
     ? telemetryFeed
-    : historicalAuditBuffer.slice(
-        historicalAuditBuffer.length - Math.max(1, Math.floor((scrubberValue / 100) * historicalAuditBuffer.length))
-      );
+    : historicalAuditBuffer.filter((evt) => evt.timestampMs <= targetTimeMs);
 
   const filteredTelemetry = activeFeedList.filter((item) => {
     if (filterMode === 'threats' && item.status !== 'FLAGGED THREAT') return false;
@@ -516,7 +558,7 @@ export default function QNThreatMap() {
           {/* Projection Mode Header Bar */}
           <div className="bg-slate-900/90 border border-slate-800/80 rounded-xl p-3 backdrop-blur-md flex items-center justify-between gap-3">
             <div className="text-xs font-mono font-bold text-slate-300 flex items-center space-x-2">
-              <span>🗺️ MAP VIEWPORT ENGINE:</span>
+              <span>MAP VIEWPORT ENGINE:</span>
               <span className="text-emerald-400">{projectionMode === '2d' ? '2D EQUIRECTANGULAR GIS' : '3D ROTATING GLOBE'}</span>
             </div>
 
@@ -568,13 +610,13 @@ export default function QNThreatMap() {
             </div>
           </div>
 
-          {/* Functional Time Scrubber Bar */}
+          {/* Functional Time Scrubber Bar (IN SECONDS) */}
           <div className="bg-slate-900/90 border border-slate-800/80 rounded-xl p-4 backdrop-blur-md space-y-2">
             <div className="flex items-center justify-between text-xs font-mono">
               <div className="flex items-center space-x-2">
-                <span className="font-bold text-white">⏱️ Incident Time Scrubber:</span>
+                <span className="font-bold text-white">⏱️ Incident Time Scrubber (Seconds):</span>
                 <span className={isLiveStreaming ? 'text-emerald-400 font-semibold' : 'text-yellow-400 font-bold animate-pulse'}>
-                  {isLiveStreaming ? '🔴 LIVE TELEMETRY STREAM' : `⏸️ AUDIT SCRUBBING (-${Math.round(((100 - scrubberValue) / 100) * 60)}m)`}
+                  {isLiveStreaming ? '🔴 LIVE TELEMETRY STREAM' : `⏸️ AUDIT SCRUBBING (-${auditSecondsAgo} SECONDS AGO)`}
                 </span>
               </div>
               <div className="flex items-center space-x-2">
@@ -590,21 +632,21 @@ export default function QNThreatMap() {
             <input
               type="range"
               min="0"
-              max="100"
+              max="60"
               value={scrubberValue}
               onChange={(e) => handleScrubberChange(parseInt(e.target.value))}
               className="w-full accent-emerald-500 bg-slate-800 rounded-lg cursor-pointer h-2"
             />
             <div className="flex justify-between text-[10px] font-mono text-slate-500">
-              <span>-60 Minutes (Audit History)</span>
-              <span>-30 Minutes</span>
-              <span>NOW (Live Stream)</span>
+              <span>-60 Seconds (Audit History)</span>
+              <span>-30 Seconds</span>
+              <span>NOW (Live Stream 0s)</span>
             </div>
           </div>
 
         </div>
 
-        {/* Right Column: Live Telemetry Feed with Moved Filters */}
+        {/* Right Column: Live Telemetry Feed */}
         <div className="bg-slate-900/90 border border-slate-800/80 rounded-xl p-5 shadow-sm space-y-4 flex flex-col h-[670px] backdrop-blur-md">
           
           <div className="flex items-center justify-between border-b border-slate-800 pb-3">
@@ -620,7 +662,7 @@ export default function QNThreatMap() {
             </span>
           </div>
 
-          {/* TELEMETRY FILTERS MOVED HERE */}
+          {/* TELEMETRY FILTERS */}
           <div className="flex items-center space-x-1.5 text-xs font-mono bg-slate-950 p-1.5 rounded-lg border border-slate-800">
             <button
               onClick={() => setFilterMode('all')}
