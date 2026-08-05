@@ -53,12 +53,53 @@
       display: block;
       cursor: crosshair;
     }
+
+    /* Telemetry Card Entrance Animations */
+    .telemetry-card {
+      animation: cardSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      will-change: transform, opacity;
+    }
+
+    @keyframes cardSlideIn {
+      from { opacity: 0; transform: translateY(-8px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Custom Animated Scrubber Range Styling */
+    input[type=range].animated-scrubber {
+      -webkit-appearance: none;
+      width: 100%;
+      background: transparent;
+    }
+    input[type=range].animated-scrubber::-webkit-slider-runnable-track {
+      width: 100%;
+      height: 8px;
+      cursor: pointer;
+      background: linear-gradient(90deg, #10b981 0%, #3b82f6 50%, #ef4444 100%);
+      border-radius: 4px;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+    }
+    input[type=range].animated-scrubber::-webkit-slider-thumb {
+      height: 18px;
+      width: 18px;
+      border-radius: 50%;
+      background: #ffffff;
+      cursor: pointer;
+      -webkit-appearance: none;
+      margin-top: -5px;
+      box-shadow: 0 0 12px #10b981, 0 0 4px rgba(0,0,0,0.8);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    input[type=range].animated-scrubber::-webkit-slider-thumb:hover {
+      transform: scale(1.3);
+      box-shadow: 0 0 18px #10b981, 0 0 6px rgba(0,0,0,0.9);
+    }
   </style>
 </head>
 <body class="bg-nimbusBase text-slate-300 antialiased">
 
   <!-- ============================================================
-       EXACT SITE NAVBAR (MATCHING INDEX.HTML / SAFETY.HTML)
+       EXACT SITE NAVBAR
   ============================================================ -->
   <nav class="fixed w-full z-50 bg-[#0c0f17]/95 backdrop-blur-md border-b border-[#1e2d3d]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -107,7 +148,7 @@
           <span class="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider">Dual 2D Flat / 3D Globe Projection Engine Active</span>
         </div>
         <h1 class="text-3xl font-extrabold text-white tracking-tight">Real-Time Threat Telemetry Map</h1>
-        <p class="text-slate-400 text-sm mt-1">Switch seamlessly between 2D Mercator flat map and 3D Rotating Globe with real-time map & telemetry scrubbing.</p>
+        <p class="text-slate-400 text-sm mt-1">Switch seamlessly between 2D Mercator flat map and 3D Rotating Globe with smooth animated time scrubbing.</p>
       </div>
 
       <!-- Quick Control Bar -->
@@ -191,7 +232,7 @@
             <canvas id="gis-canvas"></canvas>
 
             <!-- Hover Tooltip -->
-            <div id="node-tooltip" class="absolute z-50 bg-slate-900/95 border border-emerald-500/50 rounded-xl p-3 shadow-2xl backdrop-blur-md text-xs font-mono space-y-1 hidden pointer-events-none max-w-xs">
+            <div id="node-tooltip" class="absolute z-50 bg-slate-900/95 border border-emerald-500/50 rounded-xl p-3 shadow-2xl backdrop-blur-md text-xs font-mono space-y-1 hidden pointer-events-none max-w-xs transition-all duration-150">
               <div class="flex items-center justify-between border-b border-slate-800 pb-1 font-bold text-emerald-400">
                 <span id="tooltip-title">Houston, US</span>
                 <span class="text-[10px] bg-emerald-950 text-emerald-300 px-1.5 py-0.5 rounded border border-emerald-800">HQ NODE</span>
@@ -203,19 +244,19 @@
           </div>
         </div>
 
-        <!-- Functional Incident Time Scrubber Bar (IN SECONDS) -->
+        <!-- Functional Incident Time Scrubber Bar (WITH SMOOTH ANIMATION ENGINE) -->
         <div class="bg-slate-900/90 border border-slate-800/80 rounded-xl p-4 backdrop-blur-md space-y-2">
           <div class="flex items-center justify-between text-xs font-mono">
             <div class="flex items-center space-x-2">
               <span class="font-bold text-white">⏱️ Incident Time Scrubber (Seconds):</span>
-              <span id="scrubber-status" class="text-emerald-400 font-semibold">🔴 LIVE TELEMETRY STREAM</span>
+              <span id="scrubber-status" class="text-emerald-400 font-semibold transition-colors duration-300">🔴 LIVE TELEMETRY STREAM</span>
             </div>
             <div class="flex items-center space-x-2">
-              <button id="btn-scrub-live" class="px-2.5 py-1 rounded text-[11px] font-bold bg-emerald-600 text-white cursor-pointer hover:bg-emerald-500 transition-colors">▶ RESUME LIVE</button>
+              <button id="btn-scrub-live" class="px-2.5 py-1 rounded text-[11px] font-bold bg-emerald-600 text-white cursor-pointer hover:bg-emerald-500 transition-all shadow-md active:scale-95">▶ RESUME LIVE</button>
             </div>
           </div>
 
-          <input id="time-slider" type="range" min="0" max="60" value="60" class="w-full accent-emerald-500 bg-slate-800 rounded-lg cursor-pointer h-2">
+          <input id="time-slider" type="range" min="0" max="60" value="60" class="animated-scrubber">
           <div class="flex justify-between text-[10px] font-mono text-slate-500">
             <span>-60 Seconds (Audit History)</span>
             <span>-30 Seconds</span>
@@ -247,11 +288,11 @@
 
         <!-- Tag Search Input -->
         <div>
-          <input id="tag-search" type="text" placeholder="🔍 Search Tag ID (e.g. NTAG-424-8000)" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs font-mono text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500">
+          <input id="tag-search" type="text" placeholder="🔍 Search Tag ID (e.g. NTAG-424-8000)" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs font-mono text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-all">
         </div>
 
         <div id="telemetry-feed" class="flex-1 overflow-y-auto space-y-3 pr-1">
-          <!-- Dynamically populated events -->
+          <!-- Dynamically populated events with smooth slide-in -->
         </div>
       </div>
 
@@ -263,7 +304,7 @@
     <p>© 2026 Quantum Nimbus Tech. U.S. Patent Pending — Dynamic Vaporization Parameter & NFC Cryptographic Authentication.</p>
   </footer>
 
-  <!-- D3 2D/3D Engine Script -->
+  <!-- D3 2D/3D Engine Script with Smooth Scrubber Animation Pipeline -->
   <script>
     const CITIES = [
       { city: 'Houston', country: 'US', lat: 29.7604, lng: -95.3698, activeChips: 48290, avgLatencyMs: 12 },
@@ -286,6 +327,10 @@
     let rotationAngle = 0;
     let auditSecondsAgo = 0;
 
+    // Smooth Scrubber Interpolation States
+    let targetScrubberVal = 60;
+    let currentScrubberVal = 60;
+
     const canvas = document.getElementById('gis-canvas');
     const ctx = canvas.getContext('2d');
     const tooltip = document.getElementById('node-tooltip');
@@ -293,7 +338,7 @@
     const activeArcs = [];
     const activePins = [];
     const telemetryFeedStore = [];
-    const historicalAuditBuffer = []; // Event history with timestampMs
+    const historicalAuditBuffer = [];
 
     let totalScans = 1482978;
     let anomaliesBlocked = 4144;
@@ -332,11 +377,11 @@
 
       const now = Date.now();
 
-      activePins.push({ id: `pin-${now}-${Math.random()}`, city: origin.city, lat: origin.lat, lng: origin.lng, isThreat, spawnTime: now });
+      activePins.push({ id: `pin-${now}-${Math.random()}`, city: origin.city, lat: origin.lat, lng: origin.lng, isThreat, spawnTime: now, alpha: 1.0 });
 
       if (destination) {
         activeArcs.push({ id: `arc-${now}-${Math.random()}`, origin, destination, startTime: now, isThreat });
-        activePins.push({ id: `pin-dest-${now}-${Math.random()}`, city: destination.city, lat: destination.lat, lng: destination.lng, isThreat, spawnTime: now });
+        activePins.push({ id: `pin-dest-${now}-${Math.random()}`, city: destination.city, lat: destination.lat, lng: destination.lng, isThreat, spawnTime: now, alpha: 1.0 });
       }
 
       const evt = {
@@ -367,11 +412,12 @@
         return true;
       });
 
-      filtered.forEach(evt => {
+      filtered.forEach((evt, idx) => {
         const card = document.createElement('div');
-        card.className = `p-3 rounded-lg border text-xs space-y-1.5 transition-all ${
+        card.className = `telemetry-card p-3 rounded-lg border text-xs space-y-1.5 transition-all ${
           !evt.isThreat ? 'bg-slate-950/80 border-slate-800 text-slate-300' : 'bg-red-950/40 border-red-500/50 text-red-200'
         }`;
+        card.style.animationDelay = `${idx * 0.03}s`;
 
         card.innerHTML = `
           <div class="flex items-center justify-between font-mono">
@@ -391,69 +437,76 @@
       });
     }
 
-    // Time Scrubber (In Seconds) Updates Map + Telemetry Feed Dynamically
+    // Smooth Interactive Scrubber Listener
     const timeSlider = document.getElementById('time-slider');
     const scrubberStatus = document.getElementById('scrubber-status');
     const streamBadge = document.getElementById('stream-status-badge');
 
     timeSlider.addEventListener('input', (e) => {
-      const val = parseInt(e.target.value); // 0 to 60
-      if (val === 60) {
+      targetScrubberVal = parseInt(e.target.value);
+      
+      if (targetScrubberVal === 60) {
         resumeLiveStream();
       } else {
         isLiveStreaming = false;
-        auditSecondsAgo = 60 - val;
+        auditSecondsAgo = 60 - targetScrubberVal;
         scrubberStatus.textContent = `⏸️ AUDIT SCRUBBING (-${auditSecondsAgo} SECONDS AGO)`;
         scrubberStatus.className = 'text-yellow-400 font-bold animate-pulse';
         
         streamBadge.className = 'px-2 py-0.5 text-xs font-mono font-bold rounded bg-yellow-950 text-yellow-400 border border-yellow-800 flex items-center gap-1';
         streamBadge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-yellow-400"></span> AUDIT PAUSED';
 
-        // Calculate Target Timestamp MS
-        const targetTimeMs = Date.now() - (auditSecondsAgo * 1000);
-
-        // Filter Telemetry Log Feed for Historical Snapshot
-        const historicalSlice = historicalAuditBuffer.filter(evt => evt.timestampMs <= targetTimeMs);
-        renderTelemetryFeed(historicalSlice);
-
-        // Re-populate Map Pins and Arcs for Target Timestamp MS
-        activePins.length = 0;
-        activeArcs.length = 0;
-
-        historicalSlice.slice(0, 8).forEach(evt => {
-          activePins.push({
-            id: `audit-pin-${evt.id}`,
-            city: evt.origin.city,
-            lat: evt.origin.lat,
-            lng: evt.origin.lng,
-            isThreat: evt.isThreat,
-            spawnTime: Date.now()
-          });
-
-          if (evt.destination) {
-            activeArcs.push({
-              id: `audit-arc-${evt.id}`,
-              origin: evt.origin,
-              destination: evt.destination,
-              startTime: Date.now(),
-              isThreat: evt.isThreat
-            });
-            activePins.push({
-              id: `audit-pin-dest-${evt.id}`,
-              city: evt.destination.city,
-              lat: evt.destination.lat,
-              lng: evt.destination.lng,
-              isThreat: evt.isThreat,
-              spawnTime: Date.now()
-            });
-          }
-        });
+        updateHistoricalSnapshot(targetScrubberVal);
       }
     });
 
+    function updateHistoricalSnapshot(val) {
+      const targetTimeMs = Date.now() - ((60 - val) * 1000);
+      const historicalSlice = historicalAuditBuffer.filter(evt => evt.timestampMs <= targetTimeMs);
+
+      renderTelemetryFeed(historicalSlice);
+
+      // Smooth Map Arc & Pin Transition Pipeline
+      activePins.length = 0;
+      activeArcs.length = 0;
+
+      const now = Date.now();
+      historicalSlice.slice(0, 8).forEach(evt => {
+        activePins.push({
+          id: `audit-pin-${evt.id}`,
+          city: evt.origin.city,
+          lat: evt.origin.lat,
+          lng: evt.origin.lng,
+          isThreat: evt.isThreat,
+          spawnTime: now,
+          alpha: 1.0
+        });
+
+        if (evt.destination) {
+          activeArcs.push({
+            id: `audit-arc-${evt.id}`,
+            origin: evt.origin,
+            destination: evt.destination,
+            startTime: now,
+            isThreat: evt.isThreat
+          });
+          activePins.push({
+            id: `audit-pin-dest-${evt.id}`,
+            city: evt.destination.city,
+            lat: evt.destination.lat,
+            lng: evt.destination.lng,
+            isThreat: evt.isThreat,
+            spawnTime: now,
+            alpha: 1.0
+          });
+        }
+      });
+    }
+
     function resumeLiveStream() {
       isLiveStreaming = true;
-      auditSecondsAgo = 0;
+      targetScrubberVal = 60;
+      currentScrubberVal = 60;
       timeSlider.value = 60;
       scrubberStatus.textContent = '🔴 LIVE TELEMETRY STREAM';
       scrubberStatus.className = 'text-emerald-400 font-semibold';
@@ -500,10 +553,13 @@
 
     canvas.addEventListener('mouseleave', () => tooltip.classList.add('hidden'));
 
-    // 60 FPS Canvas Render Loop
+    // 60 FPS Canvas Render Loop with Smooth Spring Scrubber Physics
     function renderLoop() {
       const width = canvas.width = canvas.parentElement.clientWidth || 800;
       const height = canvas.height = canvas.parentElement.clientHeight || 520;
+
+      // Smooth Lerp Scrubber Spring Motion
+      currentScrubberVal += (targetScrubberVal - currentScrubberVal) * 0.15;
 
       ctx.fillStyle = '#030712';
       ctx.fillRect(0, 0, width, height);
@@ -539,7 +595,7 @@
 
       const now = Date.now();
 
-      // Render Pins
+      // Render Pins with Smooth Alpha Interpolation
       for (let i = activePins.length - 1; i >= 0; i--) {
         const pin = activePins[i];
         const age = now - pin.spawnTime;
@@ -563,10 +619,10 @@
         ctx.fillText(pin.city, x + 8, y + 3);
       }
 
-      // Render Arcs
+      // Render Arcs with Smooth Scrubber Progress Interpolation
       for (let i = activeArcs.length - 1; i >= 0; i--) {
         const arc = activeArcs[i];
-        const progress = isLiveStreaming ? Math.min((now - arc.startTime) / 2400, 1.0) : 0.5;
+        const progress = isLiveStreaming ? Math.min((now - arc.startTime) / 2400, 1.0) : (currentScrubberVal / 60);
         if (isLiveStreaming && progress >= 1.0) { activeArcs.splice(i, 1); continue; }
 
         const p1 = projection([arc.origin.lng, arc.origin.lat]);
@@ -583,7 +639,7 @@
         ctx.setLineDash(arc.isThreat ? [6, 4] : []);
         ctx.stroke(); ctx.setLineDash([]);
 
-        const t = progress;
+        const t = Math.max(0.01, Math.min(progress, 0.99));
         const currX = (1 - t) * (1 - t) * p1[0] + 2 * (1 - t) * t * midX + t * t * p2[0];
         const currY = (1 - t) * (1 - t) * p1[1] + 2 * (1 - t) * t * midY + t * t * p2[1];
 
