@@ -12,28 +12,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        nimbusBase:   '#0c0f17',
-                        nimbusSurface:'#111827',
-                        nimbusBorder: '#1e2d3d',
-                        nimbusText:   '#8b9cb5',
-                        accentBlue:   '#3b82f6',
-                        accentRed:    '#ef4444',
-                        accentGreen:  '#10b981',
-                    },
-                    fontFamily: {
-                        sans:    ['Inter', 'sans-serif'],
-                        heading: ['Outfit', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
+    <!-- Tailwind CSS with SRI Integrity -->
+    <script src="https://cdn.tailwindcss.com" integrity="sha384-2wRXodd07b2xdFwcJyYJc/pBXde8kFBjggsBOjd59dYb80QHJ4lVy/37HCnxOOSH" crossorigin="anonymous"></script>
+    <script src="site-config.js"></script>
     <link rel="stylesheet" href="index.css">
     <style>
         body {
@@ -316,10 +297,6 @@
         </div>
     </footer>
 
-    <script>
-        const btn = document.getElementById('mobile-menu-btn');
-        const menu = document.getElementById('mobile-menu');
-        if (btn && menu) btn.addEventListener('click', () => menu.classList.toggle('hidden'));
-    </script>
+    <script src="site-config.js"></script>
 </body>
 </html>
