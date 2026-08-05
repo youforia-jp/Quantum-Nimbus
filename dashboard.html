@@ -3,27 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quantum Nimbus | Threat Telemetry Map & Vector Basemap</title>
-  <meta name="description" content="Real-time vector GIS basemap, impossible velocity evaluation, and live quadratic Bezier arc telemetry canvas.">
+  <title>Quantum Nimbus | Threat Telemetry Map (V2 High-Precision TopoJSON)</title>
+  <meta name="description" content="Authentic world-atlas TopoJSON GIS basemap, D3 Equirectangular Projection, and live telemetry stream.">
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            emerald: {
-              500: '#10b981',
-              600: '#059669',
-              700: '#047857',
-            }
-          }
-        }
-      }
-    }
-  </script>
+
+  <!-- D3.js and TopoJSON Client CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -70,10 +58,10 @@
       <div>
         <div class="flex items-center space-x-2 mb-2">
           <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span class="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider">QN Swarm Orchestrated Vector Engine Active</span>
+          <span class="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider">V2 High-Precision TopoJSON GIS Engine Active</span>
         </div>
         <h1 class="text-3xl font-extrabold text-white tracking-tight">Real-Time Vector Threat Map</h1>
-        <p class="text-slate-400 text-sm mt-1">Dark-mode vector basemap, impossible velocity detection, and live quadratic Bezier arc canvas.</p>
+        <p class="text-slate-400 text-sm mt-1">Authentic World-Atlas TopoJSON vectors, D3 Equirectangular Projection, and live telemetry stream.</p>
       </div>
 
       <!-- Quick Control Bar -->
@@ -86,7 +74,7 @@
 
     <!-- Metric KPI Cards Grid -->
     <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-5 shadow-sm">
+      <div class="bg-slate-900/90 border border-slate-800/80 rounded-xl p-5 shadow-sm backdrop-blur-md">
         <div class="flex items-center justify-between">
           <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Scans (24h)</span>
           <span class="p-1.5 rounded-lg bg-emerald-950 text-emerald-400 text-xs">📊</span>
@@ -97,7 +85,7 @@
         </div>
       </div>
 
-      <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-5 shadow-sm">
+      <div class="bg-slate-900/90 border border-slate-800/80 rounded-xl p-5 shadow-sm backdrop-blur-md">
         <div class="flex items-center justify-between">
           <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Active NFC DNA Chips</span>
           <span class="p-1.5 rounded-lg bg-blue-950 text-blue-400 text-xs">🔐</span>
@@ -108,7 +96,7 @@
         </div>
       </div>
 
-      <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-5 shadow-sm">
+      <div class="bg-slate-900/90 border border-slate-800/80 rounded-xl p-5 shadow-sm backdrop-blur-md">
         <div class="flex items-center justify-between">
           <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Anomalies Blocked</span>
           <span class="p-1.5 rounded-lg bg-red-950 text-red-400 text-xs">🚨</span>
@@ -119,7 +107,7 @@
         </div>
       </div>
 
-      <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-5 shadow-sm">
+      <div class="bg-slate-900/90 border border-slate-800/80 rounded-xl p-5 shadow-sm backdrop-blur-md">
         <div class="flex items-center justify-between">
           <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Network Protection</span>
           <span class="p-1.5 rounded-lg bg-purple-950 text-purple-400 text-xs">🛡️</span>
@@ -136,14 +124,14 @@
       
       <!-- Left Vector GIS Basemap Canvas -->
       <section class="lg:col-span-2 space-y-4">
-        <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4 shadow-sm relative">
+        <div class="bg-slate-900/90 border border-slate-800/80 rounded-xl p-4 shadow-sm relative backdrop-blur-md">
           <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-3">
             <h2 class="text-base font-bold text-white flex items-center space-x-2">
-              <span>🗺️ Vector GIS Basemap & Live Arc Layer</span>
+              <span>🗺️ World-Atlas TopoJSON GIS Map</span>
             </h2>
             <div class="font-mono text-xs text-emerald-400 flex items-center space-x-2">
               <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span>60 FPS Render Active</span>
+              <span>D3 Projection Active</span>
             </div>
           </div>
 
@@ -154,14 +142,14 @@
       </section>
 
       <!-- Right Telemetry Sidebar Stream -->
-      <section class="bg-slate-900/80 border border-slate-800 rounded-xl p-5 shadow-sm space-y-4 flex flex-col h-[590px]">
+      <section class="bg-slate-900/90 border border-slate-800/80 rounded-xl p-5 shadow-sm space-y-4 flex flex-col h-[590px] backdrop-blur-md">
         <div class="flex items-center justify-between border-b border-slate-800 pb-3">
           <div>
             <h2 class="text-base font-bold text-white">Live Telemetry Stream</h2>
-            <p class="text-xs text-slate-400 font-mono">JSON Schema Scan Events</p>
+            <p class="text-xs text-slate-400 font-mono">10 Most Recent Events</p>
           </div>
           <span class="px-2 py-0.5 text-xs font-mono font-bold rounded bg-emerald-950 text-emerald-400 border border-emerald-800 animate-pulse">
-            LIVE SSE
+            STREAM ACTIVE
           </span>
         </div>
 
@@ -178,7 +166,7 @@
     <p>© 2026 Quantum Nimbus Tech. U.S. Patent Pending — Dynamic Vaporization Parameter & NFC Cryptographic Authentication.</p>
   </footer>
 
-  <!-- Vector Engine Script -->
+  <!-- D3 & TopoJSON GIS Script Engine -->
   <script>
     const CITIES = [
       { city: 'Houston', country: 'US', lat: 29.7604, lng: -95.3698 },
@@ -193,12 +181,17 @@
       { city: 'Sydney', country: 'Australia', lat: -33.8688, lng: 151.2093 }
     ];
 
-    function latLngToCanvas(lat, lng, width, height) {
-      return {
-        x: ((lng + 180) / 360) * width,
-        y: ((90 - lat) / 180) * height
-      };
-    }
+    let topoData = null;
+
+    // Fetch Official World Atlas TopoJSON
+    fetch('/assets/land-110m.json')
+      .then(res => res.json())
+      .then(data => { topoData = data; })
+      .catch(() => {
+        fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/land-110m.json')
+          .then(res => res.json())
+          .then(data => { topoData = data; });
+      });
 
     function haversineDistanceKm(lat1, lon1, lat2, lon2) {
       const R = 6371;
@@ -209,82 +202,6 @@
                 Math.sin(dLon / 2) * Math.sin(dLon / 2);
       const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
       return Math.round(R * c);
-    }
-
-    function drawVectorBasemap(ctx, width, height) {
-      ctx.fillStyle = '#030712';
-      ctx.fillRect(0, 0, width, height);
-
-      ctx.strokeStyle = 'rgba(30, 41, 59, 0.4)';
-      ctx.lineWidth = 0.75;
-      for (let x = 0; x < width; x += 40) {
-        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, height); ctx.stroke();
-      }
-      for (let y = 0; y < height; y += 40) {
-        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke();
-      }
-
-      ctx.fillStyle = '#0d1117';
-      ctx.strokeStyle = '#1e293b';
-      ctx.lineWidth = 1.2;
-
-      // Continents
-      const naPath = [{ lat: 70, lng: -140 }, { lat: 60, lng: -130 }, { lat: 50, lng: -125 }, { lat: 30, lng: -115 }, { lat: 15, lng: -90 }, { lat: 25, lng: -80 }, { lat: 45, lng: -65 }, { lat: 60, lng: -70 }, { lat: 75, lng: -100 }];
-      ctx.beginPath();
-      naPath.forEach((pt, idx) => {
-        const { x, y } = latLngToCanvas(pt.lat, pt.lng, width, height);
-        if (idx === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-      });
-      ctx.closePath(); ctx.fill(); ctx.stroke();
-
-      const usTopLeft = latLngToCanvas(49, -125, width, height);
-      const usBottomRight = latLngToCanvas(24, -66, width, height);
-      ctx.fillStyle = 'rgba(16, 185, 129, 0.04)';
-      ctx.strokeStyle = 'rgba(16, 185, 129, 0.25)';
-      ctx.lineWidth = 1.5; ctx.setLineDash([4, 4]);
-      ctx.fillRect(usTopLeft.x, usTopLeft.y, usBottomRight.x - usTopLeft.x, usBottomRight.y - usTopLeft.y);
-      ctx.strokeRect(usTopLeft.x, usTopLeft.y, usBottomRight.x - usTopLeft.x, usBottomRight.y - usTopLeft.y);
-      ctx.setLineDash([]);
-
-      const euPath = [{ lat: 70, lng: -10 }, { lat: 70, lng: 30 }, { lat: 40, lng: 40 }, { lat: 36, lng: -5 }, { lat: 45, lng: -10 }];
-      ctx.beginPath();
-      euPath.forEach((pt, idx) => {
-        const { x, y } = latLngToCanvas(pt.lat, pt.lng, width, height);
-        if (idx === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-      });
-      ctx.closePath(); ctx.fill(); ctx.stroke();
-
-      const asiaPath = [{ lat: 70, lng: 30 }, { lat: 70, lng: 140 }, { lat: 35, lng: 140 }, { lat: 10, lng: 100 }, { lat: 25, lng: 60 }, { lat: 40, lng: 40 }];
-      ctx.beginPath();
-      asiaPath.forEach((pt, idx) => {
-        const { x, y } = latLngToCanvas(pt.lat, pt.lng, width, height);
-        if (idx === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-      });
-      ctx.closePath(); ctx.fill(); ctx.stroke();
-
-      const saPath = [{ lat: 12, lng: -75 }, { lat: -5, lng: -35 }, { lat: -35, lng: -55 }, { lat: -55, lng: -70 }, { lat: -15, lng: -80 }];
-      ctx.beginPath();
-      saPath.forEach((pt, idx) => {
-        const { x, y } = latLngToCanvas(pt.lat, pt.lng, width, height);
-        if (idx === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-      });
-      ctx.closePath(); ctx.fill(); ctx.stroke();
-
-      const afPath = [{ lat: 37, lng: -10 }, { lat: 30, lng: 32 }, { lat: 10, lng: 50 }, { lat: -35, lng: 20 }, { lat: 5, lng: 5 }];
-      ctx.beginPath();
-      afPath.forEach((pt, idx) => {
-        const { x, y } = latLngToCanvas(pt.lat, pt.lng, width, height);
-        if (idx === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-      });
-      ctx.closePath(); ctx.fill(); ctx.stroke();
-
-      const auPath = [{ lat: -12, lng: 130 }, { lat: -15, lng: 150 }, { lat: -38, lng: 150 }, { lat: -35, lng: 115 }];
-      ctx.beginPath();
-      auPath.forEach((pt, idx) => {
-        const { x, y } = latLngToCanvas(pt.lat, pt.lng, width, height);
-        if (idx === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-      });
-      ctx.closePath(); ctx.fill(); ctx.stroke();
     }
 
     const canvas = document.getElementById('vector-canvas');
@@ -300,7 +217,9 @@
       totalScans++;
       document.getElementById('kpi-total-scans').textContent = totalScans.toLocaleString();
 
-      const isThreat = destination && (haversineDistanceKm(origin.lat, origin.lng, destination.lat, destination.lng) / Math.max(timeDeltaSeconds, 0.1)) * 3600 > 1000;
+      const distance = destination ? haversineDistanceKm(origin.lat, origin.lng, destination.lat, destination.lng) : 0;
+      const vel = destination ? Math.round((distance / Math.max(timeDeltaSeconds, 0.1)) * 3600) : 0;
+      const isThreat = destination && vel > 1000;
 
       if (isThreat) {
         anomaliesBlocked++;
@@ -320,15 +239,12 @@
         });
       }
 
-      // Add Card to Feed
+      // Add Card to Feed (Max 10)
       const feed = document.getElementById('telemetry-feed');
       const card = document.createElement('div');
       card.className = `p-3 rounded-lg border text-xs space-y-1.5 transition-all ${
-        !isThreat ? 'bg-slate-950 border-slate-800 text-slate-300' : 'bg-red-950/40 border-red-500/50 text-red-200'
+        !isThreat ? 'bg-slate-950/80 border-slate-800 text-slate-300' : 'bg-red-950/40 border-red-500/50 text-red-200'
       }`;
-
-      const distance = destination ? haversineDistanceKm(origin.lat, origin.lng, destination.lat, destination.lng) : 0;
-      const vel = destination ? Math.round((distance / Math.max(timeDeltaSeconds, 0.1)) * 3600) : 0;
 
       card.innerHTML = `
         <div class="flex items-center justify-between font-mono">
@@ -346,31 +262,62 @@
       `;
 
       feed.insertBefore(card, feed.firstChild);
-      if (feed.children.length > 50) feed.removeChild(feed.lastChild);
+      if (feed.children.length > 10) feed.removeChild(feed.lastChild);
     }
 
     function renderLoop() {
       const width = canvas.width = canvas.parentElement.clientWidth || 800;
       const height = canvas.height = canvas.parentElement.clientHeight || 520;
 
-      drawVectorBasemap(ctx, width, height);
+      // 1. Dark Ocean Background (#030712)
+      ctx.fillStyle = '#030712';
+      ctx.fillRect(0, 0, width, height);
+
+      // Setup D3 Equirectangular Projection fitted to Viewport
+      const projection = d3.geoEquirectangular().scale(width / (2 * Math.PI)).translate([width / 2, height / 2 + 20]);
+      const pathGenerator = d3.geoPath().projection(projection).context(ctx);
+
+      // 2. Latitude/Longitude Graticule Lines (#0f2038)
+      ctx.strokeStyle = '#0f2038';
+      ctx.lineWidth = 0.5;
+      ctx.setLineDash([3, 3]);
+      const graticule = d3.geoGraticule10();
+      ctx.beginPath();
+      pathGenerator(graticule);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // 3. Authentic TopoJSON Landmass Rendering (#0d1726 fill, #1e3a5f border)
+      if (topoData) {
+        const geojson = topojson.feature(topoData, topoData.objects.land);
+        ctx.fillStyle = '#0d1726';
+        ctx.strokeStyle = '#1e3a5f';
+        ctx.lineWidth = 1.2;
+
+        ctx.beginPath();
+        pathGenerator(geojson);
+        ctx.fill();
+        ctx.stroke();
+      }
 
       const now = Date.now();
 
-      // Render Pins (TTL 5000ms)
+      // Render Pulsing Radar Ping Circles
       for (let i = activePins.length - 1; i >= 0; i--) {
         const pin = activePins[i];
         const age = now - pin.spawnTime;
         if (age > 5000) { activePins.splice(i, 1); continue; }
 
+        const coords = projection([pin.lng, pin.lat]);
+        if (!coords) continue;
+        const [x, y] = coords;
         const fade = 1 - age / 5000;
-        const { x, y } = latLngToCanvas(pin.lat, pin.lng, width, height);
 
-        ctx.beginPath(); ctx.arc(x, y, (age / 5000) * 24, 0, Math.PI * 2);
-        ctx.strokeStyle = pin.isThreat ? `rgba(239, 68, 68, ${fade * 0.8})` : `rgba(16, 185, 129, ${fade * 0.8})`;
+        ctx.beginPath(); ctx.arc(x, y, (age / 5000) * 28, 0, Math.PI * 2);
+        ctx.strokeStyle = pin.isThreat ? `rgba(239, 68, 68, ${fade * 0.85})` : `rgba(16, 185, 129, ${fade * 0.85})`;
         ctx.lineWidth = 1.5; ctx.stroke();
 
-        ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2);
+        ctx.beginPath(); ctx.arc(x, y, 4.5, 0, Math.PI * 2);
         ctx.fillStyle = pin.isThreat ? '#ef4444' : '#10b981'; ctx.fill();
         ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1; ctx.stroke();
 
@@ -385,22 +332,23 @@
         const progress = Math.min((now - arc.startTime) / 2400, 1.0);
         if (progress >= 1.0) { activeArcs.splice(i, 1); continue; }
 
-        const p1 = latLngToCanvas(arc.origin.lat, arc.origin.lng, width, height);
-        const p2 = latLngToCanvas(arc.destination.lat, arc.destination.lng, width, height);
+        const p1 = projection([arc.origin.lng, arc.origin.lat]);
+        const p2 = projection([arc.destination.lng, arc.destination.lat]);
+        if (!p1 || !p2) continue;
 
-        const midX = (p1.x + p2.x) / 2;
-        const midY = Math.min(p1.y, p2.y) - Math.abs(p1.x - p2.x) * 0.28;
+        const midX = (p1[0] + p2[0]) / 2;
+        const midY = Math.min(p1[1], p2[1]) - Math.abs(p1[0] - p2[0]) * 0.28;
 
-        ctx.beginPath(); ctx.moveTo(p1.x, p1.y);
-        ctx.quadraticCurveTo(midX, midY, p2.x, p2.y);
+        ctx.beginPath(); ctx.moveTo(p1[0], p1[1]);
+        ctx.quadraticCurveTo(midX, midY, p2[0], p2[1]);
         ctx.strokeStyle = arc.isThreat ? `rgba(239, 68, 68, ${0.9 * (1 - progress)})` : `rgba(16, 185, 129, ${0.85 * (1 - progress)})`;
         ctx.lineWidth = arc.isThreat ? 3.5 : 2;
         ctx.setLineDash(arc.isThreat ? [6, 4] : []);
         ctx.stroke(); ctx.setLineDash([]);
 
         const t = progress;
-        const currX = (1 - t) * (1 - t) * p1.x + 2 * (1 - t) * t * midX + t * t * p2.x;
-        const currY = (1 - t) * (1 - t) * p1.y + 2 * (1 - t) * t * midY + t * t * p2.y;
+        const currX = (1 - t) * (1 - t) * p1[0] + 2 * (1 - t) * t * midX + t * t * p2[0];
+        const currY = (1 - t) * (1 - t) * p1[1] + 2 * (1 - t) * t * midY + t * t * p2[1];
 
         ctx.beginPath(); ctx.arc(currX, currY, arc.isThreat ? 6 : 4, 0, Math.PI * 2);
         ctx.fillStyle = arc.isThreat ? '#ef4444' : '#10b981';
@@ -435,7 +383,7 @@
       }
     }, 12000);
 
-    // Initial Trigger
+    // Initial Demo Event
     setTimeout(() => {
       const tagId = 'NTAG-424-8000';
       processPayload(CITIES[0], null, 0, tagId);
