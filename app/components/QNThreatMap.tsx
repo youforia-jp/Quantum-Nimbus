@@ -455,6 +455,14 @@ export default function QNThreatMap() {
         </div>
       </header>
 
+      {/* Demo Disclaimer Banner */}
+      <div className="max-w-7xl mx-auto bg-amber-950/40 border border-amber-500/30 rounded-xl p-3.5 mb-6 flex items-start sm:items-center gap-3 text-amber-200 text-xs font-mono backdrop-blur-md">
+        <span className="text-amber-400 text-base leading-none">⚠️</span>
+        <div>
+          <strong className="text-amber-300 font-bold uppercase tracking-wider">Demo Simulation Notice:</strong> The frequency of simulated Replay Attacks (Yellow) and Inauthentic Cryptographic CMAC Signatures (Red) is artificially elevated for interactive demonstration and real-time visualization purposes.
+        </div>
+      </div>
+
       {/* KPI Metrics Cards */}
       <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <div className="bg-slate-900/90 border border-slate-800/80 rounded-xl p-5 shadow-sm backdrop-blur-md">
