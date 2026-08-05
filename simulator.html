@@ -419,8 +419,14 @@
                                                     <div id="ai-velocity-metric" class="text-xs font-bold text-slate-200">0 km/h</div>
                                                 </div>
                                                 <div class="bg-slate-950/80 border border-slate-800 rounded-lg p-1.5 space-y-0.5">
-                                                    <div class="text-[8px] text-slate-400 uppercase">Inference Time</div>
-                                                    <div id="ai-latency-metric" class="text-xs font-bold text-purple-400">0.8 ms</div>
+                                                    <div class="text-[8px] text-slate-400 uppercase flex justify-between items-center">
+                                                        <span>Inference</span>
+                                                        <span class="text-[7px] text-purple-400/80 font-mono font-bold uppercase">RTT</span>
+                                                    </div>
+                                                    <div class="flex items-baseline justify-between gap-1">
+                                                        <div id="ai-latency-metric" class="text-xs font-bold text-purple-400">0.8 ms</div>
+                                                        <div id="ai-total-rtt-metric" class="text-[9px] font-mono text-slate-400 font-medium">240ms</div>
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -1565,6 +1571,11 @@
                 latencyMetric.textContent = `${modelInferenceMs} ms`;
             }
 
+            const totalRttMetric = document.getElementById('ai-total-rtt-metric');
+            if (totalRttMetric) {
+                totalRttMetric.textContent = `${latency}ms RTT`;
+            }
+
             // Input Vector Box
             const featureVectorDisplay = document.getElementById('ai-feature-vector-display');
             if (featureVectorDisplay) {
@@ -1808,12 +1819,13 @@
 
                     updateAiTelemetryHud(data, netLatency, mode);
 
+                    const aiMs = (data && data.inference_time_ms !== undefined) ? data.inference_time_ms : (mode === 'dual-ip' ? 1.4 : 0.8);
                     if (mode === 'dual-ip' || data.status === 'FLAGGED' || data.velocity_flag === 'IMPOSSIBLE_TRANSIT' || (data.status === 'REVOKED' && data.threat_score < 1.0)) {
                         // 🟡 Scenario 1: Dual-IP / Telemetry Anomaly
                         if (window.synth && typeof window.synth.playWarningAlarm === 'function') window.synth.playWarningAlarm();
                         if (statusPill) {
                             statusPill.className = 'text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800';
-                            statusPill.textContent = `${httpStatus} FLAGGED • ${data.scan_velocity || 0} km/h • ${netLatency}ms RTT`;
+                            statusPill.textContent = `${httpStatus} FLAGGED • ${data.scan_velocity || 0} km/h • ${netLatency}ms RTT (${aiMs}ms AI)`;
                         }
                         renderDualIpAnomalyCard(tagId, tapDisplayCount);
 
@@ -1831,7 +1843,7 @@
                         if (window.synth && typeof window.synth.playSupplementSpark === 'function') window.synth.playSupplementSpark();
                         if (statusPill) {
                             statusPill.className = 'text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800';
-                            statusPill.textContent = `${httpStatus} OK • VERIFIED • ${netLatency}ms RTT`;
+                            statusPill.textContent = `${httpStatus} OK • VERIFIED • ${netLatency}ms RTT (${aiMs}ms AI)`;
                         }
                         renderAuthenticCard({ brand: 'Secret Nature', product: 'Delta 8 Organic Live Resin Cartridge', strain: 'Delta 8 Organic Live Resin', batch: 'SA-260115-75486', coa: 'https://cdn.shopify.com/s/files/1/0046/1042/4950/files/SA-260115-75486_Secret_Nature_Delta_D8.pdf?v=1769022355' }, tagId, tapDisplayCount);
                         if (typeof slotCartridge === 'function') slotCartridge('rosin');
