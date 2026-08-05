@@ -1,82 +1,114 @@
-# Quantum Nimbus - Smart Vaporizer & Wellness Ecosystem
+# Quantum Nimbus (QN) 🛡️⚡
+> **Hardware-Backed Zero-Trust Authentication & Real-Time Anomaly Detection Engine**
 
-**Quantum Nimbus** is a visionary hardware and software startup aiming to revolutionize the cannabis consumption experience. By combining premium hardware engineering, cryptographic security, and a gamified wellness companion, Quantum Nimbus promotes user safety, control, consistency, and cognitive resilience.
-
----
-
-## 🌌 Project Vision
-
-The current vape and cannabis market is plagued by a lack of safety, consistency, and transparency. Devices are exposed to heavy metal vaporization (lead, cadmium, arsenic) due to low-grade internal solder/coils and toxic chemical vectors in untested or counterfeit cartridge oils (such as Vitamin E acetate, pesticides, and formaldehydes). 
-
-**The Solution:** The **Nimbus Elevate** line of smart vaporizers equipped with the **NIMBUS IQ System**—an automated hardware-level cryptographic authorization loop that enforces safe vaporization profiles, tracks dosage wellness analytics, and prevents toxic combustion.
+[![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com/)
+[![ONNX Runtime](https://img.shields.io/badge/ONNX_Runtime-00599C?style=for-the-badge&logo=onnx&logoColor=white)](https://onnxruntime.ai/)
+[![NTAG 424 DNA](https://img.shields.io/badge/NTAG_424_DNA-FF6F00?style=for-the-badge&logo=nxp&logoColor=white)](https://www.nxp.com/)
 
 ---
 
-## 🛠 Product & Hardware Lines
+## 📌 Executive Overview
 
-### 1. The Frontier
-*   **Aesthetic:** Bead-blasted aluminum body with genuine walnut accents.
-*   **Mechanics:** Premium tactile lever mechanism for cartridge chamber access. Built for universal 510-thread cartridges.
-*   **Target Market:** High-end, design-centric consumers looking for premium materials and physical quality.
+Traditional product authentication methods—such as static QR codes, serial numbers, and basic NFC tags—are highly vulnerable to copying, cloning, replay attacks, and supply chain diversion. Brand counterfeiting costs global markets hundreds of billions annually, compromising consumer safety and brand integrity.
 
-### 2. The Astro Nimbus
-*   **Aesthetic:** Celestial-inspired color schemes, ergonomics, and dynamic radial lighting.
-*   **Mechanics:** The "Pro" version features a motorized rocket-door mechanism that conceals and protects the mouthpiece.
+**Quantum Nimbus (QN)** solves this crisis by combining **NTAG 424 DNA hardware-level AES-128 cryptography** with **cloud-native, sub-50ms machine learning anomaly detection**. Every physical tap generates a dynamic cryptographic token that can never be reused. The QN engine instantly evaluates spatial-temporal telemetry (tap frequency, geographical displacement speed, and IP subnet shifts) using an ONNX-compiled Isolation Forest model. 
 
-### 3. My NIMBY Line
-*   **Aesthetic:** Playful, soft, cutesy "storm cloud" mascot theme.
-*   **Target Market:** The "kidult" wellness demographic, leveraging gamified wellness loops to promote balanced consumption.
-
-### 4. The Frontier Rx
-*   **Compliance:** Built for the Texas medical cannabis market under TCUP (Texas Compassionate Use Program).
-*   **Materials:** Biocompatible, medical-grade components, and a secure medical registry authentication loop.
-
-### 5. Nimbus Elevate Daily (Supplement)
-*   **Purpose:** A complementary, dropshipped nootropic supplement designed to alleviate next-day cognitive "brain fog" and fatigue.
-*   **Formulation:** Clean wellness ingredients (L-Theanine, Caffeine, B-Vitamins) sold independently via a Shopify store.
+Crucially, Quantum Nimbus achieves enterprise-grade zero-trust authentication with a **privacy-first design**, requiring **zero Personally Identifiable Information (PII)**, zero user sign-ups, and zero invasive location tracking.
 
 ---
 
-## ⚡ Core Software & Firmware Ecosystem
+## 🛡️ System Decision Flow
 
-### 📱 WebBLE Companion PWA (`app.js`, `index.html`, `index.css`)
-A secure Progressive Web App connecting to the device over Bluetooth Low Energy (Web Bluetooth API v3).
-*   **NFC Cryptographic Verification:** Automatically parses compact JSON records (`b` = brand, `y` = formula type, `i` = batch, `s` = signature) scanned from cartridge NTAGs. Validates authenticity using HMAC-SHA-256 against a hardware-encrypted master secret.
-*   **Restricted Safety Mode:** If validation fails (detecting counterfeit/unverified cartridges), the PWA blocks standard heating and enforces a strict temperature clamp of **150°C maximum**. This temperature limits heavy metal vaporization and limits toxic chemical breakdown while allowing minimal operation.
-*   **Wellness Analytics Tab:**
-    *   *Daily Puff Progress:* A visual circular SVG ring displaying today's puff count against a customizable safety limit (default: 15).
-    *   *Toxins Blocked Counter:* Tracks milligrams of heavy metals/toxins avoided (`+1.2mg` for authentic optimal puffs, `+0.4mg` for clamped counterfeit puffs).
-    *   *Nimbus Elevate Daily Supplement Log:* Integrates nootropic logging to clear mascot "brain fog" and extend the safety budget by +5 puffs.
-*   **Interactive NIMBY Mascot:** A custom SVG storm cloud that morphs visual elements (eyes, cheeks, lightning, steam, rotating sun) and dialogue based on device states:
-    *   *Sleeping:* Disconnected/Standby.
-    *   *Happy:* Active vaping within limits.
-    *   *Puffing:* Press and hold animation.
-    *   *Angry Storm:* Exceeding daily puff budget.
-    *   *Toxic Green:* Vaping unverified hardware in Safe-Mode.
-    *   *Sunny Gold:* Nootropic supplement logged.
+The following decision flowchart maps the physical NFC tap through fail-fast cryptographic validation, AI threat scoring, and real-time dashboard notifications:
 
-### 🔌 Microcontroller C++ Firmware (`nimbus_geek_firmware/`)
-Firmware developed for the **Waveshare ESP32-S3-Geek** board to act as the core hardware prototype chassis.
-*   **Screen Rendering (`TFT_eSPI`):** Drives the built-in 1.14" ST7789 screen. Renders Standby screens, locking padlocks, flashing warning overlays, concentric dials, and scrolling real-time thermal physics curves.
-*   **BLE Server:** Advertises pairing signatures, receives control parameters (vaporizer modes like "Flavor Focus", "Balanced", and "Max Cloud"), and broadcasts real-time metrics back to the phone.
-*   **Hardware Diagnostics:** Supports testing without a heating coil or NFC reader through diagnostic Serial commands and the physical boot button (cycling simulated cartridges and holding to simulate puffing physics).
+```mermaid
+flowchart TD
+    A["📱 Physical NFC Tap<br/>(NTAG 424 Hardware IC)"] --> B["⚡ Netlify Edge Gateway<br/>(/netlify/functions/verify)"]
+    B --> C{"🔑 Cryptographic Signature<br/>(NIMBUS_SIGNING_SECRET)"}
+
+    C -- Invalid Signature / Tampered --> D["⛔ Hardware Cryptographic Failure<br/>(HTTP 403 Forbidden)"]
+    D --> E["🔴 Verdict: REVOKED<br/>(Counterfeit / Cloned Cartridge Blocked)"]
+
+    C -- Signature Validated --> F["🤖 AI Isolation Forest Model<br/>(Spatial-Temporal Telemetry Inference)"]
+
+    F --> G{"📊 Threat Score Threshold<br/>(0.00 to 1.00 Tensor Evaluation)"}
+
+    G -- Threat Score >= 0.70<br/>(Impossible Transit / Scrape) --> H["⚠️ Velocity Anomaly Detected<br/>(Speed > 900 km/h or Replay)"]
+    H --> I["🔴 Verdict: REVOKED<br/>(Cartridge Access Revoked & Flagged)"]
+
+    G -- 0.40 <= Threat Score < 0.70<br/>(Subnet Shift / High Speed) --> J["⚡ Suspicious Telemetry Pattern<br/>(High Velocity / IP Shift)"]
+    J --> K["🟡 Verdict: FLAGGED<br/>(Restricted Safety Temp Clamp Applied)"]
+
+    G -- Threat Score < 0.40<br/>(Legitimate User Transit) --> L["✨ Authentic Verification Confirmed<br/>(Nominal Speed & Valid Crypto)"]
+    L --> M["🟢 Verdict: VERIFIED<br/>(Full Heating Profile & Wellness Unlocked)"]
+
+    M --> N["📡 Supabase Realtime Broadcast<br/>(Live Next.js Dashboard & Analytics)"]
+    I --> N
+    K --> N
+    E --> N
+
+    %% Custom Colored Arrow Styling
+    linkStyle 0,1 stroke:#3b82f6,stroke-width:2px;
+    linkStyle 2,3,6,7,13,15 stroke:#ef4444,stroke-width:3px;
+    linkStyle 8,9,14 stroke:#eab308,stroke-width:3px;
+    linkStyle 4,5,10,11,12 stroke:#22c55e,stroke-width:3px;
+```
 
 ---
 
-## 🚀 Strategic Development Phases
+## 🔑 Core Security & Architectural Pillars
 
-### Phase 0: Prototyping (Current)
-*   Complete mechanical CAD modeling for the universal 510 chamber.
-*   Build out firmware simulations and dynamic web companion apps.
-*   File a **Provisional Patent Application (PPA)** focusing on NFC cartridge authentication, automated optimal temperature profiles, and overuse safety algorithms.
+1. **Hardware-Backed Identity (Root of Trust):**  
+   Utilizes physical **NXP NTAG 424 DNA** ICs leveraging Secure Unique NFC (SUN) functionality. Each tap generates a fresh, single-use AES-128 cryptographic CMAC payload that prevents static cloning and payload mirroring.
+2. **Sub-50ms Edge AI Inference:**  
+   Evaluates a four-dimensional feature vector ($\Delta t$ time delta, Haversine distance, calculated transit velocity, and IP subnet delta) using a lightweight **Isolation Forest ML model** compiled to ONNX tensor bytecode for zero-latency execution.
+3. **Privacy-First Design (Zero PII):**  
+   Protects user anonymity entirely. Authentication requires no user registration, email, or exact device GPS coordinates. Telemetry relies on coarse network geolocation and relative temporal sequences.
+4. **Fail-Fast Security Gateway:**  
+   Applies immediate cryptographic signature verification at the edge. Invalid or tampered signatures trigger a **fail-fast HTTP 403 Forbidden** before invoking database reads or ML inference pipelines, protecting cloud infrastructure against compute DoS attacks.
 
-### Phase 1: Pre-Seed & Supplement Launch
-*   Implement physical BLE connections between the ESP32 board and PWA.
-*   Finalize white-label white paper formulations for *Nimbus Elevate Daily*.
-*   Launch Shopify store and TikTok/social wellness campaigns.
-*   Pitch functional PoCs to angel networks and university grants (Texas A&M Aggie PITCH).
+---
 
-### Phase 2: Seed & Manufacturing
-*   Transition from dev boards to custom PCB footprints (ESP32-S3 + PN532 module).
-*   Begin PMTA (Premarket Tobacco Product Application) filings for electronic hardware.
-*   Finalize medical certifications for the *Frontier Rx* line.
+## 🏗️ Stack Architecture
+
+| Layer | Technology | Purpose |
+| :--- | :--- | :--- |
+| **Hardware / Edge** | NTAG 424 DNA IC (13.56 MHz RF) | Silicon root of trust issuing dynamic AES-128 SUN tokens |
+| **Backend Gateway** | Netlify Serverless / FastAPI | Edge execution handling cryptographic signature checks and API dispatch |
+| **Database & Realtime** | Supabase (PostgreSQL) + Postgres CDC | Persistent time-series logging (`telemetry_logs`) & real-time WebSocket events |
+| **Inference Engine** | ONNX Runtime (`nimbus_model.onnx`) | Machine learning runtime executing Isolation Forest threat scoring in < 50ms |
+| **Frontend Dashboard** | Next.js (App Router), Tailwind CSS, Tremor | Enterprise monitoring console with interactive telemetry gauges & status badges |
+
+---
+
+## 📁 Repository Directory Structure
+
+```ascii
+Quantum-Nimbus/
+├── docs/                      # Public architectural overview & whitepapers
+│   ├── ARCHITECTURE.md        # High-level system design overview
+│   └── API_SPEC.md            # Endpoint specifications
+├── frontend/                  # Next.js Web Dashboard & Client App
+│   ├── app/                   # App Router pages, components, & layouts
+│   ├── components/            # Reusable UI badges, gauges, & charts
+│   └── public/                # Static brand assets & iconography
+├── backend/                   # Netlify Edge Functions & API Gateway
+│   ├── functions/             # Verification endpoints (verify.ts)
+│   └── lib/                   # Database schemas & cryptographic helpers
+├── ml/                        # Machine Learning Model Pipeline
+│   ├── train_model.py         # Isolation Forest model training script
+│   ├── nimbus_model.onnx      # Compiled ONNX model binary
+│   └── schema.json            # Model input/output tensor definitions
+└── README.md                  # Project documentation (this file)
+```
+
+---
+
+## 🔒 Security & Disclosure
+
+Quantum Nimbus follows strict zero-trust engineering principles. If you discover a potential security vulnerability or cryptanalytic flaw, please report it directly through our security disclosure channel rather than opening a public issue.
+
+* **Security Inquiries:** Email `security@quantumnimbus.io`
+* **Technical Due Diligence:** Enterprise partners, auditors, and CTOs may request access to our private repository containing full hardware microcode, detailed sequence diagrams (`HARDWARE_AI_SEQUENCE.md`), and raw model training sets.
