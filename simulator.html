@@ -1742,6 +1742,8 @@
             try {
                 let result;
 
+                let step2StartTime = startTime;
+
                 if (mode === 'authentic') {
                     const counter = Math.floor(Date.now() / 1000);
                     const payload = {
@@ -1755,6 +1757,7 @@
                         reset_telemetry: true,
                         mode: 'authentic'
                     };
+                    step2StartTime = performance.now();
                     result = await sendVerifyRequest(payload);
 
                 } else if (mode === 'dual-ip' || mode === 'replay') {
@@ -1787,6 +1790,7 @@
                         ip_address: '133.242.18.2',
                         timestamp: t2
                     };
+                    step2StartTime = performance.now();
                     result = await sendVerifyRequest(p2);
 
                 } else if (mode === 'counterfeit') {
@@ -1799,13 +1803,12 @@
                         ip_address: '98.194.12.44',
                         timestamp: Math.floor(Date.now() / 1000)
                     };
+                    step2StartTime = performance.now();
                     result = await sendVerifyRequest(pBad);
                 }
 
-                let netLatency = Math.round(performance.now() - startTime);
-                if (mode === 'dual-ip' || mode === 'replay') {
-                    netLatency = Math.max(40, netLatency - 1500);
-                }
+                const netLatency = Math.round(performance.now() - step2StartTime);
+                const totalSequenceSec = ((performance.now() - startTime) / 1000).toFixed(1);
                 const data = result.data;
                 const httpStatus = result.status;
 
@@ -1825,7 +1828,7 @@
                         if (window.synth && typeof window.synth.playWarningAlarm === 'function') window.synth.playWarningAlarm();
                         if (statusPill) {
                             statusPill.className = 'text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800';
-                            statusPill.textContent = `${httpStatus} FLAGGED • ${data.scan_velocity || 0} km/h • ${netLatency}ms RTT (${aiMs}ms AI)`;
+                            statusPill.textContent = `${httpStatus} FLAGGED • ${data.scan_velocity || 0} km/h • ${netLatency}ms RTT (${aiMs}ms AI) • ${totalSequenceSec}s Sequence`;
                         }
                         renderDualIpAnomalyCard(tagId, tapDisplayCount);
 
