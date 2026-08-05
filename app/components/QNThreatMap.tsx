@@ -16,7 +16,6 @@ export interface LocationNode {
 export interface TelemetryPayload {
   id: string;
   timestamp: string;
-  timestampMs: number;
   tag_id: string;
   origin: LocationNode;
   destination: LocationNode | null;
@@ -66,13 +65,12 @@ export default function QNThreatMap() {
   const [searchQuery, setSearchQuery] = useState<string>('');
   
   const [scrubberValue, setScrubberValue] = useState<number>(60);
-  const [isLiveStreaming, setIsLiveStreaming] = useState<boolean>(true);
+  const [isReversedScrubbing, setIsReversedScrubbing] = useState<boolean>(false);
 
   const [hoveredNode, setHoveredNode] = useState<LocationNode | null>(null);
   const [tooltipPos, setTooltipPos] = useState<{ x: number; y: number } | null>(null);
 
   const [telemetryFeed, setTelemetryFeed] = useState<TelemetryPayload[]>([]);
-  const [historicalAuditBuffer, setHistoricalAuditBuffer] = useState<TelemetryPayload[]>([]);
   const [anomaliesBlocked, setAnomaliesBlocked] = useState<number>(4144);
   const [totalScans, setTotalScans] = useState<number>(1482978);
 
@@ -122,11 +120,8 @@ export default function QNThreatMap() {
     };
   };
 
-  const processPayload = (rawPayload: Omit<TelemetryPayload, 'timestampMs'>) => {
-    if (!isLiveStreaming) return;
-
-    const now = Date.now();
-    const evaluated = evaluateSecurityThreat({ ...rawPayload, timestampMs: now });
+  const processPayload = (rawPayload: TelemetryPayload) => {
+    const evaluated = evaluateSecurityThreat(rawPayload);
 
     setTotalScans((prev) => prev + 1);
     if (evaluated.status === 'FLAGGED THREAT') {
@@ -134,7 +129,8 @@ export default function QNThreatMap() {
     }
 
     setTelemetryFeed((prev) => [evaluated, ...prev.slice(0, 49)]);
-    setHistoricalAuditBuffer((prev) => [evaluated, ...prev.slice(0, 199)]);
+
+    const now = Date.now();
 
     activePinsRef.current.push({
       id: `${evaluated.origin.city}-${now}`,
@@ -195,13 +191,11 @@ export default function QNThreatMap() {
     }, 1200);
   };
 
-  // Streaming Telemetry Loop
+  // Continuous Streaming Loop (Never Pauses)
   useEffect(() => {
     triggerHoustonDenverAttack();
 
     const interval = setInterval(() => {
-      if (!isLiveStreaming) return;
-
       const isReplay = Math.random() < 0.35;
       const tagId = `NTAG-424-${Math.floor(Math.random() * 8999 + 1000)}`;
       const c1 = CITIES[Math.floor(Math.random() * CITIES.length)];
@@ -235,62 +229,23 @@ export default function QNThreatMap() {
     }, 3500);
 
     return () => clearInterval(interval);
-  }, [isLiveStreaming]);
+  }, []);
 
-  // Handle Scrubber Change in Seconds
   const handleScrubberChange = (val: number) => {
     setScrubberValue(val);
     if (val === 60) {
-      setIsLiveStreaming(true);
+      setIsReversedScrubbing(false);
     } else {
-      setIsLiveStreaming(false);
-      const auditSecondsAgo = 60 - val;
-      const targetTimeMs = Date.now() - (auditSecondsAgo * 1000);
-
-      const historicalSlice = historicalAuditBuffer.filter((evt) => evt.timestampMs <= targetTimeMs);
-
-      // Update Map Arcs & Pins for historical snapshot
-      activePinsRef.current = [];
-      activeArcsRef.current = [];
-
-      const now = Date.now();
-      historicalSlice.slice(0, 8).forEach((evt) => {
-        activePinsRef.current.push({
-          id: `audit-pin-${evt.id}`,
-          city: evt.origin.city,
-          lat: evt.origin.lat,
-          lng: evt.origin.lng,
-          isThreat: evt.status === 'FLAGGED THREAT',
-          spawnTime: now
-        });
-
-        if (evt.destination) {
-          activeArcsRef.current.push({
-            id: `audit-arc-${evt.id}`,
-            origin: evt.origin,
-            destination: evt.destination,
-            startTime: now,
-            isThreat: evt.status === 'FLAGGED THREAT'
-          });
-          activePinsRef.current.push({
-            id: `audit-pin-dest-${evt.id}`,
-            city: evt.destination.city,
-            lat: evt.destination.lat,
-            lng: evt.destination.lng,
-            isThreat: evt.status === 'FLAGGED THREAT',
-            spawnTime: now
-          });
-        }
-      });
+      setIsReversedScrubbing(true);
     }
   };
 
   const resumeLiveStream = () => {
     setScrubberValue(60);
-    setIsLiveStreaming(true);
+    setIsReversedScrubbing(false);
   };
 
-  // Canvas Mouse Move Hover
+  // Mouse Hover
   const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -330,7 +285,7 @@ export default function QNThreatMap() {
     }
   };
 
-  // Canvas 60 FPS Render Loop
+  // Canvas 60 FPS Render Loop (Reversible Animation Direction)
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -385,20 +340,22 @@ export default function QNThreatMap() {
       }
 
       const now = Date.now();
+      const reverseFactor = scrubberValue / 60;
 
-      // Render Active Pins
-      activePinsRef.current = activePinsRef.current.filter((pin) => !isLiveStreaming || now - pin.spawnTime < 5000);
+      // Render Pins
+      activePinsRef.current = activePinsRef.current.filter((pin) => now - pin.spawnTime < 5000);
       activePinsRef.current.forEach((pin) => {
         const pt = projection([pin.lng, pin.lat]);
         if (!pt) return;
         const [x, y] = pt;
 
         const age = now - pin.spawnTime;
-        const fade = isLiveStreaming ? 1 - age / 5000 : 0.95;
-        const radius = isLiveStreaming ? (age / 5000) * 28 : 16;
+        const rawFade = 1 - age / 5000;
+        const fade = isReversedScrubbing ? (1 - rawFade) : rawFade;
+        const radius = isReversedScrubbing ? (1 - age / 5000) * 28 : (age / 5000) * 28;
 
         ctx.beginPath();
-        ctx.arc(x, y, radius, 0, Math.PI * 2);
+        ctx.arc(x, y, Math.max(2, radius), 0, Math.PI * 2);
         ctx.strokeStyle = pin.isThreat ? `rgba(239, 68, 68, ${fade * 0.9})` : `rgba(16, 185, 129, ${fade * 0.9})`;
         ctx.lineWidth = 1.5;
         ctx.stroke();
@@ -416,14 +373,16 @@ export default function QNThreatMap() {
         ctx.fillText(pin.city, x + 8, y + 3);
       });
 
-      // Render Quadratic Arcs
-      activeArcsRef.current = activeArcsRef.current.filter((arc) => !isLiveStreaming || now - arc.startTime < 2400);
+      // Render Quadratic Arcs (Reversed Trajectory Motion)
+      activeArcsRef.current = activeArcsRef.current.filter((arc) => now - arc.startTime < 2400);
       activeArcsRef.current.forEach((arc) => {
+        const rawProgress = Math.min((now - arc.startTime) / 2400, 1.0);
+        const progress = isReversedScrubbing ? (1 - rawProgress) * reverseFactor : rawProgress;
+
         const p1 = projection([arc.origin.lng, arc.origin.lat]);
         const p2 = projection([arc.destination.lng, arc.destination.lat]);
         if (!p1 || !p2) return;
 
-        const progress = isLiveStreaming ? Math.min((now - arc.startTime) / 2400, 1.0) : 0.5;
         const midX = (p1[0] + p2[0]) / 2;
         const midY = Math.min(p1[1], p2[1]) - Math.abs(p1[0] - p2[0]) * 0.28;
 
@@ -438,7 +397,7 @@ export default function QNThreatMap() {
         ctx.stroke();
         ctx.setLineDash([]);
 
-        const t = progress;
+        const t = Math.max(0.01, Math.min(progress, 0.99));
         const currX = (1 - t) * (1 - t) * p1[0] + 2 * (1 - t) * t * midX + t * t * p2[0];
         const currY = (1 - t) * (1 - t) * p1[1] + 2 * (1 - t) * t * midY + t * t * p2[1];
 
@@ -456,16 +415,9 @@ export default function QNThreatMap() {
 
     render();
     return () => cancelAnimationFrame(animFrameId);
-  }, [projectionMode, isLiveStreaming]);
+  }, [projectionMode, isReversedScrubbing, scrubberValue]);
 
-  // Determine active feed list
-  const auditSecondsAgo = 60 - scrubberValue;
-  const targetTimeMs = Date.now() - (auditSecondsAgo * 1000);
-  const activeFeedList = isLiveStreaming
-    ? telemetryFeed
-    : historicalAuditBuffer.filter((evt) => evt.timestampMs <= targetTimeMs);
-
-  const filteredTelemetry = activeFeedList.filter((item) => {
+  const filteredTelemetry = telemetryFeed.filter((item) => {
     if (filterMode === 'threats' && item.status !== 'FLAGGED THREAT') return false;
     if (filterMode === 'us' && !item.origin.country.includes('US')) return false;
     if (
@@ -489,7 +441,7 @@ export default function QNThreatMap() {
             </span>
           </div>
           <h1 className="text-2xl font-bold text-white tracking-tight">Quantum Nimbus Threat Map & Operations Center</h1>
-          <p className="text-sm text-slate-400">Switch seamlessly between 2D Mercator flat map and 3D Rotating Globe with interactive time scrubbing.</p>
+          <p className="text-sm text-slate-400">Switch seamlessly between 2D Mercator flat map and 3D Rotating Globe with continuous live streaming.</p>
         </div>
 
         <div className="flex items-center space-x-3">
@@ -610,13 +562,13 @@ export default function QNThreatMap() {
             </div>
           </div>
 
-          {/* Functional Time Scrubber Bar (IN SECONDS) */}
+          {/* Reversible Scrubber Bar */}
           <div className="bg-slate-900/90 border border-slate-800/80 rounded-xl p-4 backdrop-blur-md space-y-2">
             <div className="flex items-center justify-between text-xs font-mono">
               <div className="flex items-center space-x-2">
-                <span className="font-bold text-white">⏱️ Incident Time Scrubber (Seconds):</span>
-                <span className={isLiveStreaming ? 'text-emerald-400 font-semibold' : 'text-yellow-400 font-bold animate-pulse'}>
-                  {isLiveStreaming ? '🔴 LIVE TELEMETRY STREAM' : `⏸️ AUDIT SCRUBBING (-${auditSecondsAgo} SECONDS AGO)`}
+                <span className="font-bold text-white">⏱️ Incident Time Scrubber:</span>
+                <span className={!isReversedScrubbing ? 'text-emerald-400 font-semibold' : 'text-yellow-400 font-bold'}>
+                  {!isReversedScrubbing ? '🔴 LIVE STREAMING (0s)' : `⏪ REVERSED REPLAY (-${60 - scrubberValue}s)`}
                 </span>
               </div>
               <div className="flex items-center space-x-2">
@@ -638,7 +590,7 @@ export default function QNThreatMap() {
               className="w-full accent-emerald-500 bg-slate-800 rounded-lg cursor-pointer h-2"
             />
             <div className="flex justify-between text-[10px] font-mono text-slate-500">
-              <span>-60 Seconds (Audit History)</span>
+              <span>-60 Seconds (Reversed Replay)</span>
               <span>-30 Seconds</span>
               <span>NOW (Live Stream 0s)</span>
             </div>
@@ -654,11 +606,8 @@ export default function QNThreatMap() {
               <h2 className="text-base font-bold text-white">Live Telemetry Stream</h2>
               <p className="text-xs text-slate-400 font-mono">Filtered Security Events</p>
             </div>
-            <span className={`px-2 py-0.5 text-xs font-mono font-bold rounded ${
-              isLiveStreaming ? 'bg-emerald-950 text-emerald-400 border border-emerald-800 animate-pulse' : 'bg-yellow-950 text-yellow-400 border border-yellow-800'
-            } flex items-center gap-1`}>
-              <span className={`w-1.5 h-1.5 rounded-full ${isLiveStreaming ? 'bg-emerald-400' : 'bg-yellow-400'}`}></span>
-              {isLiveStreaming ? 'LIVE STREAMING' : 'AUDIT PAUSED'}
+            <span className="px-2 py-0.5 text-xs font-mono font-bold rounded bg-emerald-950 text-emerald-400 border border-emerald-800 animate-pulse flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> STREAM ACTIVE
             </span>
           </div>
 
