@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Public Threat Map & Enterprise Telemetry Dashboard | Quantum Nimbus Tech</title>
-  <meta name="description" content="Real-time global telemetry dashboard visualizing NFC cryptographic authentication, impossible velocity threat detection, and replay attack prevention.">
+  <meta name="description" content="Real-time US & Global threat map visualizing NFC cryptographic authentication, impossible velocity threat detection, and replay attack prevention.">
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -25,10 +25,6 @@
     }
   </script>
 
-  <!-- Leaflet CSS & JS (Clean CDN links without SRI integrity locks) -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,9 +33,8 @@
   <style>
     body { font-family: 'Inter', sans-serif; }
     .font-mono { font-family: 'JetBrains Mono', monospace; }
-    #threat-map { height: 520px; width: 100%; border-radius: 0.75rem; z-index: 1; background-color: #0b0f19; position: relative; overflow: hidden; }
-    .leaflet-popup-content-wrapper { background: #0f172a; color: #f8fafc; border: 1px solid #334155; }
-    .leaflet-popup-tip { background: #0f172a; }
+    #threat-map-container { height: 560px; width: 100%; border-radius: 0.75rem; background-color: #080c14; position: relative; overflow: hidden; }
+    canvas { display: block; width: 100%; height: 100%; }
   </style>
 </head>
 <body class="bg-slate-950 text-slate-100 transition-colors duration-300 min-h-screen">
@@ -83,10 +78,10 @@
       <div>
         <div class="flex items-center space-x-2 mb-2">
           <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span class="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider">Live Security Network Active</span>
+          <span class="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider">Dynamic Geolocation Threat Telemetry</span>
         </div>
-        <h1 class="text-3xl font-extrabold text-white tracking-tight">Global Threat Telemetry Dashboard</h1>
-        <p class="text-slate-400 text-sm mt-1">Real-time visualization of hardware NFC authentication, impossible velocity detection, and replay attack prevention.</p>
+        <h1 class="text-3xl font-extrabold text-white tracking-tight">Real-Time US & Global Threat Map</h1>
+        <p class="text-slate-400 text-sm mt-1">Watch live verification pings and impossible velocity replay attacks render across actual US and international nodes as they occur.</p>
       </div>
 
       <!-- Quick Control Bar -->
@@ -95,7 +90,7 @@
           <span>⚡ Trigger Houston→London Attack</span>
         </button>
         <button id="btn-random-ping" class="bg-slate-200 hover:bg-white text-slate-900 text-xs font-semibold px-3.5 py-2 rounded-lg transition-all cursor-pointer">
-          <span>🎲 Generate Random Ping</span>
+          <span>🎲 Generate Live Ping</span>
         </button>
       </div>
     </div>
@@ -147,45 +142,57 @@
       </div>
     </section>
 
-    <!-- Main Content Grid: Threat Map & Live Event Feed -->
+    <!-- Main Content Grid: Dynamic Threat Map Canvas & Live Feed -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
       
-      <!-- Leaflet OpenStreetMap Container (2 Cols) -->
+      <!-- Vector Threat Map Container (2 Cols) -->
       <section class="lg:col-span-2 space-y-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-sm">
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-sm relative">
+          
           <div class="flex items-center justify-between mb-3 px-1">
             <h2 class="text-base font-bold text-white flex items-center space-x-2">
-              <span>🗺️ Live OpenStreetMap Security Nodes</span>
+              <span>🗺️ Dynamic US & Global Security Map</span>
             </h2>
-            <div class="flex items-center space-x-3 text-xs font-mono">
-              <span class="flex items-center space-x-1"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span><span>Verified</span></span>
-              <span class="flex items-center space-x-1"><span class="w-2.5 h-2.5 rounded-full bg-red-500 inline-block"></span><span>Attack Blocked</span></span>
+            <div class="flex items-center space-x-4 text-xs font-mono">
+              <span class="flex items-center space-x-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block shadow-[0_0_8px_rgba(16,185,129,0.8)]"></span><span>Verified Ping</span></span>
+              <span class="flex items-center space-x-1.5"><span class="w-2.5 h-2.5 rounded-full bg-red-500 inline-block shadow-[0_0_8px_rgba(239,68,68,0.8)]"></span><span>Threat Blocked</span></span>
             </div>
           </div>
-          
-          <!-- Leaflet Map Container with Canvas Overlay -->
-          <div id="threat-map">
-            <canvas id="fallback-map-canvas" class="w-full h-full absolute inset-0 hidden"></canvas>
+
+          <!-- Dynamic Threat Canvas -->
+          <div id="threat-map-container">
+            <canvas id="map-canvas"></canvas>
+
+            <!-- On-Map Alert Overlay Badge -->
+            <div id="map-alert-badge" class="absolute top-4 left-4 bg-red-950/90 border border-red-500/60 rounded-lg p-3 backdrop-blur-md opacity-0 transition-opacity duration-300 max-w-xs shadow-2xl">
+              <div class="flex items-center space-x-2 text-red-400 font-bold text-xs font-mono">
+                <span class="animate-ping w-2 h-2 rounded-full bg-red-500"></span>
+                <span>🚨 IMPOSSIBLE VELOCITY DETECTED</span>
+              </div>
+              <p id="map-alert-text" class="text-[11px] text-red-200 mt-1 font-mono leading-tight">
+                Houston → London (5.2s delta) | Speed: 5,365,384 km/h
+              </p>
+            </div>
           </div>
         </div>
 
-        <!-- Explanation Card: Why This Dashboard Is Useful -->
+        <!-- Educational Explanation Card -->
         <div class="bg-emerald-950/20 border border-emerald-500/30 rounded-xl p-5 text-sm space-y-2">
           <h3 class="font-bold text-emerald-400 flex items-center space-x-2">
-            <span>💡 How Impossible Velocity Detection Protects Brand Integrity</span>
+            <span>💡 How Dynamic Arc Beams Prove Cryptographic Authenticity</span>
           </h3>
           <p class="text-slate-300 text-xs leading-relaxed">
-            Cryptographic NFC tags generate a unique single-use SUN (Secure Unique Nonce) code on every tap. If a tag is scanned in <strong>Houston</strong> and its cryptographic payload is replayed <strong>5 seconds later in London</strong>, Quantum Nimbus calculates the physical distance (7,750 km) and velocity (>5,000,000 km/h). Because this exceeds physical travel limits, the system instantly revokes authentication and flags the counterfeit attempt worldwide.
+            As NFC tags tap in real-time, green arc beams highlight verified authentications. When a duplicate tag tap is replayed across distant locations (e.g. <strong>Houston, TX</strong> to <strong>London, UK</strong>), an instant red laser arc projects across the map, triggering an automated threat block before counterfeit merchandise can be distributed.
           </p>
         </div>
       </section>
 
       <!-- Live Event Stream Feed (1 Col) -->
-      <section class="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-sm space-y-4 flex flex-col h-[650px]">
+      <section class="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-sm space-y-4 flex flex-col h-[670px]">
         <div class="flex items-center justify-between border-b border-slate-800 pb-3">
           <div>
-            <h2 class="text-base font-bold text-white">Live Telemetry Stream</h2>
-            <p class="text-xs text-slate-400">Real-time authentication log</p>
+            <h2 class="text-base font-bold text-white">Live Security Telemetry Stream</h2>
+            <p class="text-xs text-slate-400">Pings display live as scans occur</p>
           </div>
           <span id="stream-status-badge" class="px-2 py-0.5 text-xs font-mono font-bold rounded bg-emerald-950 text-emerald-400 border border-emerald-800 animate-pulse">
             STREAM ACTIVE
@@ -207,213 +214,239 @@
     <p>© 2026 Quantum Nimbus Tech. U.S. Patent Pending — Dynamic Vaporization Parameter & NFC Cryptographic Authentication.</p>
   </footer>
 
-  <!-- Leaflet & Simulation Script -->
+  <!-- Dynamic Threat Map Canvas Engine Script -->
   <script>
-    // Theme Switcher Logic (Defaults to Dark Mode)
+    // Theme State
+    let isDarkMode = true;
     const themeToggleBtn = document.getElementById('theme-toggle');
     const themeToggleIcon = document.getElementById('theme-toggle-icon');
     const themeToggleText = document.getElementById('theme-toggle-text');
-    let isDarkMode = true;
 
-    function applyTheme(dark) {
-      isDarkMode = dark;
-      if (dark) {
+    themeToggleBtn.addEventListener('click', () => {
+      isDarkMode = !isDarkMode;
+      if (isDarkMode) {
         document.documentElement.classList.add('dark');
         themeToggleIcon.textContent = '☀️';
         themeToggleText.textContent = 'Light Mode';
-        if (map && darkTileLayer && lightTileLayer) {
-          if (map.hasLayer(lightTileLayer)) map.removeLayer(lightTileLayer);
-          darkTileLayer.addTo(map);
-        }
       } else {
         document.documentElement.classList.remove('dark');
         themeToggleIcon.textContent = '🌙';
         themeToggleText.textContent = 'Dark Mode';
-        if (map && darkTileLayer && lightTileLayer) {
-          if (map.hasLayer(darkTileLayer)) map.removeLayer(darkTileLayer);
-          lightTileLayer.addTo(map);
-        }
       }
-    }
-
-    themeToggleBtn.addEventListener('click', () => {
-      applyTheme(!isDarkMode);
     });
 
-    // Global Node Coordinates
-    const GLOBAL_NODES = [
-      { name: 'Houston HQ', lat: 29.7604, lng: -95.3698, country: 'USA' },
-      { name: 'London Node', lat: 51.5074, lng: -0.1278, country: 'UK' },
-      { name: 'Berlin Lab', lat: 52.5200, lng: 13.4050, country: 'Germany' },
-      { name: 'Tokyo Hub', lat: 35.6762, lng: 139.6503, country: 'Japan' },
-      { name: 'Sydney Vault', lat: -33.8688, lng: 151.2093, country: 'Australia' },
-      { name: 'São Paulo Node', lat: -23.5505, lng: -46.6333, country: 'Brazil' },
-      { name: 'San Francisco Gateway', lat: 37.7749, lng: -122.4194, country: 'USA' },
-      { name: 'Singapore Station', lat: 1.3521, lng: 103.8198, country: 'Singapore' }
+    // Real US and International Node Coordinates
+    const NODES = [
+      { id: 'houston', name: 'Houston, TX (HQ)', lat: 29.7604, lng: -95.3698, region: 'US' },
+      { id: 'sf', name: 'San Francisco, CA', lat: 37.7749, lng: -122.4194, region: 'US' },
+      { id: 'ny', name: 'New York, NY', lat: 40.7128, lng: -74.0060, region: 'US' },
+      { id: 'chicago', name: 'Chicago, IL', lat: 41.8781, lng: -87.6298, region: 'US' },
+      { id: 'miami', name: 'Miami, FL', lat: 25.7617, lng: -80.1918, region: 'US' },
+      { id: 'denver', name: 'Denver, CO', lat: 39.7392, lng: -104.9903, region: 'US' },
+      { id: 'london', name: 'London, UK', lat: 51.5074, lng: -0.1278, region: 'INTL' },
+      { id: 'tokyo', name: 'Tokyo, Japan', lat: 35.6762, lng: 139.6503, region: 'INTL' },
+      { id: 'berlin', name: 'Berlin, Germany', lat: 52.5200, lng: 13.4050, region: 'INTL' },
+      { id: 'sydney', name: 'Sydney, Australia', lat: -33.8688, lng: 151.2093, region: 'INTL' }
     ];
 
-    let map, darkTileLayer, lightTileLayer;
-    let isLeafletActive = false;
+    // Canvas State & Ping Queue
+    const canvas = document.getElementById('map-canvas');
+    const ctx = canvas.getContext('2d');
+    const activeArcs = [];
+    const activePings = [];
 
-    function initMap() {
-      if (typeof L === 'undefined') {
-        console.warn('Leaflet JS not detected, falling back to Canvas vector map.');
-        initFallbackCanvasMap();
-        return;
-      }
-
-      try {
-        isLeafletActive = true;
-        // Initialize Leaflet
-        map = L.map('threat-map', {
-          center: [22.0, 10.0],
-          zoom: 2,
-          minZoom: 2,
-          maxZoom: 10
-        });
-
-        // Dark tiles
-        darkTileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; CARTO',
-          subdomains: 'abcd',
-          maxZoom: 19
-        });
-
-        // Light tiles
-        lightTileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
-          attribution: '&copy; OpenStreetMap &copy; CARTO',
-          subdomains: 'abcd',
-          maxZoom: 19
-        });
-
-        darkTileLayer.addTo(map);
-
-        // Add node markers
-        GLOBAL_NODES.forEach(node => {
-          const marker = L.circleMarker([node.lat, node.lng], {
-            radius: 6,
-            fillColor: '#10b981',
-            color: '#ffffff',
-            weight: 2,
-            opacity: 0.9,
-            fillOpacity: 0.8
-          }).addTo(map);
-
-          marker.bindPopup(`<strong>${node.name}</strong><br/>Status: Active Node<br/>NTAG 424 DNA`);
-        });
-
-        // Force Leaflet container resize check
-        setTimeout(() => {
-          map.invalidateSize();
-        }, 300);
-
-      } catch (err) {
-        console.error('Error initializing Leaflet map:', err);
-        initFallbackCanvasMap();
-      }
-    }
-
-    // Fallback Canvas Map Generator if CDN is blocked
-    function initFallbackCanvasMap() {
-      isLeafletActive = false;
-      const canvas = document.getElementById('fallback-map-canvas');
-      if (!canvas) return;
-      canvas.classList.remove('hidden');
-
-      const ctx = canvas.getContext('2d');
-      const container = document.getElementById('threat-map');
+    function resizeCanvas() {
+      const container = document.getElementById('threat-map-container');
       canvas.width = container.clientWidth;
       canvas.height = container.clientHeight;
-
-      function renderCanvasMap() {
-        ctx.fillStyle = '#0b0f19';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        // Draw grid lines
-        ctx.strokeStyle = '#1e293b';
-        ctx.lineWidth = 1;
-        for (let x = 0; x < canvas.width; x += 40) {
-          ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
-        }
-        for (let y = 0; y < canvas.height; y += 40) {
-          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
-        }
-
-        // Draw Global Nodes
-        GLOBAL_NODES.forEach(node => {
-          const x = ((node.lng + 180) / 360) * canvas.width;
-          const y = ((90 - node.lat) / 180) * canvas.height;
-
-          ctx.beginPath();
-          ctx.arc(x, y, 6, 0, Math.PI * 2);
-          ctx.fillStyle = '#10b981';
-          ctx.fill();
-          ctx.strokeStyle = '#ffffff';
-          ctx.stroke();
-
-          ctx.fillStyle = '#94a3b8';
-          ctx.font = '10px Inter';
-          ctx.fillText(node.name, x + 10, y + 4);
-        });
-      }
-
-      renderCanvasMap();
-      window.addEventListener('resize', renderCanvasMap);
     }
 
-    // Telemetry Event Generator
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    // Map Projection: Converts Lat/Lng to Canvas X/Y Coordinates
+    function project(lat, lng) {
+      // Adjusted Equirectangular Mercator for clear US & Global View
+      const x = ((lng + 170) / 340) * canvas.width;
+      const y = ((82 - lat) / 140) * canvas.height;
+      return { x, y };
+    }
+
+    // US Map Landmass Path Outline Data
+    const US_BOUNDS = [
+      { lat: 48.9, lng: -124.7 }, { lat: 48.9, lng: -95.1 }, { lat: 46.0, lng: -82.5 },
+      { lat: 44.9, lng: -66.9 }, { lat: 25.1, lng: -80.5 }, { lat: 29.5, lng: -94.5 },
+      { lat: 25.9, lng: -97.2 }, { lat: 32.5, lng: -117.1 }, { lat: 42.0, lng: -124.2 }
+    ];
+
+    // Main Render Loop
+    function drawMap() {
+      // Background Color based on Mode
+      ctx.fillStyle = isDarkMode ? '#080c14' : '#f8fafc';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Grid Lines
+      ctx.strokeStyle = isDarkMode ? 'rgba(30, 41, 59, 0.4)' : 'rgba(226, 232, 240, 0.8)';
+      ctx.lineWidth = 1;
+      for (let x = 0; x < canvas.width; x += 50) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
+      }
+      for (let y = 0; y < canvas.height; y += 50) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+      }
+
+      // Draw US Continent Region Highlight Box
+      const usTopLeft = project(49, -125);
+      const usBottomRight = project(24, -66);
+      ctx.fillStyle = isDarkMode ? 'rgba(16, 185, 129, 0.03)' : 'rgba(16, 185, 129, 0.05)';
+      ctx.strokeStyle = isDarkMode ? 'rgba(16, 185, 129, 0.15)' : 'rgba(16, 185, 129, 0.3)';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([4, 4]);
+      ctx.fillRect(usTopLeft.x, usTopLeft.y, usBottomRight.x - usTopLeft.x, usBottomRight.y - usTopLeft.y);
+      ctx.strokeRect(usTopLeft.x, usTopLeft.y, usBottomRight.x - usTopLeft.x, usBottomRight.y - usTopLeft.y);
+      ctx.setLineDash([]);
+
+      // Label US Core Telemetry Region
+      ctx.fillStyle = isDarkMode ? '#34d399' : '#059669';
+      ctx.font = 'bold 10px JetBrains Mono';
+      ctx.fillText('UNITED STATES PRIMARY TELEMETRY ZONE', usTopLeft.x + 8, usTopLeft.y + 16);
+
+      // Draw Node Markers
+      NODES.forEach((node) => {
+        const pt = project(node.lat, node.lng);
+        
+        // Halo
+        ctx.beginPath();
+        ctx.arc(pt.x, pt.y, 7, 0, Math.PI * 2);
+        ctx.fillStyle = isDarkMode ? 'rgba(16, 185, 129, 0.2)' : 'rgba(5, 150, 105, 0.15)';
+        ctx.fill();
+
+        // Core Dot
+        ctx.beginPath();
+        ctx.arc(pt.x, pt.y, 4, 0, Math.PI * 2);
+        ctx.fillStyle = node.region === 'US' ? '#10b981' : '#3b82f6';
+        ctx.fill();
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        // City Label
+        ctx.fillStyle = isDarkMode ? '#cbd5e1' : '#334155';
+        ctx.font = '10px Inter';
+        ctx.fillText(node.name, pt.x + 8, pt.y + 3);
+      });
+
+      // Draw Active Arc Beams & Dynamic Pings as they trigger
+      const now = Date.now();
+      for (let i = activeArcs.length - 1; i >= 0; i--) {
+        const arc = activeArcs[i];
+        const elapsed = now - arc.startTime;
+        const duration = arc.isAttack ? 2400 : 1800;
+        const progress = Math.min(elapsed / duration, 1.0);
+
+        const p1 = project(arc.origin.lat, arc.origin.lng);
+        const p2 = project(arc.dest.lat, arc.dest.lng);
+
+        // Curved Arc Control Point
+        const midX = (p1.x + p2.x) / 2;
+        const midY = Math.min(p1.y, p2.y) - Math.abs(p1.x - p2.x) * 0.25;
+
+        // Draw Arc Line
+        ctx.beginPath();
+        ctx.moveTo(p1.x, p1.y);
+        ctx.quadraticCurveTo(midX, midY, p2.x, p2.y);
+        ctx.strokeStyle = arc.isAttack ? `rgba(239, 68, 68, ${0.85 * (1 - progress)})` : `rgba(16, 185, 129, ${0.8 * (1 - progress)})`;
+        ctx.lineWidth = arc.isAttack ? 3 : 2;
+        ctx.setLineDash(arc.isAttack ? [6, 4] : []);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Animated Trailing Particle along Arc
+        const t = progress;
+        const currX = (1 - t) * (1 - t) * p1.x + 2 * (1 - t) * t * midX + t * t * p2.x;
+        const currY = (1 - t) * (1 - t) * p1.y + 2 * (1 - t) * t * midY + t * t * p2.y;
+
+        ctx.beginPath();
+        ctx.arc(currX, currY, arc.isAttack ? 6 : 4, 0, Math.PI * 2);
+        ctx.fillStyle = arc.isAttack ? '#ef4444' : '#10b981';
+        ctx.fill();
+        ctx.shadowColor = arc.isAttack ? '#ef4444' : '#10b981';
+        ctx.shadowBlur = 12;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        // If Attack & Arrived, Draw Red Shield Badge
+        if (arc.isAttack && progress > 0.4) {
+          ctx.beginPath();
+          ctx.arc(p2.x, p2.y, 14 * progress, 0, Math.PI * 2);
+          ctx.strokeStyle = `rgba(239, 68, 68, ${1 - progress})`;
+          ctx.lineWidth = 2;
+          ctx.stroke();
+        }
+
+        // Remove finished arcs
+        if (progress >= 1.0) {
+          activeArcs.splice(i, 1);
+        }
+      }
+
+      requestAnimationFrame(drawMap);
+    }
+
+    requestAnimationFrame(drawMap);
+
+    // Telemetry Engine & Live Feed Integration
     let totalScans = 1482920;
     let anomaliesBlocked = 4129;
 
-    function addTelemetryEvent(event) {
+    function triggerPingOnMap(origin, dest, isAttack, velocity, threatType) {
       totalScans++;
       document.getElementById('kpi-total-scans').textContent = totalScans.toLocaleString();
 
-      if (event.status !== 'VERIFIED') {
+      if (isAttack) {
         anomaliesBlocked++;
         document.getElementById('kpi-anomalies-blocked').textContent = anomaliesBlocked.toLocaleString();
+
+        // Show On-Map Red Alert Badge
+        const alertBadge = document.getElementById('map-alert-badge');
+        const alertText = document.getElementById('map-alert-text');
+        alertText.textContent = `${origin.name} ➔ ${dest.name} | Speed: ${velocity.toLocaleString()} km/h [${threatType}]`;
+        alertBadge.style.opacity = '1';
+        setTimeout(() => { alertBadge.style.opacity = '0'; }, 3500);
       }
 
-      // Draw connection line on Leaflet map if active
-      if (isLeafletActive && map) {
-        const color = event.status === 'VERIFIED' ? '#10b981' : '#ef4444';
-        const polyline = L.polyline([
-          [event.origin.lat, event.origin.lng],
-          [event.destination.lat, event.destination.lng]
-        ], {
-          color: color,
-          weight: event.status === 'VERIFIED' ? 2.5 : 3.5,
-          dashArray: event.status === 'VERIFIED' ? '5, 5' : '8, 8',
-          opacity: 0.85
-        }).addTo(map);
+      // Add arc to animation loop
+      activeArcs.push({
+        origin,
+        dest,
+        isAttack,
+        startTime: Date.now()
+      });
 
-        setTimeout(() => { map.removeLayer(polyline); }, 6000);
-      }
-
-      // Populate Live Stream Feed
+      // Add event to Live Stream Feed
       const feed = document.getElementById('telemetry-feed');
       const card = document.createElement('div');
       card.className = `p-3 rounded-lg border text-xs space-y-1.5 transition-all ${
-        event.status === 'VERIFIED' 
+        !isAttack 
           ? 'bg-slate-950 border-slate-800 text-slate-300' 
           : 'bg-red-950/40 border-red-500/50 text-red-200'
       }`;
 
       card.innerHTML = `
         <div class="flex items-center justify-between font-mono">
-          <span class="text-slate-500">${event.timestamp}</span>
+          <span class="text-slate-500">${new Date().toLocaleTimeString()}</span>
           <span class="px-1.5 py-0.5 text-[10px] font-bold rounded ${
-            event.status === 'VERIFIED' 
+            !isAttack 
               ? 'bg-emerald-950 text-emerald-400 border border-emerald-800' 
               : 'bg-red-900 text-red-200 border border-red-700'
-          }">${event.status}</span>
+          }">${isAttack ? 'FLAGGED THREAT' : 'VERIFIED'}</span>
         </div>
         <div class="font-semibold text-slate-100">
-          ${event.origin.name} ➔ ${event.destination.name}
+          ${origin.name} ➔ ${dest.name}
         </div>
         <div class="flex items-center justify-between text-[11px] font-mono text-slate-400">
-          <span>Vel: <strong class="${event.velocityKmh > 1000 ? 'text-red-400' : 'text-emerald-400'}">${event.velocityKmh.toLocaleString()} km/h</strong></span>
-          <span>Risk: <strong>${event.riskScore}</strong></span>
+          <span>Velocity: <strong class="${isAttack ? 'text-red-400' : 'text-emerald-400'}">${velocity.toLocaleString()} km/h</strong></span>
+          <span>Status: <strong>${isAttack ? 'BLOCKED' : 'AUTH OK'}</strong></span>
         </div>
       `;
 
@@ -423,73 +456,47 @@
       }
     }
 
-    // Trigger Houston-to-London Attack Payload
+    // Trigger Houston to London Attack
     document.getElementById('btn-attack-replay').addEventListener('click', () => {
-      const houston = GLOBAL_NODES[0];
-      const london = GLOBAL_NODES[1];
-      const distance = 7750;
-      const timeDelta = 5.2;
-      const velocity = Math.round((distance / timeDelta) * 3600);
-
-      addTelemetryEvent({
-        timestamp: new Date().toLocaleTimeString(),
-        origin: houston,
-        destination: london,
-        threatType: 'IMPOSSIBLE_VELOCITY_REPLAY',
-        velocityKmh: velocity,
-        status: 'FLAGGED',
-        riskScore: 98.4,
-        chipId: 'NTAG-424-88A9-22F0'
-      });
-
-      if (isLeafletActive && map) {
-        map.flyToBounds([[houston.lat, houston.lng], [london.lat, london.lng]], { padding: [50, 50], duration: 1.5 });
-      }
+      const houston = NODES[0]; // Houston
+      const london = NODES[6];  // London
+      const velocity = 5365384;
+      triggerPingOnMap(houston, london, true, velocity, 'IMPOSSIBLE VELOCITY REPLAY');
     });
 
-    // Random Ping Generator
+    // Random Ping Generator Button
     document.getElementById('btn-random-ping').addEventListener('click', () => {
-      const isAttack = Math.random() < 0.4;
-      const oIdx = Math.floor(Math.random() * GLOBAL_NODES.length);
-      let dIdx = Math.floor(Math.random() * GLOBAL_NODES.length);
-      while (dIdx === oIdx) dIdx = Math.floor(Math.random() * GLOBAL_NODES.length);
+      const isAttack = Math.random() < 0.45;
+      const oIdx = Math.floor(Math.random() * NODES.length);
+      let dIdx = Math.floor(Math.random() * NODES.length);
+      while (dIdx === oIdx) dIdx = Math.floor(Math.random() * NODES.length);
 
-      const origin = GLOBAL_NODES[oIdx];
-      const dest = GLOBAL_NODES[dIdx];
+      const origin = NODES[oIdx];
+      const dest = NODES[dIdx];
+      const velocity = isAttack ? Math.round(Math.random() * 600000 + 100000) : Math.round(Math.random() * 80 + 10);
 
-      addTelemetryEvent({
-        timestamp: new Date().toLocaleTimeString(),
-        origin: origin,
-        destination: dest,
-        threatType: isAttack ? 'IMPOSSIBLE_VELOCITY_REPLAY' : 'VERIFIED_AUTH',
-        velocityKmh: isAttack ? Math.round(Math.random() * 500000 + 100000) : Math.round(Math.random() * 80 + 10),
-        status: isAttack ? 'FLAGGED' : 'VERIFIED',
-        riskScore: isAttack ? 94.2 : 2.1
-      });
+      triggerPingOnMap(origin, dest, isAttack, velocity, isAttack ? 'IMPOSSIBLE_VELOCITY' : 'VERIFIED_AUTH');
     });
 
-    // On Load Initialization
+    // Auto Background Live Stream Generator
+    setInterval(() => {
+      const isAttack = Math.random() < 0.3;
+      const oIdx = Math.floor(Math.random() * NODES.length);
+      let dIdx = Math.floor(Math.random() * NODES.length);
+      while (dIdx === oIdx) dIdx = Math.floor(Math.random() * NODES.length);
+
+      const origin = NODES[oIdx];
+      const dest = NODES[dIdx];
+      const velocity = isAttack ? Math.round(Math.random() * 450000 + 80000) : Math.round(Math.random() * 60 + 5);
+
+      triggerPingOnMap(origin, dest, isAttack, velocity, isAttack ? 'NFC_CLONE_ATTEMPT' : 'VERIFIED_AUTH');
+    }, 2800);
+
+    // Initial Trigger on Load
     window.addEventListener('DOMContentLoaded', () => {
-      initMap();
-      applyTheme(true); // Default to Dark Mode
-
-      // Auto-stream realistic background pings
-      setInterval(() => {
-        const oIdx = Math.floor(Math.random() * GLOBAL_NODES.length);
-        let dIdx = Math.floor(Math.random() * GLOBAL_NODES.length);
-        while (dIdx === oIdx) dIdx = Math.floor(Math.random() * GLOBAL_NODES.length);
-
-        const isAttack = Math.random() < 0.25;
-        addTelemetryEvent({
-          timestamp: new Date().toLocaleTimeString(),
-          origin: GLOBAL_NODES[oIdx],
-          destination: GLOBAL_NODES[dIdx],
-          threatType: isAttack ? 'NFC_CLONE_ATTEMPT' : 'VERIFIED_AUTH',
-          velocityKmh: isAttack ? Math.round(Math.random() * 400000 + 50000) : Math.round(Math.random() * 60 + 5),
-          status: isAttack ? 'FLAGGED' : 'VERIFIED',
-          riskScore: isAttack ? 88.5 : 1.4
-        });
-      }, 3500);
+      setTimeout(() => {
+        triggerPingOnMap(NODES[0], NODES[6], true, 5365384, 'IMPOSSIBLE VELOCITY REPLAY');
+      }, 800);
     });
   </script>
 </body>

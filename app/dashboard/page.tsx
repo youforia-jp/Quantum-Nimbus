@@ -8,25 +8,25 @@ export default function PublicDashboardPage() {
   const [totalScans, setTotalScans] = useState<number>(1482920);
   const [anomaliesBlocked, setAnomaliesBlocked] = useState<number>(4129);
   const [activeTab, setActiveTab] = useState<'all' | 'flagged'>('all');
+  const [latestAlert, setLatestAlert] = useState<string | null>(null);
 
   useEffect(() => {
     // Initial events
-    const initialEvents: ThreatEvent[] = [
-      generateHoustonLondonAttack(),
-      generateRandomThreatEvent(),
-      generateRandomThreatEvent(),
-    ];
-    setEvents(initialEvents);
+    const attackEvt = generateHoustonLondonAttack();
+    setEvents([attackEvt]);
+    setLatestAlert(`${attackEvt.origin.name} ➔ ${attackEvt.destination.name} | Speed: ${attackEvt.velocityKmh.toLocaleString()} km/h`);
 
-    // Auto-stream telemetry events every 3.5 seconds
+    // Auto-stream telemetry events every 3 seconds
     const interval = setInterval(() => {
       const newEvt = generateRandomThreatEvent();
       setEvents((prev) => [newEvt, ...prev.slice(0, 30)]);
       setTotalScans((prev) => prev + 1);
       if (newEvt.status !== 'VERIFIED') {
         setAnomaliesBlocked((prev) => prev + 1);
+        setLatestAlert(`${newEvt.origin.name} ➔ ${newEvt.destination.name} | Speed: ${newEvt.velocityKmh.toLocaleString()} km/h [${newEvt.threatType}]`);
+        setTimeout(() => setLatestAlert(null), 3500);
       }
-    }, 3500);
+    }, 3000);
 
     return () => clearInterval(interval);
   }, []);
@@ -36,6 +36,8 @@ export default function PublicDashboardPage() {
     setEvents((prev) => [attackEvt, ...prev.slice(0, 30)]);
     setTotalScans((prev) => prev + 1);
     setAnomaliesBlocked((prev) => prev + 1);
+    setLatestAlert(`${attackEvt.origin.name} ➔ ${attackEvt.destination.name} | Speed: ${attackEvt.velocityKmh.toLocaleString()} km/h [${attackEvt.threatType}]`);
+    setTimeout(() => setLatestAlert(null), 3500);
   };
 
   const handleRandomPing = () => {
@@ -44,6 +46,8 @@ export default function PublicDashboardPage() {
     setTotalScans((prev) => prev + 1);
     if (pingEvt.status !== 'VERIFIED') {
       setAnomaliesBlocked((prev) => prev + 1);
+      setLatestAlert(`${pingEvt.origin.name} ➔ ${pingEvt.destination.name} | Speed: ${pingEvt.velocityKmh.toLocaleString()} km/h [${pingEvt.threatType}]`);
+      setTimeout(() => setLatestAlert(null), 3500);
     }
   };
 
@@ -58,7 +62,7 @@ export default function PublicDashboardPage() {
         <div>
           <div className="flex items-center space-x-2 mb-1">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span className="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider">Public Telemetry Active</span>
+            <span className="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider">Dynamic US & Global Telemetry Active</span>
           </div>
           <h1 className="text-2xl font-bold text-white tracking-tight">Quantum Nimbus Threat Map & Operations Dashboard</h1>
           <p className="text-sm text-slate-400">Live visualization of NFC cryptographic authentication & impossible velocity mitigation.</p>
@@ -75,7 +79,7 @@ export default function PublicDashboardPage() {
             onClick={handleRandomPing}
             className="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-4 py-2.5 rounded-lg border border-slate-700 transition-colors cursor-pointer"
           >
-            🎲 Generate Random Ping
+            🎲 Generate Live Ping
           </button>
         </div>
       </header>
@@ -128,28 +132,28 @@ export default function PublicDashboardPage() {
           </div>
         </div>
 
-        {/* Dashboard Grid: Map Embed & Live Stream */}
+        {/* Dashboard Grid: Dynamic Map Embed & Live Stream */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Map View */}
           <div className="lg:col-span-2 space-y-4">
-            <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3">
+            <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3 relative">
               <div className="flex items-center justify-between border-b border-slate-800 pb-3">
                 <h2 className="text-base font-bold text-white flex items-center space-x-2">
-                  <span>🗺️ Global OpenStreetMap Telemetry View</span>
+                  <span>🗺️ Dynamic US & Global Security Canvas Map</span>
                 </h2>
                 <a 
                   href="/dashboard.html" 
                   className="text-xs text-emerald-400 hover:text-emerald-300 underline font-mono"
                 >
-                  Launch Full Interactive Leaflet Map ↗
+                  Launch Full Dynamic Threat Map ↗
                 </a>
               </div>
 
-              {/* Embedded Map Frame / Interactive Leaflet Frame */}
+              {/* Dynamic Canvas Map Frame */}
               <iframe 
                 src="/dashboard.html" 
-                className="w-full h-[520px] rounded-lg border border-slate-800"
-                title="Leaflet OpenStreetMap Live Threat Engine"
+                className="w-full h-[560px] rounded-lg border border-slate-800"
+                title="Dynamic US & Global Threat Telemetry Engine"
               ></iframe>
             </div>
 
@@ -159,17 +163,17 @@ export default function PublicDashboardPage() {
                 <span>💡 Why Impossible Velocity Detection Works</span>
               </h3>
               <p className="leading-relaxed">
-                NTAG 424 DNA NFC tags compute a unique AES-128 cryptographic hash (SUN nonce) on every scan. When a tap in <strong>Houston</strong> is replayed <strong>5.2 seconds later in London</strong> (7,750 km away), Quantum Nimbus computes the velocity (>5,000,000 km/h) and revokes the signature instantly before counterfeit goods reach consumers.
+                NTAG 424 DNA NFC tags compute a unique AES-128 cryptographic hash (SUN nonce) on every scan. When a tap in <strong>Houston, TX</strong> is replayed <strong>5.2 seconds later in London, UK</strong> (7,750 km away), Quantum Nimbus computes the velocity (>5,000,000 km/h) and revokes the signature instantly before counterfeit goods reach consumers.
               </p>
             </div>
           </div>
 
           {/* Telemetry Log Stream */}
-          <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 flex flex-col h-[640px] space-y-4">
+          <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 flex flex-col h-[680px] space-y-4">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div>
-                <h2 class font-bold text-white text-base">Real-Time Security Feed</h2>
-                <p className="text-xs text-slate-400">Live cryptographic verification stream</p>
+                <h2 className="font-bold text-white text-base">Real-Time Security Feed</h2>
+                <p className="text-xs text-slate-400 font-mono">Pings display live as scans occur</p>
               </div>
 
               <div className="flex items-center space-x-1 bg-slate-950 p-1 rounded-lg border border-slate-800 text-[11px] font-mono">
