@@ -519,16 +519,20 @@
         const badge = document.getElementById('tooltip-status-badge');
         const cmac = document.getElementById('tooltip-cmac');
 
+        let bioTrackText = 'BioTrack / Traceability Sync: PASSED (License Token Valid)';
+
         if (foundEvt.status === 'REPLAY_ATTACK') {
           badge.className = 'text-[10px] bg-yellow-950 text-yellow-300 px-1.5 py-0.5 rounded border border-yellow-800';
           badge.textContent = '⚠️ REPLAY ATTACK';
           cmac.className = 'text-yellow-400';
           cmac.textContent = '⚠️ TOKEN REUSED / REPLAYED';
+          bioTrackText = 'BioTrack / Traceability Sync: FAILED (Token Reused / Lockout Triggered)';
         } else if (foundEvt.status === 'CRYPTO_FAIL') {
           badge.className = 'text-[10px] bg-red-950 text-red-300 px-1.5 py-0.5 rounded border border-red-800';
           badge.textContent = '🚨 BAD CRYPTO SIG';
           cmac.className = 'text-red-400';
           cmac.textContent = '🚨 INVALID AES-128 CMAC HASH';
+          bioTrackText = 'BioTrack / Traceability Sync: FAILED (Crypto Sig Mismatch / Quarantined)';
         } else {
           badge.className = 'text-[10px] bg-emerald-950 text-emerald-300 px-1.5 py-0.5 rounded border border-emerald-800';
           badge.textContent = 'VERIFIED TAP 1';
@@ -542,7 +546,7 @@
         document.getElementById('tooltip-sequence').textContent = foundEvt.sequenceNum;
         document.getElementById('tooltip-chips').textContent = foundEvt.origin.activeChips.toLocaleString();
         document.getElementById('tooltip-latency').textContent = `${foundEvt.origin.avgLatencyMs} ms (${foundEvt.vel.toLocaleString()} km/h)`;
-        document.getElementById('tooltip-extra').textContent = `BioTrack / Traceability Sync: PASSED | Timestamp: ${foundEvt.timestamp}`;
+        document.getElementById('tooltip-extra').textContent = `${bioTrackText} | Timestamp: ${foundEvt.timestamp}`;
 
         tooltip.classList.remove('hidden');
       } else if (foundCity) {

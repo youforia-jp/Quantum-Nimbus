@@ -280,20 +280,27 @@ export default function QNThreatMap() {
     }
 
     if (foundEvt) {
+      const isReplay = (foundEvt as TelemetryPayload).status === 'REPLAY_ATTACK';
+      const isCryptoFail = (foundEvt as TelemetryPayload).status === 'CRYPTO_FAIL';
+
+      let bioTrackSync = 'BioTrack / Traceability Sync: PASSED (License Token Valid)';
+      if (isReplay) bioTrackSync = 'BioTrack / Traceability Sync: FAILED (Token Reused / Lockout Triggered)';
+      if (isCryptoFail) bioTrackSync = 'BioTrack / Traceability Sync: FAILED (Crypto Sig Mismatch / Quarantined)';
+
       setTooltipPos({ x: mouseX, y: mouseY });
       setHoveredInfo({
         title: `${(foundEvt as TelemetryPayload).origin.city} ${(foundEvt as TelemetryPayload).destination ? `➔ ${(foundEvt as TelemetryPayload).destination?.city}` : ''}`,
         tagId: (foundEvt as TelemetryPayload).tag_id,
         batchId: (foundEvt as TelemetryPayload).batch_id,
         sequenceNum: (foundEvt as TelemetryPayload).sequence_num,
-        cmacStatus: (foundEvt as TelemetryPayload).status === 'REPLAY_ATTACK'
+        cmacStatus: isReplay
           ? '⚠️ TOKEN REUSED / REPLAYED'
-          : (foundEvt as TelemetryPayload).status === 'CRYPTO_FAIL'
+          : isCryptoFail
             ? '🚨 INVALID AES-128 CMAC HASH'
             : 'AES-128 SUN CMAC Verified',
         chips: (foundEvt as TelemetryPayload).origin.activeChips,
         latencyText: `${(foundEvt as TelemetryPayload).origin.avgLatencyMs} ms (${(foundEvt as TelemetryPayload).velocity_kmh?.toLocaleString()} km/h)`,
-        extra: `BioTrack / Traceability Sync: PASSED | Timestamp: ${(foundEvt as TelemetryPayload).timestamp}`,
+        extra: `${bioTrackSync} | Timestamp: ${(foundEvt as TelemetryPayload).timestamp}`,
         status: (foundEvt as TelemetryPayload).status
       });
     } else if (foundCity) {
