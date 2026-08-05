@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Public Threat Map & Enterprise Telemetry Dashboard | Quantum Nimbus Tech</title>
-  <meta name="description" content="Real-time US & Global threat map visualizing NFC cryptographic authentication, impossible velocity threat detection, and replay attack prevention.">
+  <title>Public Satellite Threat Map & Enterprise Telemetry Dashboard | Quantum Nimbus Tech</title>
+  <meta name="description" content="Real-time satellite world threat map visualizing NFC cryptographic authentication, impossible velocity threat detection, and replay attack prevention.">
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -33,9 +33,66 @@
   <style>
     body { font-family: 'Inter', sans-serif; }
     .font-mono { font-family: 'JetBrains Mono', monospace; }
-    #threat-map-container { height: 560px; width: 100%; border-radius: 0.75rem; background-color: #0b0f19; position: relative; overflow: hidden; }
-    .world-map-svg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: fill; opacity: 0.9; }
-    canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
+    #threat-map-container { 
+      height: 580px; 
+      width: 100%; 
+      border-radius: 0.75rem; 
+      background-color: #0b0f19; 
+      position: relative; 
+      overflow: hidden; 
+      border: 1px solid #1e293b;
+    }
+    .satellite-world-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.75) contrast(1.15) saturate(1.1);
+      opacity: 0.92;
+    }
+    .map-overlay-vignette {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(15, 23, 42, 0.1) 40%, rgba(8, 12, 20, 0.85) 100%);
+      pointer-events: none;
+      z-index: 5;
+    }
+    canvas { 
+      position: absolute; 
+      inset: 0; 
+      width: 100%; 
+      height: 100%; 
+      pointer-events: none; 
+      z-index: 10; 
+    }
+    .node-pin {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      z-index: 15;
+      pointer-events: auto;
+      cursor: pointer;
+    }
+    .node-pin-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 2px solid #ffffff;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.9);
+    }
+    .node-pin-pulse {
+      position: absolute;
+      top: -6px;
+      left: -6px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid #10b981;
+      animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+    }
+    @keyframes ping {
+      75%, 100% { transform: scale(2); opacity: 0; }
+    }
   </style>
 </head>
 <body class="bg-slate-950 text-slate-100 transition-colors duration-300 min-h-screen">
@@ -79,10 +136,10 @@
       <div>
         <div class="flex items-center space-x-2 mb-2">
           <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span class="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider">Geographic World Vector Telemetry</span>
+          <span class="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider">Satellite Telemetry Map Active</span>
         </div>
-        <h1 class="text-3xl font-extrabold text-white tracking-tight">Real-Time US & World Threat Map</h1>
-        <p class="text-slate-400 text-sm mt-1">Watch live verification pings and impossible velocity replay attacks render across actual US and international landmasses in real-time.</p>
+        <h1 class="text-3xl font-extrabold text-white tracking-tight">Real-Time Satellite Threat Map</h1>
+        <p class="text-slate-400 text-sm mt-1">Live visualization of NFC cryptographic pings and impossible velocity replay attacks over high-resolution satellite imagery.</p>
       </div>
 
       <!-- Quick Control Bar -->
@@ -143,16 +200,16 @@
       </div>
     </section>
 
-    <!-- Main Content Grid: Real World Vector Map & Live Feed -->
+    <!-- Main Content Grid: Satellite World Map Asset & Live Stream -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
       
-      <!-- Real World Vector Threat Map Container (2 Cols) -->
+      <!-- Satellite Map Container (2 Cols) -->
       <section class="lg:col-span-2 space-y-4">
         <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-sm relative">
           
           <div class="flex items-center justify-between mb-3 px-1">
             <h2 class="text-base font-bold text-white flex items-center space-x-2">
-              <span>🗺️ Geographical World & US Landmass Map</span>
+              <span>🗺️ Satellite World Telemetry Map</span>
             </h2>
             <div class="flex items-center space-x-4 text-xs font-mono">
               <span class="flex items-center space-x-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block shadow-[0_0_8px_rgba(16,185,129,0.8)]"></span><span>Verified Ping</span></span>
@@ -160,112 +217,23 @@
             </div>
           </div>
 
-          <!-- Dynamic World Map Container -->
+          <!-- Dynamic Threat Map Container with Satellite Image Background -->
           <div id="threat-map-container">
             
-            <!-- Real World Map SVG Vector Landmass Polygons -->
-            <svg class="world-map-svg" viewBox="0 0 1000 500" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <linearGradient id="oceanGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stop-color="#0b1120" />
-                  <stop offset="100%" stop-color="#080c16" />
-                </linearGradient>
-                <linearGradient id="usLandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#1e293b" />
-                  <stop offset="100%" stop-color="#0f172a" />
-                </linearGradient>
-              </defs>
+            <!-- High-Resolution Satellite Map Image Asset -->
+            <img src="assets/images/world-map-satellite.png" class="satellite-world-img" alt="Satellite World Map Telemetry Asset">
+            <div class="map-overlay-vignette"></div>
 
-              <!-- Ocean Background -->
-              <rect width="1000" height="500" fill="url(#oceanGrad)" />
+            <!-- HTML Dynamic Node Markers Overlay -->
+            <div id="node-pins-layer">
+              <!-- Dynamically mapped HTML city markers -->
+            </div>
 
-              <!-- Latitude / Longitude Grid Lines -->
-              <g stroke="rgba(51, 65, 85, 0.25)" stroke-width="0.75" stroke-dasharray="3,3">
-                <line x1="0" y1="100" x2="1000" y2="100" />
-                <line x1="0" y1="200" x2="1000" y2="200" />
-                <line x1="0" y1="300" x2="1000" y2="300" />
-                <line x1="0" y1="400" x2="1000" y2="400" />
-                <line x1="200" y1="0" x2="200" y2="500" />
-                <line x1="400" y1="0" x2="400" y2="500" />
-                <line x1="600" y1="0" x2="600" y2="500" />
-                <line x1="800" y1="0" x2="800" y2="500" />
-              </g>
-
-              <!-- CONTINENT LANDMASS POLYGONS -->
-              <g class="landmasses" fill="url(#usLandGrad)" stroke="#334155" stroke-width="1.2" stroke-linejoin="round">
-                <!-- North America (US, Canada, Mexico, Alaska) -->
-                <path d="M 120 70 L 160 50 L 220 40 L 280 60 L 290 90 L 260 110 L 250 140 L 270 170 L 250 190 L 230 200 L 220 220 L 200 240 L 190 230 L 170 210 L 150 200 L 130 180 L 110 160 L 90 140 L 80 110 L 100 80 Z" />
-                
-                <!-- United States Highlight Outline (Texas, West, East Coast) -->
-                <path d="M 110 130 L 140 125 L 180 120 L 230 130 L 245 155 L 240 180 L 210 200 L 190 205 L 170 190 L 150 185 L 125 170 L 105 150 Z" fill="rgba(16, 185, 129, 0.08)" stroke="#10b981" stroke-width="1.5" stroke-dasharray="4,2" />
-
-                <!-- South America (Brazil, Argentina, Chile, Colombia) -->
-                <path d="M 240 250 L 280 260 L 310 290 L 320 330 L 300 380 L 270 430 L 250 440 L 240 390 L 230 330 L 220 290 Z" />
-
-                <!-- Europe (UK, France, Germany, Spain, Scandinavia) -->
-                <path d="M 450 80 L 480 60 L 520 70 L 550 90 L 530 130 L 500 150 L 470 160 L 450 140 L 440 110 Z" />
-                <path d="M 440 90 L 455 85 L 450 105 L 435 100 Z" fill="#334155" /> <!-- UK Isle -->
-
-                <!-- Africa -->
-                <path d="M 450 170 L 500 165 L 550 190 L 570 230 L 560 280 L 530 350 L 500 370 L 470 330 L 450 270 L 440 210 Z" />
-
-                <!-- Asia (Russia, China, India, SE Asia) -->
-                <path d="M 540 60 L 620 45 L 750 40 L 850 60 L 880 100 L 820 140 L 760 170 L 710 200 L 650 210 L 610 180 L 570 150 L 530 110 Z" />
-
-                <!-- Japan Islands -->
-                <path d="M 840 120 L 860 110 L 870 130 L 850 145 Z" fill="#10b981" opacity="0.6" />
-
-                <!-- Australia & New Zealand -->
-                <path d="M 760 300 L 830 290 L 870 320 L 860 370 L 810 390 L 760 360 L 740 330 Z" />
-                <path d="M 890 350 L 910 370 L 895 390 Z" fill="#334155" /> <!-- NZ -->
-              </g>
-
-              <!-- Node Pulse Indicators -->
-              <g class="svg-nodes">
-                <!-- Houston HQ -->
-                <circle cx="180" cy="180" r="5" fill="#10b981" />
-                <circle cx="180" cy="180" r="10" fill="none" stroke="#10b981" stroke-width="1" opacity="0.6" />
-                <text x="188" y="184" fill="#34d399" font-family="JetBrains Mono" font-size="10" font-weight="bold">Houston, TX (HQ)</text>
-
-                <!-- San Francisco -->
-                <circle cx="115" cy="145" r="4" fill="#10b981" />
-                <text x="50" y="140" fill="#94a3b8" font-family="Inter" font-size="9">San Francisco, CA</text>
-
-                <!-- New York -->
-                <circle cx="230" cy="135" r="4" fill="#10b981" />
-                <text x="236" y="130" fill="#94a3b8" font-family="Inter" font-size="9">New York, NY</text>
-
-                <!-- Chicago -->
-                <circle cx="190" cy="130" r="4" fill="#10b981" />
-                <text x="175" y="120" fill="#94a3b8" font-family="Inter" font-size="9">Chicago, IL</text>
-
-                <!-- Miami -->
-                <circle cx="225" cy="195" r="4" fill="#10b981" />
-                <text x="232" y="200" fill="#94a3b8" font-family="Inter" font-size="9">Miami, FL</text>
-
-                <!-- London UK -->
-                <circle cx="450" cy="100" r="5" fill="#3b82f6" />
-                <text x="458" y="96" fill="#60a5fa" font-family="JetBrains Mono" font-size="10" font-weight="bold">London, UK</text>
-
-                <!-- Berlin -->
-                <circle cx="490" cy="95" r="4" fill="#3b82f6" />
-                <text x="496" y="90" fill="#94a3b8" font-family="Inter" font-size="9">Berlin</text>
-
-                <!-- Tokyo -->
-                <circle cx="850" cy="130" r="5" fill="#3b82f6" />
-                <text x="858" y="134" fill="#60a5fa" font-family="JetBrains Mono" font-size="10" font-weight="bold">Tokyo</text>
-
-                <!-- Sydney -->
-                <circle cx="820" cy="340" r="4" fill="#3b82f6" />
-                <text x="828" y="344" fill="#94a3b8" font-family="Inter" font-size="9">Sydney</text>
-              </g>
-            </svg>
-
-            <!-- Real-Time Arc Animation Canvas Layer -->
+            <!-- Real-Time Arc & Laser Beam Canvas Overlay -->
             <canvas id="map-canvas"></canvas>
 
             <!-- On-Map Alert Overlay Badge -->
-            <div id="map-alert-badge" class="absolute top-4 left-4 bg-red-950/90 border border-red-500/60 rounded-lg p-3 backdrop-blur-md opacity-0 transition-opacity duration-300 max-w-xs shadow-2xl z-20">
+            <div id="map-alert-badge" class="absolute top-4 left-4 bg-red-950/90 border border-red-500/60 rounded-lg p-3 backdrop-blur-md opacity-0 transition-opacity duration-300 max-w-xs shadow-2xl z-30">
               <div class="flex items-center space-x-2 text-red-400 font-bold text-xs font-mono">
                 <span class="animate-ping w-2 h-2 rounded-full bg-red-500"></span>
                 <span>🚨 IMPOSSIBLE VELOCITY DETECTED</span>
@@ -284,7 +252,7 @@
             <span>💡 How Dynamic Arc Beams Prove Cryptographic Authenticity</span>
           </h3>
           <p class="text-slate-300 text-xs leading-relaxed">
-            As NFC tags tap in real-time, green arc beams highlight verified authentications. When a duplicate tag tap is replayed across distant locations (e.g. <strong>Houston, TX</strong> to <strong>London, UK</strong>), an instant red laser arc projects across the map, triggering an automated threat block before counterfeit merchandise can be distributed.
+            As NFC tags tap in real-time, green arc beams highlight verified authentications over actual global satellite geography. When a duplicate tag tap is replayed across distant locations (e.g. <strong>Houston, TX</strong> to <strong>London, UK</strong>), an instant red laser arc projects across the map, triggering an automated threat block before counterfeit merchandise can be distributed.
           </p>
         </div>
       </section>
@@ -294,7 +262,7 @@
         <div class="flex items-center justify-between border-b border-slate-800 pb-3">
           <div>
             <h2 class="text-base font-bold text-white">Live Security Telemetry Stream</h2>
-            <p class="text-xs text-slate-400">Pings display live as scans occur</p>
+            <p class="text-xs text-slate-400 font-mono">Pings display live as scans occur</p>
           </div>
           <span id="stream-status-badge" class="px-2 py-0.5 text-xs font-mono font-bold rounded bg-emerald-950 text-emerald-400 border border-emerald-800 animate-pulse">
             STREAM ACTIVE
@@ -318,7 +286,7 @@
 
   <!-- Dynamic Threat Map Canvas Engine Script -->
   <script>
-    // Theme State
+    // Theme State Toggle
     let isDarkMode = true;
     const themeToggleBtn = document.getElementById('theme-toggle');
     const themeToggleIcon = document.getElementById('theme-toggle-icon');
@@ -337,17 +305,18 @@
       }
     });
 
-    // Real Node Canvas Target Positions matching SVG Map
+    // Exact City Coordinates mapped to Satellite Map Asset Percentages
     const NODES = [
-      { id: 'houston', name: 'Houston, TX (HQ)', xRatio: 180 / 1000, yRatio: 180 / 500 },
-      { id: 'sf', name: 'San Francisco, CA', xRatio: 115 / 1000, yRatio: 145 / 500 },
-      { id: 'ny', name: 'New York, NY', xRatio: 230 / 1000, yRatio: 135 / 500 },
-      { id: 'chicago', name: 'Chicago, IL', xRatio: 190 / 1000, yRatio: 130 / 500 },
-      { id: 'miami', name: 'Miami, FL', xRatio: 225 / 1000, yRatio: 195 / 500 },
-      { id: 'london', name: 'London, UK', xRatio: 450 / 1000, yRatio: 100 / 500 },
-      { id: 'berlin', name: 'Berlin, Germany', xRatio: 490 / 1000, yRatio: 95 / 500 },
-      { id: 'tokyo', name: 'Tokyo, Japan', xRatio: 850 / 1000, yRatio: 130 / 500 },
-      { id: 'sydney', name: 'Sydney, Australia', xRatio: 820 / 1000, yRatio: 340 / 500 }
+      { id: 'houston', name: 'Houston, TX (HQ)', xPct: 20.8, yPct: 44.5, isUs: true },
+      { id: 'sf', name: 'San Francisco, CA', xPct: 12.5, yPct: 37.8, isUs: true },
+      { id: 'ny', name: 'New York, NY', xPct: 26.2, yPct: 34.0, isUs: true },
+      { id: 'chicago', name: 'Chicago, IL', xPct: 22.4, yPct: 32.8, isUs: true },
+      { id: 'miami', name: 'Miami, FL', xPct: 25.2, yPct: 47.8, isUs: true },
+      { id: 'denver', name: 'Denver, CO', xPct: 17.5, yPct: 36.5, isUs: true },
+      { id: 'london', name: 'London, UK', xPct: 47.5, yPct: 24.8, isUs: false },
+      { id: 'berlin', name: 'Berlin, Germany', xPct: 51.8, yPct: 23.2, isUs: false },
+      { id: 'tokyo', name: 'Tokyo, Japan', xPct: 85.8, yPct: 34.2, isUs: false },
+      { id: 'sydney', name: 'Sydney, Australia', xPct: 86.8, yPct: 73.2, isUs: false }
     ];
 
     // Canvas State & Ping Queue
@@ -359,6 +328,31 @@
       const container = document.getElementById('threat-map-container');
       canvas.width = container.clientWidth;
       canvas.height = container.clientHeight;
+      renderNodePinElements();
+    }
+
+    // HTML Node Markers Generator
+    function renderNodePinElements() {
+      const pinLayer = document.getElementById('node-pins-layer');
+      pinLayer.innerHTML = '';
+
+      NODES.forEach(node => {
+        const pin = document.createElement('div');
+        pin.className = 'node-pin';
+        pin.style.left = `${node.xPct}%`;
+        pin.style.top = `${node.yPct}%`;
+
+        pin.innerHTML = `
+          <div class="relative flex items-center group">
+            <div class="node-pin-pulse" style="border-color: ${node.isUs ? '#10b981' : '#3b82f6'};"></div>
+            <div class="node-pin-dot" style="background-color: ${node.isUs ? '#10b981' : '#3b82f6'};"></div>
+            <span class="ml-2 font-mono text-[10px] font-bold text-white bg-slate-900/80 px-1.5 py-0.5 rounded border border-slate-700/60 backdrop-blur-sm whitespace-nowrap shadow-md">
+              ${node.name}
+            </span>
+          </div>
+        `;
+        pinLayer.appendChild(pin);
+      });
     }
 
     window.addEventListener('resize', resizeCanvas);
@@ -366,12 +360,12 @@
 
     function getCanvasCoords(node) {
       return {
-        x: node.xRatio * canvas.width,
-        y: node.yRatio * canvas.height
+        x: (node.xPct / 100) * canvas.width,
+        y: (node.yPct / 100) * canvas.height
       };
     }
 
-    // Main Render Loop for Arc Trajectories & Laser Beams
+    // Main Render Loop for Arc Trajectories over Satellite Map Asset
     function drawArcs() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -389,41 +383,40 @@
         const midX = (p1.x + p2.x) / 2;
         const midY = Math.min(p1.y, p2.y) - Math.abs(p1.x - p2.x) * 0.28;
 
-        // Draw Quadratic Arc Trajectory Line
+        // Draw Arc Line
         ctx.beginPath();
         ctx.moveTo(p1.x, p1.y);
         ctx.quadraticCurveTo(midX, midY, p2.x, p2.y);
         ctx.strokeStyle = arc.isAttack 
-          ? `rgba(239, 68, 68, ${0.9 * (1 - progress)})` 
-          : `rgba(16, 185, 129, ${0.85 * (1 - progress)})`;
-        ctx.lineWidth = arc.isAttack ? 3.5 : 2;
+          ? `rgba(239, 68, 68, ${0.95 * (1 - progress)})` 
+          : `rgba(16, 185, 129, ${0.9 * (1 - progress)})`;
+        ctx.lineWidth = arc.isAttack ? 3.5 : 2.5;
         ctx.setLineDash(arc.isAttack ? [8, 4] : []);
         ctx.stroke();
         ctx.setLineDash([]);
 
-        // Animated Traveling Laser Particle along Arc
+        // Animated Trailing Laser Particle
         const t = progress;
         const currX = (1 - t) * (1 - t) * p1.x + 2 * (1 - t) * t * midX + t * t * p2.x;
         const currY = (1 - t) * (1 - t) * p1.y + 2 * (1 - t) * t * midY + t * t * p2.y;
 
         ctx.beginPath();
-        ctx.arc(currX, currY, arc.isAttack ? 7 : 4.5, 0, Math.PI * 2);
+        ctx.arc(currX, currY, arc.isAttack ? 7 : 5, 0, Math.PI * 2);
         ctx.fillStyle = arc.isAttack ? '#ef4444' : '#10b981';
         ctx.shadowColor = arc.isAttack ? '#ef4444' : '#10b981';
-        ctx.shadowBlur = 14;
+        ctx.shadowBlur = 16;
         ctx.fill();
         ctx.shadowBlur = 0;
 
         // Dynamic Shockwave Ring at Target Node
         if (progress > 0.3) {
           ctx.beginPath();
-          ctx.arc(p2.x, p2.y, 16 * progress, 0, Math.PI * 2);
+          ctx.arc(p2.x, p2.y, 18 * progress, 0, Math.PI * 2);
           ctx.strokeStyle = arc.isAttack ? `rgba(239, 68, 68, ${1 - progress})` : `rgba(16, 185, 129, ${1 - progress})`;
           ctx.lineWidth = 2;
           ctx.stroke();
         }
 
-        // Remove finished arcs
         if (progress >= 1.0) {
           activeArcs.splice(i, 1);
         }
@@ -498,7 +491,7 @@
     // Trigger Houston to London Attack
     document.getElementById('btn-attack-replay').addEventListener('click', () => {
       const houston = NODES[0]; // Houston
-      const london = NODES[5];  // London
+      const london = NODES[6];  // London
       const velocity = 5365384;
       triggerPingOnMap(houston, london, true, velocity, 'IMPOSSIBLE VELOCITY REPLAY');
     });
@@ -534,7 +527,7 @@
     // Initial Trigger on Load
     window.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
-        triggerPingOnMap(NODES[0], NODES[5], true, 5365384, 'IMPOSSIBLE VELOCITY REPLAY');
+        triggerPingOnMap(NODES[0], NODES[6], true, 5365384, 'IMPOSSIBLE VELOCITY REPLAY');
       }, 600);
     });
   </script>
