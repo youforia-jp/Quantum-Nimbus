@@ -1559,7 +1559,10 @@
 
             const latencyMetric = document.getElementById('ai-latency-metric');
             if (latencyMetric) {
-                latencyMetric.textContent = `${latency} ms`;
+                const modelInferenceMs = (data && data.inference_time_ms !== undefined)
+                    ? data.inference_time_ms
+                    : (isCryptoFailure ? 0.0 : (mode === 'dual-ip' ? 1.4 : 0.8));
+                latencyMetric.textContent = `${modelInferenceMs} ms`;
             }
 
             // Input Vector Box
@@ -1690,6 +1693,7 @@
                             velocity_flag: 'NORMAL',
                             distance_km: 0,
                             time_delta_sec: 0,
+                            inference_time_ms: 0.0,
                             message: 'Hardware silicon MAC verification failed (standalone simulation fallback)'
                         };
                         res = { ok: false, status: 404 };
@@ -1701,6 +1705,7 @@
                             velocity_flag: 'IMPOSSIBLE_TRANSIT',
                             distance_km: 15828,
                             time_delta_sec: 1.5,
+                            inference_time_ms: 1.4,
                             message: 'Simultaneous multi-location scan anomaly flagged'
                         };
                         res = { ok: true, status: 200 };
@@ -1712,6 +1717,7 @@
                             velocity_flag: 'NORMAL',
                             distance_km: 0,
                             time_delta_sec: 0,
+                            inference_time_ms: 0.8,
                             message: 'Genuine product scan verified (standalone simulation fallback)'
                         };
                         res = { ok: true, status: 200 };
@@ -1785,7 +1791,10 @@
                     result = await sendVerifyRequest(pBad);
                 }
 
-                const latency = Math.round(performance.now() - startTime);
+                let netLatency = Math.round(performance.now() - startTime);
+                if (mode === 'dual-ip' || mode === 'replay') {
+                    netLatency = Math.max(40, netLatency - 1500);
+                }
                 const data = result.data;
                 const httpStatus = result.status;
 
@@ -1797,14 +1806,14 @@
                     if (radarOverlay) radarOverlay.classList.add('hidden');
                     if (jsonBox) jsonBox.textContent = JSON.stringify(data, null, 2);
 
-                    updateAiTelemetryHud(data, latency, mode);
+                    updateAiTelemetryHud(data, netLatency, mode);
 
                     if (mode === 'dual-ip' || data.status === 'FLAGGED' || data.velocity_flag === 'IMPOSSIBLE_TRANSIT' || (data.status === 'REVOKED' && data.threat_score < 1.0)) {
                         // 🟡 Scenario 1: Dual-IP / Telemetry Anomaly
                         if (window.synth && typeof window.synth.playWarningAlarm === 'function') window.synth.playWarningAlarm();
                         if (statusPill) {
                             statusPill.className = 'text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800';
-                            statusPill.textContent = `${httpStatus} FLAGGED • ${data.scan_velocity || 0} km/h • ${latency}ms`;
+                            statusPill.textContent = `${httpStatus} FLAGGED • ${data.scan_velocity || 0} km/h • ${netLatency}ms RTT`;
                         }
                         renderDualIpAnomalyCard(tagId, tapDisplayCount);
 
@@ -1813,7 +1822,7 @@
                         if (window.synth && typeof window.synth.playWarningAlarm === 'function') window.synth.playWarningAlarm();
                         if (statusPill) {
                             statusPill.className = 'text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-rose-950 text-rose-400 border border-rose-800';
-                            statusPill.textContent = `${httpStatus} LOCKED • ${latency}ms`;
+                            statusPill.textContent = `${httpStatus} LOCKED • ${netLatency}ms RTT`;
                         }
                         renderCounterfeitCard(tagId, tapDisplayCount);
 
@@ -1822,7 +1831,7 @@
                         if (window.synth && typeof window.synth.playSupplementSpark === 'function') window.synth.playSupplementSpark();
                         if (statusPill) {
                             statusPill.className = 'text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800';
-                            statusPill.textContent = `${httpStatus} OK • VERIFIED • ${latency}ms`;
+                            statusPill.textContent = `${httpStatus} OK • VERIFIED • ${netLatency}ms RTT`;
                         }
                         renderAuthenticCard({ brand: 'Secret Nature', product: 'Delta 8 Organic Live Resin Cartridge', strain: 'Delta 8 Organic Live Resin', batch: 'SA-260115-75486', coa: 'https://cdn.shopify.com/s/files/1/0046/1042/4950/files/SA-260115-75486_Secret_Nature_Delta_D8.pdf?v=1769022355' }, tagId, tapDisplayCount);
                         if (typeof slotCartridge === 'function') slotCartridge('rosin');
