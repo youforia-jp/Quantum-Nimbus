@@ -37,7 +37,7 @@
       height: 580px; 
       width: 100%; 
       border-radius: 0.75rem; 
-      background-color: #0b0f19; 
+      background-color: #080c14; 
       position: relative; 
       overflow: hidden; 
       border: 1px solid #1e293b;
@@ -47,14 +47,14 @@
       inset: 0;
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      filter: brightness(0.75) contrast(1.15) saturate(1.1);
-      opacity: 0.92;
+      object-fit: fill;
+      filter: brightness(0.8) contrast(1.15) saturate(1.1);
+      opacity: 0.95;
     }
     .map-overlay-vignette {
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at center, rgba(15, 23, 42, 0.1) 40%, rgba(8, 12, 20, 0.85) 100%);
+      background: radial-gradient(circle at center, rgba(15, 23, 42, 0.05) 40%, rgba(8, 12, 20, 0.75) 100%);
       pointer-events: none;
       z-index: 5;
     }
@@ -66,32 +66,30 @@
       pointer-events: none; 
       z-index: 10; 
     }
-    .node-pin {
+    .dynamic-node-pin {
       position: absolute;
       transform: translate(-50%, -50%);
       z-index: 15;
       pointer-events: auto;
-      cursor: pointer;
+      transition: opacity 0.4s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     .node-pin-dot {
       width: 10px;
       height: 10px;
       border-radius: 50%;
       border: 2px solid #ffffff;
-      box-shadow: 0 0 10px rgba(16, 185, 129, 0.9);
     }
     .node-pin-pulse {
       position: absolute;
-      top: -6px;
-      left: -6px;
-      width: 22px;
-      height: 22px;
+      top: -7px;
+      left: -7px;
+      width: 24px;
+      height: 24px;
       border-radius: 50%;
-      border: 2px solid #10b981;
-      animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+      animation: ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
     }
     @keyframes ping {
-      75%, 100% { transform: scale(2); opacity: 0; }
+      75%, 100% { transform: scale(2.2); opacity: 0; }
     }
   </style>
 </head>
@@ -136,19 +134,19 @@
       <div>
         <div class="flex items-center space-x-2 mb-2">
           <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span class="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider">Satellite Telemetry Map Active</span>
+          <span class="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider">Dynamic NFC Tag Scanning Map</span>
         </div>
         <h1 class="text-3xl font-extrabold text-white tracking-tight">Real-Time Satellite Threat Map</h1>
-        <p class="text-slate-400 text-sm mt-1">Live visualization of NFC cryptographic pings and impossible velocity replay attacks over high-resolution satellite imagery.</p>
+        <p class="text-slate-400 text-sm mt-1">Nodes appear live as NFC scans occur. Connecting laser arcs are drawn only when the same NFC tag ID is replayed at a second location.</p>
       </div>
 
       <!-- Quick Control Bar -->
       <div class="flex items-center space-x-2">
         <button id="btn-attack-replay" class="bg-red-600 hover:bg-red-500 text-white text-xs font-semibold px-3.5 py-2 rounded-lg shadow transition-all flex items-center space-x-1.5 cursor-pointer">
-          <span>⚡ Trigger Houston→London Attack</span>
+          <span>⚡ Simulate Houston→London Replay Attack</span>
         </button>
         <button id="btn-random-ping" class="bg-slate-200 hover:bg-white text-slate-900 text-xs font-semibold px-3.5 py-2 rounded-lg transition-all cursor-pointer">
-          <span>🎲 Generate Live Ping</span>
+          <span>🎲 Scan NFC Tag</span>
         </button>
       </div>
     </div>
@@ -209,11 +207,11 @@
           
           <div class="flex items-center justify-between mb-3 px-1">
             <h2 class="text-base font-bold text-white flex items-center space-x-2">
-              <span>🗺️ Satellite World Telemetry Map</span>
+              <span>🗺️ Dynamic Scan & Threat Arc Map</span>
             </h2>
             <div class="flex items-center space-x-4 text-xs font-mono">
-              <span class="flex items-center space-x-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block shadow-[0_0_8px_rgba(16,185,129,0.8)]"></span><span>Verified Ping</span></span>
-              <span class="flex items-center space-x-1.5"><span class="w-2.5 h-2.5 rounded-full bg-red-500 inline-block shadow-[0_0_8px_rgba(239,68,68,0.8)]"></span><span>Threat Blocked</span></span>
+              <span class="flex items-center space-x-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block shadow-[0_0_8px_rgba(16,185,129,0.8)]"></span><span>Tap 1 (Scan)</span></span>
+              <span class="flex items-center space-x-1.5"><span class="w-2.5 h-2.5 rounded-full bg-red-500 inline-block shadow-[0_0_8px_rgba(239,68,68,0.8)]"></span><span>Tap 2 (Replay Line Drawn)</span></span>
             </div>
           </div>
 
@@ -224,10 +222,8 @@
             <img src="assets/images/world-map-satellite.png" class="satellite-world-img" alt="Satellite World Map Telemetry Asset">
             <div class="map-overlay-vignette"></div>
 
-            <!-- HTML Dynamic Node Markers Overlay -->
-            <div id="node-pins-layer">
-              <!-- Dynamically mapped HTML city markers -->
-            </div>
+            <!-- Dynamic Node Pins Layer (Spawns on Scan) -->
+            <div id="dynamic-pins-layer"></div>
 
             <!-- Real-Time Arc & Laser Beam Canvas Overlay -->
             <canvas id="map-canvas"></canvas>
@@ -236,10 +232,10 @@
             <div id="map-alert-badge" class="absolute top-4 left-4 bg-red-950/90 border border-red-500/60 rounded-lg p-3 backdrop-blur-md opacity-0 transition-opacity duration-300 max-w-xs shadow-2xl z-30">
               <div class="flex items-center space-x-2 text-red-400 font-bold text-xs font-mono">
                 <span class="animate-ping w-2 h-2 rounded-full bg-red-500"></span>
-                <span>🚨 IMPOSSIBLE VELOCITY DETECTED</span>
+                <span>🚨 REPLAY ATTACK INTERCEPTED</span>
               </div>
               <p id="map-alert-text" class="text-[11px] text-red-200 mt-1 font-mono leading-tight">
-                Houston → London (5.2s delta) | Speed: 5,365,384 km/h
+                Tag NTAG-424-88A9 replayed in London 5.2s after Houston scan!
               </p>
             </div>
 
@@ -249,10 +245,10 @@
         <!-- Educational Explanation Card -->
         <div class="bg-emerald-950/20 border border-emerald-500/30 rounded-xl p-5 text-sm space-y-2">
           <h3 class="font-bold text-emerald-400 flex items-center space-x-2">
-            <span>💡 How Dynamic Arc Beams Prove Cryptographic Authenticity</span>
+            <span>💡 How NFC Tag Replay Triggers Laser Arcs</span>
           </h3>
           <p class="text-slate-300 text-xs leading-relaxed">
-            As NFC tags tap in real-time, green arc beams highlight verified authentications over actual global satellite geography. When a duplicate tag tap is replayed across distant locations (e.g. <strong>Houston, TX</strong> to <strong>London, UK</strong>), an instant red laser arc projects across the map, triggering an automated threat block before counterfeit merchandise can be distributed.
+            When an NFC tag is scanned at Location A (e.g. <strong>Houston, TX</strong>), a green scan node pops up. If the <strong>exact same Tag ID</strong> is scanned seconds later at Location B (e.g. <strong>London, UK</strong>), Quantum Nimbus detects duplicate nonce reuse and draws an instant red laser arc between the two nodes, revoking authentication.
           </p>
         </div>
       </section>
@@ -284,7 +280,7 @@
     <p>© 2026 Quantum Nimbus Tech. U.S. Patent Pending — Dynamic Vaporization Parameter & NFC Cryptographic Authentication.</p>
   </footer>
 
-  <!-- Dynamic Threat Map Canvas Engine Script -->
+  <!-- Dynamic Threat Map Canvas & Tag Replay Engine Script -->
   <script>
     // Theme State Toggle
     let isDarkMode = true;
@@ -305,67 +301,83 @@
       }
     });
 
-    // Exact City Coordinates mapped to Satellite Map Asset Percentages
-    const NODES = [
-      { id: 'houston', name: 'Houston, TX (HQ)', xPct: 20.8, yPct: 44.5, isUs: true },
-      { id: 'sf', name: 'San Francisco, CA', xPct: 12.5, yPct: 37.8, isUs: true },
-      { id: 'ny', name: 'New York, NY', xPct: 26.2, yPct: 34.0, isUs: true },
-      { id: 'chicago', name: 'Chicago, IL', xPct: 22.4, yPct: 32.8, isUs: true },
-      { id: 'miami', name: 'Miami, FL', xPct: 25.2, yPct: 47.8, isUs: true },
-      { id: 'denver', name: 'Denver, CO', xPct: 17.5, yPct: 36.5, isUs: true },
-      { id: 'london', name: 'London, UK', xPct: 47.5, yPct: 24.8, isUs: false },
-      { id: 'berlin', name: 'Berlin, Germany', xPct: 51.8, yPct: 23.2, isUs: false },
-      { id: 'tokyo', name: 'Tokyo, Japan', xPct: 85.8, yPct: 34.2, isUs: false },
-      { id: 'sydney', name: 'Sydney, Australia', xPct: 86.8, yPct: 73.2, isUs: false }
+    // TRUE GEOGRAPHICAL CITY PERCENTAGES (Aligned directly onto real-life landmasses)
+    const CITIES = [
+      { id: 'houston', name: 'Houston, TX (HQ)', xPct: 22.2, yPct: 40.5, isUs: true },
+      { id: 'sf', name: 'San Francisco, CA', xPct: 15.5, yPct: 35.0, isUs: true },
+      { id: 'ny', name: 'New York, NY', xPct: 28.0, yPct: 30.5, isUs: true },
+      { id: 'chicago', name: 'Chicago, IL', xPct: 24.5, yPct: 31.5, isUs: true },
+      { id: 'miami', name: 'Miami, FL', xPct: 27.2, yPct: 42.5, isUs: true },
+      { id: 'denver', name: 'Denver, CO', xPct: 20.0, yPct: 34.5, isUs: true },
+      { id: 'london', name: 'London, UK', xPct: 47.8, yPct: 23.5, isUs: false },
+      { id: 'berlin', name: 'Berlin, Germany', xPct: 52.0, yPct: 22.0, isUs: false },
+      { id: 'tokyo', name: 'Tokyo, Japan', xPct: 88.5, yPct: 34.0, isUs: false },
+      { id: 'sydney', name: 'Sydney, Australia', xPct: 87.5, yPct: 76.0, isUs: false }
     ];
 
-    // Canvas State & Ping Queue
+    // State Tracking for Tag Scans (Map of tagId -> previous scan data)
+    const tagStore = new Map();
+    const activeArcs = [];
+    const activePinElements = new Map();
+
     const canvas = document.getElementById('map-canvas');
     const ctx = canvas.getContext('2d');
-    const activeArcs = [];
 
     function resizeCanvas() {
       const container = document.getElementById('threat-map-container');
       canvas.width = container.clientWidth;
       canvas.height = container.clientHeight;
-      renderNodePinElements();
-    }
-
-    // HTML Node Markers Generator
-    function renderNodePinElements() {
-      const pinLayer = document.getElementById('node-pins-layer');
-      pinLayer.innerHTML = '';
-
-      NODES.forEach(node => {
-        const pin = document.createElement('div');
-        pin.className = 'node-pin';
-        pin.style.left = `${node.xPct}%`;
-        pin.style.top = `${node.yPct}%`;
-
-        pin.innerHTML = `
-          <div class="relative flex items-center group">
-            <div class="node-pin-pulse" style="border-color: ${node.isUs ? '#10b981' : '#3b82f6'};"></div>
-            <div class="node-pin-dot" style="background-color: ${node.isUs ? '#10b981' : '#3b82f6'};"></div>
-            <span class="ml-2 font-mono text-[10px] font-bold text-white bg-slate-900/80 px-1.5 py-0.5 rounded border border-slate-700/60 backdrop-blur-sm whitespace-nowrap shadow-md">
-              ${node.name}
-            </span>
-          </div>
-        `;
-        pinLayer.appendChild(pin);
-      });
     }
 
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
 
-    function getCanvasCoords(node) {
+    function getCanvasCoords(city) {
       return {
-        x: (node.xPct / 100) * canvas.width,
-        y: (node.yPct / 100) * canvas.height
+        x: (city.xPct / 100) * canvas.width,
+        y: (city.yPct / 100) * canvas.height
       };
     }
 
-    // Main Render Loop for Arc Trajectories over Satellite Map Asset
+    // Spawn or Refresh a Node Pin on the map when a scan occurs
+    function spawnNodePin(city, isThreat) {
+      const pinLayer = document.getElementById('dynamic-pins-layer');
+      const pinId = `pin-${city.id}`;
+
+      let pin = document.getElementById(pinId);
+      if (!pin) {
+        pin = document.createElement('div');
+        pin.id = pinId;
+        pin.className = 'dynamic-node-pin';
+        pin.style.left = `${city.xPct}%`;
+        pin.style.top = `${city.yPct}%`;
+        pinLayer.appendChild(pin);
+      }
+
+      const color = isThreat ? '#ef4444' : '#10b981';
+      pin.innerHTML = `
+        <div class="relative flex items-center">
+          <div class="node-pin-pulse" style="border-color: ${color};"></div>
+          <div class="node-pin-dot" style="background-color: ${color}; box-shadow: 0 0 12px ${color};"></div>
+          <span class="ml-2 font-mono text-[10px] font-bold text-white ${isThreat ? 'bg-red-950/90 border-red-700' : 'bg-slate-900/80 border-slate-700/60'} px-2 py-0.5 rounded border backdrop-blur-sm whitespace-nowrap shadow-lg">
+            ${city.name}
+          </span>
+        </div>
+      `;
+
+      pin.style.opacity = '1';
+      
+      // Auto-fade node pin after 8 seconds of inactivity
+      if (activePinElements.has(pinId)) {
+        clearTimeout(activePinElements.get(pinId));
+      }
+      const timeout = setTimeout(() => {
+        if (pin) pin.style.opacity = '0.2';
+      }, 8000);
+      activePinElements.set(pinId, timeout);
+    }
+
+    // Main Render Loop for Ballistic Laser Arcs between Replayed Scans
     function drawArcs() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -373,7 +385,7 @@
       for (let i = activeArcs.length - 1; i >= 0; i--) {
         const arc = activeArcs[i];
         const elapsed = now - arc.startTime;
-        const duration = arc.isAttack ? 2500 : 1800;
+        const duration = 2400;
         const progress = Math.min(elapsed / duration, 1.0);
 
         const p1 = getCanvasCoords(arc.origin);
@@ -383,15 +395,13 @@
         const midX = (p1.x + p2.x) / 2;
         const midY = Math.min(p1.y, p2.y) - Math.abs(p1.x - p2.x) * 0.28;
 
-        // Draw Arc Line
+        // Draw Arc Trajectory Line
         ctx.beginPath();
         ctx.moveTo(p1.x, p1.y);
         ctx.quadraticCurveTo(midX, midY, p2.x, p2.y);
-        ctx.strokeStyle = arc.isAttack 
-          ? `rgba(239, 68, 68, ${0.95 * (1 - progress)})` 
-          : `rgba(16, 185, 129, ${0.9 * (1 - progress)})`;
-        ctx.lineWidth = arc.isAttack ? 3.5 : 2.5;
-        ctx.setLineDash(arc.isAttack ? [8, 4] : []);
+        ctx.strokeStyle = `rgba(239, 68, 68, ${0.95 * (1 - progress)})`;
+        ctx.lineWidth = 3.5;
+        ctx.setLineDash([8, 4]);
         ctx.stroke();
         ctx.setLineDash([]);
 
@@ -401,18 +411,18 @@
         const currY = (1 - t) * (1 - t) * p1.y + 2 * (1 - t) * t * midY + t * t * p2.y;
 
         ctx.beginPath();
-        ctx.arc(currX, currY, arc.isAttack ? 7 : 5, 0, Math.PI * 2);
-        ctx.fillStyle = arc.isAttack ? '#ef4444' : '#10b981';
-        ctx.shadowColor = arc.isAttack ? '#ef4444' : '#10b981';
+        ctx.arc(currX, currY, 7, 0, Math.PI * 2);
+        ctx.fillStyle = '#ef4444';
+        ctx.shadowColor = '#ef4444';
         ctx.shadowBlur = 16;
         ctx.fill();
         ctx.shadowBlur = 0;
 
-        // Dynamic Shockwave Ring at Target Node
+        // Dynamic Shockwave Ring at Replay Destination Node
         if (progress > 0.3) {
           ctx.beginPath();
           ctx.arc(p2.x, p2.y, 18 * progress, 0, Math.PI * 2);
-          ctx.strokeStyle = arc.isAttack ? `rgba(239, 68, 68, ${1 - progress})` : `rgba(16, 185, 129, ${1 - progress})`;
+          ctx.strokeStyle = `rgba(239, 68, 68, ${1 - progress})`;
           ctx.lineWidth = 2;
           ctx.stroke();
         }
@@ -427,58 +437,100 @@
 
     requestAnimationFrame(drawArcs);
 
-    // Telemetry Engine & Live Feed Integration
+    // KPI Counters
     let totalScans = 1482920;
     let anomaliesBlocked = 4129;
 
-    function triggerPingOnMap(origin, dest, isAttack, velocity, threatType) {
+    // Scan Event Executor: Only draws line when same NFC tag ID is scanned at a 2nd location!
+    function executeScan(tagId, city) {
       totalScans++;
       document.getElementById('kpi-total-scans').textContent = totalScans.toLocaleString();
 
-      if (isAttack) {
+      const now = Date.now();
+      const existingScan = tagStore.get(tagId);
+
+      if (!existingScan) {
+        // FIRST SCAN: Tag is registered at Location A (No line drawn yet!)
+        tagStore.set(tagId, { city, time: now });
+        spawnNodePin(city, false);
+        
+        addStreamCard({
+          timestamp: new Date().toLocaleTimeString(),
+          tagId,
+          origin: city,
+          destination: null,
+          status: 'VERIFIED',
+          velocityKmh: Math.round(Math.random() * 40 + 5)
+        });
+      } else {
+        // SECOND SCAN (REPLAY): Same Tag ID scanned at Location B! Draw Replay Laser Line!
+        const timeDelta = parseFloat(((now - existingScan.time) / 1000).toFixed(1));
+        const distance = 7750; // Houston -> London distance baseline
+        const velocity = Math.round((distance / Math.max(timeDelta, 1)) * 3600);
+
         anomaliesBlocked++;
         document.getElementById('kpi-anomalies-blocked').textContent = anomaliesBlocked.toLocaleString();
 
-        // Show On-Map Red Alert Badge
+        spawnNodePin(existingScan.city, true);
+        spawnNodePin(city, true);
+
+        // Add Laser Line from Location A to Location B
+        activeArcs.push({
+          origin: existingScan.city,
+          dest: city,
+          startTime: now
+        });
+
+        // Trigger On-Map Alert Badge
         const alertBadge = document.getElementById('map-alert-badge');
         const alertText = document.getElementById('map-alert-text');
-        alertText.textContent = `${origin.name} ➔ ${dest.name} | Speed: ${velocity.toLocaleString()} km/h [${threatType}]`;
+        alertText.textContent = `Tag ${tagId} replayed at ${city.name} ${timeDelta}s after ${existingScan.city.name}! (${velocity.toLocaleString()} km/h)`;
         alertBadge.style.opacity = '1';
-        setTimeout(() => { alertBadge.style.opacity = '0'; }, 3800);
+        setTimeout(() => { alertBadge.style.opacity = '0'; }, 4500);
+
+        addStreamCard({
+          timestamp: new Date().toLocaleTimeString(),
+          tagId,
+          origin: existingScan.city,
+          destination: city,
+          status: 'FLAGGED THREAT',
+          velocityKmh: velocity
+        });
+
+        // Clear tag from store so it can be re-tested
+        tagStore.delete(tagId);
       }
+    }
 
-      // Add arc to animation loop
-      activeArcs.push({
-        origin,
-        dest,
-        isAttack,
-        startTime: Date.now()
-      });
-
-      // Add event to Live Stream Feed
+    function addStreamCard(event) {
       const feed = document.getElementById('telemetry-feed');
       const card = document.createElement('div');
+      const isThreat = event.status !== 'VERIFIED';
+      
       card.className = `p-3 rounded-lg border text-xs space-y-1.5 transition-all ${
-        !isAttack 
+        !isThreat 
           ? 'bg-slate-950 border-slate-800 text-slate-300' 
           : 'bg-red-950/40 border-red-500/50 text-red-200'
       }`;
 
       card.innerHTML = `
         <div class="flex items-center justify-between font-mono">
-          <span class="text-slate-500">${new Date().toLocaleTimeString()}</span>
+          <span class="text-slate-500">${event.timestamp}</span>
           <span class="px-1.5 py-0.5 text-[10px] font-bold rounded ${
-            !isAttack 
+            !isThreat 
               ? 'bg-emerald-950 text-emerald-400 border border-emerald-800' 
               : 'bg-red-900 text-red-200 border border-red-700'
-          }">${isAttack ? 'FLAGGED THREAT' : 'VERIFIED'}</span>
+          }">${event.status}</span>
         </div>
-        <div class="font-semibold text-slate-100">
-          ${origin.name} ➔ ${dest.name}
+        <div class="font-semibold text-slate-100 font-mono">
+          Tag: ${event.tagId}
+        </div>
+        <div class="text-slate-300">
+          ${event.origin.name} ${event.destination ? `➔ ${event.destination.name}` : '(Initial Tap Registered)'}
         </div>
         <div class="flex items-center justify-between text-[11px] font-mono text-slate-400">
-          <span>Velocity: <strong class="${isAttack ? 'text-red-400' : 'text-emerald-400'}">${velocity.toLocaleString()} km/h</strong></span>
-          <span>Status: <strong>${isAttack ? 'BLOCKED' : 'AUTH OK'}</strong></span>
+          <span>Velocity: <strong class="${isThreat ? 'text-red-400' : 'text-emerald-400'}">${event.velocityKmh.toLocaleString()} km/h</strong></span>
+          <span>Status: <strong>${isThreat ? 'REPLAY BLOCKED' : 'VERIFIED OK'}</strong></span>
         </div>
       `;
 
@@ -488,47 +540,54 @@
       }
     }
 
-    // Trigger Houston to London Attack
+    // Trigger Houston -> London Replay Attack Sequence
     document.getElementById('btn-attack-replay').addEventListener('click', () => {
-      const houston = NODES[0]; // Houston
-      const london = NODES[6];  // London
-      const velocity = 5365384;
-      triggerPingOnMap(houston, london, true, velocity, 'IMPOSSIBLE VELOCITY REPLAY');
+      const tagId = `NTAG-424-${Math.floor(Math.random() * 8999 + 1000)}`;
+      const houston = CITIES[0]; // Houston
+      const london = CITIES[6];  // London
+
+      // Scan 1 at Houston
+      executeScan(tagId, houston);
+
+      // Scan 2 at London 1.5 seconds later (Triggers Laser Line!)
+      setTimeout(() => {
+        executeScan(tagId, london);
+      }, 1500);
     });
 
-    // Random Ping Generator Button
+    // Random NFC Scan Trigger Button
     document.getElementById('btn-random-ping').addEventListener('click', () => {
-      const isAttack = Math.random() < 0.45;
-      const oIdx = Math.floor(Math.random() * NODES.length);
-      let dIdx = Math.floor(Math.random() * NODES.length);
-      while (dIdx === oIdx) dIdx = Math.floor(Math.random() * NODES.length);
-
-      const origin = NODES[oIdx];
-      const dest = NODES[dIdx];
-      const velocity = isAttack ? Math.round(Math.random() * 600000 + 100000) : Math.round(Math.random() * 80 + 10);
-
-      triggerPingOnMap(origin, dest, isAttack, velocity, isAttack ? 'IMPOSSIBLE_VELOCITY' : 'VERIFIED_AUTH');
+      const randomTagId = `NTAG-424-${Math.floor(Math.random() * 8999 + 1000)}`;
+      const cIdx = Math.floor(Math.random() * CITIES.length);
+      executeScan(randomTagId, CITIES[cIdx]);
     });
 
-    // Auto Background Live Stream Generator
+    // Automatic Live Telemetry Stream
     setInterval(() => {
-      const isAttack = Math.random() < 0.3;
-      const oIdx = Math.floor(Math.random() * NODES.length);
-      let dIdx = Math.floor(Math.random() * NODES.length);
-      while (dIdx === oIdx) dIdx = Math.floor(Math.random() * NODES.length);
+      const isReplaySequence = Math.random() < 0.4;
+      const tagId = `NTAG-424-${Math.floor(Math.random() * 90 + 10)}00`;
+      const c1 = CITIES[Math.floor(Math.random() * CITIES.length)];
+      
+      executeScan(tagId, c1);
 
-      const origin = NODES[oIdx];
-      const dest = NODES[dIdx];
-      const velocity = isAttack ? Math.round(Math.random() * 450000 + 80000) : Math.round(Math.random() * 60 + 5);
-
-      triggerPingOnMap(origin, dest, isAttack, velocity, isAttack ? 'NFC_CLONE_ATTEMPT' : 'VERIFIED_AUTH');
-    }, 2800);
+      if (isReplaySequence) {
+        let c2 = CITIES[Math.floor(Math.random() * CITIES.length)];
+        while (c2 === c1) c2 = CITIES[Math.floor(Math.random() * CITIES.length)];
+        setTimeout(() => {
+          executeScan(tagId, c2);
+        }, 1200);
+      }
+    }, 4500);
 
     // Initial Trigger on Load
     window.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
-        triggerPingOnMap(NODES[0], NODES[6], true, 5365384, 'IMPOSSIBLE VELOCITY REPLAY');
-      }, 600);
+        const demoTag = 'NTAG-424-88A9';
+        executeScan(demoTag, CITIES[0]); // Houston
+        setTimeout(() => {
+          executeScan(demoTag, CITIES[6]); // London (Draws laser line!)
+        }, 1500);
+      }, 800);
     });
   </script>
 </body>
