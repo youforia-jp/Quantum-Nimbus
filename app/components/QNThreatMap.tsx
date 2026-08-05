@@ -1,10 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { ComposableMap, Geographies, Geography, Line, Marker } from 'react-simple-maps';
-import { geoMercator } from 'd3-geo';
-
-const geoUrl = "https://cdn.jsdelivr.net/npm/world-atlas@2/land-110m.json";
+import React, { useState, useEffect, useRef } from 'react';
+import * as d3Geo from 'd3-geo';
+import * as topojson from 'topojson-client';
 
 export interface LocationNode {
   city: string;
@@ -29,21 +27,21 @@ export interface TelemetryPayload {
 }
 
 interface ActiveArc {
-  id: string;
-  from: [number, number];
-  to: [number, number];
+  origin: LocationNode;
+  destination: LocationNode;
+  startTime: number;
   isThreat: boolean;
 }
 
-interface ActiveMarkerPin {
+interface ActivePingPin {
   id: string;
   city: string;
-  coordinates: [number, number];
+  lat: number;
+  lng: number;
   isThreat: boolean;
   spawnTime: number;
 }
 
-// Available City Nodes
 const CITIES: LocationNode[] = [
   { city: 'Houston', country: 'US', lat: 29.7604, lng: -95.3698, activeChips: 48290, avgLatencyMs: 12 },
   { city: 'San Francisco', country: 'US', lat: 37.7749, lng: -122.4194, activeChips: 35120, avgLatencyMs: 14 },
@@ -58,19 +56,41 @@ const CITIES: LocationNode[] = [
 ];
 
 export default function QNThreatMap() {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  // States
+  const [projectionMode, setProjectionMode] = useState<'2d' | '3d'>('2d');
+  const [filterMode, setFilterMode] = useState<'all' | 'threats' | 'us'>('all');
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  
+  const [scrubberValue, setScrubberValue] = useState<number>(100);
+  const [isLiveStreaming, setIsLiveStreaming] = useState<boolean>(true);
+
+  const [hoveredNode, setHoveredNode] = useState<LocationNode | null>(null);
+  const [tooltipPos, setTooltipPos] = useState<{ x: number; y: number } | null>(null);
+
   const [telemetryFeed, setTelemetryFeed] = useState<TelemetryPayload[]>([]);
+  const [historicalAuditBuffer, setHistoricalAuditBuffer] = useState<TelemetryPayload[]>([]);
   const [anomaliesBlocked, setAnomaliesBlocked] = useState<number>(4144);
   const [totalScans, setTotalScans] = useState<number>(1482978);
 
-  const [activeArcs, setActiveArcs] = useState<ActiveArc[]>([]);
-  const [activePins, setActivePins] = useState<ActiveMarkerPin[]>([]);
+  const activeArcsRef = useRef<ActiveArc[]>([]);
+  const activePinsRef = useRef<ActivePingPin[]>([]);
+  const rotationAngleRef = useRef<number>(0);
+  const topoDataRef = useRef<any>(null);
 
-  const [filterMode, setFilterMode] = useState<'all' | 'threats' | 'us'>('all');
-  const [searchQuery, setSearchQuery] = useState<string>('');
-  const [timeMode, setTimeMode] = useState<'live' | '1h'>('live');
-  const [scrubberValue, setScrubberValue] = useState<number>(100);
+  // Load TopoJSON
+  useEffect(() => {
+    fetch('assets/land-110m.json')
+      .then((res) => res.json())
+      .then((data) => { topoDataRef.current = data; })
+      .catch(() => {
+        fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/land-110m.json')
+          .then((res) => res.json())
+          .then((data) => { topoDataRef.current = data; });
+      });
+  }, []);
 
-  // Haversine Velocity Threat Evaluator
   const evaluateSecurityThreat = (payload: TelemetryPayload): TelemetryPayload => {
     if (payload.tap_sequence === 1 || !payload.destination) {
       return { ...payload, velocity_kmh: 0, status: 'VERIFIED' };
@@ -101,6 +121,8 @@ export default function QNThreatMap() {
   };
 
   const processPayload = (rawPayload: TelemetryPayload) => {
+    if (!isLiveStreaming) return;
+
     const evaluated = evaluateSecurityThreat(rawPayload);
 
     setTotalScans((prev) => prev + 1);
@@ -108,48 +130,35 @@ export default function QNThreatMap() {
       setAnomaliesBlocked((prev) => prev + 1);
     }
 
-    setTelemetryFeed((prev) => [evaluated, ...prev.slice(0, 9)]);
+    setTelemetryFeed((prev) => [evaluated, ...prev.slice(0, 49)]);
+    setHistoricalAuditBuffer((prev) => [evaluated, ...prev.slice(0, 199)]);
 
-    const pinId = `pin-${evaluated.origin.city}-${Date.now()}`;
-    const newPin: ActiveMarkerPin = {
-      id: pinId,
+    activePinsRef.current.push({
+      id: `${evaluated.origin.city}-${Date.now()}`,
       city: evaluated.origin.city,
-      coordinates: [evaluated.origin.lng, evaluated.origin.lat],
+      lat: evaluated.origin.lat,
+      lng: evaluated.origin.lng,
       isThreat: evaluated.status === 'FLAGGED THREAT',
       spawnTime: Date.now()
-    };
-
-    setActivePins((prev) => [...prev.slice(-12), newPin]);
+    });
 
     if (evaluated.tap_sequence === 2 && evaluated.destination) {
-      const arcId = `arc-${Date.now()}`;
-      const newArc: ActiveArc = {
-        id: arcId,
-        from: [evaluated.origin.lng, evaluated.origin.lat],
-        to: [evaluated.destination.lng, evaluated.destination.lat],
+      activeArcsRef.current.push({
+        origin: evaluated.origin,
+        destination: evaluated.destination,
+        startTime: Date.now(),
         isThreat: evaluated.status === 'FLAGGED THREAT'
-      };
+      });
 
-      setActiveArcs((prev) => [...prev.slice(-8), newArc]);
-
-      const destPin: ActiveMarkerPin = {
-        id: `pin-${evaluated.destination.city}-${Date.now()}`,
+      activePinsRef.current.push({
+        id: `${evaluated.destination.city}-${Date.now()}`,
         city: evaluated.destination.city,
-        coordinates: [evaluated.destination.lng, evaluated.destination.lat],
+        lat: evaluated.destination.lat,
+        lng: evaluated.destination.lng,
         isThreat: evaluated.status === 'FLAGGED THREAT',
         spawnTime: Date.now()
-      };
-      setActivePins((prev) => [...prev.slice(-12), destPin]);
-
-      setTimeout(() => {
-        setActiveArcs((prev) => prev.filter((a) => a.id !== arcId));
-      }, 3200);
+      });
     }
-
-    // Auto-remove pin after 5 seconds
-    setTimeout(() => {
-      setActivePins((prev) => prev.filter((p) => p.id !== pinId));
-    }, 5000);
   };
 
   const triggerHoustonDenverAttack = () => {
@@ -182,12 +191,12 @@ export default function QNThreatMap() {
     }, 1200);
   };
 
-  // Streaming Telemetry Interval Loop
+  // Streaming Telemetry Loop
   useEffect(() => {
     triggerHoustonDenverAttack();
 
     const interval = setInterval(() => {
-      if (timeMode !== 'live') return;
+      if (!isLiveStreaming) return;
 
       const isReplay = Math.random() < 0.35;
       const tagId = `NTAG-424-${Math.floor(Math.random() * 8999 + 1000)}`;
@@ -222,10 +231,199 @@ export default function QNThreatMap() {
     }, 3500);
 
     return () => clearInterval(interval);
-  }, [timeMode]);
+  }, [isLiveStreaming]);
 
-  // Filter Stream Data
-  const filteredTelemetry = telemetryFeed.filter((item) => {
+  // Hover Detection on Canvas
+  const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+
+    const width = canvas.width;
+    const height = canvas.height;
+
+    let found: LocationNode | null = null;
+
+    CITIES.forEach((city) => {
+      let projected: [number, number] | null = null;
+      if (projectionMode === '2d') {
+        const p = d3Geo.geoEquirectangular().scale(width / (2 * Math.PI)).translate([width / 2, height / 2 + 20]);
+        projected = p([city.lng, city.lat]);
+      } else {
+        const p = d3Geo.geoOrthographic().scale(height / 2.3).translate([width / 2, height / 2]).rotate([rotationAngleRef.current, -15]);
+        projected = p([city.lng, city.lat]);
+      }
+
+      if (projected) {
+        const dist = Math.hypot(mouseX - projected[0], mouseY - projected[1]);
+        if (dist < 14) {
+          found = city;
+        }
+      }
+    });
+
+    if (found) {
+      setHoveredNode(found);
+      setTooltipPos({ x: mouseX, y: mouseY });
+    } else {
+      setHoveredNode(null);
+      setTooltipPos(null);
+    }
+  };
+
+  // Canvas 60 FPS Render Loop
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let animFrameId: number;
+
+    const render = () => {
+      const width = (canvas.width = canvas.parentElement?.clientWidth || 800);
+      const height = (canvas.height = canvas.parentElement?.clientHeight || 520);
+
+      ctx.fillStyle = '#030712';
+      ctx.fillRect(0, 0, width, height);
+
+      let projection: d3Geo.GeoProjection;
+      if (projectionMode === '2d') {
+        projection = d3Geo.geoEquirectangular().scale(width / (2 * Math.PI)).translate([width / 2, height / 2 + 20]);
+      } else {
+        rotationAngleRef.current = (rotationAngleRef.current + 0.25) % 360;
+        projection = d3Geo.geoOrthographic().scale(height / 2.3).translate([width / 2, height / 2]).rotate([rotationAngleRef.current, -15]);
+
+        ctx.beginPath();
+        ctx.arc(width / 2, height / 2, height / 2.3, 0, Math.PI * 2);
+        ctx.fillStyle = '#060c1c';
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(16, 185, 129, 0.4)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      }
+
+      const pathGenerator = d3Geo.geoPath().projection(projection).context(ctx);
+
+      ctx.strokeStyle = 'rgba(15, 32, 56, 0.6)';
+      ctx.lineWidth = 0.5;
+      ctx.setLineDash([4, 4]);
+      const graticule = d3Geo.geoGraticule10();
+      ctx.beginPath();
+      pathGenerator(graticule);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      if (topoDataRef.current) {
+        const geojson = topojson.feature(topoDataRef.current, topoDataRef.current.objects.land);
+        ctx.fillStyle = '#0d1726';
+        ctx.strokeStyle = '#1e3a5f';
+        ctx.lineWidth = 1.2;
+        ctx.beginPath();
+        pathGenerator(geojson);
+        ctx.fill();
+        ctx.stroke();
+      }
+
+      const now = Date.now();
+
+      // Render Active Pins
+      activePinsRef.current = activePinsRef.current.filter((pin) => now - pin.spawnTime < 5000);
+      activePinsRef.current.forEach((pin) => {
+        const pt = projection([pin.lng, pin.lat]);
+        if (!pt) return;
+        const [x, y] = pt;
+
+        const age = now - pin.spawnTime;
+        const fade = 1 - age / 5000;
+        const radius = (age / 5000) * 28;
+
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, Math.PI * 2);
+        ctx.strokeStyle = pin.isThreat ? `rgba(239, 68, 68, ${fade * 0.9})` : `rgba(16, 185, 129, ${fade * 0.9})`;
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(x, y, 5, 0, Math.PI * 2);
+        ctx.fillStyle = pin.isThreat ? '#ef4444' : '#10b981';
+        ctx.fill();
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
+
+        ctx.fillStyle = `rgba(255, 255, 255, ${fade})`;
+        ctx.font = 'bold 10px JetBrains Mono';
+        ctx.fillText(pin.city, x + 8, y + 3);
+      });
+
+      // Render Quadratic Arcs
+      activeArcsRef.current = activeArcsRef.current.filter((arc) => now - arc.startTime < 2400);
+      activeArcsRef.current.forEach((arc) => {
+        const p1 = projection([arc.origin.lng, arc.origin.lat]);
+        const p2 = projection([arc.destination.lng, arc.destination.lat]);
+        if (!p1 || !p2) return;
+
+        const progress = Math.min((now - arc.startTime) / 2400, 1.0);
+        const midX = (p1[0] + p2[0]) / 2;
+        const midY = Math.min(p1[1], p2[1]) - Math.abs(p1[0] - p2[0]) * 0.28;
+
+        ctx.beginPath();
+        ctx.moveTo(p1[0], p1[1]);
+        ctx.quadraticCurveTo(midX, midY, p2[0], p2[1]);
+        ctx.strokeStyle = arc.isThreat
+          ? `rgba(239, 68, 68, ${0.95 * (1 - progress)})`
+          : `rgba(16, 185, 129, ${0.85 * (1 - progress)})`;
+        ctx.lineWidth = arc.isThreat ? 3.5 : 2;
+        ctx.setLineDash(arc.isThreat ? [6, 4] : []);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        const t = progress;
+        const currX = (1 - t) * (1 - t) * p1[0] + 2 * (1 - t) * t * midX + t * t * p2[0];
+        const currY = (1 - t) * (1 - t) * p1[1] + 2 * (1 - t) * t * midY + t * t * p2[1];
+
+        ctx.beginPath();
+        ctx.arc(currX, currY, arc.isThreat ? 6 : 4, 0, Math.PI * 2);
+        ctx.fillStyle = arc.isThreat ? '#ef4444' : '#10b981';
+        ctx.shadowColor = arc.isThreat ? '#ef4444' : '#10b981';
+        ctx.shadowBlur = 14;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      });
+
+      animFrameId = requestAnimationFrame(render);
+    };
+
+    render();
+    return () => cancelAnimationFrame(animFrameId);
+  }, [projectionMode]);
+
+  // Handle Scrubber Change
+  const handleScrubberChange = (val: number) => {
+    setScrubberValue(val);
+    if (val === 100) {
+      setIsLiveStreaming(true);
+    } else {
+      setIsLiveStreaming(false);
+    }
+  };
+
+  const resumeLiveStream = () => {
+    setScrubberValue(100);
+    setIsLiveStreaming(true);
+  };
+
+  // Determine displayed list
+  const activeFeedList = isLiveStreaming
+    ? telemetryFeed
+    : historicalAuditBuffer.slice(
+        historicalAuditBuffer.length - Math.max(1, Math.floor((scrubberValue / 100) * historicalAuditBuffer.length))
+      );
+
+  const filteredTelemetry = activeFeedList.filter((item) => {
     if (filterMode === 'threats' && item.status !== 'FLAGGED THREAT') return false;
     if (filterMode === 'us' && !item.origin.country.includes('US')) return false;
     if (
@@ -245,11 +443,11 @@ export default function QNThreatMap() {
           <div className="flex items-center space-x-2 mb-1">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
             <span className="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider">
-              React-Simple-Maps GIS Threat Engine Active
+              Dual 2D Flat / 3D Globe Projection Engine Active
             </span>
           </div>
           <h1 className="text-2xl font-bold text-white tracking-tight">Quantum Nimbus Threat Map & Operations Center</h1>
-          <p className="text-sm text-slate-400">Authentic World Atlas TopoJSON GIS vectors via react-simple-maps and d3-geo.</p>
+          <p className="text-sm text-slate-400">Switch seamlessly between 2D Mercator flat map and 3D Rotating Globe with interactive time scrubbing.</p>
         </div>
 
         <div className="flex items-center space-x-3">
@@ -312,136 +510,79 @@ export default function QNThreatMap() {
       {/* Main Grid: Left Map + Right Stream */}
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
         
-        {/* Left Column: react-simple-maps Map Viewport */}
+        {/* Left Column: Map & Projection Controls */}
         <div className="lg:col-span-2 space-y-4">
           
-          {/* Filter Bar */}
-          <div className="bg-slate-900/90 border border-slate-800/80 rounded-xl p-3 backdrop-blur-md flex flex-wrap items-center justify-between gap-3">
-            <div className="flex items-center space-x-1.5 text-xs font-mono">
-              <button
-                onClick={() => setFilterMode('all')}
-                className={`px-3 py-1.5 rounded-lg transition-all ${
-                  filterMode === 'all' ? 'bg-emerald-600 text-white font-bold' : 'bg-slate-800 text-slate-400 hover:text-white'
-                }`}
-              >
-                All Telemetry
-              </button>
-              <button
-                onClick={() => setFilterMode('threats')}
-                className={`px-3 py-1.5 rounded-lg transition-all ${
-                  filterMode === 'threats' ? 'bg-red-600 text-white font-bold' : 'bg-slate-800 text-slate-400 hover:text-white'
-                }`}
-              >
-                Threats Only
-              </button>
-              <button
-                onClick={() => setFilterMode('us')}
-                className={`px-3 py-1.5 rounded-lg transition-all ${
-                  filterMode === 'us' ? 'bg-blue-600 text-white font-bold' : 'bg-slate-800 text-slate-400 hover:text-white'
-                }`}
-              >
-                US Region
-              </button>
+          {/* Projection Mode Header Bar */}
+          <div className="bg-slate-900/90 border border-slate-800/80 rounded-xl p-3 backdrop-blur-md flex items-center justify-between gap-3">
+            <div className="text-xs font-mono font-bold text-slate-300 flex items-center space-x-2">
+              <span>🗺️ MAP VIEWPORT ENGINE:</span>
+              <span className="text-emerald-400">{projectionMode === '2d' ? '2D EQUIRECTANGULAR GIS' : '3D ROTATING GLOBE'}</span>
             </div>
 
-            <div className="text-xs font-mono text-emerald-400 flex items-center space-x-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span>react-simple-maps + d3-geo</span>
+            <div className="flex items-center space-x-1 bg-slate-950 p-1 rounded-lg border border-slate-800 text-xs font-mono">
+              <button
+                onClick={() => setProjectionMode('2d')}
+                className={`px-3 py-1 rounded transition-all ${
+                  projectionMode === '2d' ? 'bg-emerald-950 text-emerald-400 border border-emerald-800 font-bold' : 'text-slate-400'
+                }`}
+              >
+                🗺️ 2D Flat
+              </button>
+              <button
+                onClick={() => setProjectionMode('3d')}
+                className={`px-3 py-1 rounded transition-all ${
+                  projectionMode === '3d' ? 'bg-emerald-950 text-emerald-400 border border-emerald-800 font-bold' : 'text-slate-400'
+                }`}
+              >
+                🌐 3D Globe
+              </button>
             </div>
           </div>
 
-          {/* Map Container */}
+          {/* Map Viewport Canvas */}
           <div className="bg-slate-900/90 border border-slate-800/80 rounded-xl p-4 shadow-sm relative backdrop-blur-md">
-            <div className="w-full h-[480px] rounded-lg overflow-hidden border border-slate-800 bg-[#030712] relative flex items-center justify-center">
-              
-              <ComposableMap
-                projection="geoMercator"
-                projectionConfig={{ scale: 110, center: [0, 20] }}
-                width={800}
-                height={480}
-                style={{ width: '100%', height: '100%', backgroundColor: '#030712' }}
-              >
-                {/* Authentic World TopoJSON Geographies */}
-                <Geographies geography={geoUrl}>
-                  {({ geographies }) =>
-                    geographies.map((geo) => (
-                      <Geography
-                        key={geo.rsmKey}
-                        geography={geo}
-                        style={{
-                          default: { fill: '#0d1726', stroke: '#1e3a5f', strokeWidth: 0.75, outline: 'none' },
-                          hover: { fill: '#102a45', stroke: '#10b981', strokeWidth: 1, outline: 'none' },
-                          pressed: { fill: '#0d1726', stroke: '#1e3a5f', strokeWidth: 0.75, outline: 'none' }
-                        }}
-                      />
-                    ))
-                  }
-                </Geographies>
+            <div className="w-full h-[480px] relative rounded-lg overflow-hidden border border-slate-800 bg-[#030712]">
+              <canvas
+                ref={canvasRef}
+                onMouseMove={handleMouseMove}
+                onMouseLeave={() => { setHoveredNode(null); setTooltipPos(null); }}
+                className="w-full h-full block cursor-crosshair"
+              />
 
-                {/* Animated Telemetry Arcs */}
-                {activeArcs.map((arc) => (
-                  <Line
-                    key={arc.id}
-                    from={arc.from}
-                    to={arc.to}
-                    stroke={arc.isThreat ? '#ef4444' : '#10b981'}
-                    strokeWidth={arc.isThreat ? 3 : 2}
-                    strokeDasharray="6,4"
-                    strokeLinecap="round"
-                  />
-                ))}
-
-                {/* Pulsing Radar Markers */}
-                {activePins.map((pin) => (
-                  <Marker key={pin.id} coordinates={pin.coordinates}>
-                    <g transform="translate(0, 0)">
-                      <circle r={14} fill="none" stroke={pin.isThreat ? '#ef4444' : '#10b981'} strokeWidth={1.5} className="animate-ping opacity-75" />
-                      <circle r={5} fill={pin.isThreat ? '#ef4444' : '#10b981'} stroke="#ffffff" strokeWidth={1.2} />
-                      <text
-                        textAnchor="start"
-                        x={10}
-                        y={4}
-                        style={{
-                          fontFamily: 'JetBrains Mono',
-                          fontSize: '10px',
-                          fontWeight: 'bold',
-                          fill: '#ffffff',
-                          pointerEvents: 'none'
-                        }}
-                      >
-                        {pin.city}
-                      </text>
-                    </g>
-                  </Marker>
-                ))}
-              </ComposableMap>
-
+              {/* Glassmorphic Node Popover Tooltip */}
+              {hoveredNode && tooltipPos && (
+                <div
+                  className="absolute z-50 bg-slate-900/95 border border-emerald-500/50 rounded-xl p-3 shadow-2xl backdrop-blur-md text-xs font-mono space-y-1 pointer-events-none transition-all max-w-xs"
+                  style={{ left: Math.min(tooltipPos.x + 15, 450), top: Math.min(tooltipPos.y + 15, 360) }}
+                >
+                  <div className="flex items-center justify-between border-b border-slate-800 pb-1 font-bold text-emerald-400">
+                    <span>{hoveredNode.city}, {hoveredNode.country}</span>
+                    <span className="text-[10px] bg-emerald-950 text-emerald-300 px-1.5 py-0.5 rounded border border-emerald-800">HQ NODE</span>
+                  </div>
+                  <div className="text-slate-300">Active Tag Chips: <strong className="text-white">{hoveredNode.activeChips.toLocaleString()}</strong></div>
+                  <div className="text-slate-300">Avg Mesh Latency: <strong className="text-emerald-400">{hoveredNode.avgLatencyMs} ms</strong></div>
+                  <div className="text-slate-400 text-[10px] pt-1">Haversine Impossible Velocity Engine: ACTIVE</div>
+                </div>
+              )}
             </div>
           </div>
 
-          {/* Time Scrubber Bar */}
+          {/* Functional Time Scrubber Bar */}
           <div className="bg-slate-900/90 border border-slate-800/80 rounded-xl p-4 backdrop-blur-md space-y-2">
             <div className="flex items-center justify-between text-xs font-mono">
               <div className="flex items-center space-x-2">
                 <span className="font-bold text-white">⏱️ Incident Time Scrubber:</span>
-                <span className="text-emerald-400">{timeMode === 'live' ? 'LIVE TELEMETRY STREAM' : `AUDIT SCRUB: -${100 - scrubberValue}m`}</span>
+                <span className={isLiveStreaming ? 'text-emerald-400 font-semibold' : 'text-yellow-400 font-bold animate-pulse'}>
+                  {isLiveStreaming ? '🔴 LIVE TELEMETRY STREAM' : `⏸️ AUDIT SCRUBBING (-${Math.round(((100 - scrubberValue) / 100) * 60)}m)`}
+                </span>
               </div>
               <div className="flex items-center space-x-2">
                 <button
-                  onClick={() => { setTimeMode('live'); setScrubberValue(100); }}
-                  className={`px-2 py-0.5 rounded text-[11px] font-bold ${
-                    timeMode === 'live' ? 'bg-emerald-600 text-white' : 'bg-slate-800 text-slate-400'
-                  }`}
+                  onClick={resumeLiveStream}
+                  className="px-2.5 py-1 rounded text-[11px] font-bold bg-emerald-600 text-white cursor-pointer hover:bg-emerald-500 transition-colors"
                 >
-                  [LIVE]
-                </button>
-                <button
-                  onClick={() => setTimeMode('1h')}
-                  className={`px-2 py-0.5 rounded text-[11px] font-bold ${
-                    timeMode === '1h' ? 'bg-blue-600 text-white' : 'bg-slate-800 text-slate-400'
-                  }`}
-                >
-                  [-1 Hour]
+                  ▶ RESUME LIVE
                 </button>
               </div>
             </div>
@@ -451,30 +592,63 @@ export default function QNThreatMap() {
               min="0"
               max="100"
               value={scrubberValue}
-              onChange={(e) => {
-                const val = parseInt(e.target.value);
-                setScrubberValue(val);
-                if (val < 100) setTimeMode('1h');
-                else setTimeMode('live');
-              }}
+              onChange={(e) => handleScrubberChange(parseInt(e.target.value))}
               className="w-full accent-emerald-500 bg-slate-800 rounded-lg cursor-pointer h-2"
             />
+            <div className="flex justify-between text-[10px] font-mono text-slate-500">
+              <span>-60 Minutes (Audit History)</span>
+              <span>-30 Minutes</span>
+              <span>NOW (Live Stream)</span>
+            </div>
           </div>
 
         </div>
 
-        {/* Right Column: Telemetry Feed */}
-        <div className="bg-slate-900/90 border border-slate-800/80 rounded-xl p-5 shadow-sm space-y-4 flex flex-col h-[630px] backdrop-blur-md">
+        {/* Right Column: Live Telemetry Feed with Moved Filters */}
+        <div className="bg-slate-900/90 border border-slate-800/80 rounded-xl p-5 shadow-sm space-y-4 flex flex-col h-[670px] backdrop-blur-md">
+          
           <div className="flex items-center justify-between border-b border-slate-800 pb-3">
             <div>
               <h2 className="text-base font-bold text-white">Live Telemetry Stream</h2>
               <p className="text-xs text-slate-400 font-mono">Filtered Security Events</p>
             </div>
-            <span className="px-2 py-0.5 text-xs font-mono font-bold rounded bg-emerald-950 text-emerald-400 border border-emerald-800 animate-pulse flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> STREAM ACTIVE
+            <span className={`px-2 py-0.5 text-xs font-mono font-bold rounded ${
+              isLiveStreaming ? 'bg-emerald-950 text-emerald-400 border border-emerald-800 animate-pulse' : 'bg-yellow-950 text-yellow-400 border border-yellow-800'
+            } flex items-center gap-1`}>
+              <span className={`w-1.5 h-1.5 rounded-full ${isLiveStreaming ? 'bg-emerald-400' : 'bg-yellow-400'}`}></span>
+              {isLiveStreaming ? 'LIVE STREAMING' : 'AUDIT PAUSED'}
             </span>
           </div>
 
+          {/* TELEMETRY FILTERS MOVED HERE */}
+          <div className="flex items-center space-x-1.5 text-xs font-mono bg-slate-950 p-1.5 rounded-lg border border-slate-800">
+            <button
+              onClick={() => setFilterMode('all')}
+              className={`flex-1 py-1.5 rounded-md font-bold transition-all text-center ${
+                filterMode === 'all' ? 'bg-emerald-600 text-white' : 'bg-slate-800 text-slate-400 hover:text-white'
+              }`}
+            >
+              All Telemetry
+            </button>
+            <button
+              onClick={() => setFilterMode('threats')}
+              className={`flex-1 py-1.5 rounded-md font-bold transition-all text-center ${
+                filterMode === 'threats' ? 'bg-red-600 text-white' : 'bg-slate-800 text-slate-400 hover:text-white'
+              }`}
+            >
+              Threats Only
+            </button>
+            <button
+              onClick={() => setFilterMode('us')}
+              className={`flex-1 py-1.5 rounded-md font-bold transition-all text-center ${
+                filterMode === 'us' ? 'bg-blue-600 text-white' : 'bg-slate-800 text-slate-400 hover:text-white'
+              }`}
+            >
+              US Region
+            </button>
+          </div>
+
+          {/* Tag Search Input */}
           <div>
             <input
               type="text"

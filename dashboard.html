@@ -78,7 +78,7 @@
           <span class="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider">Dual 2D Flat / 3D Globe Projection Engine Active</span>
         </div>
         <h1 class="text-3xl font-extrabold text-white tracking-tight">Real-Time Threat Telemetry Map</h1>
-        <p class="text-slate-400 text-sm mt-1">Switch seamlessly between 2D Mercator flat map and 3D Rotating Globe with live NFC laser telemetry.</p>
+        <p class="text-slate-400 text-sm mt-1">Switch seamlessly between 2D Mercator flat map and 3D Rotating Globe with interactive time scrubbing.</p>
       </div>
 
       <!-- Quick Control Bar -->
@@ -142,13 +142,11 @@
       <!-- Left Column: Map Viewport -->
       <div class="lg:col-span-2 space-y-4">
         
-        <!-- Filter Bar & Projection Mode Toggle Buttons -->
-        <div class="bg-slate-900/90 border border-slate-800/80 rounded-xl p-3 backdrop-blur-md flex flex-wrap items-center justify-between gap-3">
-          
-          <div class="flex items-center space-x-1.5 text-xs font-mono">
-            <button id="btn-filter-all" class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white font-bold transition-all">All Telemetry</button>
-            <button id="btn-filter-threats" class="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition-all">Threats Only</button>
-            <button id="btn-filter-us" class="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition-all">US Region</button>
+        <!-- Projection Mode Header Bar -->
+        <div class="bg-slate-900/90 border border-slate-800/80 rounded-xl p-3 backdrop-blur-md flex items-center justify-between gap-3">
+          <div class="text-xs font-mono font-bold text-slate-300 flex items-center space-x-2">
+            <span>🗺️ MAP VIEWPORT ENGINE:</span>
+            <span id="map-mode-indicator" class="text-emerald-400">2D EQUIRECTANGULAR GIS</span>
           </div>
 
           <!-- 2D vs 3D Projection Toggle -->
@@ -156,7 +154,6 @@
             <button id="btn-proj-2d" class="px-3 py-1 rounded bg-emerald-950 text-emerald-400 border border-emerald-800 font-bold transition-all">🗺️ 2D Flat</button>
             <button id="btn-proj-3d" class="px-3 py-1 rounded text-slate-400 transition-all">🌐 3D Globe</button>
           </div>
-
         </div>
 
         <!-- GIS Canvas Viewport with Popover Tooltip -->
@@ -177,36 +174,49 @@
           </div>
         </div>
 
-        <!-- Incident Time Scrubber Bar -->
+        <!-- Functional Incident Time Scrubber Bar -->
         <div class="bg-slate-900/90 border border-slate-800/80 rounded-xl p-4 backdrop-blur-md space-y-2">
           <div class="flex items-center justify-between text-xs font-mono">
             <div class="flex items-center space-x-2">
               <span class="font-bold text-white">⏱️ Incident Time Scrubber:</span>
-              <span id="scrubber-status" class="text-emerald-400">LIVE TELEMETRY STREAM</span>
+              <span id="scrubber-status" class="text-emerald-400 font-semibold">🔴 LIVE TELEMETRY STREAM</span>
             </div>
             <div class="flex items-center space-x-2">
-              <button id="btn-scrub-live" class="px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-600 text-white">[LIVE]</button>
-              <button id="btn-scrub-1h" class="px-2 py-0.5 rounded text-[11px] font-bold bg-slate-800 text-slate-400">[-1 Hour]</button>
+              <button id="btn-scrub-live" class="px-2.5 py-1 rounded text-[11px] font-bold bg-emerald-600 text-white cursor-pointer hover:bg-emerald-500 transition-colors">▶ RESUME LIVE</button>
             </div>
           </div>
 
           <input id="time-slider" type="range" min="0" max="100" value="100" class="w-full accent-emerald-500 bg-slate-800 rounded-lg cursor-pointer h-2">
+          <div class="flex justify-between text-[10px] font-mono text-slate-500">
+            <span>-60 Minutes (Audit History)</span>
+            <span>-30 Minutes</span>
+            <span>NOW (Live Stream)</span>
+          </div>
         </div>
 
       </div>
 
-      <!-- Right Column: Live Telemetry Feed -->
-      <div class="bg-slate-900/90 border border-slate-800/80 rounded-xl p-5 shadow-sm space-y-4 flex flex-col h-[640px] backdrop-blur-md">
+      <!-- Right Column: Live Telemetry Feed with Moved Filters -->
+      <div class="bg-slate-900/90 border border-slate-800/80 rounded-xl p-5 shadow-sm space-y-4 flex flex-col h-[670px] backdrop-blur-md">
+        
         <div class="flex items-center justify-between border-b border-slate-800 pb-3">
           <div>
             <h2 class="text-base font-bold text-white">Live Telemetry Stream</h2>
             <p class="text-xs text-slate-400 font-mono">Filtered Security Events</p>
           </div>
-          <span class="px-2 py-0.5 text-xs font-mono font-bold rounded bg-emerald-950 text-emerald-400 border border-emerald-800 animate-pulse flex items-center gap-1">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> STREAM ACTIVE
+          <span id="stream-status-badge" class="px-2 py-0.5 text-xs font-mono font-bold rounded bg-emerald-950 text-emerald-400 border border-emerald-800 animate-pulse flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> LIVE STREAMING
           </span>
         </div>
 
+        <!-- TELEMETRY FILTER BUTTONS MOVED HERE -->
+        <div class="flex items-center space-x-1.5 text-xs font-mono bg-slate-950 p-1.5 rounded-lg border border-slate-800">
+          <button id="btn-filter-all" class="flex-1 py-1.5 rounded-md bg-emerald-600 text-white font-bold transition-all text-center">All Telemetry</button>
+          <button id="btn-filter-threats" class="flex-1 py-1.5 rounded-md bg-slate-800 text-slate-400 hover:text-white transition-all text-center">Threats Only</button>
+          <button id="btn-filter-us" class="flex-1 py-1.5 rounded-md bg-slate-800 text-slate-400 hover:text-white transition-all text-center">US Region</button>
+        </div>
+
+        <!-- Tag Search Input -->
         <div>
           <input id="tag-search" type="text" placeholder="🔍 Search Tag ID (e.g. NTAG-424-8000)" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs font-mono text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500">
         </div>
@@ -224,7 +234,7 @@
     <p>© 2026 Quantum Nimbus Tech. U.S. Patent Pending — Dynamic Vaporization Parameter & NFC Cryptographic Authentication.</p>
   </footer>
 
-  <!-- D3 2D/3D Globe Projection Engine Script -->
+  <!-- D3 2D/3D Globe Engine Script -->
   <script>
     const CITIES = [
       { city: 'Houston', country: 'US', lat: 29.7604, lng: -95.3698, activeChips: 48290, avgLatencyMs: 12 },
@@ -240,10 +250,10 @@
     ];
 
     let topoData = null;
-    let projectionMode = '2d'; // '2d' or '3d'
+    let projectionMode = '2d';
     let filterMode = 'all';
     let searchQuery = '';
-    let isLive = true;
+    let isLiveStreaming = true;
     let rotationAngle = 0;
 
     const canvas = document.getElementById('gis-canvas');
@@ -253,11 +263,11 @@
     const activeArcs = [];
     const activePins = [];
     const telemetryFeedStore = [];
+    const historicalAuditBuffer = []; // Stores historical log
 
     let totalScans = 1482978;
     let anomaliesBlocked = 4144;
 
-    // Load Official World Atlas TopoJSON
     fetch('assets/land-110m.json')
       .then(res => res.json())
       .then(data => { topoData = data; })
@@ -276,6 +286,8 @@
     }
 
     function processPayload(origin, destination, timeDeltaSeconds, tagId) {
+      if (!isLiveStreaming) return; // Paused during audit scrubbing
+
       totalScans++;
       document.getElementById('kpi-total-scans').textContent = totalScans.toLocaleString();
 
@@ -302,16 +314,20 @@
       };
 
       telemetryFeedStore.unshift(evt);
-      if (telemetryFeedStore.length > 30) telemetryFeedStore.pop();
+      historicalAuditBuffer.unshift(evt);
+      if (telemetryFeedStore.length > 50) telemetryFeedStore.pop();
+      if (historicalAuditBuffer.length > 200) historicalAuditBuffer.pop();
 
       renderTelemetryFeed();
     }
 
-    function renderTelemetryFeed() {
+    function renderTelemetryFeed(customList = null) {
       const feed = document.getElementById('telemetry-feed');
       feed.innerHTML = '';
 
-      const filtered = telemetryFeedStore.filter(evt => {
+      const targetList = customList || telemetryFeedStore;
+
+      const filtered = targetList.filter(evt => {
         if (filterMode === 'threats' && !evt.isThreat) return false;
         if (filterMode === 'us' && !evt.origin.country.includes('US')) return false;
         if (searchQuery.trim() !== '' && !evt.tagId.toLowerCase().includes(searchQuery.toLowerCase()) && !evt.origin.city.toLowerCase().includes(searchQuery.toLowerCase())) return false;
@@ -341,6 +357,46 @@
         feed.appendChild(card);
       });
     }
+
+    // Functional Time Scrubber Controls
+    const timeSlider = document.getElementById('time-slider');
+    const scrubberStatus = document.getElementById('scrubber-status');
+    const streamBadge = document.getElementById('stream-status-badge');
+
+    timeSlider.addEventListener('input', (e) => {
+      const val = parseInt(e.target.value);
+      if (val === 100) {
+        resumeLiveStream();
+      } else {
+        isLiveStreaming = false;
+        const minutesAgo = Math.round(((100 - val) / 100) * 60);
+        scrubberStatus.textContent = `⏸️ AUDIT SCRUBBING (-${minutesAgo} MINUTES AGO)`;
+        scrubberStatus.className = 'text-yellow-400 font-bold animate-pulse';
+        
+        streamBadge.className = 'px-2 py-0.5 text-xs font-mono font-bold rounded bg-yellow-950 text-yellow-400 border border-yellow-800 flex items-center gap-1';
+        streamBadge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-yellow-400"></span> AUDIT PAUSED';
+
+        // Filter historical records up to scrub point
+        const sliceCount = Math.max(1, Math.floor((val / 100) * historicalAuditBuffer.length));
+        const historicalSlice = historicalAuditBuffer.slice(historicalAuditBuffer.length - sliceCount);
+        
+        renderTelemetryFeed(historicalSlice);
+      }
+    });
+
+    function resumeLiveStream() {
+      isLiveStreaming = true;
+      timeSlider.value = 100;
+      scrubberStatus.textContent = '🔴 LIVE TELEMETRY STREAM';
+      scrubberStatus.className = 'text-emerald-400 font-semibold';
+      
+      streamBadge.className = 'px-2 py-0.5 text-xs font-mono font-bold rounded bg-emerald-950 text-emerald-400 border border-emerald-800 animate-pulse flex items-center gap-1';
+      streamBadge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> LIVE STREAMING';
+
+      renderTelemetryFeed();
+    }
+
+    document.getElementById('btn-scrub-live').addEventListener('click', resumeLiveStream);
 
     // Hover Tooltip
     canvas.addEventListener('mousemove', (e) => {
@@ -376,12 +432,11 @@
 
     canvas.addEventListener('mouseleave', () => tooltip.classList.add('hidden'));
 
-    // 60 FPS Render Loop Supporting 2D Flat & 3D Globe Projection
+    // 60 FPS Render Loop
     function renderLoop() {
       const width = canvas.width = canvas.parentElement.clientWidth || 800;
       const height = canvas.height = canvas.parentElement.clientHeight || 520;
 
-      // 1. Dark Ocean Background (#030712)
       ctx.fillStyle = '#030712';
       ctx.fillRect(0, 0, width, height);
 
@@ -392,7 +447,6 @@
         rotationAngle = (rotationAngle + 0.25) % 360;
         projection = d3.geoOrthographic().scale(height / 2.3).translate([width / 2, height / 2]).rotate([rotationAngle, -15]);
 
-        // Atmosphere Ring for 3D Globe
         ctx.beginPath();
         ctx.arc(width / 2, height / 2, height / 2.3, 0, Math.PI * 2);
         ctx.fillStyle = '#060c1c'; ctx.fill();
@@ -401,11 +455,9 @@
 
       const pathGenerator = d3.geoPath().projection(projection).context(ctx);
 
-      // 2. Lat/Lng Graticule Grid Lines (#0f2038)
       ctx.strokeStyle = 'rgba(15, 32, 56, 0.6)'; ctx.lineWidth = 0.5; ctx.setLineDash([4, 4]);
       const graticule = d3.geoGraticule10(); ctx.beginPath(); pathGenerator(graticule); ctx.stroke(); ctx.setLineDash([]);
 
-      // 3. Render TopoJSON Landmasses (#0d1726 fill, #1e3a5f border)
       if (topoData) {
         const geojson = topojson.feature(topoData, topoData.objects.land);
         ctx.fillStyle = '#0d1726';
@@ -481,37 +533,40 @@
     // Mode Selector Controls
     document.getElementById('btn-proj-2d').addEventListener('click', () => {
       projectionMode = '2d';
+      document.getElementById('map-mode-indicator').textContent = '2D EQUIRECTANGULAR GIS';
       document.getElementById('btn-proj-2d').className = 'px-3 py-1 rounded bg-emerald-950 text-emerald-400 border border-emerald-800 font-bold transition-all';
       document.getElementById('btn-proj-3d').className = 'px-3 py-1 rounded text-slate-400 transition-all';
     });
 
     document.getElementById('btn-proj-3d').addEventListener('click', () => {
       projectionMode = '3d';
+      document.getElementById('map-mode-indicator').textContent = '3D ROTATING GLOBE';
       document.getElementById('btn-proj-3d').className = 'px-3 py-1 rounded bg-emerald-950 text-emerald-400 border border-emerald-800 font-bold transition-all';
       document.getElementById('btn-proj-2d').className = 'px-3 py-1 rounded text-slate-400 transition-all';
     });
 
+    // Telemetry Filter Buttons (Now in Right Sidebar)
     document.getElementById('btn-filter-all').addEventListener('click', () => {
       filterMode = 'all';
-      document.getElementById('btn-filter-all').className = 'px-3 py-1.5 rounded-lg bg-emerald-600 text-white font-bold transition-all';
-      document.getElementById('btn-filter-threats').className = 'px-3 py-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition-all';
-      document.getElementById('btn-filter-us').className = 'px-3 py-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition-all';
+      document.getElementById('btn-filter-all').className = 'flex-1 py-1.5 rounded-md bg-emerald-600 text-white font-bold transition-all text-center';
+      document.getElementById('btn-filter-threats').className = 'flex-1 py-1.5 rounded-md bg-slate-800 text-slate-400 hover:text-white transition-all text-center';
+      document.getElementById('btn-filter-us').className = 'flex-1 py-1.5 rounded-md bg-slate-800 text-slate-400 hover:text-white transition-all text-center';
       renderTelemetryFeed();
     });
 
     document.getElementById('btn-filter-threats').addEventListener('click', () => {
       filterMode = 'threats';
-      document.getElementById('btn-filter-threats').className = 'px-3 py-1.5 rounded-lg bg-red-600 text-white font-bold transition-all';
-      document.getElementById('btn-filter-all').className = 'px-3 py-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition-all';
-      document.getElementById('btn-filter-us').className = 'px-3 py-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition-all';
+      document.getElementById('btn-filter-threats').className = 'flex-1 py-1.5 rounded-md bg-red-600 text-white font-bold transition-all text-center';
+      document.getElementById('btn-filter-all').className = 'flex-1 py-1.5 rounded-md bg-slate-800 text-slate-400 hover:text-white transition-all text-center';
+      document.getElementById('btn-filter-us').className = 'flex-1 py-1.5 rounded-md bg-slate-800 text-slate-400 hover:text-white transition-all text-center';
       renderTelemetryFeed();
     });
 
     document.getElementById('btn-filter-us').addEventListener('click', () => {
       filterMode = 'us';
-      document.getElementById('btn-filter-us').className = 'px-3 py-1.5 rounded-lg bg-blue-600 text-white font-bold transition-all';
-      document.getElementById('btn-filter-all').className = 'px-3 py-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition-all';
-      document.getElementById('btn-filter-threats').className = 'px-3 py-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition-all';
+      document.getElementById('btn-filter-us').className = 'flex-1 py-1.5 rounded-md bg-blue-600 text-white font-bold transition-all text-center';
+      document.getElementById('btn-filter-all').className = 'flex-1 py-1.5 rounded-md bg-slate-800 text-slate-400 hover:text-white transition-all text-center';
+      document.getElementById('btn-filter-threats').className = 'flex-1 py-1.5 rounded-md bg-slate-800 text-slate-400 hover:text-white transition-all text-center';
       renderTelemetryFeed();
     });
 
@@ -527,7 +582,7 @@
     });
 
     setInterval(() => {
-      if (!isLive) return;
+      if (!isLiveStreaming) return;
       const isReplay = Math.random() < 0.35;
       const tagId = `NTAG-424-${Math.floor(Math.random() * 8999 + 1000)}`;
       const c1 = CITIES[Math.floor(Math.random() * CITIES.length)];
