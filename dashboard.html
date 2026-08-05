@@ -1,27 +1,42 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" class="dark scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quantum Nimbus | 2D/3D Globe Enterprise Threat Suite</title>
+  <title>Quantum Nimbus Tech | Real-Time Threat Telemetry Map</title>
   <meta name="description" content="High-precision 2D/3D Globe cybersecurity threat map with live NFC telemetry and impossible velocity detection.">
   
-  <!-- Tailwind CSS CDN -->
+  <!-- Google Fonts: Inter + Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS & Site Config -->
+  <script src="site-config.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="index.css">
 
   <!-- D3.js and TopoJSON CDN -->
   <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
   <script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
 
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-
   <style>
-    body { font-family: 'Inter', sans-serif; }
+    body {
+      overflow-x: hidden !important;
+      min-height: 100vh;
+      background-color: #0c0f17 !important;
+      font-family: 'Inter', sans-serif;
+    }
     .font-mono { font-family: 'JetBrains Mono', monospace; }
-    
+    .nav-link {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #8b9cb5;
+      transition: color 0.18s;
+    }
+    .nav-link:hover { color: #f1f5f9; }
+    .nav-link.active { color: #10b981; font-weight: 600; }
+
     #map-viewport {
       width: 100%;
       height: 520px;
@@ -29,7 +44,7 @@
       background-color: #030712;
       position: relative;
       overflow: hidden;
-      border: 1px solid #1e293b;
+      border: 1px solid #1e2d3d;
     }
     
     #gis-canvas {
@@ -40,38 +55,52 @@
     }
   </style>
 </head>
-<body class="bg-[#030712] text-slate-100 min-h-screen transition-colors duration-300">
+<body class="bg-nimbusBase text-slate-300 antialiased">
 
-  <!-- Header Navigation -->
-  <header class="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-6 py-4">
-    <div class="max-w-7xl mx-auto flex items-center justify-between">
-      <div class="flex items-center space-x-3">
-        <a href="/" class="flex items-center space-x-2">
-          <div class="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center text-white font-bold">Q</div>
-          <span class="font-bold text-lg text-white tracking-tight">Quantum Nimbus <span class="text-xs font-semibold px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800">Tech</span></span>
-        </a>
-      </div>
+  <!-- ============================================================
+       EXACT SITE NAVBAR (MATCHING INDEX.HTML / SAFETY.HTML)
+  ============================================================ -->
+  <nav class="fixed w-full z-50 bg-[#0c0f17]/95 backdrop-blur-md border-b border-[#1e2d3d]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <!-- Logo -->
+        <div class="flex-shrink-0">
+          <a href="index.html" class="flex items-center gap-2.5">
+            <div class="relative flex items-center justify-center w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 shadow-[0_0_12px_rgba(59,130,246,0.25)]">
+              <svg class="w-5 h-5 text-blue-400 drop-shadow-[0_0_6px_rgba(59,130,246,0.8)]" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/>
+              </svg>
+            </div>
+            <span class="font-heading font-bold text-[1.1rem] text-white tracking-tight">Quantum <span class="text-blue-500">Nimbus</span> Tech</span>
+          </a>
+        </div>
+        
+        <!-- Desktop Nav -->
+        <div class="hidden md:flex items-center gap-6 lg:gap-8">
+          <a href="index.html#technology" class="nav-link">Technology</a>
+          <a href="safety.html" class="nav-link">Compliance Data</a>
+          <a href="dashboard.html" class="nav-link active flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>Live Threat Map</a>
+          <a href="simulator.html" class="nav-link">Simulation</a>
+          <a href="contact.html" class="nav-link">Contact</a>
+          <a href="about.html" class="nav-link">About Us</a>
+        </div>
 
-      <nav class="hidden md:flex items-center space-x-6 text-sm font-medium text-slate-300">
-        <a href="/" class="hover:text-emerald-400 transition-colors">Overview</a>
-        <a href="/about.html" class="hover:text-emerald-400 transition-colors">Architecture</a>
-        <a href="/safety.html" class="hover:text-emerald-400 transition-colors">Compliance Data</a>
-        <a href="/dashboard.html" class="text-emerald-400 font-semibold flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>Live Threat Map</a>
-        <a href="/simulator.html" class="hover:text-emerald-400 transition-colors">Simulation</a>
-      </nav>
-
-      <div class="flex items-center space-x-4">
-        <a href="/contact.html" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold px-4 py-2 rounded-lg shadow-sm transition-all">
-          Request Enterprise Assessment
-        </a>
+        <!-- Mobile menu button -->
+        <div class="md:hidden flex items-center">
+          <button id="mobile-menu-btn" class="text-slate-400 hover:text-white focus:outline-none p-1">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
-  </header>
+  </nav>
 
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-6">
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 pt-24 space-y-6">
     
     <!-- Title Banner -->
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#1e2d3d] pb-4">
       <div>
         <div class="flex items-center space-x-2 mb-1">
           <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -145,7 +174,7 @@
         <!-- Projection Mode Header Bar -->
         <div class="bg-slate-900/90 border border-slate-800/80 rounded-xl p-3 backdrop-blur-md flex items-center justify-between gap-3">
           <div class="text-xs font-mono font-bold text-slate-300 flex items-center space-x-2">
-            <span>🗺️ MAP VIEWPORT ENGINE:</span>
+            <span>MAP VIEWPORT ENGINE:</span>
             <span id="map-mode-indicator" class="text-emerald-400">2D EQUIRECTANGULAR GIS</span>
           </div>
 
@@ -263,7 +292,7 @@
     const activeArcs = [];
     const activePins = [];
     const telemetryFeedStore = [];
-    const historicalAuditBuffer = []; // Stores historical log
+    const historicalAuditBuffer = [];
 
     let totalScans = 1482978;
     let anomaliesBlocked = 4144;
@@ -286,7 +315,7 @@
     }
 
     function processPayload(origin, destination, timeDeltaSeconds, tagId) {
-      if (!isLiveStreaming) return; // Paused during audit scrubbing
+      if (!isLiveStreaming) return;
 
       totalScans++;
       document.getElementById('kpi-total-scans').textContent = totalScans.toLocaleString();
@@ -358,7 +387,6 @@
       });
     }
 
-    // Functional Time Scrubber Controls
     const timeSlider = document.getElementById('time-slider');
     const scrubberStatus = document.getElementById('scrubber-status');
     const streamBadge = document.getElementById('stream-status-badge');
@@ -376,7 +404,6 @@
         streamBadge.className = 'px-2 py-0.5 text-xs font-mono font-bold rounded bg-yellow-950 text-yellow-400 border border-yellow-800 flex items-center gap-1';
         streamBadge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-yellow-400"></span> AUDIT PAUSED';
 
-        // Filter historical records up to scrub point
         const sliceCount = Math.max(1, Math.floor((val / 100) * historicalAuditBuffer.length));
         const historicalSlice = historicalAuditBuffer.slice(historicalAuditBuffer.length - sliceCount);
         
@@ -398,7 +425,6 @@
 
     document.getElementById('btn-scrub-live').addEventListener('click', resumeLiveStream);
 
-    // Hover Tooltip
     canvas.addEventListener('mousemove', (e) => {
       const rect = canvas.getBoundingClientRect();
       const mouseX = e.clientX - rect.left;
@@ -432,7 +458,6 @@
 
     canvas.addEventListener('mouseleave', () => tooltip.classList.add('hidden'));
 
-    // 60 FPS Render Loop
     function renderLoop() {
       const width = canvas.width = canvas.parentElement.clientWidth || 800;
       const height = canvas.height = canvas.parentElement.clientHeight || 520;
@@ -471,7 +496,6 @@
 
       const now = Date.now();
 
-      // Render Active Pins
       for (let i = activePins.length - 1; i >= 0; i--) {
         const pin = activePins[i];
         const age = now - pin.spawnTime;
@@ -495,7 +519,6 @@
         ctx.fillText(pin.city, x + 8, y + 3);
       }
 
-      // Render Quadratic Arcs
       for (let i = activeArcs.length - 1; i >= 0; i--) {
         const arc = activeArcs[i];
         const progress = Math.min((now - arc.startTime) / 2400, 1.0);
@@ -530,7 +553,6 @@
 
     requestAnimationFrame(renderLoop);
 
-    // Mode Selector Controls
     document.getElementById('btn-proj-2d').addEventListener('click', () => {
       projectionMode = '2d';
       document.getElementById('map-mode-indicator').textContent = '2D EQUIRECTANGULAR GIS';
@@ -545,7 +567,6 @@
       document.getElementById('btn-proj-2d').className = 'px-3 py-1 rounded text-slate-400 transition-all';
     });
 
-    // Telemetry Filter Buttons (Now in Right Sidebar)
     document.getElementById('btn-filter-all').addEventListener('click', () => {
       filterMode = 'all';
       document.getElementById('btn-filter-all').className = 'flex-1 py-1.5 rounded-md bg-emerald-600 text-white font-bold transition-all text-center';
