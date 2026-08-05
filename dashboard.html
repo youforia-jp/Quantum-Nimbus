@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Public Satellite Threat Map & Enterprise Telemetry Dashboard | Quantum Nimbus Tech</title>
-  <meta name="description" content="Real-time satellite world threat map visualizing NFC cryptographic authentication, impossible velocity threat detection, and replay attack prevention.">
+  <title>Quantum Nimbus | Threat Telemetry Map & Vector Basemap</title>
+  <meta name="description" content="Real-time vector GIS basemap, impossible velocity evaluation, and live quadratic Bezier arc telemetry canvas.">
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -33,69 +33,9 @@
   <style>
     body { font-family: 'Inter', sans-serif; }
     .font-mono { font-family: 'JetBrains Mono', monospace; }
-    #threat-map-container { 
-      height: 580px; 
-      width: 100%; 
-      border-radius: 0.75rem; 
-      background-color: #050811; 
-      position: relative; 
-      overflow: hidden; 
-      border: 1px solid #1e293b;
-    }
-    .satellite-world-img {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 100%;
-      height: 100%;
-      object-fit: fill;
-      filter: brightness(0.85) contrast(1.15) saturate(1.1);
-      opacity: 0.95;
-    }
-    .map-overlay-vignette {
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at center, rgba(15, 23, 42, 0.02) 50%, rgba(5, 8, 17, 0.7) 100%);
-      pointer-events: none;
-      z-index: 5;
-    }
-    canvas { 
-      position: absolute; 
-      inset: 0; 
-      width: 100%; 
-      height: 100%; 
-      pointer-events: none; 
-      z-index: 10; 
-    }
-    .dynamic-node-pin {
-      position: absolute;
-      transform: translate(-50%, -50%);
-      z-index: 15;
-      pointer-events: auto;
-      transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    .node-pin-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      border: 2px solid #ffffff;
-    }
-    .node-pin-pulse {
-      position: absolute;
-      top: -7px;
-      left: -7px;
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      animation: ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
-    }
-    @keyframes ping {
-      75%, 100% { transform: scale(2.2); opacity: 0; }
-    }
   </style>
 </head>
-<body class="bg-slate-950 text-slate-100 transition-colors duration-300 min-h-screen">
+<body class="bg-[#030712] text-slate-100 min-h-screen transition-colors duration-300">
 
   <!-- Header Navigation -->
   <header class="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-6 py-4">
@@ -116,12 +56,6 @@
       </nav>
 
       <div class="flex items-center space-x-4">
-        <!-- Theme Toggle -->
-        <button id="theme-toggle" class="p-2 rounded-lg border border-slate-800 bg-slate-800 hover:bg-slate-700 transition-colors text-xs font-semibold flex items-center space-x-1">
-          <span id="theme-toggle-icon">☀️</span>
-          <span id="theme-toggle-text">Light Mode</span>
-        </button>
-
         <a href="/contact.html" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold px-4 py-2 rounded-lg shadow-sm transition-all">
           Request Enterprise Assessment
         </a>
@@ -136,26 +70,23 @@
       <div>
         <div class="flex items-center space-x-2 mb-2">
           <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span class="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider">Geographic Telemetry Network</span>
+          <span class="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider">QN Swarm Orchestrated Vector Engine Active</span>
         </div>
-        <h1 class="text-3xl font-extrabold text-white tracking-tight">Real-Time Satellite Threat Map</h1>
-        <p class="text-slate-400 text-sm mt-1">NFC tap nodes pop up on scan events and disappear after verification. Connecting laser arcs are drawn only when the same NFC tag ID is replayed at a second location.</p>
+        <h1 class="text-3xl font-extrabold text-white tracking-tight">Real-Time Vector Threat Map</h1>
+        <p class="text-slate-400 text-sm mt-1">Dark-mode vector basemap, impossible velocity detection, and live quadratic Bezier arc canvas.</p>
       </div>
 
       <!-- Quick Control Bar -->
       <div class="flex items-center space-x-2">
         <button id="btn-attack-replay" class="bg-red-600 hover:bg-red-500 text-white text-xs font-semibold px-3.5 py-2 rounded-lg shadow transition-all flex items-center space-x-1.5 cursor-pointer">
-          <span>⚡ Simulate Houston→London Replay Attack</span>
-        </button>
-        <button id="btn-random-ping" class="bg-slate-200 hover:bg-white text-slate-900 text-xs font-semibold px-3.5 py-2 rounded-lg transition-all cursor-pointer">
-          <span>🎲 Scan NFC Tag</span>
+          <span>⚡ Simulate Houston→Denver Attack</span>
         </button>
       </div>
     </div>
 
     <!-- Metric KPI Cards Grid -->
     <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-sm">
+      <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-5 shadow-sm">
         <div class="flex items-center justify-between">
           <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Scans (24h)</span>
           <span class="p-1.5 rounded-lg bg-emerald-950 text-emerald-400 text-xs">📊</span>
@@ -166,18 +97,18 @@
         </div>
       </div>
 
-      <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-sm">
+      <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-5 shadow-sm">
         <div class="flex items-center justify-between">
           <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Active NFC DNA Chips</span>
           <span class="p-1.5 rounded-lg bg-blue-950 text-blue-400 text-xs">🔐</span>
         </div>
         <div class="mt-3 flex items-baseline justify-between">
-          <span id="kpi-active-chips" class="text-2xl font-bold font-mono text-white">350,000</span>
+          <span class="text-2xl font-bold font-mono text-white">350,000</span>
           <span class="text-xs font-semibold text-blue-400">NTAG 424 DNA</span>
         </div>
       </div>
 
-      <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-sm">
+      <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-5 shadow-sm">
         <div class="flex items-center justify-between">
           <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Anomalies Blocked</span>
           <span class="p-1.5 rounded-lg bg-red-950 text-red-400 text-xs">🚨</span>
@@ -188,7 +119,7 @@
         </div>
       </div>
 
-      <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-sm">
+      <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-5 shadow-sm">
         <div class="flex items-center justify-between">
           <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Network Protection</span>
           <span class="p-1.5 rounded-lg bg-purple-950 text-purple-400 text-xs">🛡️</span>
@@ -200,65 +131,42 @@
       </div>
     </section>
 
-    <!-- Main Content Grid: Satellite World Map Asset & Live Stream -->
+    <!-- Main Grid: Left Vector GIS Canvas + Right Live Stream -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
       
-      <!-- Satellite Map Container (2 Cols) -->
+      <!-- Left Vector GIS Basemap Canvas -->
       <section class="lg:col-span-2 space-y-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-sm relative">
-          
-          <div class="flex items-center justify-between mb-3 px-1">
+        <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4 shadow-sm relative">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-3">
             <h2 class="text-base font-bold text-white flex items-center space-x-2">
-              <span>🗺️ Dynamic Satellite Telemetry Map</span>
+              <span>🗺️ Vector GIS Basemap & Live Arc Layer</span>
             </h2>
-            <div class="flex items-center space-x-4 text-xs font-mono">
-              <span class="flex items-center space-x-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block shadow-[0_0_8px_rgba(16,185,129,0.8)]"></span><span>Tap 1 (Scan)</span></span>
-              <span class="flex items-center space-x-1.5"><span class="w-2.5 h-2.5 rounded-full bg-red-500 inline-block shadow-[0_0_8px_rgba(239,68,68,0.8)]"></span><span>Tap 2 (Replay Line Drawn)</span></span>
+            <div class="font-mono text-xs text-emerald-400 flex items-center space-x-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span>60 FPS Render Active</span>
             </div>
           </div>
 
-          <!-- Dynamic Threat Map Container with Satellite Image Background -->
-          <div id="threat-map-container">
-            
-            <!-- High-Resolution Satellite Map Image Asset -->
-            <img id="satellite-img" src="assets/images/world-map-satellite.png" class="satellite-world-img" alt="Satellite World Map Telemetry Asset">
-            <div class="map-overlay-vignette"></div>
-
-            <!-- Dynamic Node Pins Layer (Appears on scan, disappears after 5s) -->
-            <div id="dynamic-pins-layer"></div>
-
-            <!-- Real-Time Arc & Laser Beam Canvas Overlay -->
-            <canvas id="map-canvas"></canvas>
-
+          <div class="w-full h-[520px] relative rounded-lg overflow-hidden border border-slate-800 bg-[#030712]">
+            <canvas id="vector-canvas" class="w-full h-full block"></canvas>
           </div>
-        </div>
-
-        <!-- Educational Explanation Card -->
-        <div class="bg-emerald-950/20 border border-emerald-500/30 rounded-xl p-5 text-sm space-y-2">
-          <h3 class="font-bold text-emerald-400 flex items-center space-x-2">
-            <span>💡 How NFC Tag Replay Triggers Laser Arcs</span>
-          </h3>
-          <p class="text-slate-300 text-xs leading-relaxed">
-            When an NFC tag is scanned at Location A (e.g. <strong>Houston, TX</strong>), a green scan node pops up. If the <strong>exact same Tag ID</strong> is scanned seconds later at Location B (e.g. <strong>London, UK</strong>), Quantum Nimbus detects duplicate nonce reuse and draws an instant red laser arc between the two nodes, revoking authentication.
-          </p>
         </div>
       </section>
 
-      <!-- Live Event Stream Feed (1 Col) -->
-      <section class="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-sm space-y-4 flex flex-col h-[670px]">
+      <!-- Right Telemetry Sidebar Stream -->
+      <section class="bg-slate-900/80 border border-slate-800 rounded-xl p-5 shadow-sm space-y-4 flex flex-col h-[590px]">
         <div class="flex items-center justify-between border-b border-slate-800 pb-3">
           <div>
-            <h2 class="text-base font-bold text-white">Live Security Telemetry Stream</h2>
-            <p class="text-xs text-slate-400 font-mono">Pings display live as scans occur</p>
+            <h2 class="text-base font-bold text-white">Live Telemetry Stream</h2>
+            <p class="text-xs text-slate-400 font-mono">JSON Schema Scan Events</p>
           </div>
-          <span id="stream-status-badge" class="px-2 py-0.5 text-xs font-mono font-bold rounded bg-emerald-950 text-emerald-400 border border-emerald-800 animate-pulse">
-            STREAM ACTIVE
+          <span class="px-2 py-0.5 text-xs font-mono font-bold rounded bg-emerald-950 text-emerald-400 border border-emerald-800 animate-pulse">
+            LIVE SSE
           </span>
         </div>
 
-        <!-- Scrollable Feed -->
         <div id="telemetry-feed" class="flex-1 overflow-y-auto space-y-3 pr-1">
-          <!-- Dynamically populated events -->
+          <!-- Dynamically inserted stream cards -->
         </div>
       </section>
 
@@ -266,312 +174,275 @@
 
   </main>
 
-  <!-- Footer -->
   <footer class="border-t border-slate-800 mt-16 py-8 text-center text-xs text-slate-500">
     <p>© 2026 Quantum Nimbus Tech. U.S. Patent Pending — Dynamic Vaporization Parameter & NFC Cryptographic Authentication.</p>
   </footer>
 
-  <!-- Dynamic Threat Map Canvas Engine Script -->
+  <!-- Vector Engine Script -->
   <script>
-    // Theme State Toggle
-    let isDarkMode = true;
-    const themeToggleBtn = document.getElementById('theme-toggle');
-    const themeToggleIcon = document.getElementById('theme-toggle-icon');
-    const themeToggleText = document.getElementById('theme-toggle-text');
-
-    themeToggleBtn.addEventListener('click', () => {
-      isDarkMode = !isDarkMode;
-      if (isDarkMode) {
-        document.documentElement.classList.add('dark');
-        themeToggleIcon.textContent = '☀️';
-        themeToggleText.textContent = 'Light Mode';
-      } else {
-        document.documentElement.classList.remove('dark');
-        themeToggleIcon.textContent = '🌙';
-        themeToggleText.textContent = 'Dark Mode';
-      }
-    });
-
-    // MATHEMATICALLY ACCURATE CITY COORDINATES (Equirectangular Projection)
-    // Formula: x = ((lng + 180)/360) * 100%, y = ((90 - lat)/180) * 100%
     const CITIES = [
-      { id: 'houston', name: 'Houston, TX (HQ)', lat: 29.76, lng: -95.37, xPct: 23.51, yPct: 33.47, isUs: true },
-      { id: 'sf', name: 'San Francisco, CA', lat: 37.77, lng: -122.42, xPct: 15.99, yPct: 29.02, isUs: true },
-      { id: 'ny', name: 'New York, NY', lat: 40.71, lng: -74.01, xPct: 29.44, yPct: 27.38, isUs: true },
-      { id: 'chicago', name: 'Chicago, IL', lat: 41.88, lng: -87.63, xPct: 25.66, yPct: 26.73, isUs: true },
-      { id: 'miami', name: 'Miami, FL', lat: 25.76, lng: -80.19, xPct: 27.73, yPct: 35.69, isUs: true },
-      { id: 'denver', name: 'Denver, CO', lat: 39.74, lng: -104.99, xPct: 20.83, yPct: 27.92, isUs: true },
-      { id: 'london', name: 'London, UK', lat: 51.51, lng: -0.13, xPct: 49.96, yPct: 21.38, isUs: false },
-      { id: 'berlin', name: 'Berlin, Germany', lat: 52.52, lng: 13.41, xPct: 53.73, yPct: 20.82, isUs: false },
-      { id: 'tokyo', name: 'Tokyo, Japan', lat: 35.68, lng: 139.65, xPct: 88.79, yPct: 30.18, isUs: false },
-      { id: 'sydney', name: 'Sydney, Australia', lat: -33.87, lng: 151.21, xPct: 92.00, yPct: 68.82, isUs: false }
+      { city: 'Houston', country: 'US', lat: 29.7604, lng: -95.3698 },
+      { city: 'San Francisco', country: 'US', lat: 37.7749, lng: -122.4194 },
+      { city: 'New York', country: 'US', lat: 40.7128, lng: -74.0060 },
+      { city: 'Chicago', country: 'US', lat: 41.8781, lng: -87.6298 },
+      { city: 'Miami', country: 'US', lat: 25.7617, lng: -80.1918 },
+      { city: 'Denver', country: 'US', lat: 39.7392, lng: -104.9903 },
+      { city: 'London', country: 'UK', lat: 51.5074, lng: -0.1278 },
+      { city: 'Berlin', country: 'Germany', lat: 52.5200, lng: 13.4050 },
+      { city: 'Tokyo', country: 'Japan', lat: 35.6762, lng: 139.6503 },
+      { city: 'Sydney', country: 'Australia', lat: -33.8688, lng: 151.2093 }
     ];
 
-    // State Tracking for Tag Scans (Map of tagId -> previous scan data)
-    const tagStore = new Map();
-    const activeArcs = [];
-    const activePinTimeouts = new Map();
-
-    const canvas = document.getElementById('map-canvas');
-    const ctx = canvas.getContext('2d');
-
-    function resizeCanvas() {
-      const container = document.getElementById('threat-map-container');
-      canvas.width = container.clientWidth;
-      canvas.height = container.clientHeight;
-    }
-
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-
-    function getCanvasCoords(city) {
+    function latLngToCanvas(lat, lng, width, height) {
       return {
-        x: (city.xPct / 100) * canvas.width,
-        y: (city.yPct / 100) * canvas.height
+        x: ((lng + 180) / 360) * width,
+        y: ((90 - lat) / 180) * height
       };
     }
 
-    // Spawn Node Pin: Disappears completely after 5 seconds!
-    function spawnNodePin(city, isThreat) {
-      const pinLayer = document.getElementById('dynamic-pins-layer');
-      const pinId = `pin-${city.id}-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`;
-
-      const pin = document.createElement('div');
-      pin.id = pinId;
-      pin.className = 'dynamic-node-pin';
-      pin.style.left = `${city.xPct}%`;
-      pin.style.top = `${city.yPct}%`;
-      
-      const color = isThreat ? '#ef4444' : '#10b981';
-      pin.innerHTML = `
-        <div class="relative flex items-center">
-          <div class="node-pin-pulse" style="border-color: ${color};"></div>
-          <div class="node-pin-dot" style="background-color: ${color}; box-shadow: 0 0 12px ${color};"></div>
-          <span class="ml-2 font-mono text-[10px] font-bold text-white ${isThreat ? 'bg-red-950/90 border-red-700' : 'bg-slate-900/80 border-slate-700/60'} px-2 py-0.5 rounded border backdrop-blur-sm whitespace-nowrap shadow-lg">
-            ${city.name}
-          </span>
-        </div>
-      `;
-
-      pinLayer.appendChild(pin);
-
-      // Completely remove pin element after 5 seconds!
-      setTimeout(() => {
-        pin.style.opacity = '0';
-        pin.style.transform = 'translate(-50%, -50%) scale(0.5)';
-        setTimeout(() => {
-          if (pin.parentNode) {
-            pin.parentNode.removeChild(pin);
-          }
-        }, 300);
-      }, 5000);
+    function haversineDistanceKm(lat1, lon1, lat2, lon2) {
+      const R = 6371;
+      const dLat = ((lat2 - lat1) * Math.PI) / 180;
+      const dLon = ((lon2 - lon1) * Math.PI) / 180;
+      const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) *
+                Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      return Math.round(R * c);
     }
 
-    // Main Render Loop for Arc Trajectories
-    function drawArcs() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    function drawVectorBasemap(ctx, width, height) {
+      ctx.fillStyle = '#030712';
+      ctx.fillRect(0, 0, width, height);
+
+      ctx.strokeStyle = 'rgba(30, 41, 59, 0.4)';
+      ctx.lineWidth = 0.75;
+      for (let x = 0; x < width; x += 40) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, height); ctx.stroke();
+      }
+      for (let y = 0; y < height; y += 40) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke();
+      }
+
+      ctx.fillStyle = '#0d1117';
+      ctx.strokeStyle = '#1e293b';
+      ctx.lineWidth = 1.2;
+
+      // Continents
+      const naPath = [{ lat: 70, lng: -140 }, { lat: 60, lng: -130 }, { lat: 50, lng: -125 }, { lat: 30, lng: -115 }, { lat: 15, lng: -90 }, { lat: 25, lng: -80 }, { lat: 45, lng: -65 }, { lat: 60, lng: -70 }, { lat: 75, lng: -100 }];
+      ctx.beginPath();
+      naPath.forEach((pt, idx) => {
+        const { x, y } = latLngToCanvas(pt.lat, pt.lng, width, height);
+        if (idx === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      });
+      ctx.closePath(); ctx.fill(); ctx.stroke();
+
+      const usTopLeft = latLngToCanvas(49, -125, width, height);
+      const usBottomRight = latLngToCanvas(24, -66, width, height);
+      ctx.fillStyle = 'rgba(16, 185, 129, 0.04)';
+      ctx.strokeStyle = 'rgba(16, 185, 129, 0.25)';
+      ctx.lineWidth = 1.5; ctx.setLineDash([4, 4]);
+      ctx.fillRect(usTopLeft.x, usTopLeft.y, usBottomRight.x - usTopLeft.x, usBottomRight.y - usTopLeft.y);
+      ctx.strokeRect(usTopLeft.x, usTopLeft.y, usBottomRight.x - usTopLeft.x, usBottomRight.y - usTopLeft.y);
+      ctx.setLineDash([]);
+
+      const euPath = [{ lat: 70, lng: -10 }, { lat: 70, lng: 30 }, { lat: 40, lng: 40 }, { lat: 36, lng: -5 }, { lat: 45, lng: -10 }];
+      ctx.beginPath();
+      euPath.forEach((pt, idx) => {
+        const { x, y } = latLngToCanvas(pt.lat, pt.lng, width, height);
+        if (idx === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      });
+      ctx.closePath(); ctx.fill(); ctx.stroke();
+
+      const asiaPath = [{ lat: 70, lng: 30 }, { lat: 70, lng: 140 }, { lat: 35, lng: 140 }, { lat: 10, lng: 100 }, { lat: 25, lng: 60 }, { lat: 40, lng: 40 }];
+      ctx.beginPath();
+      asiaPath.forEach((pt, idx) => {
+        const { x, y } = latLngToCanvas(pt.lat, pt.lng, width, height);
+        if (idx === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      });
+      ctx.closePath(); ctx.fill(); ctx.stroke();
+
+      const saPath = [{ lat: 12, lng: -75 }, { lat: -5, lng: -35 }, { lat: -35, lng: -55 }, { lat: -55, lng: -70 }, { lat: -15, lng: -80 }];
+      ctx.beginPath();
+      saPath.forEach((pt, idx) => {
+        const { x, y } = latLngToCanvas(pt.lat, pt.lng, width, height);
+        if (idx === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      });
+      ctx.closePath(); ctx.fill(); ctx.stroke();
+
+      const afPath = [{ lat: 37, lng: -10 }, { lat: 30, lng: 32 }, { lat: 10, lng: 50 }, { lat: -35, lng: 20 }, { lat: 5, lng: 5 }];
+      ctx.beginPath();
+      afPath.forEach((pt, idx) => {
+        const { x, y } = latLngToCanvas(pt.lat, pt.lng, width, height);
+        if (idx === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      });
+      ctx.closePath(); ctx.fill(); ctx.stroke();
+
+      const auPath = [{ lat: -12, lng: 130 }, { lat: -15, lng: 150 }, { lat: -38, lng: 150 }, { lat: -35, lng: 115 }];
+      ctx.beginPath();
+      auPath.forEach((pt, idx) => {
+        const { x, y } = latLngToCanvas(pt.lat, pt.lng, width, height);
+        if (idx === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      });
+      ctx.closePath(); ctx.fill(); ctx.stroke();
+    }
+
+    const canvas = document.getElementById('vector-canvas');
+    const ctx = canvas.getContext('2d');
+
+    const activeArcs = [];
+    const activePins = [];
+
+    let totalScans = 1482920;
+    let anomaliesBlocked = 4129;
+
+    function processPayload(origin, destination, timeDeltaSeconds, tagId) {
+      totalScans++;
+      document.getElementById('kpi-total-scans').textContent = totalScans.toLocaleString();
+
+      const isThreat = destination && (haversineDistanceKm(origin.lat, origin.lng, destination.lat, destination.lng) / Math.max(timeDeltaSeconds, 0.1)) * 3600 > 1000;
+
+      if (isThreat) {
+        anomaliesBlocked++;
+        document.getElementById('kpi-anomalies-blocked').textContent = anomaliesBlocked.toLocaleString();
+      }
+
+      activePins.push({
+        city: origin.city, lat: origin.lat, lng: origin.lng, isThreat, spawnTime: Date.now()
+      });
+
+      if (destination) {
+        activeArcs.push({
+          origin, destination, startTime: Date.now(), isThreat
+        });
+        activePins.push({
+          city: destination.city, lat: destination.lat, lng: destination.lng, isThreat, spawnTime: Date.now()
+        });
+      }
+
+      // Add Card to Feed
+      const feed = document.getElementById('telemetry-feed');
+      const card = document.createElement('div');
+      card.className = `p-3 rounded-lg border text-xs space-y-1.5 transition-all ${
+        !isThreat ? 'bg-slate-950 border-slate-800 text-slate-300' : 'bg-red-950/40 border-red-500/50 text-red-200'
+      }`;
+
+      const distance = destination ? haversineDistanceKm(origin.lat, origin.lng, destination.lat, destination.lng) : 0;
+      const vel = destination ? Math.round((distance / Math.max(timeDeltaSeconds, 0.1)) * 3600) : 0;
+
+      card.innerHTML = `
+        <div class="flex items-center justify-between font-mono">
+          <span class="text-slate-500">${new Date().toLocaleTimeString()}</span>
+          <span class="px-1.5 py-0.5 text-[10px] font-bold rounded ${!isThreat ? 'bg-emerald-950 text-emerald-400 border border-emerald-800' : 'bg-red-900 text-red-200 border border-red-700'}">
+            ${isThreat ? 'FLAGGED THREAT' : 'VERIFIED'}
+          </span>
+        </div>
+        <div class="font-mono font-semibold text-slate-100">Tag: ${tagId}</div>
+        <div class="text-slate-300">${origin.city}, ${origin.country} ${destination ? `➔ ${destination.city}, ${destination.country}` : '(Tap 1 Verified)'}</div>
+        ${destination ? `<div class="flex items-center justify-between text-[11px] font-mono text-slate-400">
+          <span>Vel: <strong class="${isThreat ? 'text-red-400' : 'text-emerald-400'}">${vel.toLocaleString()} km/h</strong></span>
+          <span>Delta: <strong>${timeDeltaSeconds}s</strong></span>
+        </div>` : ''}
+      `;
+
+      feed.insertBefore(card, feed.firstChild);
+      if (feed.children.length > 50) feed.removeChild(feed.lastChild);
+    }
+
+    function renderLoop() {
+      const width = canvas.width = canvas.parentElement.clientWidth || 800;
+      const height = canvas.height = canvas.parentElement.clientHeight || 520;
+
+      drawVectorBasemap(ctx, width, height);
 
       const now = Date.now();
+
+      // Render Pins (TTL 5000ms)
+      for (let i = activePins.length - 1; i >= 0; i--) {
+        const pin = activePins[i];
+        const age = now - pin.spawnTime;
+        if (age > 5000) { activePins.splice(i, 1); continue; }
+
+        const fade = 1 - age / 5000;
+        const { x, y } = latLngToCanvas(pin.lat, pin.lng, width, height);
+
+        ctx.beginPath(); ctx.arc(x, y, (age / 5000) * 24, 0, Math.PI * 2);
+        ctx.strokeStyle = pin.isThreat ? `rgba(239, 68, 68, ${fade * 0.8})` : `rgba(16, 185, 129, ${fade * 0.8})`;
+        ctx.lineWidth = 1.5; ctx.stroke();
+
+        ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2);
+        ctx.fillStyle = pin.isThreat ? '#ef4444' : '#10b981'; ctx.fill();
+        ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1; ctx.stroke();
+
+        ctx.fillStyle = `rgba(255, 255, 255, ${fade})`;
+        ctx.font = 'bold 10px JetBrains Mono';
+        ctx.fillText(pin.city, x + 8, y + 3);
+      }
+
+      // Render Arcs
       for (let i = activeArcs.length - 1; i >= 0; i--) {
         const arc = activeArcs[i];
-        const elapsed = now - arc.startTime;
-        const duration = 2400;
-        const progress = Math.min(elapsed / duration, 1.0);
+        const progress = Math.min((now - arc.startTime) / 2400, 1.0);
+        if (progress >= 1.0) { activeArcs.splice(i, 1); continue; }
 
-        const p1 = getCanvasCoords(arc.origin);
-        const p2 = getCanvasCoords(arc.dest);
+        const p1 = latLngToCanvas(arc.origin.lat, arc.origin.lng, width, height);
+        const p2 = latLngToCanvas(arc.destination.lat, arc.destination.lng, width, height);
 
-        // Curved Ballistic Arc Control Point
         const midX = (p1.x + p2.x) / 2;
         const midY = Math.min(p1.y, p2.y) - Math.abs(p1.x - p2.x) * 0.28;
 
-        // Draw Arc Trajectory Line
-        ctx.beginPath();
-        ctx.moveTo(p1.x, p1.y);
+        ctx.beginPath(); ctx.moveTo(p1.x, p1.y);
         ctx.quadraticCurveTo(midX, midY, p2.x, p2.y);
-        ctx.strokeStyle = `rgba(239, 68, 68, ${0.95 * (1 - progress)})`;
-        ctx.lineWidth = 3.5;
-        ctx.setLineDash([8, 4]);
-        ctx.stroke();
-        ctx.setLineDash([]);
+        ctx.strokeStyle = arc.isThreat ? `rgba(239, 68, 68, ${0.9 * (1 - progress)})` : `rgba(16, 185, 129, ${0.85 * (1 - progress)})`;
+        ctx.lineWidth = arc.isThreat ? 3.5 : 2;
+        ctx.setLineDash(arc.isThreat ? [6, 4] : []);
+        ctx.stroke(); ctx.setLineDash([]);
 
-        // Animated Trailing Laser Particle
         const t = progress;
         const currX = (1 - t) * (1 - t) * p1.x + 2 * (1 - t) * t * midX + t * t * p2.x;
         const currY = (1 - t) * (1 - t) * p1.y + 2 * (1 - t) * t * midY + t * t * p2.y;
 
-        ctx.beginPath();
-        ctx.arc(currX, currY, 7, 0, Math.PI * 2);
-        ctx.fillStyle = '#ef4444';
-        ctx.shadowColor = '#ef4444';
-        ctx.shadowBlur = 16;
-        ctx.fill();
-        ctx.shadowBlur = 0;
-
-        // Dynamic Shockwave Ring at Target Node
-        if (progress > 0.3) {
-          ctx.beginPath();
-          ctx.arc(p2.x, p2.y, 18 * progress, 0, Math.PI * 2);
-          ctx.strokeStyle = `rgba(239, 68, 68, ${1 - progress})`;
-          ctx.lineWidth = 2;
-          ctx.stroke();
-        }
-
-        if (progress >= 1.0) {
-          activeArcs.splice(i, 1);
-        }
+        ctx.beginPath(); ctx.arc(currX, currY, arc.isThreat ? 6 : 4, 0, Math.PI * 2);
+        ctx.fillStyle = arc.isThreat ? '#ef4444' : '#10b981';
+        ctx.shadowColor = arc.isThreat ? '#ef4444' : '#10b981';
+        ctx.shadowBlur = 14; ctx.fill(); ctx.shadowBlur = 0;
       }
 
-      requestAnimationFrame(drawArcs);
+      requestAnimationFrame(renderLoop);
     }
 
-    requestAnimationFrame(drawArcs);
+    requestAnimationFrame(renderLoop);
 
-    // KPI Counters
-    let totalScans = 1482920;
-    let anomaliesBlocked = 4129;
-
-    // Scan Event Executor: Only draws line when same NFC tag ID is scanned at a 2nd location!
-    function executeScan(tagId, city) {
-      totalScans++;
-      document.getElementById('kpi-total-scans').textContent = totalScans.toLocaleString();
-
-      const now = Date.now();
-      const existingScan = tagStore.get(tagId);
-
-      if (!existingScan) {
-        // FIRST SCAN: Tag is registered at Location A (No line drawn yet!)
-        tagStore.set(tagId, { city, time: now });
-        spawnNodePin(city, false);
-        
-        addStreamCard({
-          timestamp: new Date().toLocaleTimeString(),
-          tagId,
-          origin: city,
-          destination: null,
-          status: 'VERIFIED',
-          velocityKmh: Math.round(Math.random() * 40 + 5)
-        });
-      } else {
-        // SECOND SCAN (REPLAY): Same Tag ID scanned at Location B! Draw Replay Laser Line!
-        const timeDelta = parseFloat(((now - existingScan.time) / 1000).toFixed(1));
-        const distance = 7750; // Houston -> London distance baseline
-        const velocity = Math.round((distance / Math.max(timeDelta, 1)) * 3600);
-
-        anomaliesBlocked++;
-        document.getElementById('kpi-anomalies-blocked').textContent = anomaliesBlocked.toLocaleString();
-
-        spawnNodePin(existingScan.city, true);
-        spawnNodePin(city, true);
-
-        // Add Laser Line from Location A to Location B
-        activeArcs.push({
-          origin: existingScan.city,
-          dest: city,
-          startTime: now
-        });
-
-        addStreamCard({
-          timestamp: new Date().toLocaleTimeString(),
-          tagId,
-          origin: existingScan.city,
-          destination: city,
-          status: 'FLAGGED THREAT',
-          velocityKmh: velocity
-        });
-
-        // Clear tag from store so it can be re-tested
-        tagStore.delete(tagId);
-      }
-    }
-
-    function addStreamCard(event) {
-      const feed = document.getElementById('telemetry-feed');
-      const card = document.createElement('div');
-      const isThreat = event.status !== 'VERIFIED';
-      
-      card.className = `p-3 rounded-lg border text-xs space-y-1.5 transition-all ${
-        !isThreat 
-          ? 'bg-slate-950 border-slate-800 text-slate-300' 
-          : 'bg-red-950/40 border-red-500/50 text-red-200'
-      }`;
-
-      card.innerHTML = `
-        <div class="flex items-center justify-between font-mono">
-          <span class="text-slate-500">${event.timestamp}</span>
-          <span class="px-1.5 py-0.5 text-[10px] font-bold rounded ${
-            !isThreat 
-              ? 'bg-emerald-950 text-emerald-400 border border-emerald-800' 
-              : 'bg-red-900 text-red-200 border border-red-700'
-          }">${event.status}</span>
-        </div>
-        <div class="font-semibold text-slate-100 font-mono">
-          Tag: ${event.tagId}
-        </div>
-        <div class="text-slate-300">
-          ${event.origin.name} ${event.destination ? `➔ ${event.destination.name}` : '(Initial Tap Registered)'}
-        </div>
-        <div class="flex items-center justify-between text-[11px] font-mono text-slate-400">
-          <span>Velocity: <strong class="${isThreat ? 'text-red-400' : 'text-emerald-400'}">${event.velocityKmh.toLocaleString()} km/h</strong></span>
-          <span>Status: <strong>${isThreat ? 'REPLAY BLOCKED' : 'VERIFIED OK'}</strong></span>
-        </div>
-      `;
-
-      feed.insertBefore(card, feed.firstChild);
-      if (feed.children.length > 25) {
-        feed.removeChild(feed.lastChild);
-      }
-    }
-
-    // Trigger Houston -> London Replay Attack Sequence
     document.getElementById('btn-attack-replay').addEventListener('click', () => {
       const tagId = `NTAG-424-${Math.floor(Math.random() * 8999 + 1000)}`;
-      const houston = CITIES[0]; // Houston
-      const london = CITIES[6];  // London
-
-      // Scan 1 at Houston
-      executeScan(tagId, houston);
-
-      // Scan 2 at London 1.5 seconds later (Triggers Laser Line!)
+      processPayload(CITIES[0], null, 0, tagId);
       setTimeout(() => {
-        executeScan(tagId, london);
-      }, 1500);
+        processPayload(CITIES[0], CITIES[5], 0.45, tagId);
+      }, 1200);
     });
 
-    // Random NFC Scan Trigger Button
-    document.getElementById('btn-random-ping').addEventListener('click', () => {
-      const randomTagId = `NTAG-424-${Math.floor(Math.random() * 8999 + 1000)}`;
-      const cIdx = Math.floor(Math.random() * CITIES.length);
-      executeScan(randomTagId, CITIES[cIdx]);
-    });
-
-    // Low Frequency Background Telemetry Generator (Every 12 seconds with rare 15% threat rate)
     setInterval(() => {
-      const isReplaySequence = Math.random() < 0.15; // Decreased significantly to 15%
-      const tagId = `NTAG-424-${Math.floor(Math.random() * 90 + 10)}00`;
+      const isReplay = Math.random() < 0.2;
+      const tagId = `NTAG-424-${Math.floor(Math.random() * 8999 + 1000)}`;
       const c1 = CITIES[Math.floor(Math.random() * CITIES.length)];
-      
-      executeScan(tagId, c1);
 
-      if (isReplaySequence) {
+      if (!isReplay) {
+        processPayload(c1, null, 0, tagId);
+      } else {
         let c2 = CITIES[Math.floor(Math.random() * CITIES.length)];
-        while (c2 === c1) c2 = CITIES[Math.floor(Math.random() * CITIES.length)];
-        setTimeout(() => {
-          executeScan(tagId, c2);
-        }, 1800);
+        while (c2.city === c1.city) c2 = CITIES[Math.floor(Math.random() * CITIES.length)];
+        processPayload(c1, c2, parseFloat((Math.random() * 2 + 0.2).toFixed(2)), tagId);
       }
-    }, 12000); // 12-second interval for low frequency
+    }, 12000);
 
-    // Initial Demo Trigger on Load
-    window.addEventListener('DOMContentLoaded', () => {
+    // Initial Trigger
+    setTimeout(() => {
+      const tagId = 'NTAG-424-8000';
+      processPayload(CITIES[0], null, 0, tagId);
       setTimeout(() => {
-        const demoTag = 'NTAG-424-88A9';
-        executeScan(demoTag, CITIES[0]); // Houston
-        setTimeout(() => {
-          executeScan(demoTag, CITIES[6]); // London (Draws laser line!)
-        }, 1800);
-      }, 1000);
-    });
+        processPayload(CITIES[0], CITIES[5], 0.45, tagId);
+      }, 1200);
+    }, 800);
   </script>
 </body>
 </html>
