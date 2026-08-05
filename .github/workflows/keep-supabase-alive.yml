@@ -1,0 +1,22 @@
+name: Keep Supabase Alive
+
+on:
+  schedule:
+    # Run at 00:00 UTC every 3 days to keep Supabase active
+    - cron: '0 0 */3 * *'
+  workflow_dispatch: # Allows manual trigger from GitHub UI
+
+jobs:
+  ping-supabase:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase REST API Endpoint
+        run: |
+          SUPABASE_URL="${{ secrets.SUPABASE_URL }}"
+          if [ -z "$SUPABASE_URL" ]; then
+            SUPABASE_URL="https://flxmgndxtzkqylhwkqck.supabase.co"
+          fi
+          
+          echo "Pinging Supabase at $SUPABASE_URL ..."
+          curl -i -s -X GET "$SUPABASE_URL/rest/v1/" \
+            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}"

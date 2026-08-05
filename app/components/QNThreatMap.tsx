@@ -24,7 +24,7 @@ export interface TelemetryPayload {
   delta_seconds: number;
   distance_km: number;
   velocity_kmh?: number;
-  status?: 'VERIFIED' | 'FLAGGED THREAT';
+  status: 'VERIFIED' | 'REPLAY_ATTACK' | 'CRYPTO_FAIL';
 }
 
 const CITIES: LocationNode[] = [
@@ -54,6 +54,7 @@ export default function QNThreatMap() {
   const [hoveredNode, setHoveredNode] = useState<LocationNode | null>(null);
   const [tooltipPos, setTooltipPos] = useState<{ x: number; y: number } | null>(null);
 
+  const [replaysCaught, setReplaysCaught] = useState<number>(1829);
   const [anomaliesBlocked, setAnomaliesBlocked] = useState<number>(4144);
   const [totalScans, setTotalScans] = useState<number>(1482978);
 
@@ -73,44 +74,48 @@ export default function QNThreatMap() {
       });
   }, []);
 
-  const evaluateSecurityThreat = (payload: Omit<TelemetryPayload, 'timestampMs'>, now: number): TelemetryPayload => {
-    if (payload.tap_sequence === 1 || !payload.destination) {
-      return { ...payload, timestampMs: now, velocity_kmh: 0, status: 'VERIFIED' };
+  const processPayload = (rawPayload: Omit<TelemetryPayload, 'timestampMs' | 'status'>, forceType: 'VERIFIED' | 'REPLAY_ATTACK' | 'CRYPTO_FAIL' = 'VERIFIED') => {
+    const now = Date.now();
+    setTotalScans((prev) => prev + 1);
+
+    let status: 'VERIFIED' | 'REPLAY_ATTACK' | 'CRYPTO_FAIL' = forceType;
+    if (forceType === 'CRYPTO_FAIL') {
+      setAnomaliesBlocked((prev) => prev + 1);
+    } else if (forceType === 'REPLAY_ATTACK') {
+      setReplaysCaught((prev) => prev + 1);
+      // Turn previous matching origin events YELLOW as well!
+      masterEventHistoryRef.current.forEach((evt) => {
+        if (evt.tag_id === rawPayload.tag_id && evt.status === 'VERIFIED') {
+          evt.status = 'REPLAY_ATTACK';
+        }
+      });
     }
 
     const R = 6371;
-    const dLat = ((payload.destination.lat - payload.origin.lat) * Math.PI) / 180;
-    const dLon = ((payload.destination.lng - payload.origin.lng) * Math.PI) / 180;
-    const a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos((payload.origin.lat * Math.PI) / 180) *
-        Math.cos((payload.destination.lat * Math.PI) / 180) *
-        Math.sin(dLon / 2) *
-        Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const distKm = Math.round(R * c);
+    let distKm = 0;
+    let velKmh = 0;
 
-    const hours = Math.max(payload.delta_seconds, 0.1) / 3600;
-    const velKmh = Math.round(distKm / hours);
-    const isThreat = velKmh > 1000;
+    if (rawPayload.destination) {
+      const dLat = ((rawPayload.destination.lat - rawPayload.origin.lat) * Math.PI) / 180;
+      const dLon = ((rawPayload.destination.lng - rawPayload.origin.lng) * Math.PI) / 180;
+      const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos((rawPayload.origin.lat * Math.PI) / 180) *
+          Math.cos((rawPayload.destination.lat * Math.PI) / 180) *
+          Math.sin(dLon / 2) *
+          Math.sin(dLon / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      distKm = Math.round(R * c);
+      velKmh = Math.round(distKm / (Math.max(rawPayload.delta_seconds, 0.1) / 3600));
+    }
 
-    return {
-      ...payload,
+    const evaluated: TelemetryPayload = {
+      ...rawPayload,
       timestampMs: now,
       distance_km: distKm,
       velocity_kmh: velKmh,
-      status: isThreat ? 'FLAGGED THREAT' : 'VERIFIED'
+      status
     };
-  };
-
-  const processPayload = (rawPayload: Omit<TelemetryPayload, 'timestampMs'>) => {
-    const now = Date.now();
-    const evaluated = evaluateSecurityThreat(rawPayload, now);
-
-    setTotalScans((prev) => prev + 1);
-    if (evaluated.status === 'FLAGGED THREAT') {
-      setAnomaliesBlocked((prev) => prev + 1);
-    }
 
     masterEventHistoryRef.current.unshift(evaluated);
     if (masterEventHistoryRef.current.length > 300) {
@@ -118,7 +123,7 @@ export default function QNThreatMap() {
     }
   };
 
-  const triggerHoustonDenverAttack = () => {
+  const triggerReplayAttack = () => {
     const tagId = `NTAG-424-${Math.floor(Math.random() * 8999 + 1000)}`;
     const houston = CITIES[0];
     const denver = CITIES[5];
@@ -132,7 +137,7 @@ export default function QNThreatMap() {
       tap_sequence: 1,
       delta_seconds: 0,
       distance_km: 0
-    });
+    }, 'VERIFIED');
 
     setTimeout(() => {
       processPayload({
@@ -144,20 +149,34 @@ export default function QNThreatMap() {
         tap_sequence: 2,
         delta_seconds: 0.45,
         distance_km: 1412
-      });
+      }, 'REPLAY_ATTACK');
     }, 1200);
+  };
+
+  const triggerCryptoFail = () => {
+    const tagId = `NTAG-424-${Math.floor(Math.random() * 8999 + 1000)}`;
+    processPayload({
+      id: `evt-${Date.now()}`,
+      timestamp: new Date().toLocaleTimeString(),
+      tag_id: tagId,
+      origin: CITIES[2],
+      destination: CITIES[1],
+      tap_sequence: 2,
+      delta_seconds: 0.35,
+      distance_km: 4140
+    }, 'CRYPTO_FAIL');
   };
 
   // Continuous Streaming Loop
   useEffect(() => {
-    triggerHoustonDenverAttack();
+    triggerReplayAttack();
 
     const interval = setInterval(() => {
-      const isReplay = Math.random() < 0.35;
+      const rand = Math.random();
       const tagId = `NTAG-424-${Math.floor(Math.random() * 8999 + 1000)}`;
       const c1 = CITIES[Math.floor(Math.random() * CITIES.length)];
 
-      if (!isReplay) {
+      if (rand < 0.55) {
         processPayload({
           id: `evt-${Date.now()}`,
           timestamp: new Date().toLocaleTimeString(),
@@ -167,11 +186,10 @@ export default function QNThreatMap() {
           tap_sequence: 1,
           delta_seconds: 0,
           distance_km: 0
-        });
-      } else {
+        }, 'VERIFIED');
+      } else if (rand < 0.85) {
         let c2 = CITIES[Math.floor(Math.random() * CITIES.length)];
         while (c2.city === c1.city) c2 = CITIES[Math.floor(Math.random() * CITIES.length)];
-
         processPayload({
           id: `evt-${Date.now()}`,
           timestamp: new Date().toLocaleTimeString(),
@@ -181,9 +199,22 @@ export default function QNThreatMap() {
           tap_sequence: 2,
           delta_seconds: parseFloat((Math.random() * 1.8 + 0.2).toFixed(2)),
           distance_km: 0
-        });
+        }, 'REPLAY_ATTACK');
+      } else {
+        let c2 = CITIES[Math.floor(Math.random() * CITIES.length)];
+        while (c2.city === c1.city) c2 = CITIES[Math.floor(Math.random() * CITIES.length)];
+        processPayload({
+          id: `evt-${Date.now()}`,
+          timestamp: new Date().toLocaleTimeString(),
+          tag_id: tagId,
+          origin: c1,
+          destination: c2,
+          tap_sequence: 2,
+          delta_seconds: 0.4,
+          distance_km: 0
+        }, 'CRYPTO_FAIL');
       }
-    }, 3500);
+    }, 3200);
 
     return () => clearInterval(interval);
   }, []);
@@ -228,7 +259,7 @@ export default function QNThreatMap() {
     }
   };
 
-  // Canvas Render Loop with Deterministic Time-Travel Evaluation
+  // Canvas Render Loop
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -282,32 +313,39 @@ export default function QNThreatMap() {
         ctx.stroke();
       }
 
-      // Calculate Target Viewport Timestamp MS
       const targetTimeMs = Date.now() - (scrubberSecondsAgo * 1000);
-
-      // Find events active within a 12-second window relative to targetTimeMs
       const visibleEvents = masterEventHistoryRef.current.filter(
         (evt) => evt.timestampMs <= targetTimeMs && targetTimeMs - evt.timestampMs < 12000
       );
 
-      // Render Pins & Arcs for Target Timestamp MS
       visibleEvents.forEach((evt) => {
         const age = targetTimeMs - evt.timestampMs;
         const fade = Math.max(0.1, 1 - age / 12000);
         const radius = (age / 12000) * 28;
+
+        let mainColor = '#10b981';
+        let arcColorStr = `rgba(16, 185, 129, ${0.85 * (1 - Math.min(age / 2400, 1.0))})`;
+
+        if (evt.status === 'REPLAY_ATTACK') {
+          mainColor = '#eab308'; // Yellow for both pings in replay attack
+          arcColorStr = `rgba(234, 179, 8, ${0.95 * (1 - Math.min(age / 2400, 1.0))})`;
+        } else if (evt.status === 'CRYPTO_FAIL') {
+          mainColor = '#ef4444'; // Red for cryptographic signature failure
+          arcColorStr = `rgba(239, 68, 68, ${0.95 * (1 - Math.min(age / 2400, 1.0))})`;
+        }
 
         const pt1 = projection([evt.origin.lng, evt.origin.lat]);
         if (pt1) {
           const [x, y] = pt1;
           ctx.beginPath();
           ctx.arc(x, y, Math.max(2, radius), 0, Math.PI * 2);
-          ctx.strokeStyle = evt.status === 'FLAGGED THREAT' ? `rgba(239, 68, 68, ${fade * 0.9})` : `rgba(16, 185, 129, ${fade * 0.9})`;
+          ctx.strokeStyle = mainColor;
           ctx.lineWidth = 1.5;
           ctx.stroke();
 
           ctx.beginPath();
           ctx.arc(x, y, 5, 0, Math.PI * 2);
-          ctx.fillStyle = evt.status === 'FLAGGED THREAT' ? '#ef4444' : '#10b981';
+          ctx.fillStyle = mainColor;
           ctx.fill();
           ctx.strokeStyle = '#ffffff';
           ctx.lineWidth = 1.2;
@@ -324,7 +362,7 @@ export default function QNThreatMap() {
             const [x, y] = pt2;
             ctx.beginPath();
             ctx.arc(x, y, 5, 0, Math.PI * 2);
-            ctx.fillStyle = evt.status === 'FLAGGED THREAT' ? '#ef4444' : '#10b981';
+            ctx.fillStyle = mainColor;
             ctx.fill();
             ctx.strokeStyle = '#ffffff';
             ctx.lineWidth = 1.2;
@@ -343,22 +381,20 @@ export default function QNThreatMap() {
             ctx.beginPath();
             ctx.moveTo(pt1[0], pt1[1]);
             ctx.quadraticCurveTo(midX, midY, pt2[0], pt2[1]);
-            ctx.strokeStyle = evt.status === 'FLAGGED THREAT'
-              ? `rgba(239, 68, 68, ${0.95 * (1 - progress)})`
-              : `rgba(16, 185, 129, ${0.85 * (1 - progress)})`;
-            ctx.lineWidth = evt.status === 'FLAGGED THREAT' ? 3.5 : 2;
-            ctx.setLineDash(evt.status === 'FLAGGED THREAT' ? [6, 4] : []);
+            ctx.strokeStyle = arcColorStr;
+            ctx.lineWidth = evt.status !== 'VERIFIED' ? 3.5 : 2;
+            ctx.setLineDash(evt.status !== 'VERIFIED' ? [6, 4] : []);
             ctx.stroke();
             ctx.setLineDash([]);
 
             const t = Math.max(0.01, Math.min(progress, 0.99));
-            const currX = (1 - t) * (1 - t) * pt1[0] + 2 * (1 - t) * t * midX + t * t * pt2[0];
-            const currY = (1 - t) * (1 - t) * pt1[1] + 2 * (1 - t) * t * midY + t * t * pt2[1];
+            const currX = (1 - t) * (1 - t) * pt1[0] + 2 * (1 - t) * t * midX + t * t * p2[0];
+            const currY = (1 - t) * (1 - t) * pt1[1] + 2 * (1 - t) * t * midY + t * t * p2[1];
 
             ctx.beginPath();
-            ctx.arc(currX, currY, evt.status === 'FLAGGED THREAT' ? 6 : 4, 0, Math.PI * 2);
-            ctx.fillStyle = evt.status === 'FLAGGED THREAT' ? '#ef4444' : '#10b981';
-            ctx.shadowColor = evt.status === 'FLAGGED THREAT' ? '#ef4444' : '#10b981';
+            ctx.arc(currX, currY, evt.status !== 'VERIFIED' ? 6 : 4, 0, Math.PI * 2);
+            ctx.fillStyle = mainColor;
+            ctx.shadowColor = mainColor;
             ctx.shadowBlur = 14;
             ctx.fill();
             ctx.shadowBlur = 0;
@@ -373,12 +409,11 @@ export default function QNThreatMap() {
     return () => cancelAnimationFrame(animFrameId);
   }, [projectionMode, scrubberSecondsAgo]);
 
-  // Determine active feed slice
   const targetTimeMs = Date.now() - (scrubberSecondsAgo * 1000);
   const activeFeedList = masterEventHistoryRef.current.filter((evt) => evt.timestampMs <= targetTimeMs);
 
   const filteredTelemetry = activeFeedList.filter((item) => {
-    if (filterMode === 'threats' && item.status !== 'FLAGGED THREAT') return false;
+    if (filterMode === 'threats' && item.status === 'VERIFIED') return false;
     if (filterMode === 'us' && !item.origin.country.includes('US')) return false;
     if (
       searchQuery.trim() !== '' &&
@@ -397,19 +432,25 @@ export default function QNThreatMap() {
           <div className="flex items-center space-x-2 mb-1">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
             <span className="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider">
-              Dual 2D Flat / 3D Globe Projection Engine Active
+              Cryptographic Threat Classification Engine Active
             </span>
           </div>
           <h1 className="text-2xl font-bold text-white tracking-tight">Quantum Nimbus Threat Map & Operations Center</h1>
-          <p className="text-sm text-slate-400">Switch seamlessly between 2D Mercator flat map and 3D Rotating Globe with instant time scrubbing.</p>
+          <p className="text-sm text-slate-400">Green = Verified Tap 1 | Yellow = Replay Attack (Both Pings Turn Yellow) | Red = Invalid Crypto Sig</p>
         </div>
 
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-2">
           <button
-            onClick={triggerHoustonDenverAttack}
-            className="bg-red-600 hover:bg-red-500 text-white text-xs font-semibold px-4 py-2.5 rounded-lg shadow-lg transition-colors cursor-pointer"
+            onClick={triggerReplayAttack}
+            className="bg-yellow-600 hover:bg-yellow-500 text-white text-xs font-semibold px-3 py-2 rounded-lg shadow-lg transition-colors cursor-pointer"
           >
-            ⚡ Simulate Houston→Denver Attack
+            ⚠️ Replay Attack (Yellow)
+          </button>
+          <button
+            onClick={triggerCryptoFail}
+            className="bg-red-600 hover:bg-red-500 text-white text-xs font-semibold px-3 py-2 rounded-lg shadow-lg transition-colors cursor-pointer"
+          >
+            🚨 Crypto Fail (Red)
           </button>
         </div>
       </header>
@@ -429,23 +470,23 @@ export default function QNThreatMap() {
 
         <div className="bg-slate-900/90 border border-slate-800/80 rounded-xl p-5 shadow-sm backdrop-blur-md">
           <div className="flex items-center justify-between text-slate-400 text-xs font-medium uppercase tracking-wider">
-            <span>Active NFC DNA Chips</span>
-            <span>🔐</span>
+            <span>Replay Attacks Caught</span>
+            <span>⚠️</span>
           </div>
           <div className="mt-2 flex items-baseline justify-between">
-            <span className="text-2xl font-bold font-mono text-white">350,000</span>
-            <span className="text-xs text-blue-400 font-semibold">NTAG 424 DNA</span>
+            <span className="text-2xl font-bold font-mono text-yellow-400">{replaysCaught.toLocaleString()}</span>
+            <span className="text-xs text-yellow-400 font-mono">Yellow Both Pings</span>
           </div>
         </div>
 
         <div className="bg-slate-900/90 border border-slate-800/80 rounded-xl p-5 shadow-sm backdrop-blur-md">
           <div className="flex items-center justify-between text-slate-400 text-xs font-medium uppercase tracking-wider">
-            <span>Anomalies Blocked</span>
+            <span>Crypto Failures Blocked</span>
             <span>🚨</span>
           </div>
           <div className="mt-2 flex items-baseline justify-between">
             <span className="text-2xl font-bold font-mono text-red-400">{anomaliesBlocked.toLocaleString()}</span>
-            <span className="text-xs text-red-400 font-mono font-bold">100% Mitigated</span>
+            <span className="text-xs text-red-400 font-mono font-bold">Red Bad CMAC</span>
           </div>
         </div>
 
@@ -519,6 +560,22 @@ export default function QNThreatMap() {
                   <div className="text-slate-400 text-[10px] pt-1">Haversine Impossible Velocity Engine: ACTIVE</div>
                 </div>
               )}
+            </div>
+
+            {/* Color Classification Legend */}
+            <div className="mt-3 pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between text-[11px] font-mono gap-2 text-slate-400">
+              <div className="flex items-center space-x-1.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                <span className="text-slate-200">🟢 Green: Authentic Tap 1</span>
+              </div>
+              <div className="flex items-center space-x-1.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-yellow-500"></span>
+                <span className="text-slate-200">🟡 Yellow: Replay Attack (Both Pings Turn Yellow)</span>
+              </div>
+              <div className="flex items-center space-x-1.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-red-500"></span>
+                <span className="text-slate-200">🔴 Red: Bad Cryptographic Signature</span>
+              </div>
             </div>
           </div>
 
@@ -611,52 +668,61 @@ export default function QNThreatMap() {
           </div>
 
           <div className="flex-1 overflow-y-auto space-y-3 pr-1">
-            {filteredTelemetry.slice(0, 40).map((evt) => (
-              <div
-                key={evt.id}
-                className={`p-3 rounded-lg border text-xs space-y-1.5 transition-all ${
-                  evt.status === 'VERIFIED'
-                    ? 'bg-slate-950/80 border-slate-800 text-slate-300'
-                    : 'bg-red-950/40 border-red-500/50 text-red-200'
-                }`}
-              >
-                <div className="flex items-center justify-between font-mono">
-                  <span className="text-slate-500">{evt.timestamp}</span>
-                  <span
-                    className={`px-1.5 py-0.5 text-[10px] font-bold rounded ${
-                      evt.status === 'VERIFIED'
-                        ? 'bg-emerald-950 text-emerald-400 border border-emerald-800'
-                        : 'bg-red-900 text-red-200 border border-red-700'
-                    }`}
-                  >
-                    {evt.status}
-                  </span>
-                </div>
+            {filteredTelemetry.slice(0, 40).map((evt) => {
+              let cardClass = 'bg-slate-950/80 border-slate-800 text-slate-300';
+              let badgeClass = 'bg-emerald-950 text-emerald-400 border border-emerald-800';
+              let statusText = 'VERIFIED';
+              let velColor = 'text-emerald-400';
 
-                <div className="font-mono font-semibold text-slate-100">
-                  Tag: {evt.tag_id}
-                </div>
+              if (evt.status === 'REPLAY_ATTACK') {
+                cardClass = 'bg-yellow-950/40 border-yellow-500/50 text-yellow-100';
+                badgeClass = 'bg-yellow-900 text-yellow-200 border border-yellow-700';
+                statusText = '⚠️ REPLAY ATTACK';
+                velColor = 'text-yellow-400';
+              } else if (evt.status === 'CRYPTO_FAIL') {
+                cardClass = 'bg-red-950/40 border-red-500/50 text-red-200';
+                badgeClass = 'bg-red-900 text-red-200 border border-red-700';
+                statusText = '🚨 BAD CRYPTO SIG';
+                velColor = 'text-red-400';
+              }
 
-                <div className="text-slate-300 font-medium">
-                  {evt.origin.city}, {evt.origin.country}{' '}
-                  {evt.destination ? `➔ ${evt.destination.city}, ${evt.destination.country}` : '(Tap 1 Verified)'}
-                </div>
-
-                {evt.destination && (
-                  <div className="flex items-center justify-between text-[11px] font-mono text-slate-400">
-                    <span>
-                      Vel:{' '}
-                      <strong className={evt.velocity_kmh! > 1000 ? 'text-red-400' : 'text-emerald-400'}>
-                        {evt.velocity_kmh?.toLocaleString()} km/h
-                      </strong>
-                    </span>
-                    <span>
-                      Delta: <strong>{evt.delta_seconds}s</strong>
+              return (
+                <div
+                  key={evt.id}
+                  className={`p-3 rounded-lg border text-xs space-y-1.5 transition-all ${cardClass}`}
+                >
+                  <div className="flex items-center justify-between font-mono">
+                    <span className="text-slate-500">{evt.timestamp}</span>
+                    <span className={`px-1.5 py-0.5 text-[10px] font-bold rounded ${badgeClass}`}>
+                      {statusText}
                     </span>
                   </div>
-                )}
-              </div>
-            ))}
+
+                  <div className="font-mono font-semibold text-slate-100">
+                    Tag: {evt.tag_id}
+                  </div>
+
+                  <div className="text-slate-300 font-medium">
+                    {evt.origin.city}, {evt.origin.country}{' '}
+                    {evt.destination ? `➔ ${evt.destination.city}, ${evt.destination.country}` : '(Tap 1 Verified)'}
+                  </div>
+
+                  {evt.destination && (
+                    <div className="flex items-center justify-between text-[11px] font-mono text-slate-400">
+                      <span>
+                        Vel:{' '}
+                        <strong className={velColor}>
+                          {evt.velocity_kmh?.toLocaleString()} km/h
+                        </strong>
+                      </span>
+                      <span>
+                        Delta: <strong>{evt.delta_seconds}s</strong>
+                      </span>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
 

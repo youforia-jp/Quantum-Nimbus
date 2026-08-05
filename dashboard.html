@@ -104,16 +104,19 @@
       <div>
         <div class="flex items-center space-x-2 mb-1">
           <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span class="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider">Deterministic GIS Time-Travel Engine Active</span>
+          <span class="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider">Cryptographic Threat Classification Engine Active</span>
         </div>
         <h1 class="text-3xl font-extrabold text-white tracking-tight">Real-Time Threat Telemetry Map</h1>
-        <p class="text-slate-400 text-sm mt-1">Switch seamlessly between 2D Mercator flat map and 3D Globe with instant, responsive time scrubbing.</p>
+        <p class="text-slate-400 text-sm mt-1">Green = Verified Tap 1 | Yellow = Replay Attack (Both Pings Turn Yellow) | Red = Invalid Crypto Sig</p>
       </div>
 
       <!-- Quick Control Bar -->
       <div class="flex items-center space-x-2">
-        <button id="btn-attack-replay" class="bg-red-600 hover:bg-red-500 text-white text-xs font-semibold px-4 py-2.5 rounded-lg shadow transition-all flex items-center space-x-1.5 cursor-pointer">
-          <span>⚡ Simulate Houston→Denver Attack</span>
+        <button id="btn-attack-replay" class="bg-yellow-600 hover:bg-yellow-500 text-white text-xs font-semibold px-3 py-2 rounded-lg shadow transition-all flex items-center space-x-1 cursor-pointer">
+          <span>⚠️ Replay Attack (Yellow)</span>
+        </button>
+        <button id="btn-attack-crypto" class="bg-red-600 hover:bg-red-500 text-white text-xs font-semibold px-3 py-2 rounded-lg shadow transition-all flex items-center space-x-1 cursor-pointer">
+          <span>🚨 Crypto Fail (Red)</span>
         </button>
       </div>
     </div>
@@ -122,7 +125,7 @@
     <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <div class="bg-slate-900/90 border border-slate-800/80 rounded-xl p-5 shadow-sm backdrop-blur-md">
         <div class="flex items-center justify-between text-slate-400 text-xs font-medium uppercase">
-          <span>Total Security Scans (24h)</span>
+          <span>Total Security Scans</span>
           <span>📊</span>
         </div>
         <div class="mt-2 flex items-baseline justify-between">
@@ -133,23 +136,23 @@
 
       <div class="bg-slate-900/90 border border-slate-800/80 rounded-xl p-5 shadow-sm backdrop-blur-md">
         <div class="flex items-center justify-between text-slate-400 text-xs font-medium uppercase">
-          <span>Active NFC DNA Chips</span>
-          <span>🔐</span>
+          <span>Replay Attacks Caught</span>
+          <span>⚠️</span>
         </div>
         <div class="mt-2 flex items-baseline justify-between">
-          <span class="text-2xl font-bold font-mono text-white">350,000</span>
-          <span class="text-xs font-semibold text-blue-400">NTAG 424 DNA</span>
+          <span id="kpi-replays-caught" class="text-2xl font-bold font-mono text-yellow-400">1,829</span>
+          <span class="text-xs font-semibold text-yellow-400 font-mono">Yellow Both Pings</span>
         </div>
       </div>
 
       <div class="bg-slate-900/90 border border-slate-800/80 rounded-xl p-5 shadow-sm backdrop-blur-md">
         <div class="flex items-center justify-between text-slate-400 text-xs font-medium uppercase">
-          <span>Anomalies Blocked</span>
+          <span>Crypto Failures Blocked</span>
           <span>🚨</span>
         </div>
         <div class="mt-2 flex items-baseline justify-between">
           <span id="kpi-anomalies-blocked" class="text-2xl font-bold font-mono text-red-400">4,144</span>
-          <span class="text-xs font-semibold text-red-400 font-mono">100% Mitigated</span>
+          <span class="text-xs font-semibold text-red-400 font-mono">Red Bad CMAC</span>
         </div>
       </div>
 
@@ -199,6 +202,22 @@
               <div class="text-slate-300">Active Tag Chips: <strong id="tooltip-chips" class="text-white">48,290</strong></div>
               <div class="text-slate-300">Avg Mesh Latency: <strong id="tooltip-latency" class="text-emerald-400">12 ms</strong></div>
               <div class="text-slate-400 text-[10px] pt-1">Haversine Impossible Velocity Engine: ACTIVE</div>
+            </div>
+          </div>
+
+          <!-- Color Classification Legend Bar -->
+          <div class="mt-3 pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between text-[11px] font-mono gap-2 text-slate-400">
+            <div class="flex items-center space-x-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+              <span class="text-slate-200">🟢 Green: Authentic Tap 1</span>
+            </div>
+            <div class="flex items-center space-x-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-yellow-500"></span>
+              <span class="text-slate-200">🟡 Yellow: Replay Attack (Both Pings Turn Yellow)</span>
+            </div>
+            <div class="flex items-center space-x-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
+              <span class="text-slate-200">🔴 Red: Bad Cryptographic Signature</span>
             </div>
           </div>
         </div>
@@ -263,7 +282,7 @@
     <p>© 2026 Quantum Nimbus Tech. U.S. Patent Pending — Dynamic Vaporization Parameter & NFC Cryptographic Authentication.</p>
   </footer>
 
-  <!-- Deterministic Time-Travel GIS Engine Script -->
+  <!-- Deterministic GIS Engine with Authentic Yellow Replay & Red Bad Crypto Color Logic -->
   <script>
     const CITIES = [
       { city: 'Houston', country: 'US', lat: 29.7604, lng: -95.3698, activeChips: 48290, avgLatencyMs: 12 },
@@ -283,18 +302,16 @@
     let filterMode = 'all';
     let searchQuery = '';
     let rotationAngle = 0;
-    
-    // Time Scrubber State: 60 = Live (0s ago), < 60 = Audit Replay (-Xs ago)
     let scrubberSecondsAgo = 0;
 
     const canvas = document.getElementById('gis-canvas');
     const ctx = canvas.getContext('2d');
     const tooltip = document.getElementById('node-tooltip');
 
-    // Central Event History Buffer (Retains full 60s memory)
     const masterEventHistory = [];
 
     let totalScans = 1482978;
+    let replaysCaught = 1829;
     let anomaliesBlocked = 4144;
 
     fetch('assets/land-110m.json')
@@ -314,17 +331,35 @@
       return Math.round(R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
     }
 
-    function processPayload(origin, destination, timeDeltaSeconds, tagId) {
+    /**
+     * Process telemetry payload with authentic color rules:
+     * - status 'VERIFIED': Green (Tap 1)
+     * - status 'REPLAY_ATTACK': Yellow (Tap 2 duplicate - both pings turn yellow)
+     * - status 'CRYPTO_FAIL': Red (Invalid Cryptographic CMAC Signature)
+     */
+    function processPayload(origin, destination, timeDeltaSeconds, tagId, forceType = null) {
       totalScans++;
       document.getElementById('kpi-total-scans').textContent = totalScans.toLocaleString();
 
       const distance = destination ? haversineDistanceKm(origin.lat, origin.lng, destination.lat, destination.lng) : 0;
       const vel = destination ? Math.round((distance / Math.max(timeDeltaSeconds, 0.1)) * 3600) : 0;
-      const isThreat = destination && vel > 1000;
 
-      if (isThreat) {
+      let status = 'VERIFIED';
+      if (forceType === 'CRYPTO_FAIL') {
+        status = 'CRYPTO_FAIL';
         anomaliesBlocked++;
         document.getElementById('kpi-anomalies-blocked').textContent = anomaliesBlocked.toLocaleString();
+      } else if (forceType === 'REPLAY_ATTACK' || (destination && vel > 1000)) {
+        status = 'REPLAY_ATTACK';
+        replaysCaught++;
+        document.getElementById('kpi-replays-caught').textContent = replaysCaught.toLocaleString();
+
+        // Turn previous matching origin events YELLOW as well!
+        masterEventHistory.forEach(evt => {
+          if (evt.tagId === tagId && evt.status === 'VERIFIED') {
+            evt.status = 'REPLAY_ATTACK';
+          }
+        });
       }
 
       const now = Date.now();
@@ -332,7 +367,7 @@
         id: `evt-${now}-${Math.random()}`,
         timestamp: new Date().toLocaleTimeString(),
         timestampMs: now,
-        tagId, origin, destination, isThreat, vel, timeDeltaSeconds
+        tagId, origin, destination, status, vel, timeDeltaSeconds
       };
 
       masterEventHistory.unshift(evt);
@@ -345,12 +380,11 @@
       const feed = document.getElementById('telemetry-feed');
       feed.innerHTML = '';
 
-      // Determine active event slice based on Scrubber Position
       const targetTimeMs = Date.now() - (scrubberSecondsAgo * 1000);
       const activeSlice = masterEventHistory.filter(evt => evt.timestampMs <= targetTimeMs);
 
       const filtered = activeSlice.filter(evt => {
-        if (filterMode === 'threats' && !evt.isThreat) return false;
+        if (filterMode === 'threats' && evt.status === 'VERIFIED') return false;
         if (filterMode === 'us' && !evt.origin.country.includes('US')) return false;
         if (searchQuery.trim() !== '' && !evt.tagId.toLowerCase().includes(searchQuery.toLowerCase()) && !evt.origin.city.toLowerCase().includes(searchQuery.toLowerCase())) return false;
         return true;
@@ -358,21 +392,37 @@
 
       filtered.slice(0, 40).forEach(evt => {
         const card = document.createElement('div');
-        card.className = `p-3 rounded-lg border text-xs space-y-1.5 transition-all ${
-          !evt.isThreat ? 'bg-slate-950/80 border-slate-800 text-slate-300' : 'bg-red-950/40 border-red-500/50 text-red-200'
-        }`;
+
+        let cardClass = 'bg-slate-950/80 border-slate-800 text-slate-300';
+        let badgeClass = 'bg-emerald-950 text-emerald-400 border border-emerald-800';
+        let statusText = 'VERIFIED';
+        let velColor = 'text-emerald-400';
+
+        if (evt.status === 'REPLAY_ATTACK') {
+          cardClass = 'bg-yellow-950/40 border-yellow-500/50 text-yellow-100';
+          badgeClass = 'bg-yellow-900 text-yellow-200 border border-yellow-700';
+          statusText = '⚠️ REPLAY ATTACK';
+          velColor = 'text-yellow-400';
+        } else if (evt.status === 'CRYPTO_FAIL') {
+          cardClass = 'bg-red-950/40 border-red-500/50 text-red-200';
+          badgeClass = 'bg-red-900 text-red-200 border border-red-700';
+          statusText = '🚨 BAD CRYPTO SIG';
+          velColor = 'text-red-400';
+        }
+
+        card.className = `p-3 rounded-lg border text-xs space-y-1.5 transition-all ${cardClass}`;
 
         card.innerHTML = `
           <div class="flex items-center justify-between font-mono">
             <span class="text-slate-500">${evt.timestamp}</span>
-            <span class="px-1.5 py-0.5 text-[10px] font-bold rounded ${!evt.isThreat ? 'bg-emerald-950 text-emerald-400 border border-emerald-800' : 'bg-red-900 text-red-200 border border-red-700'}">
-              ${evt.isThreat ? 'FLAGGED THREAT' : 'VERIFIED'}
+            <span class="px-1.5 py-0.5 text-[10px] font-bold rounded ${badgeClass}">
+              ${statusText}
             </span>
           </div>
           <div class="font-mono font-semibold text-slate-100">Tag: ${evt.tagId}</div>
           <div class="text-slate-300">${evt.origin.city}, ${evt.origin.country} ${evt.destination ? `➔ ${evt.destination.city}, ${evt.destination.country}` : '(Tap 1 Verified)'}</div>
           ${evt.destination ? `<div class="flex items-center justify-between text-[11px] font-mono text-slate-400">
-            <span>Vel: <strong class="${evt.isThreat ? 'text-red-400' : 'text-emerald-400'}">${evt.vel.toLocaleString()} km/h</strong></span>
+            <span>Vel: <strong class="${velColor}">${evt.vel.toLocaleString()} km/h</strong></span>
             <span>Delta: <strong>${evt.timeDeltaSeconds}s</strong></span>
           </div>` : ''}
         `;
@@ -385,7 +435,7 @@
     const scrubberStatus = document.getElementById('scrubber-status');
 
     timeSlider.addEventListener('input', (e) => {
-      const val = parseInt(e.target.value); // 0 to 60
+      const val = parseInt(e.target.value);
       if (val === 60) {
         scrubberSecondsAgo = 0;
         scrubberStatus.textContent = '🔴 LIVE STREAMING (0s)';
@@ -440,7 +490,7 @@
 
     canvas.addEventListener('mouseleave', () => tooltip.classList.add('hidden'));
 
-    // 60 FPS Canvas Render Loop (Evaluates exact historical time window)
+    // 60 FPS Canvas Render Loop with Exact Yellow Replay & Red Bad Crypto Logic
     function renderLoop() {
       const width = canvas.width = canvas.parentElement.clientWidth || 800;
       const height = canvas.height = canvas.parentElement.clientHeight || 520;
@@ -477,29 +527,37 @@
         ctx.stroke();
       }
 
-      // Calculate Target Viewport Timestamp MS
       const targetTimeMs = Date.now() - (scrubberSecondsAgo * 1000);
-
-      // Find events active within a 12-second window relative to targetTimeMs
       const visibleEvents = masterEventHistory.filter(
         evt => evt.timestampMs <= targetTimeMs && targetTimeMs - evt.timestampMs < 12000
       );
 
-      // Render Map Pins & Radar Ripples for Target Time Window
       visibleEvents.forEach(evt => {
         const age = targetTimeMs - evt.timestampMs;
         const fade = Math.max(0.1, 1 - age / 12000);
         const radius = (age / 12000) * 28;
 
+        // Color definitions
+        let mainColor = '#10b981'; // Green
+        let arcColorStr = `rgba(16, 185, 129, ${0.85 * (1 - Math.min(age / 2400, 1.0))})`;
+
+        if (evt.status === 'REPLAY_ATTACK') {
+          mainColor = '#eab308'; // Yellow (Replay Attack - both pings turn yellow!)
+          arcColorStr = `rgba(234, 179, 8, ${0.95 * (1 - Math.min(age / 2400, 1.0))})`;
+        } else if (evt.status === 'CRYPTO_FAIL') {
+          mainColor = '#ef4444'; // Red (Crypto Fail)
+          arcColorStr = `rgba(239, 68, 68, ${0.95 * (1 - Math.min(age / 2400, 1.0))})`;
+        }
+
         const pt1 = projection([evt.origin.lng, evt.origin.lat]);
         if (pt1) {
           const [x, y] = pt1;
           ctx.beginPath(); ctx.arc(x, y, Math.max(2, radius), 0, Math.PI * 2);
-          ctx.strokeStyle = evt.isThreat ? `rgba(239, 68, 68, ${fade * 0.9})` : `rgba(16, 185, 129, ${fade * 0.9})`;
+          ctx.strokeStyle = mainColor;
           ctx.lineWidth = 1.5; ctx.stroke();
 
           ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2);
-          ctx.fillStyle = evt.isThreat ? '#ef4444' : '#10b981'; ctx.fill();
+          ctx.fillStyle = mainColor; ctx.fill();
           ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1.2; ctx.stroke();
 
           ctx.fillStyle = `rgba(255, 255, 255, ${fade})`;
@@ -512,7 +570,7 @@
           if (pt2) {
             const [x, y] = pt2;
             ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2);
-            ctx.fillStyle = evt.isThreat ? '#ef4444' : '#10b981'; ctx.fill();
+            ctx.fillStyle = mainColor; ctx.fill();
             ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1.2; ctx.stroke();
 
             ctx.fillStyle = `rgba(255, 255, 255, ${fade})`;
@@ -520,7 +578,6 @@
             ctx.fillText(evt.destination.city, x + 8, y + 3);
           }
 
-          // Render Quadratic Laser Arcs
           if (pt1 && pt2) {
             const progress = Math.min(age / 2400, 1.0);
             const midX = (pt1[0] + pt2[0]) / 2;
@@ -528,18 +585,18 @@
 
             ctx.beginPath(); ctx.moveTo(pt1[0], pt1[1]);
             ctx.quadraticCurveTo(midX, midY, pt2[0], pt2[1]);
-            ctx.strokeStyle = evt.isThreat ? `rgba(239, 68, 68, ${0.95 * (1 - progress)})` : `rgba(16, 185, 129, ${0.85 * (1 - progress)})`;
-            ctx.lineWidth = evt.isThreat ? 3.5 : 2;
-            ctx.setLineDash(evt.isThreat ? [6, 4] : []);
+            ctx.strokeStyle = arcColorStr;
+            ctx.lineWidth = evt.status !== 'VERIFIED' ? 3.5 : 2;
+            ctx.setLineDash(evt.status !== 'VERIFIED' ? [6, 4] : []);
             ctx.stroke(); ctx.setLineDash([]);
 
             const t = Math.max(0.01, Math.min(progress, 0.99));
             const currX = (1 - t) * (1 - t) * pt1[0] + 2 * (1 - t) * t * midX + t * t * pt2[0];
             const currY = (1 - t) * (1 - t) * pt1[1] + 2 * (1 - t) * t * midY + t * t * pt2[1];
 
-            ctx.beginPath(); ctx.arc(currX, currY, evt.isThreat ? 6 : 4, 0, Math.PI * 2);
-            ctx.fillStyle = evt.isThreat ? '#ef4444' : '#10b981';
-            ctx.shadowColor = evt.isThreat ? '#ef4444' : '#10b981';
+            ctx.beginPath(); ctx.arc(currX, currY, evt.status !== 'VERIFIED' ? 6 : 4, 0, Math.PI * 2);
+            ctx.fillStyle = mainColor;
+            ctx.shadowColor = mainColor;
             ctx.shadowBlur = 14; ctx.fill(); ctx.shadowBlur = 0;
           }
         }
@@ -594,30 +651,45 @@
       renderTelemetryFeed();
     });
 
+    // Simulate Yellow Replay Attack Button
     document.getElementById('btn-attack-replay').addEventListener('click', () => {
       const tagId = `NTAG-424-${Math.floor(Math.random() * 8999 + 1000)}`;
-      processPayload(CITIES[0], null, 0, tagId);
-      setTimeout(() => { processPayload(CITIES[0], CITIES[5], 0.45, tagId); }, 1200);
+      processPayload(CITIES[0], null, 0, tagId, 'VERIFIED');
+      setTimeout(() => { processPayload(CITIES[0], CITIES[5], 0.45, tagId, 'REPLAY_ATTACK'); }, 1200);
     });
 
+    // Simulate Red Crypto Fail Button
+    document.getElementById('btn-attack-crypto').addEventListener('click', () => {
+      const tagId = `NTAG-424-${Math.floor(Math.random() * 8999 + 1000)}`;
+      processPayload(CITIES[2], CITIES[1], 0.35, tagId, 'CRYPTO_FAIL');
+    });
+
+    // Continuous Live Stream Generator
     setInterval(() => {
-      const isReplay = Math.random() < 0.35;
+      const rand = Math.random();
       const tagId = `NTAG-424-${Math.floor(Math.random() * 8999 + 1000)}`;
       const c1 = CITIES[Math.floor(Math.random() * CITIES.length)];
 
-      if (!isReplay) {
-        processPayload(c1, null, 0, tagId);
-      } else {
+      if (rand < 0.55) {
+        // Authentic Tap 1 (Green)
+        processPayload(c1, null, 0, tagId, 'VERIFIED');
+      } else if (rand < 0.85) {
+        // Replay Attack (Yellow - both pings turn yellow!)
         let c2 = CITIES[Math.floor(Math.random() * CITIES.length)];
         while (c2.city === c1.city) c2 = CITIES[Math.floor(Math.random() * CITIES.length)];
-        processPayload(c1, c2, parseFloat((Math.random() * 1.8 + 0.2).toFixed(2)), tagId);
+        processPayload(c1, c2, parseFloat((Math.random() * 1.8 + 0.2).toFixed(2)), tagId, 'REPLAY_ATTACK');
+      } else {
+        // Bad Cryptographic Signature (Red)
+        let c2 = CITIES[Math.floor(Math.random() * CITIES.length)];
+        while (c2.city === c1.city) c2 = CITIES[Math.floor(Math.random() * CITIES.length)];
+        processPayload(c1, c2, 0.4, tagId, 'CRYPTO_FAIL');
       }
-    }, 3500);
+    }, 3200);
 
     setTimeout(() => {
       const tagId = 'NTAG-424-8000';
-      processPayload(CITIES[0], null, 0, tagId);
-      setTimeout(() => { processPayload(CITIES[0], CITIES[5], 0.45, tagId); }, 1200);
+      processPayload(CITIES[0], null, 0, tagId, 'VERIFIED');
+      setTimeout(() => { processPayload(CITIES[0], CITIES[5], 0.45, tagId, 'REPLAY_ATTACK'); }, 1200);
     }, 800);
   </script>
 </body>
