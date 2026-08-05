@@ -14,6 +14,9 @@
   "dependencies": {
     "@netlify/functions": "^5.3.0",
     "@supabase/supabase-js": "^2.110.7",
-    "onnxruntime-node": "^1.20.0"
+    "d3-geo": "^3.1.1",
+    "onnxruntime-node": "^1.20.0",
+    "react-simple-maps": "^3.0.0",
+    "topojson-client": "^3.1.0"
   }
 }
