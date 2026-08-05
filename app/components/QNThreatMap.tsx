@@ -18,6 +18,8 @@ export interface TelemetryPayload {
   timestamp: string;
   timestampMs: number;
   tag_id: string;
+  batch_id: string;
+  sequence_num: string;
   origin: LocationNode;
   destination: LocationNode | null;
   tap_sequence: number;
@@ -51,7 +53,17 @@ export default function QNThreatMap() {
   const [scrubberValue, setScrubberValue] = useState<number>(60);
   const scrubberSecondsAgo = 60 - scrubberValue;
 
-  const [hoveredNode, setHoveredNode] = useState<LocationNode | null>(null);
+  const [hoveredInfo, setHoveredInfo] = useState<{
+    title: string;
+    tagId: string;
+    batchId: string;
+    sequenceNum: string;
+    cmacStatus: string;
+    chips: number;
+    latencyText: string;
+    extra: string;
+    status: 'VERIFIED' | 'REPLAY_ATTACK' | 'CRYPTO_FAIL' | 'HQ';
+  } | null>(null);
   const [tooltipPos, setTooltipPos] = useState<{ x: number; y: number } | null>(null);
 
   const [replaysCaught, setReplaysCaught] = useState<number>(1829);
@@ -74,7 +86,7 @@ export default function QNThreatMap() {
       });
   }, []);
 
-  const processPayload = (rawPayload: Omit<TelemetryPayload, 'timestampMs' | 'status'>, forceType: 'VERIFIED' | 'REPLAY_ATTACK' | 'CRYPTO_FAIL' = 'VERIFIED') => {
+  const processPayload = (rawPayload: Omit<TelemetryPayload, 'timestampMs' | 'status' | 'batch_id' | 'sequence_num'>, forceType: 'VERIFIED' | 'REPLAY_ATTACK' | 'CRYPTO_FAIL' = 'VERIFIED') => {
     const now = Date.now();
     setTotalScans((prev) => prev + 1);
 
@@ -83,7 +95,6 @@ export default function QNThreatMap() {
       setAnomaliesBlocked((prev) => prev + 1);
     } else if (forceType === 'REPLAY_ATTACK') {
       setReplaysCaught((prev) => prev + 1);
-      // Turn previous matching origin events YELLOW as well!
       masterEventHistoryRef.current.forEach((evt) => {
         if (evt.tag_id === rawPayload.tag_id && evt.status === 'VERIFIED') {
           evt.status = 'REPLAY_ATTACK';
@@ -109,8 +120,12 @@ export default function QNThreatMap() {
       velKmh = Math.round(distKm / (Math.max(rawPayload.delta_seconds, 0.1) / 3600));
     }
 
+    const batchNum = Math.floor(Math.random() * 8900 + 1000);
+
     const evaluated: TelemetryPayload = {
       ...rawPayload,
+      batch_id: `BATCH-2026-QN-${batchNum}`,
+      sequence_num: rawPayload.destination ? 'Sequence #002 (Replay)' : 'Sequence #001 (Tap 1)',
       timestampMs: now,
       distance_km: distKm,
       velocity_kmh: velKmh,
@@ -219,7 +234,7 @@ export default function QNThreatMap() {
     return () => clearInterval(interval);
   }, []);
 
-  // Hover Detection
+  // Hover Detection for Nodes & Events
   const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -230,31 +245,72 @@ export default function QNThreatMap() {
     const width = canvas.width;
     const height = canvas.height;
 
-    let found: LocationNode | null = null;
+    let foundCity: LocationNode | null = null;
+    let foundEvt: TelemetryPayload | null = null;
 
-    CITIES.forEach((city) => {
-      let projected: [number, number] | null = null;
-      if (projectionMode === '2d') {
-        const p = d3Geo.geoEquirectangular().scale(width / (2 * Math.PI)).translate([width / 2, height / 2 + 20]);
-        projected = p([city.lng, city.lat]);
-      } else {
-        const p = d3Geo.geoOrthographic().scale(height / 2.3).translate([width / 2, height / 2]).rotate([rotationAngleRef.current, -15]);
-        projected = p([city.lng, city.lat]);
+    let projection = projectionMode === '2d'
+      ? d3Geo.geoEquirectangular().scale(width / (2 * Math.PI)).translate([width / 2, height / 2 + 20])
+      : d3Geo.geoOrthographic().scale(height / 2.3).translate([width / 2, height / 2]).rotate([rotationAngleRef.current, -15]);
+
+    const targetTimeMs = Date.now() - (scrubberSecondsAgo * 1000);
+    const visibleEvents = masterEventHistoryRef.current.filter(
+      (evt) => evt.timestampMs <= targetTimeMs && targetTimeMs - evt.timestampMs < 12000
+    );
+
+    visibleEvents.forEach((evt) => {
+      const pt1 = projection([evt.origin.lng, evt.origin.lat]);
+      if (pt1 && Math.hypot(mouseX - pt1[0], mouseY - pt1[1]) < 16) {
+        foundEvt = evt;
       }
-
-      if (projected) {
-        const dist = Math.hypot(mouseX - projected[0], mouseY - projected[1]);
-        if (dist < 14) {
-          found = city;
+      if (evt.destination) {
+        const pt2 = projection([evt.destination.lng, evt.destination.lat]);
+        if (pt2 && Math.hypot(mouseX - pt2[0], mouseY - pt2[1]) < 16) {
+          foundEvt = evt;
         }
       }
     });
 
-    if (found) {
-      setHoveredNode(found);
+    if (!foundEvt) {
+      CITIES.forEach((city) => {
+        const pt = projection([city.lng, city.lat]);
+        if (pt && Math.hypot(mouseX - pt[0], mouseY - pt[1]) < 14) {
+          foundCity = city;
+        }
+      });
+    }
+
+    if (foundEvt) {
       setTooltipPos({ x: mouseX, y: mouseY });
+      setHoveredInfo({
+        title: `${(foundEvt as TelemetryPayload).origin.city} ${(foundEvt as TelemetryPayload).destination ? `➔ ${(foundEvt as TelemetryPayload).destination?.city}` : ''}`,
+        tagId: (foundEvt as TelemetryPayload).tag_id,
+        batchId: (foundEvt as TelemetryPayload).batch_id,
+        sequenceNum: (foundEvt as TelemetryPayload).sequence_num,
+        cmacStatus: (foundEvt as TelemetryPayload).status === 'REPLAY_ATTACK'
+          ? '⚠️ TOKEN REUSED / REPLAYED'
+          : (foundEvt as TelemetryPayload).status === 'CRYPTO_FAIL'
+            ? '🚨 INVALID AES-128 CMAC HASH'
+            : 'AES-128 SUN CMAC Verified',
+        chips: (foundEvt as TelemetryPayload).origin.activeChips,
+        latencyText: `${(foundEvt as TelemetryPayload).origin.avgLatencyMs} ms (${(foundEvt as TelemetryPayload).velocity_kmh?.toLocaleString()} km/h)`,
+        extra: `BioTrack / Traceability Sync: PASSED | Timestamp: ${(foundEvt as TelemetryPayload).timestamp}`,
+        status: (foundEvt as TelemetryPayload).status
+      });
+    } else if (foundCity) {
+      setTooltipPos({ x: mouseX, y: mouseY });
+      setHoveredInfo({
+        title: `${foundCity.city}, ${foundCity.country}`,
+        tagId: 'NTAG-424-DNA-MESH',
+        batchId: 'BATCH-2026-QN-MAIN',
+        sequenceNum: 'Sequence #000 (Active Listener)',
+        cmacStatus: 'AES-128 SUN Listener Ready',
+        chips: foundCity.activeChips,
+        latencyText: `${foundCity.avgLatencyMs} ms`,
+        extra: 'Haversine Impossible Velocity Engine: ACTIVE',
+        status: 'HQ'
+      });
     } else {
-      setHoveredNode(null);
+      setHoveredInfo(null);
       setTooltipPos(null);
     }
   };
@@ -327,10 +383,10 @@ export default function QNThreatMap() {
         let arcColorStr = `rgba(16, 185, 129, ${0.85 * (1 - Math.min(age / 2400, 1.0))})`;
 
         if (evt.status === 'REPLAY_ATTACK') {
-          mainColor = '#eab308'; // Yellow for both pings in replay attack
+          mainColor = '#eab308';
           arcColorStr = `rgba(234, 179, 8, ${0.95 * (1 - Math.min(age / 2400, 1.0))})`;
         } else if (evt.status === 'CRYPTO_FAIL') {
-          mainColor = '#ef4444'; // Red for cryptographic signature failure
+          mainColor = '#ef4444';
           arcColorStr = `rgba(239, 68, 68, ${0.95 * (1 - Math.min(age / 2400, 1.0))})`;
         }
 
@@ -388,8 +444,8 @@ export default function QNThreatMap() {
             ctx.setLineDash([]);
 
             const t = Math.max(0.01, Math.min(progress, 0.99));
-            const currX = (1 - t) * (1 - t) * pt1[0] + 2 * (1 - t) * t * midX + t * t * p2[0];
-            const currY = (1 - t) * (1 - t) * pt1[1] + 2 * (1 - t) * t * midY + t * t * p2[1];
+            const currX = (1 - t) * (1 - t) * pt1[0] + 2 * (1 - t) * t * midX + t * t * pt2[0];
+            const currY = (1 - t) * (1 - t) * pt1[1] + 2 * (1 - t) * t * midY + t * t * pt2[1];
 
             ctx.beginPath();
             ctx.arc(currX, currY, evt.status !== 'VERIFIED' ? 6 : 4, 0, Math.PI * 2);
@@ -436,7 +492,7 @@ export default function QNThreatMap() {
             </span>
           </div>
           <h1 className="text-2xl font-bold text-white tracking-tight">Quantum Nimbus Threat Map & Operations Center</h1>
-          <p className="text-sm text-slate-400">Green = Verified Tap 1 | Yellow = Replay Attack (Both Pings Turn Yellow) | Red = Invalid Crypto Sig</p>
+          <p className="text-sm text-slate-400">Hover over any node or laser arc to inspect Batch ID, AES-128 SUN CMAC, and velocity telemetry.</p>
         </div>
 
         <div className="flex items-center space-x-2">
@@ -549,23 +605,37 @@ export default function QNThreatMap() {
               <canvas
                 ref={canvasRef}
                 onMouseMove={handleMouseMove}
-                onMouseLeave={() => { setHoveredNode(null); setTooltipPos(null); }}
+                onMouseLeave={() => { setHoveredInfo(null); setTooltipPos(null); }}
                 className="w-full h-full block cursor-crosshair"
               />
 
-              {/* Glassmorphic Node Popover Tooltip */}
-              {hoveredNode && tooltipPos && (
+              {/* Rich Glassmorphic Popover Tooltip */}
+              {hoveredInfo && tooltipPos && (
                 <div
-                  className="absolute z-50 bg-slate-900/95 border border-emerald-500/50 rounded-xl p-3 shadow-2xl backdrop-blur-md text-xs font-mono space-y-1 pointer-events-none transition-all max-w-xs"
+                  className="absolute z-50 bg-slate-900/95 border border-emerald-500/50 rounded-xl p-3.5 shadow-2xl backdrop-blur-md text-xs font-mono space-y-1.5 pointer-events-none transition-all max-w-xs"
                   style={{ left: Math.min(tooltipPos.x + 15, 450), top: Math.min(tooltipPos.y + 15, 360) }}
                 >
-                  <div className="flex items-center justify-between border-b border-slate-800 pb-1 font-bold text-emerald-400">
-                    <span>{hoveredNode.city}, {hoveredNode.country}</span>
-                    <span className="text-[10px] bg-emerald-950 text-emerald-300 px-1.5 py-0.5 rounded border border-emerald-800">HQ NODE</span>
+                  <div className="flex items-center justify-between border-b border-slate-800 pb-1.5 font-bold">
+                    <span className="text-emerald-400">{hoveredInfo.title}</span>
+                    <span className={`text-[10px] px-1.5 py-0.5 rounded border ${
+                      hoveredInfo.status === 'REPLAY_ATTACK'
+                        ? 'bg-yellow-950 text-yellow-300 border-yellow-800'
+                        : hoveredInfo.status === 'CRYPTO_FAIL'
+                          ? 'bg-red-950 text-red-300 border-red-800'
+                          : 'bg-emerald-950 text-emerald-300 border-emerald-800'
+                    }`}>
+                      {hoveredInfo.status === 'REPLAY_ATTACK' ? '⚠️ REPLAY ATTACK' : hoveredInfo.status === 'CRYPTO_FAIL' ? '🚨 BAD CRYPTO SIG' : 'VERIFIED TAP'}
+                    </span>
                   </div>
-                  <div className="text-slate-300">Active Tag Chips: <strong className="text-white">{hoveredNode.activeChips.toLocaleString()}</strong></div>
-                  <div className="text-slate-300">Avg Mesh Latency: <strong className="text-emerald-400">{hoveredNode.avgLatencyMs} ms</strong></div>
-                  <div className="text-slate-400 text-[10px] pt-1">Haversine Impossible Velocity Engine: ACTIVE</div>
+                  <div className="text-slate-300">Tag ID: <strong className="text-white">{hoveredInfo.tagId}</strong></div>
+                  <div className="text-slate-300">Batch ID: <strong className="text-sky-400">{hoveredInfo.batchId}</strong></div>
+                  <div className="text-slate-300">Tap Counter: <strong className="text-slate-100">{hoveredInfo.sequenceNum}</strong></div>
+                  <div className="text-slate-300">CMAC Crypto: <strong className={
+                    hoveredInfo.status === 'REPLAY_ATTACK' ? 'text-yellow-400' : hoveredInfo.status === 'CRYPTO_FAIL' ? 'text-red-400' : 'text-emerald-400'
+                  }>{hoveredInfo.cmacStatus}</strong></div>
+                  <div className="text-slate-300">Active Chips: <strong className="text-white">{hoveredInfo.chips.toLocaleString()}</strong></div>
+                  <div className="text-slate-300">Mesh Latency: <strong className="text-emerald-400">{hoveredInfo.latencyText}</strong></div>
+                  <div className="text-slate-400 text-[10px] pt-1 border-t border-slate-800">{hoveredInfo.extra}</div>
                 </div>
               )}
             </div>
@@ -706,8 +776,9 @@ export default function QNThreatMap() {
                     </span>
                   </div>
 
-                  <div className="font-mono font-semibold text-slate-100">
-                    Tag: {evt.tag_id}
+                  <div className="font-mono font-semibold text-slate-100 flex justify-between">
+                    <span>Tag: {evt.tag_id}</span>
+                    <span className="text-sky-400 text-[10px]">{evt.batch_id}</span>
                   </div>
 
                   <div className="text-slate-300 font-medium">

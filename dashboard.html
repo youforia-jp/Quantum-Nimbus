@@ -108,7 +108,7 @@
           <span class="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider">Cryptographic Threat Classification Engine Active</span>
         </div>
         <h1 class="text-3xl font-extrabold text-white tracking-tight">Real-Time Threat Telemetry Map</h1>
-        <p class="text-slate-400 text-sm mt-1">Green = Verified Tap 1 | Yellow = Replay Attack (Both Pings Turn Yellow) | Red = Invalid Crypto Sig</p>
+        <p class="text-slate-400 text-sm mt-1">Hover over any node or laser arc to inspect Batch ID, AES-128 SUN CMAC, and velocity telemetry.</p>
       </div>
 
       <!-- Quick Control Bar -->
@@ -197,20 +197,24 @@
           </div>
         </div>
 
-        <!-- GIS Canvas Viewport with Popover Tooltip -->
+        <!-- GIS Canvas Viewport with Enhanced Popover Tooltip -->
         <div class="bg-slate-900/90 border border-slate-800/80 rounded-xl p-4 shadow-sm relative backdrop-blur-md">
           <div id="map-viewport">
             <canvas id="gis-canvas"></canvas>
 
-            <!-- Hover Tooltip -->
-            <div id="node-tooltip" class="absolute z-50 bg-slate-900/95 border border-emerald-500/50 rounded-xl p-3 shadow-2xl backdrop-blur-md text-xs font-mono space-y-1 hidden pointer-events-none max-w-xs">
-              <div class="flex items-center justify-between border-b border-slate-800 pb-1 font-bold text-emerald-400">
-                <span id="tooltip-title">Houston, US</span>
-                <span class="text-[10px] bg-emerald-950 text-emerald-300 px-1.5 py-0.5 rounded border border-emerald-800">HQ NODE</span>
+            <!-- Expanded Glassmorphic Popover Tooltip -->
+            <div id="node-tooltip" class="absolute z-50 bg-slate-900/95 border border-emerald-500/50 rounded-xl p-3.5 shadow-2xl backdrop-blur-md text-xs font-mono space-y-1.5 hidden pointer-events-none max-w-xs transition-all">
+              <div class="flex items-center justify-between border-b border-slate-800 pb-1.5 font-bold">
+                <span id="tooltip-title" class="text-emerald-400">Houston, US</span>
+                <span id="tooltip-status-badge" class="text-[10px] bg-emerald-950 text-emerald-300 px-1.5 py-0.5 rounded border border-emerald-800">HQ NODE</span>
               </div>
-              <div class="text-slate-300">Active Tag Chips: <strong id="tooltip-chips" class="text-white">48,290</strong></div>
-              <div class="text-slate-300">Avg Mesh Latency: <strong id="tooltip-latency" class="text-emerald-400">12 ms</strong></div>
-              <div class="text-slate-400 text-[10px] pt-1">Haversine Impossible Velocity Engine: ACTIVE</div>
+              <div class="text-slate-300">Tag ID: <strong id="tooltip-tagid" class="text-white">NTAG-424-DNA-8000</strong></div>
+              <div class="text-slate-300">Batch ID: <strong id="tooltip-batchid" class="text-sky-400">BATCH-2026-QN-8840</strong></div>
+              <div class="text-slate-300">Tap Counter: <strong id="tooltip-sequence" class="text-slate-100">Sequence #001</strong></div>
+              <div class="text-slate-300">CMAC Crypto: <strong id="tooltip-cmac" class="text-emerald-400">AES-128 SUN Verified</strong></div>
+              <div class="text-slate-300">Active Chips: <strong id="tooltip-chips" class="text-white">48,290</strong></div>
+              <div class="text-slate-300">Mesh Latency: <strong id="tooltip-latency" class="text-emerald-400">12 ms</strong></div>
+              <div id="tooltip-extra" class="text-slate-400 text-[10px] pt-1 border-t border-slate-800">Haversine Impossible Velocity Engine: ACTIVE</div>
             </div>
           </div>
 
@@ -291,7 +295,7 @@
     <p>© 2026 Quantum Nimbus Tech. U.S. Patent Pending — Dynamic Vaporization Parameter & NFC Cryptographic Authentication.</p>
   </footer>
 
-  <!-- Deterministic GIS Engine with Authentic Yellow Replay & Red Bad Crypto Color Logic -->
+  <!-- Deterministic GIS Engine with Rich Popover Tooltip Metadata -->
   <script>
     const CITIES = [
       { city: 'Houston', country: 'US', lat: 29.7604, lng: -95.3698, activeChips: 48290, avgLatencyMs: 12 },
@@ -340,12 +344,6 @@
       return Math.round(R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
     }
 
-    /**
-     * Process telemetry payload with authentic color rules:
-     * - status 'VERIFIED': Green (Tap 1)
-     * - status 'REPLAY_ATTACK': Yellow (Tap 2 duplicate - both pings turn yellow)
-     * - status 'CRYPTO_FAIL': Red (Invalid Cryptographic CMAC Signature)
-     */
     function processPayload(origin, destination, timeDeltaSeconds, tagId, forceType = null) {
       totalScans++;
       document.getElementById('kpi-total-scans').textContent = totalScans.toLocaleString();
@@ -363,7 +361,6 @@
         replaysCaught++;
         document.getElementById('kpi-replays-caught').textContent = replaysCaught.toLocaleString();
 
-        // Turn previous matching origin events YELLOW as well!
         masterEventHistory.forEach(evt => {
           if (evt.tagId === tagId && evt.status === 'VERIFIED') {
             evt.status = 'REPLAY_ATTACK';
@@ -372,11 +369,15 @@
       }
 
       const now = Date.now();
+      const batchNum = Math.floor(Math.random() * 8900 + 1000);
+      const batchId = `BATCH-2026-QN-${batchNum}`;
+      const sequenceNum = destination ? 'Sequence #002 (Replay)' : 'Sequence #001 (Tap 1)';
+
       const evt = {
         id: `evt-${now}-${Math.random()}`,
         timestamp: new Date().toLocaleTimeString(),
         timestampMs: now,
-        tagId, origin, destination, status, vel, timeDeltaSeconds
+        tagId, batchId, sequenceNum, origin, destination, status, vel, timeDeltaSeconds
       };
 
       masterEventHistory.unshift(evt);
@@ -428,7 +429,10 @@
               ${statusText}
             </span>
           </div>
-          <div class="font-mono font-semibold text-slate-100">Tag: ${evt.tagId}</div>
+          <div class="font-mono font-semibold text-slate-100 flex justify-between">
+            <span>Tag: ${evt.tagId}</span>
+            <span class="text-sky-400 text-[10px]">${evt.batchId}</span>
+          </div>
           <div class="text-slate-300">${evt.origin.city}, ${evt.origin.country} ${evt.destination ? `➔ ${evt.destination.city}, ${evt.destination.country}` : '(Tap 1 Verified)'}</div>
           ${evt.destination ? `<div class="flex items-center justify-between text-[11px] font-mono text-slate-400">
             <span>Vel: <strong class="${velColor}">${evt.vel.toLocaleString()} km/h</strong></span>
@@ -465,7 +469,7 @@
       renderTelemetryFeed();
     });
 
-    // Hover Tooltip
+    // Rich Hover Tooltip Engine (Inspects Nodes & Active Events)
     canvas.addEventListener('mousemove', (e) => {
       const rect = canvas.getBoundingClientRect();
       const mouseX = e.clientX - rect.left;
@@ -473,24 +477,92 @@
       const width = canvas.width;
       const height = canvas.height;
 
-      let found = null;
+      let foundCity = null;
+      let foundEvt = null;
+
       let projection = projectionMode === '2d'
         ? d3.geoEquirectangular().scale(width / (2 * Math.PI)).translate([width / 2, height / 2 + 20])
         : d3.geoOrthographic().scale(height / 2.3).translate([width / 2, height / 2]).rotate([rotationAngle, -15]);
 
-      CITIES.forEach(city => {
-        const pt = projection([city.lng, city.lat]);
-        if (pt && Math.hypot(mouseX - pt[0], mouseY - pt[1]) < 14) {
-          found = city;
+      const targetTimeMs = Date.now() - (scrubberSecondsAgo * 1000);
+      const visibleEvents = masterEventHistory.filter(
+        evt => evt.timestampMs <= targetTimeMs && targetTimeMs - evt.timestampMs < 12000
+      );
+
+      // Check if mouse hovers near any active event pin/arc
+      visibleEvents.forEach(evt => {
+        const pt1 = projection([evt.origin.lng, evt.origin.lat]);
+        if (pt1 && Math.hypot(mouseX - pt1[0], mouseY - pt1[1]) < 16) {
+          foundEvt = evt;
+        }
+        if (evt.destination) {
+          const pt2 = projection([evt.destination.lng, evt.destination.lat]);
+          if (pt2 && Math.hypot(mouseX - pt2[0], mouseY - pt2[1]) < 16) {
+            foundEvt = evt;
+          }
         }
       });
 
-      if (found) {
+      if (!foundEvt) {
+        CITIES.forEach(city => {
+          const pt = projection([city.lng, city.lat]);
+          if (pt && Math.hypot(mouseX - pt[0], mouseY - pt[1]) < 14) {
+            foundCity = city;
+          }
+        });
+      }
+
+      if (foundEvt) {
         tooltip.style.left = `${Math.min(mouseX + 15, 450)}px`;
         tooltip.style.top = `${Math.min(mouseY + 15, 360)}px`;
-        document.getElementById('tooltip-title').textContent = `${found.city}, ${found.country}`;
-        document.getElementById('tooltip-chips').textContent = found.activeChips.toLocaleString();
-        document.getElementById('tooltip-latency').textContent = `${found.avgLatencyMs} ms`;
+
+        const badge = document.getElementById('tooltip-status-badge');
+        const cmac = document.getElementById('tooltip-cmac');
+
+        if (foundEvt.status === 'REPLAY_ATTACK') {
+          badge.className = 'text-[10px] bg-yellow-950 text-yellow-300 px-1.5 py-0.5 rounded border border-yellow-800';
+          badge.textContent = '⚠️ REPLAY ATTACK';
+          cmac.className = 'text-yellow-400';
+          cmac.textContent = '⚠️ TOKEN REUSED / REPLAYED';
+        } else if (foundEvt.status === 'CRYPTO_FAIL') {
+          badge.className = 'text-[10px] bg-red-950 text-red-300 px-1.5 py-0.5 rounded border border-red-800';
+          badge.textContent = '🚨 BAD CRYPTO SIG';
+          cmac.className = 'text-red-400';
+          cmac.textContent = '🚨 INVALID AES-128 CMAC HASH';
+        } else {
+          badge.className = 'text-[10px] bg-emerald-950 text-emerald-300 px-1.5 py-0.5 rounded border border-emerald-800';
+          badge.textContent = 'VERIFIED TAP 1';
+          cmac.className = 'text-emerald-400';
+          cmac.textContent = 'AES-128 SUN CMAC Verified';
+        }
+
+        document.getElementById('tooltip-title').textContent = `${foundEvt.origin.city} ${foundEvt.destination ? `➔ ${foundEvt.destination.city}` : ''}`;
+        document.getElementById('tooltip-tagid').textContent = foundEvt.tagId;
+        document.getElementById('tooltip-batchid').textContent = foundEvt.batchId;
+        document.getElementById('tooltip-sequence').textContent = foundEvt.sequenceNum;
+        document.getElementById('tooltip-chips').textContent = foundEvt.origin.activeChips.toLocaleString();
+        document.getElementById('tooltip-latency').textContent = `${foundEvt.origin.avgLatencyMs} ms (${foundEvt.vel.toLocaleString()} km/h)`;
+        document.getElementById('tooltip-extra').textContent = `BioTrack / Traceability Sync: PASSED | Timestamp: ${foundEvt.timestamp}`;
+
+        tooltip.classList.remove('hidden');
+      } else if (foundCity) {
+        tooltip.style.left = `${Math.min(mouseX + 15, 450)}px`;
+        tooltip.style.top = `${Math.min(mouseY + 15, 360)}px`;
+
+        const badge = document.getElementById('tooltip-status-badge');
+        badge.className = 'text-[10px] bg-emerald-950 text-emerald-300 px-1.5 py-0.5 rounded border border-emerald-800';
+        badge.textContent = 'HQ NODE';
+
+        document.getElementById('tooltip-title').textContent = `${foundCity.city}, ${foundCity.country}`;
+        document.getElementById('tooltip-tagid').textContent = 'NTAG-424-DNA-MESH';
+        document.getElementById('tooltip-batchid').textContent = 'BATCH-2026-QN-MAIN';
+        document.getElementById('tooltip-sequence').textContent = 'Sequence #000 (Active Listener)';
+        document.getElementById('tooltip-cmac').className = 'text-emerald-400';
+        document.getElementById('tooltip-cmac').textContent = 'AES-128 SUN Listener Ready';
+        document.getElementById('tooltip-chips').textContent = foundCity.activeChips.toLocaleString();
+        document.getElementById('tooltip-latency').textContent = `${foundCity.avgLatencyMs} ms`;
+        document.getElementById('tooltip-extra').textContent = 'Haversine Impossible Velocity Engine: ACTIVE';
+
         tooltip.classList.remove('hidden');
       } else {
         tooltip.classList.add('hidden');
@@ -499,7 +571,7 @@
 
     canvas.addEventListener('mouseleave', () => tooltip.classList.add('hidden'));
 
-    // 60 FPS Canvas Render Loop with Exact Yellow Replay & Red Bad Crypto Logic
+    // 60 FPS Canvas Render Loop
     function renderLoop() {
       const width = canvas.width = canvas.parentElement.clientWidth || 800;
       const height = canvas.height = canvas.parentElement.clientHeight || 520;
@@ -546,15 +618,14 @@
         const fade = Math.max(0.1, 1 - age / 12000);
         const radius = (age / 12000) * 28;
 
-        // Color definitions
-        let mainColor = '#10b981'; // Green
+        let mainColor = '#10b981';
         let arcColorStr = `rgba(16, 185, 129, ${0.85 * (1 - Math.min(age / 2400, 1.0))})`;
 
         if (evt.status === 'REPLAY_ATTACK') {
-          mainColor = '#eab308'; // Yellow (Replay Attack - both pings turn yellow!)
+          mainColor = '#eab308';
           arcColorStr = `rgba(234, 179, 8, ${0.95 * (1 - Math.min(age / 2400, 1.0))})`;
         } else if (evt.status === 'CRYPTO_FAIL') {
-          mainColor = '#ef4444'; // Red (Crypto Fail)
+          mainColor = '#ef4444';
           arcColorStr = `rgba(239, 68, 68, ${0.95 * (1 - Math.min(age / 2400, 1.0))})`;
         }
 
@@ -660,35 +731,29 @@
       renderTelemetryFeed();
     });
 
-    // Simulate Yellow Replay Attack Button
     document.getElementById('btn-attack-replay').addEventListener('click', () => {
       const tagId = `NTAG-424-${Math.floor(Math.random() * 8999 + 1000)}`;
       processPayload(CITIES[0], null, 0, tagId, 'VERIFIED');
       setTimeout(() => { processPayload(CITIES[0], CITIES[5], 0.45, tagId, 'REPLAY_ATTACK'); }, 1200);
     });
 
-    // Simulate Red Crypto Fail Button
     document.getElementById('btn-attack-crypto').addEventListener('click', () => {
       const tagId = `NTAG-424-${Math.floor(Math.random() * 8999 + 1000)}`;
       processPayload(CITIES[2], CITIES[1], 0.35, tagId, 'CRYPTO_FAIL');
     });
 
-    // Continuous Live Stream Generator
     setInterval(() => {
       const rand = Math.random();
       const tagId = `NTAG-424-${Math.floor(Math.random() * 8999 + 1000)}`;
       const c1 = CITIES[Math.floor(Math.random() * CITIES.length)];
 
       if (rand < 0.55) {
-        // Authentic Tap 1 (Green)
         processPayload(c1, null, 0, tagId, 'VERIFIED');
       } else if (rand < 0.85) {
-        // Replay Attack (Yellow - both pings turn yellow!)
         let c2 = CITIES[Math.floor(Math.random() * CITIES.length)];
         while (c2.city === c1.city) c2 = CITIES[Math.floor(Math.random() * CITIES.length)];
         processPayload(c1, c2, parseFloat((Math.random() * 1.8 + 0.2).toFixed(2)), tagId, 'REPLAY_ATTACK');
       } else {
-        // Bad Cryptographic Signature (Red)
         let c2 = CITIES[Math.floor(Math.random() * CITIES.length)];
         while (c2.city === c1.city) c2 = CITIES[Math.floor(Math.random() * CITIES.length)];
         processPayload(c1, c2, 0.4, tagId, 'CRYPTO_FAIL');
