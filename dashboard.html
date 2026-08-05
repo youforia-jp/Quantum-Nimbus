@@ -3,23 +3,77 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quantum Nimbus | V3 Enterprise Threat Telemetry Suite</title>
-  <meta name="description" content="Enterprise Threat Map with 2D/3D Globe Projection, Hover Tooltips, Filter Bar, Tag Search, Time Scrubber, and Live SSE.">
+  <title>Quantum Nimbus | Real-World Threat Map & Telemetry Dashboard</title>
+  <meta name="description" content="Real-world high-resolution dark-mode cybersecurity map with live NFC authentication and impossible velocity threat detection.">
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- D3.js CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <!-- Leaflet CSS & JS for Real-World High-Res Dark GIS Map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains-Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
   <style>
     body { font-family: 'Inter', sans-serif; }
     .font-mono { font-family: 'JetBrains Mono', monospace; }
+    
+    #map-viewport {
+      width: 100%;
+      height: 520px;
+      border-radius: 0.75rem;
+      background-color: #030712;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    /* Dark Tile Customization */
+    .leaflet-container {
+      background: #030712 !important;
+    }
+    
+    .leaflet-tile {
+      filter: brightness(0.7) contrast(1.25) saturate(0.8) hue-rotate(190deg);
+    }
+    
+    /* Overlay Canvas for Arcs */
+    #arc-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 400;
+    }
+
+    /* Custom Pulsing Markers */
+    .custom-ping-marker {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .ping-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 2px solid #ffffff;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.9);
+    }
+    .ping-ripple {
+      position: absolute;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      animation: ripple 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+    }
+    @keyframes ripple {
+      0% { transform: scale(0.2); opacity: 1; }
+      100% { transform: scale(2.2); opacity: 0; }
+    }
   </style>
 </head>
 <body class="bg-[#030712] text-slate-100 min-h-screen transition-colors duration-300">
@@ -57,15 +111,15 @@
       <div>
         <div class="flex items-center space-x-2 mb-1">
           <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span class="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider">QN V3 Enterprise Threat Suite Active</span>
+          <span class="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider">Real-World High-Res CartoDB Vector Engine Active</span>
         </div>
-        <h1 class="text-2xl font-extrabold text-white tracking-tight">Quantum Nimbus Threat Map & Operations Center</h1>
-        <p class="text-slate-400 text-sm mt-1">2D/3D Globe projection, node hover tooltips, telemetry search, and incident time scrubber.</p>
+        <h1 class="text-3xl font-extrabold text-white tracking-tight">Real-Time Threat Telemetry Map</h1>
+        <p class="text-slate-400 text-sm mt-1">High-resolution dark-mode vector tile map with live NFC cryptographic telemetry and impossible velocity threat mitigation.</p>
       </div>
 
       <!-- Quick Control Bar -->
       <div class="flex items-center space-x-2">
-        <button id="btn-attack-replay" class="bg-red-600 hover:bg-red-500 text-white text-xs font-semibold px-3.5 py-2.5 rounded-lg shadow transition-all flex items-center space-x-1.5 cursor-pointer">
+        <button id="btn-attack-replay" class="bg-red-600 hover:bg-red-500 text-white text-xs font-semibold px-4 py-2.5 rounded-lg shadow transition-all flex items-center space-x-1.5 cursor-pointer">
           <span>⚡ Simulate Houston→Denver Attack</span>
         </button>
       </div>
@@ -75,7 +129,7 @@
     <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <div class="bg-slate-900/90 border border-slate-800/80 rounded-xl p-5 shadow-sm backdrop-blur-md">
         <div class="flex items-center justify-between text-slate-400 text-xs font-medium uppercase">
-          <span>Total Scans (24h)</span>
+          <span>Total Security Scans (24h)</span>
           <span>📊</span>
         </div>
         <div class="mt-2 flex items-baseline justify-between">
@@ -121,69 +175,41 @@
     <!-- Main Content Grid -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       
-      <!-- Left Column: Map & Filter Controls -->
+      <!-- Left Column: Map Viewport -->
       <div class="lg:col-span-2 space-y-4">
         
-        <!-- Filter Bar & Projection Mode Toggle -->
+        <!-- Filter Controls Bar -->
         <div class="bg-slate-900/90 border border-slate-800/80 rounded-xl p-3 backdrop-blur-md flex flex-wrap items-center justify-between gap-3">
-          
           <div class="flex items-center space-x-1.5 text-xs font-mono">
             <button id="btn-filter-all" class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white font-bold transition-all">All Telemetry</button>
             <button id="btn-filter-threats" class="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition-all">Threats Only</button>
             <button id="btn-filter-us" class="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition-all">US Region</button>
           </div>
 
-          <div class="flex items-center space-x-1 bg-slate-950 p-1 rounded-lg border border-slate-800 text-xs font-mono">
-            <button id="btn-proj-2d" class="px-2.5 py-1 rounded bg-emerald-950 text-emerald-400 border border-emerald-800 font-bold transition-all">🗺️ 2D Flat</button>
-            <button id="btn-proj-3d" class="px-2.5 py-1 rounded text-slate-400 transition-all">🌐 3D Globe</button>
+          <div class="text-xs font-mono text-emerald-400 flex items-center space-x-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span>Real-World High-Res Tile Vector Engine</span>
           </div>
         </div>
 
-        <!-- Canvas Viewport with Hover Tooltip -->
+        <!-- Real-World Map Container -->
         <div class="bg-slate-900/90 border border-slate-800/80 rounded-xl p-4 shadow-sm relative backdrop-blur-md">
-          <div class="w-full h-[480px] relative rounded-lg overflow-hidden border border-slate-800 bg-[#030712]">
-            <canvas id="vector-canvas" class="w-full h-full block cursor-crosshair"></canvas>
-
-            <!-- Popover Tooltip -->
-            <div id="node-tooltip" class="absolute z-50 bg-slate-900/95 border border-emerald-500/50 rounded-xl p-3 shadow-2xl backdrop-blur-md text-xs font-mono space-y-1 hidden pointer-events-none max-w-xs">
-              <div class="flex items-center justify-between border-b border-slate-800 pb-1 font-bold text-emerald-400">
-                <span id="tooltip-title">Houston, US</span>
-                <span class="text-[10px] bg-emerald-950 text-emerald-300 px-1.5 py-0.5 rounded border border-emerald-800">HQ NODE</span>
-              </div>
-              <div class="text-slate-300">Active Tag Chips: <strong id="tooltip-chips" class="text-white">48,290</strong></div>
-              <div class="text-slate-300">Avg Mesh Latency: <strong id="tooltip-latency" class="text-emerald-400">12 ms</strong></div>
-              <div class="text-slate-400 text-[10px] pt-1">Haversine Impossible Velocity Engine: ACTIVE</div>
-            </div>
+          <div id="map-viewport">
+            <canvas id="arc-canvas"></canvas>
           </div>
-        </div>
-
-        <!-- Time Scrubber Bar -->
-        <div class="bg-slate-900/90 border border-slate-800/80 rounded-xl p-4 backdrop-blur-md space-y-2">
-          <div class="flex items-center justify-between text-xs font-mono">
-            <div class="flex items-center space-x-2">
-              <span class="font-bold text-white">⏱️ Incident Time Scrubber:</span>
-              <span id="scrubber-status" class="text-emerald-400">LIVE TELEMETRY STREAM</span>
-            </div>
-            <div class="flex items-center space-x-2">
-              <button id="btn-scrub-live" class="px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-600 text-white">[LIVE]</button>
-              <button id="btn-scrub-1h" class="px-2 py-0.5 rounded text-[11px] font-bold bg-slate-800 text-slate-400">[-1 Hour]</button>
-            </div>
-          </div>
-
-          <input id="time-slider" type="range" min="0" max="100" value="100" class="w-full accent-emerald-500 bg-slate-800 rounded-lg cursor-pointer h-2">
         </div>
 
       </div>
 
-      <!-- Right Column: Telemetry Feed & Tag Search -->
-      <div class="bg-slate-900/90 border border-slate-800/80 rounded-xl p-5 shadow-sm space-y-4 flex flex-col h-[630px] backdrop-blur-md">
+      <!-- Right Column: Live Telemetry Feed -->
+      <div class="bg-slate-900/90 border border-slate-800/80 rounded-xl p-5 shadow-sm space-y-4 flex flex-col h-[600px] backdrop-blur-md">
         <div class="flex items-center justify-between border-b border-slate-800 pb-3">
           <div>
             <h2 class="text-base font-bold text-white">Live Telemetry Stream</h2>
             <p class="text-xs text-slate-400 font-mono">Filtered Security Events</p>
           </div>
           <span class="px-2 py-0.5 text-xs font-mono font-bold rounded bg-emerald-950 text-emerald-400 border border-emerald-800 animate-pulse flex items-center gap-1">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> SSE WS ACTIVE
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> STREAM ACTIVE
           </span>
         </div>
 
@@ -204,7 +230,7 @@
     <p>© 2026 Quantum Nimbus Tech. U.S. Patent Pending — Dynamic Vaporization Parameter & NFC Cryptographic Authentication.</p>
   </footer>
 
-  <!-- Script Engine -->
+  <!-- Real-World Leaflet Map Engine -->
   <script>
     const CITIES = [
       { city: 'Houston', country: 'US', lat: 29.7604, lng: -95.3698, activeChips: 48290, avgLatencyMs: 12 },
@@ -219,34 +245,43 @@
       { city: 'Sydney', country: 'Australia', lat: -33.8688, lng: 151.2093, activeChips: 19500, avgLatencyMs: 110 }
     ];
 
-    const WORLD_CONTINENTS = [
-      { name: 'North America', polygon: [[-168, 65], [-150, 70], [-130, 70], [-100, 75], [-75, 78], [-60, 60], [-64, 46], [-70, 42], [-75, 35], [-80, 25], [-90, 20], [-92, 15], [-105, 20], [-117, 32], [-124, 48], [-140, 60], [-168, 65]] },
-      { name: 'United States Primary', polygon: [[-124.7, 48.4], [-123.0, 49.0], [-89.0, 48.0], [-67.0, 45.0], [-75.0, 35.0], [-80.0, 25.0], [-97.0, 26.0], [-117.0, 32.5], [-124.7, 48.4]] },
-      { name: 'South America', polygon: [[-78, 11], [-60, 8], [-35, -5], [-37, -12], [-48, -28], [-57, -38], [-68, -55], [-75, -45], [-72, -18], [-80, -2], [-78, 11]] },
-      { name: 'Europe', polygon: [[-9, 36], [-9, 43], [-4, 48], [2, 51], [5, 60], [10, 62], [25, 70], [32, 70], [40, 60], [40, 45], [26, 40], [22, 38], [15, 38], [9, 42], [-9, 36]] },
-      { name: 'British Isles', polygon: [[-10, 50], [-5, 59], [1, 53], [-4, 50], [-10, 50]] },
-      { name: 'Africa', polygon: [[-17, 14], [-17, 21], [-5, 36], [11, 37], [32, 31], [43, 12], [51, 11], [40, -10], [33, -27], [26, -34], [18, -34], [12, -17], [9, 5], [-17, 14]] },
-      { name: 'Asia', polygon: [[32, 31], [40, 45], [40, 60], [60, 70], [100, 75], [170, 68], [140, 50], [120, 30], [108, 10], [98, 8], [80, 15], [60, 25], [43, 12], [32, 31]] },
-      { name: 'Japan', polygon: [[130, 31], [132, 34], [140, 36], [142, 44], [140, 45], [136, 36], [130, 31]] },
-      { name: 'Australia', polygon: [[114, -22], [123, -15], [136, -12], [142, -11], [153, -28], [150, -37], [138, -35], [117, -35], [114, -22]] }
-    ];
+    // Initialize Leaflet Map with CartoDB Dark Matter High-Res Tiles
+    const map = L.map('map-viewport', {
+      center: [25, 0],
+      zoom: 2,
+      minZoom: 2,
+      maxZoom: 10,
+      zoomControl: false,
+      attributionControl: false
+    });
 
-    let projectionMode = '2d';
-    let filterMode = 'all';
-    let searchQuery = '';
-    let isLive = true;
-    let rotationAngle = 0;
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      maxZoom: 19,
+      subdomains: 'abcd'
+    }).addTo(map);
 
-    const canvas = document.getElementById('vector-canvas');
+    const canvas = document.getElementById('arc-canvas');
     const ctx = canvas.getContext('2d');
-    const tooltip = document.getElementById('node-tooltip');
 
     const activeArcs = [];
-    const activePins = [];
+    const activeMarkers = new Map();
     const telemetryFeedStore = [];
 
+    let filterMode = 'all';
+    let searchQuery = '';
     let totalScans = 1482978;
     let anomaliesBlocked = 4144;
+
+    function resizeCanvas() {
+      const viewport = document.getElementById('map-viewport');
+      canvas.width = viewport.clientWidth;
+      canvas.height = viewport.clientHeight;
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    map.on('move', resizeCanvas);
+    map.on('zoom', resizeCanvas);
+    resizeCanvas();
 
     function haversineDistanceKm(lat1, lon1, lat2, lon2) {
       const R = 6371;
@@ -254,6 +289,33 @@
       const dLon = ((lon2 - lon1) * Math.PI) / 180;
       const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
       return Math.round(R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
+    }
+
+    function spawnMarkerOnMap(city, isThreat) {
+      const key = `${city.city}-${Date.now()}`;
+      const color = isThreat ? '#ef4444' : '#10b981';
+
+      const customIcon = L.divIcon({
+        className: 'custom-ping-marker',
+        html: `
+          <div style="position: relative; display: flex; align-items: center;">
+            <div class="ping-ripple" style="border: 2px solid ${color};"></div>
+            <div class="ping-dot" style="background-color: ${color}; box-shadow: 0 0 12px ${color};"></div>
+            <span style="margin-left: 12px; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: bold; color: white; background: rgba(15, 23, 42, 0.85); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(51, 65, 85, 0.8); white-space: nowrap;">
+              ${city.city}
+            </span>
+          </div>
+        `,
+        iconSize: [20, 20],
+        iconAnchor: [10, 10]
+      });
+
+      const marker = L.marker([city.lat, city.lng], { icon: customIcon }).addTo(map);
+
+      // Auto-fade & remove marker after 5 seconds
+      setTimeout(() => {
+        map.removeLayer(marker);
+      }, 5000);
     }
 
     function processPayload(origin, destination, timeDeltaSeconds, tagId) {
@@ -269,11 +331,11 @@
         document.getElementById('kpi-anomalies-blocked').textContent = anomaliesBlocked.toLocaleString();
       }
 
-      activePins.push({ city: origin.city, lat: origin.lat, lng: origin.lng, isThreat, spawnTime: Date.now() });
+      spawnMarkerOnMap(origin, isThreat);
 
       if (destination) {
         activeArcs.push({ origin, destination, startTime: Date.now(), isThreat });
-        activePins.push({ city: destination.city, lat: destination.lat, lng: destination.lng, isThreat, spawnTime: Date.now() });
+        spawnMarkerOnMap(destination, isThreat);
       }
 
       const evt = {
@@ -323,155 +385,50 @@
       });
     }
 
-    // Hover Tooltip Listener
-    canvas.addEventListener('mousemove', (e) => {
-      const rect = canvas.getBoundingClientRect();
-      const mouseX = e.clientX - rect.left;
-      const mouseY = e.clientY - rect.top;
-      const width = canvas.width;
-      const height = canvas.height;
-
-      let found = null;
-      let projection = projectionMode === '2d'
-        ? d3.geoEquirectangular().scale(width / (2 * Math.PI)).translate([width / 2, height / 2 + 20])
-        : d3.geoOrthographic().scale(height / 2.3).translate([width / 2, height / 2]).rotate([rotationAngle, -15]);
-
-      CITIES.forEach(city => {
-        const pt = projection([city.lng, city.lat]);
-        if (pt && Math.hypot(mouseX - pt[0], mouseY - pt[1]) < 14) {
-          found = city;
-        }
-      });
-
-      if (found) {
-        tooltip.style.left = `${Math.min(mouseX + 15, 450)}px`;
-        tooltip.style.top = `${Math.min(mouseY + 15, 360)}px`;
-        document.getElementById('tooltip-title').textContent = `${found.city}, ${found.country}`;
-        document.getElementById('tooltip-chips').textContent = found.activeChips.toLocaleString();
-        document.getElementById('tooltip-latency').textContent = `${found.avgLatencyMs} ms`;
-        tooltip.classList.remove('hidden');
-      } else {
-        tooltip.classList.add('hidden');
-      }
-    });
-
-    canvas.addEventListener('mouseleave', () => tooltip.classList.add('hidden'));
-
-    function renderLoop() {
-      const width = canvas.width = canvas.parentElement.clientWidth || 800;
-      const height = canvas.height = canvas.parentElement.clientHeight || 520;
-
-      ctx.fillStyle = '#030712';
-      ctx.fillRect(0, 0, width, height);
-
-      let projection;
-      if (projectionMode === '2d') {
-        projection = d3.geoEquirectangular().scale(width / (2 * Math.PI)).translate([width / 2, height / 2 + 20]);
-      } else {
-        rotationAngle = (rotationAngle + 0.25) % 360;
-        projection = d3.geoOrthographic().scale(height / 2.3).translate([width / 2, height / 2]).rotate([rotationAngle, -15]);
-
-        ctx.beginPath();
-        ctx.arc(width / 2, height / 2, height / 2.3, 0, Math.PI * 2);
-        ctx.fillStyle = '#050a17'; ctx.fill();
-        ctx.strokeStyle = 'rgba(16, 185, 129, 0.3)'; ctx.lineWidth = 2; ctx.stroke();
-      }
-
-      const pathGenerator = d3.geoPath().projection(projection).context(ctx);
-
-      ctx.strokeStyle = 'rgba(15, 32, 56, 0.6)'; ctx.lineWidth = 0.5; ctx.setLineDash([4, 4]);
-      const graticule = d3.geoGraticule10(); ctx.beginPath(); pathGenerator(graticule); ctx.stroke(); ctx.setLineDash([]);
-
-      WORLD_CONTINENTS.forEach(cont => {
-        ctx.beginPath();
-        cont.polygon.forEach(([lng, lat], idx) => {
-          const pt = projection([lng, lat]);
-          if (!pt) return;
-          if (idx === 0) ctx.moveTo(pt[0], pt[1]);
-          else ctx.lineTo(pt[0], pt[1]);
-        });
-        ctx.closePath();
-
-        if (cont.name === 'United States Primary') {
-          ctx.fillStyle = 'rgba(16, 185, 129, 0.06)'; ctx.strokeStyle = 'rgba(16, 185, 129, 0.4)'; ctx.lineWidth = 1.5;
-        } else {
-          ctx.fillStyle = '#0d1726'; ctx.strokeStyle = '#1e3a5f'; ctx.lineWidth = 1.2;
-        }
-        ctx.fill(); ctx.stroke();
-      });
+    // 60 FPS Laser Arc Renderer on Leaflet Viewport
+    function renderArcs() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       const now = Date.now();
-
-      for (let i = activePins.length - 1; i >= 0; i--) {
-        const pin = activePins[i];
-        const age = now - pin.spawnTime;
-        if (age > 5000) { activePins.splice(i, 1); continue; }
-
-        const pt = projection([pin.lng, pin.lat]);
-        if (!pt) continue;
-        const [x, y] = pt;
-        const fade = 1 - age / 5000;
-
-        ctx.beginPath(); ctx.arc(x, y, (age / 5000) * 28, 0, Math.PI * 2);
-        ctx.strokeStyle = pin.isThreat ? `rgba(239, 68, 68, ${fade * 0.9})` : `rgba(16, 185, 129, ${fade * 0.9})`;
-        ctx.lineWidth = 1.5; ctx.stroke();
-
-        ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2);
-        ctx.fillStyle = pin.isThreat ? '#ef4444' : '#10b981'; ctx.fill();
-        ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1.2; ctx.stroke();
-
-        ctx.fillStyle = `rgba(255, 255, 255, ${fade})`;
-        ctx.font = 'bold 10px JetBrains Mono';
-        ctx.fillText(pin.city, x + 8, y + 3);
-      }
-
       for (let i = activeArcs.length - 1; i >= 0; i--) {
         const arc = activeArcs[i];
         const progress = Math.min((now - arc.startTime) / 2400, 1.0);
         if (progress >= 1.0) { activeArcs.splice(i, 1); continue; }
 
-        const p1 = projection([arc.origin.lng, arc.origin.lat]);
-        const p2 = projection([arc.destination.lng, arc.destination.lat]);
-        if (!p1 || !p2) continue;
+        const p1 = map.latLngToContainerPoint([arc.origin.lat, arc.origin.lng]);
+        const p2 = map.latLngToContainerPoint([arc.destination.lat, arc.destination.lng]);
 
-        const midX = (p1[0] + p2[0]) / 2;
-        const midY = Math.min(p1[0], p2[1]) - Math.abs(p1[0] - p2[0]) * 0.28;
+        const midX = (p1.x + p2.x) / 2;
+        const midY = Math.min(p1.y, p2.y) - Math.abs(p1.x - p2.x) * 0.28;
 
-        ctx.beginPath(); ctx.moveTo(p1[0], p1[1]);
-        ctx.quadraticCurveTo(midX, midY, p2[0], p2[1]);
+        ctx.beginPath();
+        ctx.moveTo(p1.x, p1.y);
+        ctx.quadraticCurveTo(midX, midY, p2.x, p2.y);
         ctx.strokeStyle = arc.isThreat ? `rgba(239, 68, 68, ${0.95 * (1 - progress)})` : `rgba(16, 185, 129, ${0.85 * (1 - progress)})`;
         ctx.lineWidth = arc.isThreat ? 3.5 : 2;
         ctx.setLineDash(arc.isThreat ? [6, 4] : []);
-        ctx.stroke(); ctx.setLineDash([]);
+        ctx.stroke();
+        ctx.setLineDash([]);
 
         const t = progress;
-        const currX = (1 - t) * (1 - t) * p1[0] + 2 * (1 - t) * t * midX + t * t * p2[0];
-        const currY = (1 - t) * (1 - t) * p1[1] + 2 * (1 - t) * t * midY + t * t * p2[1];
+        const currX = (1 - t) * (1 - t) * p1.x + 2 * (1 - t) * t * midX + t * t * p2.x;
+        const currY = (1 - t) * (1 - t) * p1.y + 2 * (1 - t) * t * midY + t * t * p2.y;
 
-        ctx.beginPath(); ctx.arc(currX, currY, arc.isThreat ? 6 : 4, 0, Math.PI * 2);
+        ctx.beginPath();
+        ctx.arc(currX, currY, arc.isThreat ? 6 : 4, 0, Math.PI * 2);
         ctx.fillStyle = arc.isThreat ? '#ef4444' : '#10b981';
         ctx.shadowColor = arc.isThreat ? '#ef4444' : '#10b981';
-        ctx.shadowBlur = 14; ctx.fill(); ctx.shadowBlur = 0;
+        ctx.shadowBlur = 14;
+        ctx.fill();
+        ctx.shadowBlur = 0;
       }
 
-      requestAnimationFrame(renderLoop);
+      requestAnimationFrame(renderArcs);
     }
 
-    requestAnimationFrame(renderLoop);
+    requestAnimationFrame(renderArcs);
 
-    // Event Controls
-    document.getElementById('btn-proj-2d').addEventListener('click', () => {
-      projectionMode = '2d';
-      document.getElementById('btn-proj-2d').className = 'px-2.5 py-1 rounded bg-emerald-950 text-emerald-400 border border-emerald-800 font-bold transition-all';
-      document.getElementById('btn-proj-3d').className = 'px-2.5 py-1 rounded text-slate-400 transition-all';
-    });
-
-    document.getElementById('btn-proj-3d').addEventListener('click', () => {
-      projectionMode = '3d';
-      document.getElementById('btn-proj-3d').className = 'px-2.5 py-1 rounded bg-emerald-950 text-emerald-400 border border-emerald-800 font-bold transition-all';
-      document.getElementById('btn-proj-2d').className = 'px-2.5 py-1 rounded text-slate-400 transition-all';
-    });
-
+    // Filter Buttons
     document.getElementById('btn-filter-all').addEventListener('click', () => {
       filterMode = 'all';
       document.getElementById('btn-filter-all').className = 'px-3 py-1.5 rounded-lg bg-emerald-600 text-white font-bold transition-all';
@@ -508,7 +465,6 @@
     });
 
     setInterval(() => {
-      if (!isLive) return;
       const isReplay = Math.random() < 0.35;
       const tagId = `NTAG-424-${Math.floor(Math.random() * 8999 + 1000)}`;
       const c1 = CITIES[Math.floor(Math.random() * CITIES.length)];
