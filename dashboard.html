@@ -104,10 +104,10 @@
       <div>
         <div class="flex items-center space-x-2 mb-1">
           <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span class="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider">Dual 2D Flat / 3D Globe Projection Engine Active</span>
+          <span class="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider">Deterministic GIS Time-Travel Engine Active</span>
         </div>
         <h1 class="text-3xl font-extrabold text-white tracking-tight">Real-Time Threat Telemetry Map</h1>
-        <p class="text-slate-400 text-sm mt-1">Switch seamlessly between 2D Mercator flat map and 3D Rotating Globe with continuous live streaming.</p>
+        <p class="text-slate-400 text-sm mt-1">Switch seamlessly between 2D Mercator flat map and 3D Globe with instant, responsive time scrubbing.</p>
       </div>
 
       <!-- Quick Control Bar -->
@@ -203,7 +203,7 @@
           </div>
         </div>
 
-        <!-- Clean Incident Time Scrubber Bar (Reversible Animations) -->
+        <!-- Guaranteed Responsive Incident Time Scrubber Bar -->
         <div class="bg-slate-900/90 border border-slate-800/80 rounded-xl p-4 backdrop-blur-md space-y-2">
           <div class="flex items-center justify-between text-xs font-mono">
             <div class="flex items-center space-x-2">
@@ -217,7 +217,7 @@
 
           <input id="time-slider" type="range" min="0" max="60" value="60" class="w-full accent-emerald-500 bg-slate-800 rounded-lg cursor-pointer h-2">
           <div class="flex justify-between text-[10px] font-mono text-slate-500">
-            <span>-60 Seconds (Reversed Replay)</span>
+            <span>-60 Seconds (Audit History)</span>
             <span>-30 Seconds</span>
             <span>NOW (Live Stream 0s)</span>
           </div>
@@ -263,7 +263,7 @@
     <p>© 2026 Quantum Nimbus Tech. U.S. Patent Pending — Dynamic Vaporization Parameter & NFC Cryptographic Authentication.</p>
   </footer>
 
-  <!-- Reversible Scrubber & D3 Engine Script -->
+  <!-- Deterministic Time-Travel GIS Engine Script -->
   <script>
     const CITIES = [
       { city: 'Houston', country: 'US', lat: 29.7604, lng: -95.3698, activeChips: 48290, avgLatencyMs: 12 },
@@ -282,17 +282,17 @@
     let projectionMode = '2d';
     let filterMode = 'all';
     let searchQuery = '';
-    let isReversedScrubbing = false;
-    let reverseProgressFactor = 1.0;
     let rotationAngle = 0;
+    
+    // Time Scrubber State: 60 = Live (0s ago), < 60 = Audit Replay (-Xs ago)
+    let scrubberSecondsAgo = 0;
 
     const canvas = document.getElementById('gis-canvas');
     const ctx = canvas.getContext('2d');
     const tooltip = document.getElementById('node-tooltip');
 
-    const activeArcs = [];
-    const activePins = [];
-    const telemetryFeedStore = [];
+    // Central Event History Buffer (Retains full 60s memory)
+    const masterEventHistory = [];
 
     let totalScans = 1482978;
     let anomaliesBlocked = 4144;
@@ -328,22 +328,15 @@
       }
 
       const now = Date.now();
-
-      activePins.push({ id: `pin-${now}-${Math.random()}`, city: origin.city, lat: origin.lat, lng: origin.lng, isThreat, spawnTime: now });
-
-      if (destination) {
-        activeArcs.push({ id: `arc-${now}-${Math.random()}`, origin, destination, startTime: now, isThreat });
-        activePins.push({ id: `pin-dest-${now}-${Math.random()}`, city: destination.city, lat: destination.lat, lng: destination.lng, isThreat, spawnTime: now });
-      }
-
       const evt = {
         id: `evt-${now}-${Math.random()}`,
         timestamp: new Date().toLocaleTimeString(),
+        timestampMs: now,
         tagId, origin, destination, isThreat, vel, timeDeltaSeconds
       };
 
-      telemetryFeedStore.unshift(evt);
-      if (telemetryFeedStore.length > 50) telemetryFeedStore.pop();
+      masterEventHistory.unshift(evt);
+      if (masterEventHistory.length > 300) masterEventHistory.pop();
 
       renderTelemetryFeed();
     }
@@ -352,14 +345,18 @@
       const feed = document.getElementById('telemetry-feed');
       feed.innerHTML = '';
 
-      const filtered = telemetryFeedStore.filter(evt => {
+      // Determine active event slice based on Scrubber Position
+      const targetTimeMs = Date.now() - (scrubberSecondsAgo * 1000);
+      const activeSlice = masterEventHistory.filter(evt => evt.timestampMs <= targetTimeMs);
+
+      const filtered = activeSlice.filter(evt => {
         if (filterMode === 'threats' && !evt.isThreat) return false;
         if (filterMode === 'us' && !evt.origin.country.includes('US')) return false;
         if (searchQuery.trim() !== '' && !evt.tagId.toLowerCase().includes(searchQuery.toLowerCase()) && !evt.origin.city.toLowerCase().includes(searchQuery.toLowerCase())) return false;
         return true;
       });
 
-      filtered.forEach(evt => {
+      filtered.slice(0, 40).forEach(evt => {
         const card = document.createElement('div');
         card.className = `p-3 rounded-lg border text-xs space-y-1.5 transition-all ${
           !evt.isThreat ? 'bg-slate-950/80 border-slate-800 text-slate-300' : 'bg-red-950/40 border-red-500/50 text-red-200'
@@ -383,32 +380,30 @@
       });
     }
 
-    // Clean Reversible Scrubber Engine (Time Keeps Flowing)
+    // Time Scrubber Drag Listener
     const timeSlider = document.getElementById('time-slider');
     const scrubberStatus = document.getElementById('scrubber-status');
 
     timeSlider.addEventListener('input', (e) => {
       const val = parseInt(e.target.value); // 0 to 60
       if (val === 60) {
-        isReversedScrubbing = false;
-        reverseProgressFactor = 1.0;
+        scrubberSecondsAgo = 0;
         scrubberStatus.textContent = '🔴 LIVE STREAMING (0s)';
         scrubberStatus.className = 'text-emerald-400 font-semibold';
       } else {
-        isReversedScrubbing = true;
-        const secondsAgo = 60 - val;
-        reverseProgressFactor = val / 60; // 1.0 down to 0.0 (reverses animation progress)
-        scrubberStatus.textContent = `⏪ REVERSED REPLAY (-${secondsAgo}s)`;
+        scrubberSecondsAgo = 60 - val;
+        scrubberStatus.textContent = `⏪ AUDIT SCRUBBING (-${scrubberSecondsAgo}s AGO)`;
         scrubberStatus.className = 'text-yellow-400 font-bold';
       }
+      renderTelemetryFeed();
     });
 
     document.getElementById('btn-scrub-live').addEventListener('click', () => {
-      isReversedScrubbing = false;
-      reverseProgressFactor = 1.0;
+      scrubberSecondsAgo = 0;
       timeSlider.value = 60;
       scrubberStatus.textContent = '🔴 LIVE STREAMING (0s)';
       scrubberStatus.className = 'text-emerald-400 font-semibold';
+      renderTelemetryFeed();
     });
 
     // Hover Tooltip
@@ -445,7 +440,7 @@
 
     canvas.addEventListener('mouseleave', () => tooltip.classList.add('hidden'));
 
-    // 60 FPS Canvas Render Loop (Reversible Animation Direction)
+    // 60 FPS Canvas Render Loop (Evaluates exact historical time window)
     function renderLoop() {
       const width = canvas.width = canvas.parentElement.clientWidth || 800;
       const height = canvas.height = canvas.parentElement.clientHeight || 520;
@@ -482,75 +477,80 @@
         ctx.stroke();
       }
 
-      const now = Date.now();
+      // Calculate Target Viewport Timestamp MS
+      const targetTimeMs = Date.now() - (scrubberSecondsAgo * 1000);
 
-      // Render Pins
-      for (let i = activePins.length - 1; i >= 0; i--) {
-        const pin = activePins[i];
-        const age = now - pin.spawnTime;
-        if (age > 5000) { activePins.splice(i, 1); continue; }
+      // Find events active within a 12-second window relative to targetTimeMs
+      const visibleEvents = masterEventHistory.filter(
+        evt => evt.timestampMs <= targetTimeMs && targetTimeMs - evt.timestampMs < 12000
+      );
 
-        const pt = projection([pin.lng, pin.lat]);
-        if (!pt) continue;
-        const [x, y] = pt;
+      // Render Map Pins & Radar Ripples for Target Time Window
+      visibleEvents.forEach(evt => {
+        const age = targetTimeMs - evt.timestampMs;
+        const fade = Math.max(0.1, 1 - age / 12000);
+        const radius = (age / 12000) * 28;
 
-        // Apply Reversible Animation Direction
-        const rawFade = 1 - age / 5000;
-        const fade = isReversedScrubbing ? (1 - rawFade) : rawFade;
-        const radius = isReversedScrubbing ? (1 - age / 5000) * 28 : (age / 5000) * 28;
+        const pt1 = projection([evt.origin.lng, evt.origin.lat]);
+        if (pt1) {
+          const [x, y] = pt1;
+          ctx.beginPath(); ctx.arc(x, y, Math.max(2, radius), 0, Math.PI * 2);
+          ctx.strokeStyle = evt.isThreat ? `rgba(239, 68, 68, ${fade * 0.9})` : `rgba(16, 185, 129, ${fade * 0.9})`;
+          ctx.lineWidth = 1.5; ctx.stroke();
 
-        ctx.beginPath(); ctx.arc(x, y, Math.max(2, radius), 0, Math.PI * 2);
-        ctx.strokeStyle = pin.isThreat ? `rgba(239, 68, 68, ${fade * 0.9})` : `rgba(16, 185, 129, ${fade * 0.9})`;
-        ctx.lineWidth = 1.5; ctx.stroke();
+          ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2);
+          ctx.fillStyle = evt.isThreat ? '#ef4444' : '#10b981'; ctx.fill();
+          ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1.2; ctx.stroke();
 
-        ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2);
-        ctx.fillStyle = pin.isThreat ? '#ef4444' : '#10b981'; ctx.fill();
-        ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1.2; ctx.stroke();
+          ctx.fillStyle = `rgba(255, 255, 255, ${fade})`;
+          ctx.font = 'bold 10px JetBrains Mono';
+          ctx.fillText(evt.origin.city, x + 8, y + 3);
+        }
 
-        ctx.fillStyle = `rgba(255, 255, 255, ${fade})`;
-        ctx.font = 'bold 10px JetBrains Mono';
-        ctx.fillText(pin.city, x + 8, y + 3);
-      }
+        if (evt.destination) {
+          const pt2 = projection([evt.destination.lng, evt.destination.lat]);
+          if (pt2) {
+            const [x, y] = pt2;
+            ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2);
+            ctx.fillStyle = evt.isThreat ? '#ef4444' : '#10b981'; ctx.fill();
+            ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1.2; ctx.stroke();
 
-      // Render Arcs (Reversible Laser Travel Direction)
-      for (let i = activeArcs.length - 1; i >= 0; i--) {
-        const arc = activeArcs[i];
-        const rawProgress = Math.min((now - arc.startTime) / 2400, 1.0);
-        if (rawProgress >= 1.0) { activeArcs.splice(i, 1); continue; }
+            ctx.fillStyle = `rgba(255, 255, 255, ${fade})`;
+            ctx.font = 'bold 10px JetBrains Mono';
+            ctx.fillText(evt.destination.city, x + 8, y + 3);
+          }
 
-        // Reverse trajectory direction when scrubbing back
-        const progress = isReversedScrubbing ? (1 - rawProgress) * reverseProgressFactor : rawProgress;
+          // Render Quadratic Laser Arcs
+          if (pt1 && pt2) {
+            const progress = Math.min(age / 2400, 1.0);
+            const midX = (pt1[0] + pt2[0]) / 2;
+            const midY = Math.min(pt1[1], pt2[1]) - Math.abs(pt1[0] - pt2[0]) * 0.28;
 
-        const p1 = projection([arc.origin.lng, arc.origin.lat]);
-        const p2 = projection([arc.destination.lng, arc.destination.lat]);
-        if (!p1 || !p2) continue;
+            ctx.beginPath(); ctx.moveTo(pt1[0], pt1[1]);
+            ctx.quadraticCurveTo(midX, midY, pt2[0], pt2[1]);
+            ctx.strokeStyle = evt.isThreat ? `rgba(239, 68, 68, ${0.95 * (1 - progress)})` : `rgba(16, 185, 129, ${0.85 * (1 - progress)})`;
+            ctx.lineWidth = evt.isThreat ? 3.5 : 2;
+            ctx.setLineDash(evt.isThreat ? [6, 4] : []);
+            ctx.stroke(); ctx.setLineDash([]);
 
-        const midX = (p1[0] + p2[0]) / 2;
-        const midY = Math.min(p1[1], p2[1]) - Math.abs(p1[0] - p2[0]) * 0.28;
+            const t = Math.max(0.01, Math.min(progress, 0.99));
+            const currX = (1 - t) * (1 - t) * pt1[0] + 2 * (1 - t) * t * midX + t * t * pt2[0];
+            const currY = (1 - t) * (1 - t) * pt1[1] + 2 * (1 - t) * t * midY + t * t * pt2[1];
 
-        ctx.beginPath(); ctx.moveTo(p1[0], p1[1]);
-        ctx.quadraticCurveTo(midX, midY, p2[0], p2[1]);
-        ctx.strokeStyle = arc.isThreat ? `rgba(239, 68, 68, ${0.95 * (1 - progress)})` : `rgba(16, 185, 129, ${0.85 * (1 - progress)})`;
-        ctx.lineWidth = arc.isThreat ? 3.5 : 2;
-        ctx.setLineDash(arc.isThreat ? [6, 4] : []);
-        ctx.stroke(); ctx.setLineDash([]);
-
-        const t = Math.max(0.01, Math.min(progress, 0.99));
-        const currX = (1 - t) * (1 - t) * p1[0] + 2 * (1 - t) * t * midX + t * t * p2[0];
-        const currY = (1 - t) * (1 - t) * p1[1] + 2 * (1 - t) * t * midY + t * t * p2[1];
-
-        ctx.beginPath(); ctx.arc(currX, currY, arc.isThreat ? 6 : 4, 0, Math.PI * 2);
-        ctx.fillStyle = arc.isThreat ? '#ef4444' : '#10b981';
-        ctx.shadowColor = arc.isThreat ? '#ef4444' : '#10b981';
-        ctx.shadowBlur = 14; ctx.fill(); ctx.shadowBlur = 0;
-      }
+            ctx.beginPath(); ctx.arc(currX, currY, evt.isThreat ? 6 : 4, 0, Math.PI * 2);
+            ctx.fillStyle = evt.isThreat ? '#ef4444' : '#10b981';
+            ctx.shadowColor = evt.isThreat ? '#ef4444' : '#10b981';
+            ctx.shadowBlur = 14; ctx.fill(); ctx.shadowBlur = 0;
+          }
+        }
+      });
 
       requestAnimationFrame(renderLoop);
     }
 
     requestAnimationFrame(renderLoop);
 
-    // Navigation Controls
+    // Controls
     document.getElementById('btn-proj-2d').addEventListener('click', () => {
       projectionMode = '2d';
       document.getElementById('map-mode-indicator').textContent = '2D EQUIRECTANGULAR GIS';
@@ -600,7 +600,6 @@
       setTimeout(() => { processPayload(CITIES[0], CITIES[5], 0.45, tagId); }, 1200);
     });
 
-    // CONTINUOUS LIVE TELEMETRY LOOP (NEVER PAUSES)
     setInterval(() => {
       const isReplay = Math.random() < 0.35;
       const tagId = `NTAG-424-${Math.floor(Math.random() * 8999 + 1000)}`;
