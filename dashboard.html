@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Public Threat Map & Enterprise Telemetry Dashboard | Quantum Nimbus Tech</title>
+  <meta name="description" content="Real-time global telemetry dashboard visualizing NFC cryptographic authentication, impossible velocity threat detection, and replay attack prevention.">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            emerald: {
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Leaflet CSS & JS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+    #threat-map { height: 520px; width: 100%; border-radius: 0.75rem; z-index: 1; }
+    .leaflet-popup-content-wrapper { background: #0f172a; color: #f8fafc; border: 1px solid #334155; }
+    .leaflet-popup-tip { background: #0f172a; }
+  </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300 min-h-screen">
+
+  <!-- Header Navigation -->
+  <header class="sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-6 py-4">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <a href="/" class="flex items-center space-x-2">
+          <div class="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center text-white font-bold">Q</div>
+          <span class="font-bold text-lg text-slate-900 dark:text-white tracking-tight">Quantum Nimbus <span class="text-xs font-semibold px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800">Tech</span></span>
+        </a>
+      </div>
+
+      <nav class="hidden md:flex items-center space-x-6 text-sm font-medium text-slate-600 dark:text-slate-300">
+        <a href="/" class="hover:text-emerald-600 transition-colors">Overview</a>
+        <a href="/about.html" class="hover:text-emerald-600 transition-colors">Architecture</a>
+        <a href="/safety.html" class="hover:text-emerald-600 transition-colors">Compliance Data</a>
+        <a href="/dashboard.html" class="text-emerald-600 font-semibold">Live Threat Map</a>
+      </nav>
+
+      <div class="flex items-center space-x-4">
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" class="p-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors text-xs font-semibold flex items-center space-x-1">
+          <span id="theme-toggle-icon">🌙</span>
+          <span id="theme-toggle-text">Dark Mode</span>
+        </button>
+
+        <a href="/contact.html" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold px-4 py-2 rounded-lg shadow-sm transition-all">
+          Request Enterprise Assessment
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+    
+    <!-- Title Banner -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-6">
+      <div>
+        <div class="flex items-center space-x-2 mb-2">
+          <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span class="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Live Security Network Active</span>
+        </div>
+        <h1 class="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Global Threat Telemetry Dashboard</h1>
+        <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">Real-time visualization of hardware NFC authentication, impossible velocity detection, and replay attack prevention.</p>
+      </div>
+
+      <!-- Quick Control Bar -->
+      <div class="flex items-center space-x-2">
+        <button id="btn-attack-replay" class="bg-red-600 hover:bg-red-500 text-white text-xs font-semibold px-3 py-2 rounded-lg shadow transition-all flex items-center space-x-1.5 cursor-pointer">
+          <span>⚡ Trigger Houston→London Attack</span>
+        </button>
+        <button id="btn-random-ping" class="bg-slate-800 dark:bg-slate-200 hover:bg-slate-700 dark:hover:bg-white text-white dark:text-slate-900 text-xs font-semibold px-3 py-2 rounded-lg transition-all cursor-pointer">
+          <span>🎲 Generate Random Ping</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Metric KPI Cards Grid -->
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 shadow-sm">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total Scans (24h)</span>
+          <span class="p-1.5 rounded-lg bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 text-xs">📊</span>
+        </div>
+        <div class="mt-3 flex items-baseline justify-between">
+          <span id="kpi-total-scans" class="text-2xl font-bold font-mono text-slate-900 dark:text-white">1,482,920</span>
+          <span class="text-xs font-semibold text-emerald-600">+12.4%</span>
+        </div>
+      </div>
+
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 shadow-sm">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Active NFC DNA Chips</span>
+          <span class="p-1.5 rounded-lg bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-400 text-xs">🔐</span>
+        </div>
+        <div class="mt-3 flex items-baseline justify-between">
+          <span id="kpi-active-chips" class="text-2xl font-bold font-mono text-slate-900 dark:text-white">350,000</span>
+          <span class="text-xs font-semibold text-blue-600">NTAG 424 DNA</span>
+        </div>
+      </div>
+
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 shadow-sm">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Anomalies Blocked</span>
+          <span class="p-1.5 rounded-lg bg-red-100 dark:bg-red-950 text-red-600 dark:text-red-400 text-xs">🚨</span>
+        </div>
+        <div class="mt-3 flex items-baseline justify-between">
+          <span id="kpi-anomalies-blocked" class="text-2xl font-bold font-mono text-red-600 dark:text-red-400">4,129</span>
+          <span class="text-xs font-semibold text-red-600 font-mono">100% Mitigated</span>
+        </div>
+      </div>
+
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 shadow-sm">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Network Protection</span>
+          <span class="p-1.5 rounded-lg bg-purple-100 dark:bg-purple-950 text-purple-600 dark:text-purple-400 text-xs">🛡️</span>
+        </div>
+        <div class="mt-3 flex items-baseline justify-between">
+          <span class="text-2xl font-bold font-mono text-slate-900 dark:text-white">99.98%</span>
+          <span class="text-xs font-semibold text-purple-600">Haversine Active</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Content Grid: Threat Map & Live Event Feed -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      
+      <!-- Leaflet OpenStreetMap Container (2 Cols) -->
+      <section class="lg:col-span-2 space-y-4">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 shadow-sm">
+          <div class="flex items-center justify-between mb-3 px-1">
+            <h2 class="text-base font-bold text-slate-900 dark:text-white flex items-center space-x-2">
+              <span>🗺️ Live OpenStreetMap Security Nodes</span>
+            </h2>
+            <div class="flex items-center space-x-2 text-xs font-mono">
+              <span class="flex items-center space-x-1"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span><span>Verified</span></span>
+              <span class="flex items-center space-x-1"><span class="w-2.5 h-2.5 rounded-full bg-red-500 inline-block"></span><span>Attack Blocked</span></span>
+            </div>
+          </div>
+          
+          <!-- Leaflet Map Container -->
+          <div id="threat-map"></div>
+        </div>
+
+        <!-- Explanation Card: Why This Dashboard Is Useful -->
+        <div class="bg-emerald-950/20 border border-emerald-500/30 rounded-xl p-5 text-sm space-y-2">
+          <h3 class="font-bold text-emerald-700 dark:text-emerald-400 flex items-center space-x-2">
+            <span>💡 How Impossible Velocity Detection Protects Brand Integrity</span>
+          </h3>
+          <p class="text-slate-700 dark:text-slate-300 text-xs leading-relaxed">
+            Cryptographic NFC tags generate a unique single-use SUN (Secure Unique Nonce) code on every tap. If a tag is scanned in <strong>Houston</strong> and its cryptographic payload is replayed <strong>5 seconds later in London</strong>, Quantum Nimbus calculates the physical distance (7,750 km) and velocity (>5,000,000 km/h). Because this exceeds physical travel limits, the system instantly revokes the authentication and flags the counterfeit attempt worldwide.
+          </p>
+        </div>
+      </section>
+
+      <!-- Live Event Stream Feed (1 Col) -->
+      <section class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 shadow-sm space-y-4 flex flex-col h-[650px]">
+        <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+          <div>
+            <h2 class="text-base font-bold text-slate-900 dark:text-white">Live Telemetry Stream</h2>
+            <p class="text-xs text-slate-500">Real-time authentication log</p>
+          </div>
+          <span id="stream-status-badge" class="px-2 py-0.5 text-xs font-mono font-bold rounded bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800 animate-pulse">
+            STREAM ACTIVE
+          </span>
+        </div>
+
+        <!-- Scrollable Feed -->
+        <div id="telemetry-feed" class="flex-1 overflow-y-auto space-y-3 pr-1">
+          <!-- Dynamically populated events -->
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-200 dark:border-slate-800 mt-16 py-8 text-center text-xs text-slate-500">
+    <p>© 2026 Quantum Nimbus Tech. U.S. Patent Pending — Dynamic Vaporization Parameter & NFC Cryptographic Authentication.</p>
+  </footer>
+
+  <!-- Leaflet & Simulation Script -->
+  <script>
+    // Theme Switcher Logic
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const themeToggleIcon = document.getElementById('theme-toggle-icon');
+    const themeToggleText = document.getElementById('theme-toggle-text');
+    let isDarkMode = true;
+
+    function applyTheme(dark) {
+      isDarkMode = dark;
+      if (dark) {
+        document.documentElement.classList.add('dark');
+        themeToggleIcon.textContent = '☀️';
+        themeToggleText.textContent = 'Light Mode';
+        if (map && darkTileLayer && lightTileLayer) {
+          map.removeLayer(lightTileLayer);
+          darkTileLayer.addTo(map);
+        }
+      } else {
+        document.documentElement.classList.remove('dark');
+        themeToggleIcon.textContent = '🌙';
+        themeToggleText.textContent = 'Dark Mode';
+        if (map && darkTileLayer && lightTileLayer) {
+          map.removeLayer(darkTileLayer);
+          lightTileLayer.addTo(map);
+        }
+      }
+    }
+
+    themeToggleBtn.addEventListener('click', () => {
+      applyTheme(!isDarkMode);
+    });
+
+    // Initialize Leaflet OpenStreetMap
+    let map, darkTileLayer, lightTileLayer;
+    const activeMarkers = [];
+    const activePolyline = [];
+
+    const GLOBAL_NODES = [
+      { name: 'Houston HQ', lat: 29.7604, lng: -95.3698, country: 'USA' },
+      { name: 'London Node', lat: 51.5074, lng: -0.1278, country: 'UK' },
+      { name: 'Berlin Lab', lat: 52.5200, lng: 13.4050, country: 'Germany' },
+      { name: 'Tokyo Hub', lat: 35.6762, lng: 139.6503, country: 'Japan' },
+      { name: 'Sydney Vault', lat: -33.8688, lng: 151.2093, country: 'Australia' },
+      { name: 'São Paulo Node', lat: -23.5505, lng: -46.6333, country: 'Brazil' },
+      { name: 'San Francisco Gateway', lat: 37.7749, lng: -122.4194, country: 'USA' },
+      { name: 'Singapore Station', lat: 1.3521, lng: 103.8198, country: 'Singapore' }
+    ];
+
+    function initMap() {
+      // Create Map centered globally
+      map = L.map('threat-map', {
+        center: [20.0, 0.0],
+        zoom: 2,
+        minZoom: 2,
+        maxZoom: 10
+      });
+
+      // CartoDB Dark Matter tiles
+      darkTileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 19
+      });
+
+      // CartoDB Positron Light tiles
+      lightTileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; OpenStreetMap &copy; CARTO',
+        subdomains: 'abcd',
+        maxZoom: 19
+      });
+
+      // Add dark tile by default
+      darkTileLayer.addTo(map);
+
+      // Add static node markers
+      GLOBAL_NODES.forEach(node => {
+        const marker = L.circleMarker([node.lat, node.lng], {
+          radius: 6,
+          fillColor: '#10b981',
+          color: '#ffffff',
+          weight: 1.5,
+          opacity: 0.9,
+          fillOpacity: 0.8
+        }).addTo(map);
+
+        marker.bindPopup(`<strong>${node.name}</strong><br/>Status: Online<br/>NTAG 424 DNA Gateway`);
+      });
+    }
+
+    // Telemetry Event Generator
+    let totalScans = 1482920;
+    let anomaliesBlocked = 4129;
+
+    function addTelemetryEvent(event) {
+      totalScans++;
+      document.getElementById('kpi-total-scans').textContent = totalScans.toLocaleString();
+
+      if (event.status !== 'VERIFIED') {
+        anomaliesBlocked++;
+        document.getElementById('kpi-anomalies-blocked').textContent = anomaliesBlocked.toLocaleString();
+      }
+
+      // Draw connection polyline on map
+      const color = event.status === 'VERIFIED' ? '#10b981' : '#ef4444';
+      const polyline = L.polyline([
+        [event.origin.lat, event.origin.lng],
+        [event.destination.lat, event.destination.lng]
+      ], {
+        color: color,
+        weight: event.status === 'VERIFIED' ? 2 : 3,
+        dashArray: event.status === 'VERIFIED' ? '4, 4' : '6, 6',
+        opacity: 0.8
+      }).addTo(map);
+
+      // Remove line after 6 seconds to keep map clean
+      setTimeout(() => { map.removeLayer(polyline); }, 6000);
+
+      // Add feed item
+      const feed = document.getElementById('telemetry-feed');
+      const card = document.createElement('div');
+      card.className = `p-3 rounded-lg border text-xs space-y-1.5 transition-all ${
+        event.status === 'VERIFIED' 
+          ? 'bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800' 
+          : 'bg-red-950/20 border-red-500/40 text-red-200'
+      }`;
+
+      card.innerHTML = `
+        <div class="flex items-center justify-between font-mono">
+          <span class="text-slate-500">${event.timestamp}</span>
+          <span class="px-1.5 py-0.5 text-[10px] font-bold rounded ${
+            event.status === 'VERIFIED' 
+              ? 'bg-emerald-100 dark:bg-emerald-950 text-emerald-600 border border-emerald-400/30' 
+              : 'bg-red-900/60 text-red-300 border border-red-600'
+          }">${event.status}</span>
+        </div>
+        <div class="font-medium text-slate-800 dark:text-slate-200">
+          ${event.origin.name} ➔ ${event.destination.name}
+        </div>
+        <div class="flex items-center justify-between text-[11px] font-mono text-slate-500">
+          <span>Vel: <strong class="${event.velocityKmh > 1000 ? 'text-red-500' : 'text-emerald-500'}">${event.velocityKmh.toLocaleString()} km/h</strong></span>
+          <span>Risk: <strong>${event.riskScore}</strong></span>
+        </div>
+      `;
+
+      feed.insertBefore(card, feed.firstChild);
+      if (feed.children.length > 25) {
+        feed.removeChild(feed.lastChild);
+      }
+    }
+
+    // Trigger Houston-to-London Attack Payload
+    document.getElementById('btn-attack-replay').addEventListener('click', () => {
+      const houston = GLOBAL_NODES[0];
+      const london = GLOBAL_NODES[1];
+      const distance = 7750;
+      const timeDelta = 5.2;
+      const velocity = Math.round((distance / timeDelta) * 3600);
+
+      addTelemetryEvent({
+        timestamp: new Date().toLocaleTimeString(),
+        origin: houston,
+        destination: london,
+        threatType: 'IMPOSSIBLE_VELOCITY_REPLAY',
+        velocityKmh: velocity,
+        status: 'FLAGGED',
+        riskScore: 98.4,
+        chipId: 'NTAG-424-88A9-22F0'
+      });
+
+      // Zoom map briefly to highlight attack vector
+      map.flyToBounds([[houston.lat, houston.lng], [london.lat, london.lng]], { padding: [50, 50], duration: 1.5 });
+    });
+
+    // Random Ping Generator
+    document.getElementById('btn-random-ping').addEventListener('click', () => {
+      const isAttack = Math.random() < 0.4;
+      const oIdx = Math.floor(Math.random() * GLOBAL_NODES.length);
+      let dIdx = Math.floor(Math.random() * GLOBAL_NODES.length);
+      while (dIdx === oIdx) dIdx = Math.floor(Math.random() * GLOBAL_NODES.length);
+
+      const origin = GLOBAL_NODES[oIdx];
+      const dest = GLOBAL_NODES[dIdx];
+
+      addTelemetryEvent({
+        timestamp: new Date().toLocaleTimeString(),
+        origin: origin,
+        destination: dest,
+        threatType: isAttack ? 'IMPOSSIBLE_VELOCITY_REPLAY' : 'VERIFIED_AUTH',
+        velocityKmh: isAttack ? Math.round(Math.random() * 500000 + 100000) : Math.round(Math.random() * 80 + 10),
+        status: isAttack ? 'FLAGGED' : 'VERIFIED',
+        riskScore: isAttack ? 94.2 : 2.1
+      });
+    });
+
+    // On Load
+    window.addEventListener('DOMContentLoaded', () => {
+      initMap();
+      applyTheme(true); // Default to Dark Mode for sleek security vibe
+
+      // Auto-generate realistic background telemetry every 4 seconds
+      setInterval(() => {
+        const oIdx = Math.floor(Math.random() * GLOBAL_NODES.length);
+        let dIdx = Math.floor(Math.random() * GLOBAL_NODES.length);
+        while (dIdx === oIdx) dIdx = Math.floor(Math.random() * GLOBAL_NODES.length);
+
+        const isAttack = Math.random() < 0.25;
+        addTelemetryEvent({
+          timestamp: new Date().toLocaleTimeString(),
+          origin: GLOBAL_NODES[oIdx],
+          destination: GLOBAL_NODES[dIdx],
+          threatType: isAttack ? 'NFC_CLONE_ATTEMPT' : 'VERIFIED_AUTH',
+          velocityKmh: isAttack ? Math.round(Math.random() * 400000 + 50000) : Math.round(Math.random() * 60 + 5),
+          status: isAttack ? 'FLAGGED' : 'VERIFIED',
+          riskScore: isAttack ? 88.5 : 1.4
+        });
+      }, 4000);
+    });
+  </script>
+</body>
+</html>
