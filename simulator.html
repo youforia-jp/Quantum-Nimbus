@@ -1540,6 +1540,16 @@
                 }
             }
 
+            const totalRttMetric = document.getElementById('ai-total-rtt-metric');
+            if (totalRttMetric) {
+                if (mode === 'dual-ip' || mode === 'replay') {
+                    const sec = (latency / 1000).toFixed(1);
+                    totalRttMetric.textContent = `${sec}s Total`;
+                } else {
+                    totalRttMetric.textContent = `${latency}ms RTT`;
+                }
+            }        
+
             // Threat Score Metric
             const threatMetric = document.getElementById('ai-threat-score-metric');
             if (threatMetric) {
@@ -1766,6 +1776,7 @@
                     await new Promise(r => setTimeout(r, 1500));
 
                     // Step 2: Tokyo, Japan tap with same Tag ID 1.5s later from IP 133.242.18.2
+                    const step2StartTime = performance.now();
                     const t2 = Math.floor(Date.now() / 1000);
                     const p2 = {
                         tag_id: tagId,
@@ -1774,9 +1785,58 @@
                         latitude: 35.6762,
                         longitude: 139.6503,
                         ip_address: '133.242.18.2',
-                        timestamp: t2
+                        timestamp: t2,
+                        mode: 'dual-ip'
                     };
                     result = await sendVerifyRequest(p2);
+                    const netLatency = Math.round(performance.now() - step2StartTime);
+                    const totalSequenceMs = Math.round(performance.now() - startTime);
+                    const totalSequenceSec = (totalSequenceMs / 1000).toFixed(1);
+                    const data = result.data;
+                    const httpStatus = result.status;
+
+                    const elapsed = performance.now() - startTime;
+                    const delay = Math.max(0, 400 - elapsed);
+
+                    setTimeout(() => {
+                        stopProgressIndicators();
+                        if (radarOverlay) radarOverlay.classList.add('hidden');
+                        if (jsonBox) jsonBox.textContent = JSON.stringify(data, null, 2);
+
+                        const displayLatency = (mode === 'dual-ip' || mode === 'replay') ? totalSequenceMs : netLatency;
+                        updateAiTelemetryHud(data, displayLatency, mode);
+
+                        const aiMs = (data && data.inference_time_ms !== undefined) ? data.inference_time_ms : (mode === 'dual-ip' ? 1.4 : 0.8);
+                        if (mode === 'dual-ip' || data.status === 'FLAGGED' || data.velocity_flag === 'IMPOSSIBLE_TRANSIT' || (data.status === 'REVOKED' && data.threat_score < 1.0)) {
+                            // 🟡 Scenario 1: Dual-IP / Telemetry Anomaly
+                            if (window.synth && typeof window.synth.playWarningAlarm === 'function') window.synth.playWarningAlarm();
+                            if (statusPill) {
+                                statusPill.className = 'text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800';
+                                statusPill.textContent = `${httpStatus} FLAGGED • ${data.scan_velocity || 0} km/h • ${totalSequenceSec}s Total Scan (${aiMs}ms AI)`;
+                            }
+                            renderDualIpAnomalyCard(tagId, tapDisplayCount);
+
+                        } else if (mode === 'counterfeit' || data.status === 'REVOKED' || data.status === 'COUNTERFEIT' || data.status === 'INVALID_MAC') {
+                            // 🔴 Scenario 2: Counterfeit Tag
+                            if (window.synth && typeof window.synth.playWarningAlarm === 'function') window.synth.playWarningAlarm();
+                            if (statusPill) {
+                                statusPill.className = 'text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-rose-950 text-rose-400 border border-rose-800';
+                                statusPill.textContent = `${httpStatus} LOCKED • ${netLatency}ms RTT`;
+                            }
+                            renderCounterfeitCard(tagId, tapDisplayCount);
+
+                        } else {
+                            // 🟢 Scenario 3: Authentic Tap
+                            if (window.synth && typeof window.synth.playSupplementSpark === 'function') window.synth.playSupplementSpark();
+                            if (statusPill) {
+                                statusPill.className = 'text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800';
+                                statusPill.textContent = `${httpStatus} OK • VERIFIED • ${netLatency}ms RTT (${aiMs}ms AI)`;
+                            }
+                            renderAuthenticCard({ brand: 'Secret Nature', product: 'Delta 8 Organic Live Resin Cartridge', strain: 'Delta 8 Organic Live Resin', batch: 'SA-260115-75486', coa: 'https://cdn.shopify.com/s/files/1/0046/1042/4950/files/SA-260115-75486_Secret_Nature_Delta_D8.pdf?v=1769022355' }, tagId, tapDisplayCount);
+                            if (typeof slotCartridge === 'function') slotCartridge('rosin');
+                        }
+                    }, delay);
+                    return;
 
                 } else if (mode === 'counterfeit') {
                     const pBad = {
@@ -1792,9 +1852,6 @@
                 }
 
                 let netLatency = Math.round(performance.now() - startTime);
-                if (mode === 'dual-ip' || mode === 'replay') {
-                    netLatency = Math.max(40, netLatency - 1500);
-                }
                 const data = result.data;
                 const httpStatus = result.status;
 
