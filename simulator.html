@@ -67,8 +67,8 @@
             if (!btnNfc || !btnPen || !contentNfc || !contentPen) return;
 
             if (tabId === 'nfc') {
-                btnNfc.className = 'bg-white text-slate-900 font-bold shadow-sm rounded-xl px-4 py-2 text-xs flex items-center justify-center gap-2 border border-slate-200 flex-1 cursor-pointer transition-all';
-                btnPen.className = 'text-slate-500 hover:text-slate-800 font-semibold px-4 py-2 text-xs transition-colors flex-1 flex items-center justify-center gap-2 cursor-pointer';
+                btnNfc.className = 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-bold shadow-sm rounded-xl px-4 py-2 text-xs flex items-center justify-center gap-2 border border-slate-200 dark:border-slate-700 flex-1 cursor-pointer transition-all';
+                btnPen.className = 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white font-semibold px-4 py-2 text-xs transition-colors flex-1 flex items-center justify-center gap-2 cursor-pointer';
                 contentNfc.style.display = 'flex';
                 contentNfc.classList.remove('hidden');
                 contentNfc.classList.add('active');
@@ -76,8 +76,8 @@
                 contentPen.classList.add('hidden');
                 contentPen.classList.remove('active');
             } else if (tabId === 'pen') {
-                btnPen.className = 'bg-white text-slate-900 font-bold shadow-sm rounded-xl px-4 py-2 text-xs flex items-center justify-center gap-2 border border-slate-200 flex-1 cursor-pointer transition-all';
-                btnNfc.className = 'text-slate-500 hover:text-slate-800 font-semibold px-4 py-2 text-xs transition-colors flex-1 flex items-center justify-center gap-2 cursor-pointer';
+                btnPen.className = 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-bold shadow-sm rounded-xl px-4 py-2 text-xs flex items-center justify-center gap-2 border border-slate-200 dark:border-slate-700 flex-1 cursor-pointer transition-all';
+                btnNfc.className = 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white font-semibold px-4 py-2 text-xs transition-colors flex-1 flex items-center justify-center gap-2 cursor-pointer';
                 contentPen.style.display = 'block';
                 contentPen.classList.remove('hidden');
                 contentPen.classList.add('active');
@@ -249,8 +249,8 @@
                             ⚡
                         </div>
                         <div>
-                            <h2 class="font-heading font-bold text-lg text-nimbusHeading tracking-tight">Nimbus Labs Sandbox • Mobile Cryptographic NFC Verification &amp; State Audit Telemetry</h2>
-                            <p class="text-xs text-nimbusText">Test mobile cryptographic NFC tag verification, SUN/SDM counter validation, and real-time state compliance logging.</p>
+                            <h2 class="font-heading font-bold text-lg text-slate-900 dark:text-white tracking-tight">Nimbus Labs Sandbox • Mobile Cryptographic NFC Verification &amp; State Audit Telemetry</h2>
+                            <p class="text-xs text-slate-600 dark:text-slate-400">Test mobile cryptographic NFC tag verification, SUN/SDM counter validation, and real-time state compliance logging.</p>
                         </div>
                     </div>
                     <div class="flex items-center gap-3">
@@ -258,16 +258,16 @@
                             <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                             <span class="text-xs font-semibold text-emerald-400">Sandbox Active</span>
                         </div>
-                        <span class="hidden sm:inline text-xs font-mono text-slate-600">v3.7-prod</span>
+                        <span class="hidden sm:inline text-xs font-mono text-slate-600 dark:text-slate-400">v3.7-prod</span>
                     </div>
                 </div>
 
                 <!-- 2. SEGMENTED TOP NAVIGATION TABS -->
-                <div class="flex border-b border-slate-200 bg-slate-100/60 p-1.5 rounded-t-2xl gap-2">
-                    <button id="tab-btn-nfc" onclick="switchTab('nfc')" class="bg-white text-slate-900 font-bold shadow-sm rounded-xl px-4 py-2 text-xs flex items-center justify-center gap-2 border border-slate-200 flex-1 cursor-pointer transition-all">
+                <div class="flex border-b border-slate-200 dark:border-slate-800 bg-slate-100/60 dark:bg-slate-900/80 p-1.5 rounded-t-2xl gap-2">
+                    <button id="tab-btn-nfc" onclick="switchTab('nfc')" class="bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-bold shadow-sm rounded-xl px-4 py-2 text-xs flex items-center justify-center gap-2 border border-slate-200 dark:border-slate-700 flex-1 cursor-pointer transition-all">
                         <span>🏷️ NFC Security Engine</span>
                     </button>
-                    <button id="tab-btn-pen" onclick="switchTab('pen')" class="text-slate-500 hover:text-slate-800 font-semibold px-4 py-2 text-xs transition-colors flex-1 flex items-center justify-center gap-2 cursor-pointer">
+                    <button id="tab-btn-pen" onclick="switchTab('pen')" class="text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white font-semibold px-4 py-2 text-xs transition-colors flex-1 flex items-center justify-center gap-2 cursor-pointer">
                         <span>⚡ Smart Pen Telemetry</span>
                     </button>
                 </div>
@@ -281,34 +281,34 @@
                     <div id="tab-content-nfc" class="tab-pane active max-w-5xl mx-auto flex-col items-center justify-start space-y-6">
                         <div class="w-full bg-slate-50/60 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 rounded-xl p-5 sm:p-6">
                             <!-- Section Header -->
-                            <div class="flex items-center justify-between border-b border-slate-200 pb-3 mb-4 w-full">
+                            <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3 mb-4 w-full">
                                 <div class="flex items-center gap-2">
-                                    <span class="text-xs font-mono text-accentBlue font-bold uppercase tracking-wider">Tab 1</span>
-                                    <span class="text-slate-600">•</span>
-                                    <h3 class="text-sm font-bold text-nimbusHeading uppercase tracking-wider">NFC Hardware Tap &amp; Live Verification</h3>
+                                    <span class="text-xs font-mono text-accentBlue dark:text-sky-400 font-bold uppercase tracking-wider">Tab 1</span>
+                                    <span class="text-slate-600 dark:text-slate-500">•</span>
+                                    <h3 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">NFC Hardware Tap &amp; Live Verification</h3>
                                 </div>
-                                <div class="text-[11px] font-mono text-slate-600">
-                                    Endpoint: <code class="text-accentBlue font-bold">/api/v1/verify</code>
+                                <div class="text-[11px] font-mono text-slate-600 dark:text-slate-400">
+                                    Endpoint: <code class="text-accentBlue dark:text-sky-400 font-bold">/api/v1/verify</code>
                                 </div>
                             </div>
 
                             <!-- REAL SQL DATABASE EXPLANATION BADGE BANNER -->
                             <div class="mb-6 bg-gradient-to-r from-slate-50 via-white to-blue-50/40 dark:from-slate-900 dark:via-slate-900 dark:to-slate-950 border border-blue-200 dark:border-slate-800 rounded-xl p-3.5 flex flex-wrap items-center justify-between gap-3 shadow-lg">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-9 h-9 rounded-lg bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-300 text-lg shadow-[0_0_12px_rgba(6,182,212,0.3)]">
+                                    <div class="w-9 h-9 rounded-lg bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-600 dark:text-cyan-300 text-lg shadow-[0_0_12px_rgba(6,182,212,0.3)]">
                                         🛢️
                                     </div>
                                     <div>
-                                        <div class="text-xs font-bold text-nimbusHeading flex items-center gap-2">
+                                        <div class="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-2">
                                             <span>Backed by Live Supabase PostgreSQL Database</span>
-                                            <span class="px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-emerald-100 text-accentGreen border border-emerald-300 font-bold">REAL SQL CONNECTED</span>
+                                            <span class="px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800">REAL SQL CONNECTED</span>
                                         </div>
-                                        <div class="text-[11px] text-nimbusText leading-tight mt-0.5">
+                                        <div class="text-[11px] text-slate-600 dark:text-slate-300 leading-tight mt-0.5">
                                             Every tap executes server-side cryptographic counter validation and writes live telemetry audit logs directly to our cloud database table.
                                         </div>
                                     </div>
                                 </div>
-                                <div class="hidden sm:flex items-center gap-2 font-mono text-[10px] text-accentBlue bg-slate-100 border border-slate-300 text-slate-700 px-3 py-1.5 rounded-lg shadow-inner">
+                                <div class="hidden sm:flex items-center gap-2 font-mono text-[10px] text-accentBlue dark:text-sky-400 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 px-3 py-1.5 rounded-lg shadow-inner">
                                     <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                                     <span>supabase.co &bull; Postgres active</span>
                                 </div>
@@ -321,10 +321,10 @@
                                 <div class="flex flex-col items-center justify-between space-y-5 h-full">
                                     
                                     <!-- Hardware Cartridge Box -->
-                                    <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-4 flex flex-col items-center justify-center text-center w-full shadow-sm space-y-4">
+                                    <div class="bg-slate-50 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800 rounded-xl p-4 flex flex-col items-center justify-center text-center w-full shadow-sm space-y-4">
                                         <div class="w-full text-center">
-                                            <div class="text-[10px] font-mono font-bold uppercase tracking-widest text-accentBlue mb-1">Interactive Telemetry Diagram</div>
-                                            <div class="text-xs text-slate-600 font-medium">NTAG 424 DNA Near-Field Contact Simulation</div>
+                                            <div class="text-[10px] font-mono font-bold uppercase tracking-widest text-accentBlue dark:text-sky-400 mb-1">Interactive Telemetry Diagram</div>
+                                            <div class="text-xs text-slate-600 dark:text-slate-400 font-medium">NTAG 424 DNA Near-Field Contact Simulation</div>
                                         </div>
 
                                         <!-- ACCURATE 3D VAPE CARTRIDGE DIAGRAM CANVAS AREA -->
@@ -368,15 +368,15 @@
                                                     <div class="w-36 h-36 rounded-full border border-cyan-500/60 animate-pulse opacity-50 absolute"></div>
                                                     <div class="w-48 h-48 rounded-full border border-cyan-600/30 absolute"></div>
                                                 </div>
-                                                <div id="tap-status-pill" class="text-[10px] font-mono font-bold uppercase tracking-widest text-slate-600 bg-slate-50/90 border border-slate-200 px-3 py-1 rounded-full z-10">
+                                                <div id="tap-status-pill" class="text-[10px] font-mono font-bold uppercase tracking-widest text-slate-600 dark:text-slate-400 bg-slate-50/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 px-3 py-1 rounded-full z-10">
                                                     HOVERING &bull; READY TO TAP
                                                 </div>
                                             </div>
 
                                             <!-- SMARTPHONE TOP EDGE GRAPHIC (BOTTOM OF DIAGRAM) -->
                                             <div id="diagram-phone-top" class="w-56 h-14 bg-slate-50 dark:bg-slate-900 border-t-4 border-cyan-500/70 border-x-2 border-slate-300 dark:border-slate-800 rounded-t-3xl flex flex-col items-center justify-start pt-2 shadow-[0_-10px_25px_rgba(6,182,212,0.2)] z-20">
-                                                <div class="w-16 h-1.5 bg-slate-100 rounded-full mb-1"></div>
-                                                <div class="text-[9px] font-mono text-accentBlue font-semibold tracking-wider uppercase flex items-center gap-1">
+                                                <div class="w-16 h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full mb-1"></div>
+                                                <div class="text-[9px] font-mono text-accentBlue dark:text-cyan-400 font-semibold tracking-wider uppercase flex items-center gap-1">
                                                     <span>📡</span> NFC ANTENNA RING
                                                 </div>
                                             </div>
@@ -385,12 +385,12 @@
 
                                     <!-- SIMULATE VERIFICATION SCAN ACTION BUTTONS (HIGH CONTRAST) -->
                                     <div class="w-full space-y-2">
-                                        <div class="text-[10px] font-mono font-bold text-slate-600 uppercase tracking-wider text-center">
+                                        <div class="text-[10px] font-mono font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider text-center">
                                             Execute NFC Hardware Tap:
                                         </div>
                                         <div class="grid grid-cols-1 gap-2">
                                             <!-- 🟢 Test Authentic Tap -->
-                                            <button onclick="runSimulation('authentic')" class="bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-emerald-950 font-bold p-3 rounded-xl flex items-center justify-between text-xs transition-all cursor-pointer shadow-sm w-full">
+                                            <button onclick="runSimulation('authentic')" class="bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 border border-emerald-300 dark:border-emerald-800 text-emerald-950 dark:text-emerald-200 font-bold p-3 rounded-xl flex items-center justify-between text-xs transition-all cursor-pointer shadow-sm w-full">
                                                 <div class="flex items-center gap-2">
                                                     <span class="text-sm">🟢</span>
                                                     <span>Test Authentic Tap</span>
@@ -399,7 +399,7 @@
                                             </button>
 
                                             <!-- 🟠 Test Dual-IP Anomaly -->
-                                            <button onclick="runSimulation('replay')" class="bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-950 font-bold p-3 rounded-xl flex items-center justify-between text-xs transition-all cursor-pointer shadow-sm w-full">
+                                            <button onclick="runSimulation('replay')" class="bg-amber-50 dark:bg-amber-950/40 hover:bg-amber-100 dark:hover:bg-amber-900/60 border border-amber-300 dark:border-amber-800 text-amber-950 dark:text-amber-200 font-bold p-3 rounded-xl flex items-center justify-between text-xs transition-all cursor-pointer shadow-sm w-full">
                                                 <div class="flex items-center gap-2">
                                                     <span class="text-sm">🟠</span>
                                                     <span>Test Dual-IP Anomaly</span>
@@ -408,7 +408,7 @@
                                             </button>
 
                                             <!-- 🔴 Test Counterfeit Tag -->
-                                            <button onclick="runSimulation('counterfeit')" class="bg-rose-50 hover:bg-rose-100 border border-rose-300 text-rose-950 font-bold p-3 rounded-xl flex items-center justify-between text-xs transition-all cursor-pointer shadow-sm w-full">
+                                            <button onclick="runSimulation('counterfeit')" class="bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 dark:hover:bg-rose-900/60 border border-rose-300 dark:border-rose-800 text-rose-950 dark:text-rose-200 font-bold p-3 rounded-xl flex items-center justify-between text-xs transition-all cursor-pointer shadow-sm w-full">
                                                 <div class="flex items-center gap-2">
                                                     <span class="text-sm">🔴</span>
                                                     <span>Test Counterfeit Tag</span>
@@ -418,56 +418,56 @@
                                         </div>
                                     </div>
 
-                                    <!-- ONNX ISOLATION FOREST ANOMALY ENGINE WIDGET (COMPACT COLUMN WIDGET MATCHING SCREENSHOT) -->
-                                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-3.5 shadow-inner w-full space-y-3 font-mono">
+                                    <!-- ONNX ISOLATION FOREST ANOMALY ENGINE WIDGET (LIGHT + DARK MODE ADAPTIVE WIDGET) -->
+                                    <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3.5 shadow-sm dark:shadow-inner w-full space-y-3 font-mono transition-colors">
                                         <!-- Header -->
-                                        <div class="flex items-center justify-between border-b border-slate-800/80 pb-2">
+                                        <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800/80 pb-2">
                                             <div class="flex items-center gap-2">
                                                 <span class="text-sm">🤖</span>
                                                 <div>
-                                                    <h4 class="font-mono font-bold text-xs text-cyan-400 tracking-wider uppercase">ONNX ISOLATION FOREST ANOMALY ENGINE</h4>
-                                                    <div class="text-[9px] text-slate-400">100 Trees &bull; Zero-Latency Edge Inference</div>
+                                                    <h4 class="font-mono font-bold text-xs text-cyan-700 dark:text-cyan-400 tracking-wider uppercase">ONNX ISOLATION FOREST ANOMALY ENGINE</h4>
+                                                    <div class="text-[9px] text-slate-500 dark:text-slate-400">100 Trees &bull; Zero-Latency Edge Inference</div>
                                                 </div>
                                             </div>
-                                            <div id="onnx-status-badge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-950 text-emerald-400 border border-emerald-800 flex items-center gap-1">
-                                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> INLIER NORMAL
+                                            <div id="onnx-status-badge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800 flex items-center gap-1">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse"></span> INLIER NORMAL
                                             </div>
                                         </div>
 
                                         <!-- 4 Metric Cards Grid -->
                                         <div class="grid grid-cols-4 gap-2">
-                                            <div class="bg-slate-950 border border-slate-800/80 rounded-lg p-2 text-left">
-                                                <div class="text-[8px] text-slate-400 font-semibold uppercase tracking-wider">THREAT SCORE</div>
-                                                <div id="onnx-threat-score" class="text-xs font-bold text-emerald-400 mt-0.5">0.00 / 1.00</div>
+                                            <div class="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800/80 rounded-lg p-2 text-left shadow-xs">
+                                                <div class="text-[8px] text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider">THREAT SCORE</div>
+                                                <div id="onnx-threat-score" class="text-xs sm:text-sm font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">0.00 / 1.00</div>
                                             </div>
-                                            <div class="bg-slate-950 border border-slate-800/80 rounded-lg p-2 text-left">
-                                                <div class="text-[8px] text-slate-400 font-semibold uppercase tracking-wider">MODEL OUTPUT</div>
-                                                <div id="onnx-model-output" class="text-xs font-bold text-white mt-0.5">INLIER</div>
+                                            <div class="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800/80 rounded-lg p-2 text-left shadow-xs">
+                                                <div class="text-[8px] text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider">MODEL OUTPUT</div>
+                                                <div id="onnx-model-output" class="text-xs sm:text-sm font-bold text-slate-900 dark:text-white mt-0.5">INLIER</div>
                                             </div>
-                                            <div class="bg-slate-950 border border-slate-800/80 rounded-lg p-2 text-left">
-                                                <div class="text-[8px] text-slate-400 font-semibold uppercase tracking-wider">SCAN SPEED</div>
-                                                <div id="onnx-scan-speed" class="text-xs font-bold text-white mt-0.5">0 km/h</div>
+                                            <div class="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800/80 rounded-lg p-2 text-left shadow-xs">
+                                                <div class="text-[8px] text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider">SCAN SPEED</div>
+                                                <div id="onnx-scan-speed" class="text-xs sm:text-sm font-bold text-slate-900 dark:text-white mt-0.5">0 km/h</div>
                                             </div>
-                                            <div class="bg-slate-950 border border-slate-800/80 rounded-lg p-2 text-left">
-                                                <div class="text-[8px] text-slate-400 font-semibold uppercase tracking-wider">INFERENCE TIME</div>
-                                                <div id="onnx-inference-time" class="text-xs font-bold text-purple-400 mt-0.5">0.8 ms</div>
+                                            <div class="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800/80 rounded-lg p-2 text-left shadow-xs">
+                                                <div class="text-[8px] text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider">INFERENCE TIME</div>
+                                                <div id="onnx-inference-time" class="text-xs sm:text-sm font-bold text-purple-600 dark:text-purple-400 mt-0.5">0.8 ms</div>
                                             </div>
                                         </div>
 
                                         <!-- Live Vector Output -->
                                         <div class="space-y-1">
-                                            <div class="flex items-center justify-between text-[8px] text-slate-400 font-bold uppercase tracking-wider">
+                                            <div class="flex items-center justify-between text-[8px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider">
                                                 <span>INPUT VECTOR [ΔT, DIST, SPEED, IP_JUMP]</span>
-                                                <span class="text-cyan-400">ONNX OPSET V15</span>
+                                                <span class="text-cyan-700 dark:text-cyan-400">ONNX OPSET V15</span>
                                             </div>
-                                            <div id="onnx-vector-display" class="bg-slate-950 border border-slate-800 rounded-lg py-1.5 px-2 text-center text-cyan-300 font-bold text-[10px] shadow-inner">
+                                            <div id="onnx-vector-display" class="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg py-1.5 px-2 text-center text-cyan-800 dark:text-cyan-300 font-bold text-[10px] shadow-xs">
                                                 [ Δt: 0s | dist: 0km | speed: 0km/h | ip_jump: 0 ]
                                             </div>
                                         </div>
                                     </div>
 
                                     <!-- RAW API JSON RESPONSE BOX -->
-                                    <div class="bg-slate-900 text-slate-100 font-mono text-[11px] rounded-xl p-3.5 shadow-inner border border-slate-800 w-full">
+                                    <div class="bg-slate-900 dark:bg-slate-950 text-slate-100 font-mono text-[11px] rounded-xl p-3.5 shadow-inner border border-slate-800 w-full">
                                         <div class="flex items-center justify-between mb-1.5">
                                             <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Raw API JSON Response</span>
                                             <span id="response-status-pill" class="text-[9px] font-mono font-bold px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
@@ -486,7 +486,7 @@
                                 </div>
 
                                 <!-- 4. RIGHT SIDE: PHONE FRAME CONTAINER (VERTICALLY ALIGNED TO MATCH LEFT COLUMN BOTTOM) -->
-                                <div class="flex items-center justify-center p-4 bg-slate-50/50 rounded-xl border border-slate-200/60 h-full w-full">
+                                <div class="flex items-center justify-center p-4 bg-slate-50/50 dark:bg-slate-900/40 rounded-xl border border-slate-200/60 dark:border-slate-800 h-full w-full">
                                     <div class="phone-mockup mx-auto shadow-2xl relative w-full max-w-[360px] h-[720px] flex flex-col justify-between overflow-hidden border-[10px] border-slate-800 dark:border-slate-900 rounded-[44px] bg-white dark:bg-slate-950 transition-colors">
                                         <!-- iPhone Notch / Dynamic Island Header -->
                                         <div class="phone-notch"></div>
@@ -511,35 +511,35 @@
                                             <!-- Dynamic Verification Card View -->
                                             <div id="phone-card-container" class="animate-card-pop space-y-3">
                                                 <!-- Header Status Badge -->
-                                                <div class="flex items-center justify-between border-b border-slate-200 pb-2">
-                                                    <span class="text-[10px] font-mono uppercase text-slate-600 tracking-wider">AUTHENTICATION STATUS</span>
-                                                    <span id="phone-status-badge" class="px-2.5 py-0.5 rounded-md text-xs font-bold bg-emerald-100 text-accentGreen border border-emerald-300 font-bold">
+                                                <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-2">
+                                                    <span class="text-[10px] font-mono uppercase text-slate-600 dark:text-slate-400 tracking-wider">AUTHENTICATION STATUS</span>
+                                                    <span id="phone-status-badge" class="px-2.5 py-0.5 rounded-md text-xs font-bold bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-accentGreen border border-emerald-300 dark:border-emerald-800 font-bold">
                                                         VERIFIED AUTHENTIC
                                                     </span>
                                                 </div>
 
                                                 <!-- Main Product Details Card -->
                                                 <div id="phone-card-body" class="bg-slate-50/90 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3.5 space-y-2.5">
-                                                    <div class="text-xs font-mono text-accentBlue uppercase tracking-widest" id="phone-brand-title">Hometown Hero CBD</div>
+                                                    <div class="text-xs font-mono text-accentBlue dark:text-sky-400 uppercase tracking-widest" id="phone-brand-title">Hometown Hero CBD</div>
                                                     <div class="text-sm font-bold text-slate-900 dark:text-white leading-tight" id="phone-product-title">THCa Live Rosin Cartridge - Maui Wowie</div>
                                                     
                                                     <div class="space-y-1 pt-1 text-xs font-mono">
-                                                        <div class="flex justify-between text-slate-600">
+                                                        <div class="flex justify-between text-slate-600 dark:text-slate-400">
                                                             <span>Strain:</span>
-                                                            <span class="text-nimbusHeading font-bold" id="phone-strain-val">Maui Wowie</span>
+                                                            <span class="text-slate-900 dark:text-white font-bold" id="phone-strain-val">Maui Wowie</span>
                                                         </div>
-                                                        <div class="flex justify-between text-slate-600">
+                                                        <div class="flex justify-between text-slate-600 dark:text-slate-400">
                                                             <span>Batch ID:</span>
-                                                            <span class="text-nimbusHeading font-bold" id="phone-batch-val">B-MW-001</span>
+                                                            <span class="text-slate-900 dark:text-white font-bold" id="phone-batch-val">B-MW-001</span>
                                                         </div>
-                                                        <div class="flex justify-between text-slate-600">
+                                                        <div class="flex justify-between text-slate-600 dark:text-slate-400">
                                                             <span>Scan Counter:</span>
-                                                            <span class="text-emerald-400 font-bold" id="phone-scan-count">#26,482,901</span>
+                                                            <span class="text-emerald-600 dark:text-emerald-400 font-bold" id="phone-scan-count">#26,482,901</span>
                                                         </div>
                                                     </div>
 
                                                     <div class="pt-1.5">
-                                                        <a id="phone-coa-link" href="https://hometownhero.com/coa/mw-001.pdf" target="_blank" class="block w-full text-center py-1.5 bg-emerald-100 hover:bg-emerald-200 border border-emerald-300 rounded-lg text-xs font-bold text-accentGreen transition shadow">
+                                                        <a id="phone-coa-link" href="https://hometownhero.com/coa/mw-001.pdf" target="_blank" class="block w-full text-center py-1.5 bg-emerald-100 dark:bg-emerald-950/60 hover:bg-emerald-200 dark:hover:bg-emerald-900/70 border border-emerald-300 dark:border-emerald-800 rounded-lg text-xs font-bold text-emerald-800 dark:text-emerald-300 transition shadow">
                                                             📄 View Certified COA PDF
                                                         </a>
                                                     </div>
@@ -549,27 +549,27 @@
                                                 <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-2.5 text-[10px] font-mono space-y-1 text-slate-600 dark:text-slate-400 shadow-sm">
                                                     <div class="flex justify-between">
                                                         <span>Tag UID:</span>
-                                                        <span id="phone-uid-val" class="text-nimbusHeading font-bold">04A1B2C3D4E5F6</span>
+                                                        <span id="phone-uid-val" class="text-slate-900 dark:text-white font-bold">04A1B2C3D4E5F6</span>
                                                     </div>
                                                     <div class="flex justify-between">
                                                         <span>Crypto MAC:</span>
-                                                        <span class="text-emerald-400 font-bold">VALID (AES-128 SUN)</span>
+                                                        <span class="text-emerald-600 dark:text-emerald-400 font-bold">VALID (AES-128 SUN)</span>
                                                     </div>
                                                 </div>
                                             </div>
 
                                             <!-- SECURITY INCIDENT REPORT & CONSUMER / ENTERPRISE CONTACT SECTION -->
                                             <div class="bg-slate-50/90 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 space-y-2">
-                                                <div class="flex items-center justify-between text-[10px] font-mono text-slate-600 border-b border-slate-200/80 pb-1.5">
-                                                    <span class="font-bold text-nimbusText">CONSUMER &amp; ENTERPRISE SUPPORT</span>
-                                                    <span class="text-emerald-400 font-bold">● ONLINE</span>
+                                                <div class="flex items-center justify-between text-[10px] font-mono text-slate-600 dark:text-slate-400 border-b border-slate-200/80 dark:border-slate-800 pb-1.5">
+                                                    <span class="font-bold text-slate-900 dark:text-white">CONSUMER &amp; ENTERPRISE SUPPORT</span>
+                                                    <span class="text-emerald-600 dark:text-emerald-400 font-bold">● ONLINE</span>
                                                 </div>
                                                 
                                                 <!-- Report Security Incident Button -->
-                                                <button onclick="toggleIncidentModal()" class="w-full flex items-center justify-between px-3 py-2 bg-red-50 hover:bg-red-100 border border-red-200 rounded-lg text-xs text-red-900 font-bold transition active:scale-95 text-left shadow-sm">
+                                                <button onclick="toggleIncidentModal()" class="w-full flex items-center justify-between px-3 py-2 bg-red-50 dark:bg-rose-950/40 hover:bg-red-100 dark:hover:bg-rose-900/60 border border-red-200 dark:border-rose-800 rounded-lg text-xs text-red-900 dark:text-rose-200 font-bold transition active:scale-95 text-left shadow-sm">
                                                     <div class="flex items-center gap-2">
                                                         <span class="text-sm">🚨</span>
-                                                        <span class="font-bold text-red-900 text-[11px]">Report Security Incident</span>
+                                                        <span class="font-bold text-red-900 dark:text-rose-200 text-[11px]">Report Security Incident</span>
                                                     </div>
                                                     <span class="text-[9px] font-mono text-white bg-red-600 px-1.5 py-0.5 rounded font-bold">REPORT</span>
                                                 </button>
@@ -578,37 +578,37 @@
                                                 <a href="contact.html" target="_blank" class="w-full flex items-center justify-between px-3 py-2 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-lg text-xs text-slate-900 dark:text-white font-bold transition active:scale-95 shadow-sm">
                                                     <div class="flex items-center gap-2">
                                                         <span class="text-sm">💬</span>
-                                                        <span class="font-bold text-nimbusHeading text-[11px]">Contact Security Team</span>
+                                                        <span class="font-bold text-slate-900 dark:text-white text-[11px]">Contact Security Team</span>
                                                     </div>
-                                                    <span class="text-[9px] font-mono text-accentBlue bg-slate-50 border border-slate-300 px-1.5 py-0.5 rounded font-bold">DIRECT</span>
+                                                    <span class="text-[9px] font-mono text-accentBlue dark:text-sky-400 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 px-1.5 py-0.5 rounded font-bold">DIRECT</span>
                                                 </a>
                                             </div>
 
                                             <!-- INCIDENT REPORTING MODAL OVERLAY (Inside Phone Screen) -->
-                                            <div id="incident-report-modal" class="hidden absolute inset-0 bg-slate-100/95 backdrop-blur-md z-30 p-4 flex flex-col justify-between animate-card-pop">
+                                            <div id="incident-report-modal" class="hidden absolute inset-0 bg-slate-100/95 dark:bg-slate-900/95 backdrop-blur-md z-30 p-4 flex flex-col justify-between animate-card-pop">
                                                 <div class="space-y-3">
-                                                    <div class="flex items-center justify-between border-b border-slate-200 pb-2">
-                                                        <div class="flex items-center gap-2 text-rose-400 text-xs font-bold font-mono">
+                                                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-2">
+                                                        <div class="flex items-center gap-2 text-rose-600 dark:text-rose-400 text-xs font-bold font-mono">
                                                             <span>🚨</span>
                                                             <span>SECURITY INCIDENT REPORT</span>
                                                         </div>
-                                                        <button onclick="toggleIncidentModal()" class="text-slate-600 hover:text-nimbusHeading text-xs font-mono p-1">✕ Close</button>
+                                                        <button onclick="toggleIncidentModal()" class="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white text-xs font-mono p-1">✕ Close</button>
                                                     </div>
-                                                    <p class="text-[11px] text-nimbusText leading-relaxed">
+                                                    <p class="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
                                                         Report suspected tag cloning, counterfeit packaging, or tampered hardware signatures directly to Nimbus Threat Intelligence.
                                                     </p>
                                                     <div class="space-y-2 font-mono text-xs">
                                                         <div>
-                                                            <label class="block text-[9px] text-slate-600 uppercase mb-1">Issue Category:</label>
-                                                            <select class="w-full bg-slate-50 border border-slate-300 rounded p-1.5 text-slate-800 text-[11px]">
+                                                            <label class="block text-[9px] text-slate-600 dark:text-slate-400 uppercase mb-1">Issue Category:</label>
+                                                            <select class="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded p-1.5 text-slate-800 dark:text-white text-[11px]">
                                                                 <option>Duplicate Counter / Replay Attack</option>
                                                                 <option>Unregistered / Counterfeit Tag</option>
                                                                 <option>Physical Hardware Tampering</option>
                                                             </select>
                                                         </div>
                                                         <div>
-                                                            <label class="block text-[9px] text-slate-600 uppercase mb-1">Incident Notes / Dispensary Location:</label>
-                                                            <textarea class="w-full bg-slate-50 border border-slate-300 rounded p-1.5 text-slate-800 text-[11px] h-16" placeholder="Describe where you purchased or scanned this item..."></textarea>
+                                                            <label class="block text-[9px] text-slate-600 dark:text-slate-400 uppercase mb-1">Incident Notes / Dispensary Location:</label>
+                                                            <textarea class="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded p-1.5 text-slate-800 dark:text-white text-[11px] h-16" placeholder="Describe where you purchased or scanned this item..."></textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -618,15 +618,15 @@
                                             </div>
 
                                             <!-- NFC RADAR RIPPLE ANIMATION OVERLAY -->
-                                            <div id="radar-ripple-overlay" class="hidden absolute inset-0 bg-slate-100/90 backdrop-blur-sm z-20 flex flex-col items-center justify-center text-center p-4">
+                                            <div id="radar-ripple-overlay" class="hidden absolute inset-0 bg-white/90 dark:bg-slate-950/90 backdrop-blur-sm z-20 flex flex-col items-center justify-center text-center p-4">
                                                 <div class="relative flex items-center justify-center my-6">
                                                     <div class="radar-ripple-wave"></div>
                                                     <div class="radar-ripple-wave radar-ripple-delay"></div>
-                                                    <div class="w-12 h-12 rounded-full bg-cyan-500/20 border border-cyan-400/50 flex items-center justify-center text-cyan-300 text-xl shadow-[0_0_20px_rgba(6,182,212,0.6)]">
+                                                    <div class="w-12 h-12 rounded-full bg-cyan-500/20 border border-cyan-400/50 flex items-center justify-center text-cyan-500 dark:text-cyan-300 text-xl shadow-[0_0_20px_rgba(6,182,212,0.6)]">
                                                         📡
                                                     </div>
                                                 </div>
-                                                <div id="radar-status-text" class="text-xs font-mono font-bold text-cyan-300 uppercase tracking-widest animate-pulse">Reading NTAG 424 SUN Payload...</div>
+                                                <div id="radar-status-text" class="text-xs font-mono font-bold text-cyan-600 dark:text-cyan-300 uppercase tracking-widest animate-pulse">Reading NTAG 424 SUN Payload...</div>
                                             </div>
                                         </div>
 
@@ -974,18 +974,18 @@
             </div>
 
             <!-- VALIDATION CONSOLE & HARDWARE PROFILE SELECTOR (UNDER THE PEN CHASSIS) -->
-            <div class="w-full mt-6 pt-5 border-t border-slate-200/80">
+            <div class="w-full mt-6 pt-5 border-t border-slate-200/80 dark:border-slate-800">
                 <div class="console-header flex items-center gap-2 mb-2.5">
-                    <svg class="w-4 h-4 text-accentBlue" viewBox="0 0 24 24" fill="none">
+                    <svg class="w-4 h-4 text-accentBlue dark:text-sky-400" viewBox="0 0 24 24" fill="none">
                         <path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
-                    <h3 class="text-xs font-bold text-nimbusHeading uppercase tracking-wider">Validation Console</h3>
+                    <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Validation Console</h3>
                 </div>
-                <p class="console-desc text-[11px] text-slate-600 mb-3 leading-snug">Slot hardware cartridges or simulate custom NFC cryptographic payloads.</p>
+                <p class="console-desc text-[11px] text-slate-600 dark:text-slate-400 mb-3 leading-snug">Slot hardware cartridges or simulate custom NFC cryptographic payloads.</p>
 
                 <!-- Hardware profile selector -->
                 <div class="mb-4">
-                    <div class="text-[10px] font-semibold text-slate-600 mb-2 tracking-wide uppercase">Select Hardware Profile</div>
+                    <div class="text-[10px] font-semibold text-slate-600 dark:text-slate-400 mb-2 tracking-wide uppercase">Select Hardware Profile</div>
                     <div class="cartridge-buttons flex flex-col gap-1.5">
                         <button class="cart-btn active" data-cart="disconnected">No Cartridge (Idle)</button>
                         <button class="cart-btn" data-cart="astro">Astro — D9 THC</button>
@@ -998,18 +998,18 @@
                 <!-- Payload input + developer settings -->
                 <div class="flex flex-col gap-3">
                     <div class="custom-nfc-input flex flex-col gap-1">
-                        <span class="console-sublabel text-[10px] font-semibold text-slate-600">Scan / Paste Custom Hardware Payload</span>
+                        <span class="console-sublabel text-[10px] font-semibold text-slate-600 dark:text-slate-400">Scan / Paste Custom Hardware Payload</span>
                         <div class="nfc-input-row flex gap-1.5">
-                            <input type="text" id="input-nfc-payload" placeholder='{"b":"Brand","y":"Type","i":"Batch","s":"sig"}' class="flex-1 bg-slate-100/80 border border-slate-300/60 rounded-lg px-2.5 py-1.5 text-[11px] text-nimbusHeading placeholder-slate-500 outline-none focus:border-cyan-500/60">
+                            <input type="text" id="input-nfc-payload" placeholder='{"b":"Brand","y":"Type","i":"Batch","s":"sig"}' class="flex-1 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-[11px] text-slate-900 dark:text-white placeholder-slate-400 outline-none focus:border-cyan-500/60">
                             <button id="btn-nfc-submit" class="btn-nfc-action px-3 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg text-[11px] font-semibold transition-colors">Validate</button>
                         </div>
                     </div>
 
-                    <div class="developer-settings pt-2.5 border-t border-slate-200/80 flex flex-col gap-2.5">
+                    <div class="developer-settings pt-2.5 border-t border-slate-200/80 dark:border-slate-800 flex flex-col gap-2.5">
                         <div class="toggle-row flex items-center justify-between">
                             <div class="toggle-info flex flex-col">
-                                <span class="toggle-title text-[11px] font-semibold text-nimbusHeading">Permit Unverified Cartridges</span>
-                                <span class="toggle-desc text-[10px] text-slate-600">Enforces 150°C thermal ceiling</span>
+                                <span class="toggle-title text-[11px] font-semibold text-slate-900 dark:text-white">Permit Unverified Cartridges</span>
+                                <span class="toggle-desc text-[10px] text-slate-600 dark:text-slate-400">Enforces 150°C thermal ceiling</span>
                             </div>
                             <label class="switch relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" id="chk-allow-unverified" class="sr-only peer">
@@ -1017,13 +1017,13 @@
                             </label>
                         </div>
                         <div class="secret-row flex flex-col gap-1">
-                            <label for="input-secret" class="text-[10px] font-semibold text-slate-600 flex items-center gap-1">
+                            <label for="input-secret" class="text-[10px] font-semibold text-slate-600 dark:text-slate-400 flex items-center gap-1">
                                 HMAC Signing Key
                             </label>
-                            <input type="text" id="input-secret" value="nimbus_secure_master_secret_2026" class="bg-slate-100/80 border border-slate-300/60 rounded-lg px-2.5 py-1 text-[10px] font-mono text-cyan-700 outline-none">
+                            <input type="text" id="input-secret" value="nimbus_secure_master_secret_2026" class="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-2.5 py-1 text-[10px] font-mono text-cyan-700 dark:text-cyan-400 outline-none">
                         </div>
                         <div class="pt-1">
-                            <button id="btn-reset-data" class="w-full bg-rose-100 hover:bg-rose-200 border border-rose-300 text-rose-800 rounded-lg px-2.5 py-1.5 text-[11px] font-medium transition-colors">
+                            <button id="btn-reset-data" class="w-full bg-rose-100 dark:bg-rose-950/60 hover:bg-rose-200 dark:hover:bg-rose-900/70 border border-rose-300 dark:border-rose-800 text-rose-800 dark:text-rose-200 rounded-lg px-2.5 py-1.5 text-[11px] font-medium transition-colors">
                                 Reset Demo Data &amp; Wellness Logs
                             </button>
                         </div>
@@ -1533,36 +1533,36 @@
             if (mode === 'authentic') {
                 const score = (data.onnx_anomaly_score || 0.00).toFixed(2);
                 const infMs = (data.inference_ms || 0.8).toFixed(1);
-                scoreEl.className = 'text-lg font-bold text-emerald-400 mt-1';
+                scoreEl.className = 'text-xs sm:text-sm font-bold text-emerald-600 dark:text-emerald-400 mt-0.5';
                 scoreEl.textContent = `${score} / 1.00`;
-                outputEl.className = 'text-lg font-bold text-white mt-1';
+                outputEl.className = 'text-xs sm:text-sm font-bold text-slate-900 dark:text-white mt-0.5';
                 outputEl.textContent = 'INLIER';
                 speedEl.textContent = `${data.velocity_km_h || 0} km/h`;
                 inferenceEl.textContent = `${infMs} ms`;
-                badgeEl.className = 'px-3 py-1 rounded-lg text-xs font-mono font-bold bg-emerald-950/80 text-emerald-400 border border-emerald-800 flex items-center gap-1.5';
-                badgeEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> INLIER NORMAL';
+                badgeEl.className = 'px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800 flex items-center gap-1';
+                badgeEl.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse"></span> INLIER NORMAL';
                 vectorEl.textContent = `[ Δt: 12s | dist: 0km | speed: ${data.velocity_km_h || 0}km/h | ip_jump: 0 ]`;
             } else if (mode === 'replay') {
                 const score = (data.onnx_anomaly_score || 0.78).toFixed(2);
-                scoreEl.className = 'text-lg font-bold text-amber-400 mt-1';
+                scoreEl.className = 'text-xs sm:text-sm font-bold text-amber-600 dark:text-amber-400 mt-0.5';
                 scoreEl.textContent = `${score} / 1.00`;
-                outputEl.className = 'text-lg font-bold text-amber-400 mt-1';
+                outputEl.className = 'text-xs sm:text-sm font-bold text-amber-600 dark:text-amber-400 mt-0.5';
                 outputEl.textContent = 'OUTLIER';
                 speedEl.textContent = '850 km/h';
                 inferenceEl.textContent = '1.2 ms';
-                badgeEl.className = 'px-3 py-1 rounded-lg text-xs font-mono font-bold bg-amber-950/80 text-amber-400 border border-amber-800 flex items-center gap-1.5';
-                badgeEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span> 🚨 REPLAY ANOMALY';
+                badgeEl.className = 'px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-400 border border-amber-300 dark:border-amber-800 flex items-center gap-1';
+                badgeEl.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-amber-500 dark:bg-amber-400 animate-pulse"></span> 🚨 REPLAY ANOMALY';
                 vectorEl.textContent = '[ Δt: 0s | dist: 1420km | speed: 850km/h | ip_jump: 1 ]';
             } else {
                 const score = (data.onnx_anomaly_score || 0.98).toFixed(2);
-                scoreEl.className = 'text-lg font-bold text-rose-400 mt-1';
+                scoreEl.className = 'text-xs sm:text-sm font-bold text-rose-600 dark:text-rose-400 mt-0.5';
                 scoreEl.textContent = `${score} / 1.00`;
-                outputEl.className = 'text-lg font-bold text-rose-400 mt-1';
+                outputEl.className = 'text-xs sm:text-sm font-bold text-rose-600 dark:text-rose-400 mt-0.5';
                 outputEl.textContent = 'CRITICAL';
                 speedEl.textContent = '0 km/h';
                 inferenceEl.textContent = '0.6 ms';
-                badgeEl.className = 'px-3 py-1 rounded-lg text-xs font-mono font-bold bg-rose-950/80 text-rose-400 border border-rose-800 flex items-center gap-1.5';
-                badgeEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-rose-400 animate-pulse"></span> 🚨 INVALID CMAC';
+                badgeEl.className = 'px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-rose-100 dark:bg-rose-950/80 text-rose-800 dark:text-rose-400 border border-rose-300 dark:border-rose-800 flex items-center gap-1';
+                badgeEl.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-rose-500 dark:bg-rose-400 animate-pulse"></span> 🚨 INVALID CMAC';
                 vectorEl.textContent = '[ Δt: 0s | dist: 0km | speed: 0km/h | ip_jump: 1 ]';
             }
         }
@@ -1579,9 +1579,9 @@
     </script>
 
     <!-- 5. FOOTER LIGHT-MODE ENFORCEMENT -->
-    <footer class="bg-slate-100 text-slate-800 py-16 border-t border-slate-200 transition-colors">
+    <footer class="bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-300 py-16 border-t border-slate-200 dark:border-slate-800 transition-colors">
         <div class="max-w-[100rem] mx-auto px-6 lg:px-12">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 lg:gap-12 text-sm text-slate-600 items-start">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 lg:gap-12 text-sm text-slate-600 dark:text-slate-400 items-start">
                 
                 <!-- Column 1: Brand & Patent Info -->
                 <div class="md:col-span-1 space-y-4">
@@ -1589,12 +1589,12 @@
                         <img src="nimbus-actual-logo.png" alt="Nimbus Logo" class="h-16 md:h-18 w-auto object-contain block dark:hidden">
                         <img src="nimbus-actual-logo-dark.png" alt="Nimbus Logo" class="h-16 md:h-18 w-auto object-contain hidden dark:block">
                     </a>
-                    <p class="leading-relaxed text-xs text-slate-600">U.S. Patent Pending — App. No. 64/114,968. Systems and Methods for Dynamic Vaporization Parameter Configuration and Authentication via Cryptographic Near Field Communication.</p>
+                    <p class="leading-relaxed text-xs text-slate-600 dark:text-slate-400">U.S. Patent Pending — App. No. 64/114,968. Systems and Methods for Dynamic Vaporization Parameter Configuration and Authentication via Cryptographic Near Field Communication.</p>
                     <div class="pt-1 space-y-2 text-xs">
-                        <p class="text-slate-700 font-medium flex items-center gap-1.5">
-                            <span>✉️</span> <a href="mailto:JPLopez@QuantumNimbus.com" class="hover:text-accentBlue transition-colors">JPLopez@QuantumNimbus.com</a>
+                        <p class="text-slate-700 dark:text-slate-300 font-medium flex items-center gap-1.5">
+                            <span>✉️</span> <a href="mailto:JPLopez@QuantumNimbus.com" class="hover:text-accentBlue dark:hover:text-sky-400 transition-colors">JPLopez@QuantumNimbus.com</a>
                         </p>
-                        <p class="text-slate-500 pt-3 border-t border-slate-200">© 2026 Quantum Nimbus Tech. All rights reserved.</p>
+                        <p class="text-slate-500 dark:text-slate-500 pt-3 border-t border-slate-200 dark:border-slate-800">© 2026 Quantum Nimbus Tech. All rights reserved.</p>
                     </div>
                 </div>
 
