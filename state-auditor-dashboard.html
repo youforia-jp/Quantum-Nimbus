@@ -94,68 +94,64 @@
   <!-- ========================================== -->
   <!-- TOP NAVIGATION BAR                         -->
   <!-- ========================================== -->
-  <nav class="w-full bg-white/90 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
-      
-      <!-- Brand Logo -->
-      <div class="flex-shrink-0 flex items-center">
-        <a href="index.html" aria-label="Nimbus" class="flex items-center gap-2.5 group">
-          <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-sky-600 via-indigo-600 to-cyan-400 p-[1px] shadow-md shadow-sky-500/20">
-            <div class="w-full h-full bg-slate-900 rounded-[11px] flex items-center justify-center">
-              <i data-lucide="shield-check" class="w-5 h-5 text-sky-400"></i>
+  <!-- ========================================== -->
+  <!-- TOP NAVIGATION BAR                         -->
+  <!-- ========================================== -->
+  <nav class="fixed w-full z-50 bg-white/95 dark:bg-slate-950/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors">
+    <div class="max-w-[100rem] mx-auto px-6 lg:px-12">
+        <div class="flex justify-between items-center h-20 gap-4">
+            <!-- Logo -->
+            <div class="flex-shrink-0 flex items-center pl-2 sm:pl-6">
+                <a href="index.html" aria-label="Nimbus" class="flex items-center justify-center group -mt-2">
+                    <img src="nimbus-actual-logo.png" alt="Nimbus Logo" class="h-16 sm:h-18 w-auto object-contain block dark:hidden">
+                    <img src="nimbus-actual-logo-dark.png" alt="Nimbus Logo" class="h-16 sm:h-18 w-auto object-contain hidden dark:block">
+                </a>
             </div>
-          </div>
-          <span class="font-heading font-extrabold text-lg text-slate-900 tracking-wider">QUANTUM<span class="text-sky-600">NIMBUS</span></span>
-        </a>
-      </div>
-
-      <!-- Desktop Nav Links -->
-      <div class="hidden lg:flex items-center gap-6 xl:gap-8 whitespace-nowrap">
-                    <a href="index.html#technology" class="nav-link whitespace-nowrap text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Platform Overview</a>
-                    <a href="how-it-works.html" class="nav-link whitespace-nowrap text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">How It Works</a>
-                    <a href="safety.html" class="nav-link whitespace-nowrap text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Compliance Data</a>
-                    <a href="unit-economics.html" class="nav-link whitespace-nowrap text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Unit Economics</a>
-                    <a href="simulator.html" class="nav-link whitespace-nowrap text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">NFC Sandbox</a>
-                    <a href="state-auditor-dashboard.html" class="nav-link whitespace-nowrap text-sm font-bold text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300 transition-colors flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-sky-500 dark:bg-sky-400 animate-pulse"></span>State Auditor</a>
-                </div>
-                <!-- Right Actions -->
-      <div class="hidden lg:flex items-center gap-3">
-        <button onclick="toggleTheme()" class="p-2 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors" aria-label="Toggle Theme">
-          <i data-lucide="sun" class="w-4 h-4 hidden dark:block text-amber-500"></i>
-          <i data-lucide="moon" class="w-4 h-4 block dark:hidden text-slate-600"></i>
-        </button>
-        <a href="contact.html" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition-all shadow-sm">
-          Schedule a Demo
-        </a>
-      </div>
-
-      <!-- Mobile Menu Button -->
-      <div class="lg:hidden flex items-center gap-2">
-        <button onclick="toggleTheme()" class="p-2 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors" aria-label="Toggle Theme">
-          <i data-lucide="sun" class="w-4 h-4 hidden dark:block text-amber-500"></i>
-          <i data-lucide="moon" class="w-4 h-4 block dark:hidden text-slate-600"></i>
-        </button>
-        <button id="mobile-menu-btn" class="p-2 rounded-lg text-slate-600 hover:bg-slate-100 focus:outline-none" aria-label="Toggle Menu">
-          <i data-lucide="menu" class="w-5 h-5"></i>
-        </button>
-      </div>
-
+            <!-- Desktop Nav Links -->
+            <div class="hidden lg:flex items-center gap-6 xl:gap-8 whitespace-nowrap">
+                <a href="index.html#technology" class="nav-link whitespace-nowrap text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Platform Overview</a>
+                <a href="how-it-works.html" class="nav-link whitespace-nowrap text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">How It Works</a>
+                <a href="safety.html" class="nav-link whitespace-nowrap text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Compliance Data</a>
+                <a href="unit-economics.html" class="nav-link whitespace-nowrap text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Unit Economics</a>
+                <a href="simulator.html" class="nav-link whitespace-nowrap text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">NFC Sandbox</a>
+                <a href="dashboard.html" class="nav-link whitespace-nowrap text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>Live Threat Map</a>
+                <a href="state-auditor-dashboard.html" class="nav-link whitespace-nowrap text-sm font-bold text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300 transition-colors flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-sky-500 dark:bg-sky-400 animate-pulse"></span>State Auditor</a>
+            </div>
+            <!-- Right Actions -->
+            <div class="hidden lg:flex items-center gap-4">
+                <!-- Theme Toggle -->
+                <button onclick="toggleTheme()" class="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle Theme">
+                    <svg class="w-5 h-5 hidden dark:block text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                    <svg class="w-5 h-5 block dark:hidden text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                </button>
+                <a href="contact.html" class="inline-flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-accentGreen hover:bg-accentGreenHover rounded-lg transition-colors shadow-sm">
+                    Schedule a Demo
+                </a>
+            </div>
+            <!-- Mobile Menu Btn -->
+            <div class="lg:hidden flex items-center gap-2">
+                <button onclick="toggleTheme()" class="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle Theme">
+                    <svg class="w-5 h-5 hidden dark:block text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                    <svg class="w-5 h-5 block dark:hidden text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                </button>
+                <button id="mobile-menu-btn" class="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                </button>
+            </div>
+        </div>
     </div>
-
-    <!-- Mobile Navigation Menu -->
-    <div id="mobile-menu" class="lg:hidden hidden bg-white border-t border-slate-200/80 px-4 py-3 space-y-2">
-      <a href="index.html#technology" class="block px-3 py-2 text-xs font-medium text-slate-700 hover:bg-slate-100 rounded-lg">Platform Overview</a>
-      <a href="how-it-works.html" class="block px-3 py-2 text-xs font-medium text-slate-700 hover:bg-slate-100 rounded-lg">How It Works</a>
-      <a href="safety.html" class="block px-3 py-2 text-xs font-medium text-slate-700 hover:bg-slate-100 rounded-lg">Compliance Data</a>
-      <a href="unit-economics.html" class="block px-3 py-2 text-xs font-medium text-slate-700 hover:bg-slate-100 rounded-lg">Unit Economics</a>
-      <a href="simulator.html" class="block px-3 py-2 text-xs font-medium text-slate-700 hover:bg-slate-100 rounded-lg">NFC + AI Simulation</a>
-      <a href="dashboard.html" class="block px-3 py-2 text-xs font-medium text-slate-700 hover:bg-slate-100 rounded-lg">Live Threat Map</a>
-      <a href="state-auditor-dashboard.html" class="block px-3 py-2 text-xs font-bold text-cyan-700 bg-cyan-50 rounded-lg flex items-center gap-1.5">
-        <span class="w-2 h-2 rounded-full bg-cyan-500 animate-pulse"></span>State Auditor
-      </a>
-      <a href="contact.html" class="block text-center px-4 py-2 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl transition-all shadow-sm mt-2">
-        Schedule a Demo
-      </a>
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="lg:hidden hidden bg-slate-50 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
+        <div class="px-4 py-3 space-y-1">
+            <a href="index.html#technology" class="block px-3 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 rounded-md">Platform Overview</a>
+            <a href="how-it-works.html" class="block px-3 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 rounded-md">How It Works</a>
+            <a href="safety.html" class="block px-3 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 rounded-md">Compliance Data</a>
+            <a href="unit-economics.html" class="block px-3 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 rounded-md">Unit Economics</a>
+            <a href="simulator.html" class="block px-3 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 rounded-md">NFC Sandbox</a>
+            <a href="dashboard.html" class="block px-3 py-2 text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:bg-white dark:hover:bg-slate-800 rounded-md flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>Live Threat Map</a>
+            <a href="state-auditor-dashboard.html" class="block px-3 py-2 text-sm font-bold text-sky-600 dark:text-sky-400 hover:bg-white dark:hover:bg-slate-800 rounded-md flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-sky-500 dark:bg-sky-400 animate-pulse"></span>State Auditor</a>
+            <a href="contact.html" class="block px-3 py-2 text-sm font-semibold text-accentGreen hover:bg-white dark:hover:bg-slate-800 rounded-md">Schedule Demo</a>
+        </div>
     </div>
   </nav>
 
