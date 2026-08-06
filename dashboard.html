@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="dark scroll-smooth">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,6 +14,43 @@
   <!-- Tailwind CSS & Site Config -->
   <script src="site-config.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            nimbusBase:   '#FFFFFF',
+            nimbusSurface:'#F8FAFC',
+            nimbusBorder: '#E2E8F0',
+            nimbusText:   '#334155',
+            accentBlue:   '#0284C7',
+            accentRed:    '#ef4444',
+            accentGreen:  '#047857',
+            accentGreenHover: '#065F46',
+          },
+          fontFamily: {
+            sans:    ['Inter', 'sans-serif'],
+            heading: ['Outfit', 'sans-serif'],
+            mono:    ['JetBrains Mono', 'monospace'],
+          }
+        }
+      }
+    };
+    (function() {
+      const savedTheme = localStorage.getItem('nimbus_theme');
+      if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    })();
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('nimbus_theme', isDark ? 'dark' : 'light');
+    }
+    window.toggleTheme = toggleTheme;
+  </script>
   <link rel="stylesheet" href="index.css">
 
   <!-- D3.js and TopoJSON CDN -->
@@ -24,7 +61,6 @@
     body {
       overflow-x: hidden !important;
       min-height: 100vh;
-      background-color: #0c0f17 !important;
       font-family: 'Inter', sans-serif;
     }
     .font-mono { font-family: 'JetBrains Mono', monospace; }
@@ -33,10 +69,8 @@
       width: 100%;
       height: 520px;
       border-radius: 0.75rem;
-      background-color: #030712;
       position: relative;
       overflow: hidden;
-      border: 1px solid #1e2d3d;
     }
     
     #gis-canvas {
@@ -47,7 +81,7 @@
     }
   </style>
 </head>
-<body class="bg-nimbusBase text-slate-300 antialiased">
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-300 antialiased transition-colors">
 
   <!-- ============================================================
        EXACT SITE NAVBAR
@@ -116,78 +150,78 @@
   <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 pt-24 space-y-6">
     
     <!-- Title Banner -->
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#1e2d3d] pb-4">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 dark:border-[#1e2d3d] pb-4">
       <div>
         <div class="flex items-center space-x-2 mb-1">
           <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span class="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider">Cryptographic Threat Classification Engine Active</span>
+          <span class="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Cryptographic Threat Classification Engine Active</span>
         </div>
-        <h1 class="text-3xl font-extrabold text-white tracking-tight">Real-Time Threat Telemetry Map</h1>
-        <p class="text-slate-400 text-sm mt-1">Hover over any node or laser arc to inspect Batch ID, AES-128 SUN CMAC, and velocity telemetry.</p>
+        <h1 class="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Real-Time Threat Telemetry Map</h1>
+        <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">Hover over any node or laser arc to inspect Batch ID, AES-128 SUN CMAC, and velocity telemetry.</p>
       </div>
 
       <!-- Quick Control Bar -->
       <div class="flex items-center space-x-2">
-        <button id="btn-attack-replay" class="bg-yellow-600 hover:bg-yellow-500 text-white text-xs font-semibold px-3 py-2 rounded-lg shadow transition-all flex items-center space-x-1 cursor-pointer">
+        <button id="btn-attack-replay" class="bg-amber-600 hover:bg-amber-500 text-white text-xs font-semibold px-3 py-2 rounded-lg shadow transition-all flex items-center space-x-1 cursor-pointer">
           <span>⚠️ Replay Attack (Yellow)</span>
         </button>
-        <button id="btn-attack-crypto" class="bg-red-600 hover:bg-red-500 text-white text-xs font-semibold px-3 py-2 rounded-lg shadow transition-all flex items-center space-x-1 cursor-pointer">
+        <button id="btn-attack-crypto" class="bg-rose-600 hover:bg-rose-500 text-white text-xs font-semibold px-3 py-2 rounded-lg shadow transition-all flex items-center space-x-1 cursor-pointer">
           <span>🚨 Crypto Fail (Red)</span>
         </button>
       </div>
     </div>
 
     <!-- Demo Disclaimer Banner -->
-    <div class="bg-amber-950/40 border border-amber-500/30 rounded-xl p-3.5 flex items-start sm:items-center gap-3 text-amber-200 text-xs font-mono backdrop-blur-md">
-      <span class="text-amber-400 text-base leading-none">⚠️</span>
+    <div class="bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-500/30 rounded-xl p-3.5 flex items-start sm:items-center gap-3 text-amber-900 dark:text-amber-200 text-xs font-mono backdrop-blur-md">
+      <span class="text-amber-600 dark:text-amber-400 text-base leading-none">⚠️</span>
       <div>
-        <strong class="text-amber-300 font-bold uppercase tracking-wider">Demo Simulation Notice:</strong> The frequency of simulated Replay Attacks (Yellow) and Inauthentic Cryptographic CMAC Signatures (Red) is artificially elevated for interactive demonstration and real-time visualization purposes.
+        <strong class="text-amber-800 dark:text-amber-300 font-bold uppercase tracking-wider">Demo Simulation Notice:</strong> The frequency of simulated Replay Attacks (Yellow) and Inauthentic Cryptographic CMAC Signatures (Red) is artificially elevated for interactive demonstration and real-time visualization purposes.
       </div>
     </div>
 
     <!-- Metric KPI Cards Grid -->
     <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <div class="bg-slate-900/90 border border-slate-800/80 rounded-xl p-5 shadow-sm backdrop-blur-md">
-        <div class="flex items-center justify-between text-slate-400 text-xs font-medium uppercase">
+      <div class="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800/80 rounded-xl p-5 shadow-sm backdrop-blur-md">
+        <div class="flex items-center justify-between text-slate-500 dark:text-slate-400 text-xs font-medium uppercase">
           <span>Total Security Scans</span>
           <span>📊</span>
         </div>
         <div class="mt-2 flex items-baseline justify-between">
-          <span id="kpi-total-scans" class="text-2xl font-bold font-mono text-white">1,482,978</span>
-          <span class="text-xs font-semibold text-emerald-400">+12.4%</span>
+          <span id="kpi-total-scans" class="text-2xl font-bold font-mono text-slate-900 dark:text-white">1,482,978</span>
+          <span class="text-xs font-semibold text-emerald-600 dark:text-emerald-400">+12.4%</span>
         </div>
       </div>
 
-      <div class="bg-slate-900/90 border border-slate-800/80 rounded-xl p-5 shadow-sm backdrop-blur-md">
-        <div class="flex items-center justify-between text-slate-400 text-xs font-medium uppercase">
+      <div class="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800/80 rounded-xl p-5 shadow-sm backdrop-blur-md">
+        <div class="flex items-center justify-between text-slate-500 dark:text-slate-400 text-xs font-medium uppercase">
           <span>Replay Attacks Caught</span>
           <span>⚠️</span>
         </div>
         <div class="mt-2 flex items-baseline justify-between">
-          <span id="kpi-replays-caught" class="text-2xl font-bold font-mono text-yellow-400">1,829</span>
-          <span class="text-xs font-semibold text-yellow-400 font-mono">Yellow Both Pings</span>
+          <span id="kpi-replays-caught" class="text-2xl font-bold font-mono text-amber-600 dark:text-yellow-400">1,829</span>
+          <span class="text-xs font-semibold text-amber-600 dark:text-yellow-400 font-mono">Yellow Both Pings</span>
         </div>
       </div>
 
-      <div class="bg-slate-900/90 border border-slate-800/80 rounded-xl p-5 shadow-sm backdrop-blur-md">
-        <div class="flex items-center justify-between text-slate-400 text-xs font-medium uppercase">
+      <div class="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800/80 rounded-xl p-5 shadow-sm backdrop-blur-md">
+        <div class="flex items-center justify-between text-slate-500 dark:text-slate-400 text-xs font-medium uppercase">
           <span>Crypto Failures Blocked</span>
           <span>🚨</span>
         </div>
         <div class="mt-2 flex items-baseline justify-between">
-          <span id="kpi-anomalies-blocked" class="text-2xl font-bold font-mono text-red-400">4,144</span>
-          <span class="text-xs font-semibold text-red-400 font-mono">Red Bad CMAC</span>
+          <span id="kpi-anomalies-blocked" class="text-2xl font-bold font-mono text-rose-600 dark:text-red-400">4,144</span>
+          <span class="text-xs font-semibold text-rose-600 dark:text-red-400 font-mono">Red Bad CMAC</span>
         </div>
       </div>
 
-      <div class="bg-slate-900/90 border border-slate-800/80 rounded-xl p-5 shadow-sm backdrop-blur-md">
-        <div class="flex items-center justify-between text-slate-400 text-xs font-medium uppercase">
+      <div class="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800/80 rounded-xl p-5 shadow-sm backdrop-blur-md">
+        <div class="flex items-center justify-between text-slate-500 dark:text-slate-400 text-xs font-medium uppercase">
           <span>Network Protection</span>
           <span>🛡️</span>
         </div>
         <div class="mt-2 flex items-baseline justify-between">
-          <span class="text-2xl font-bold font-mono text-white">99.98%</span>
-          <span class="text-xs font-semibold text-purple-400">Haversine Active</span>
+          <span class="text-2xl font-bold font-mono text-slate-900 dark:text-white">99.98%</span>
+          <span class="text-xs font-semibold text-purple-600 dark:text-purple-400">Haversine Active</span>
         </div>
       </div>
     </section>
@@ -199,70 +233,70 @@
       <div class="lg:col-span-2 space-y-4">
         
         <!-- Projection Mode Header Bar -->
-        <div class="bg-slate-900/90 border border-slate-800/80 rounded-xl p-3 backdrop-blur-md flex items-center justify-between gap-3">
-          <div class="text-xs font-mono font-bold text-slate-300 flex items-center space-x-2">
+        <div class="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800/80 rounded-xl p-3 backdrop-blur-md flex items-center justify-between gap-3 shadow-sm">
+          <div class="text-xs font-mono font-bold text-slate-700 dark:text-slate-300 flex items-center space-x-2">
             <span>MAP VIEWPORT ENGINE:</span>
-            <span id="map-mode-indicator" class="text-emerald-400">2D EQUIRECTANGULAR GIS</span>
+            <span id="map-mode-indicator" class="text-emerald-600 dark:text-emerald-400">2D EQUIRECTANGULAR GIS</span>
           </div>
 
           <!-- 2D vs 3D Projection Toggle -->
-          <div class="flex items-center space-x-1 bg-slate-950 p-1 rounded-lg border border-slate-800 text-xs font-mono">
-            <button id="btn-proj-2d" class="px-3 py-1 rounded bg-emerald-950 text-emerald-400 border border-emerald-800 font-bold transition-all">🗺️ 2D Flat</button>
-            <button id="btn-proj-3d" class="px-3 py-1 rounded text-slate-400 transition-all">🌐 3D Globe</button>
+          <div class="flex items-center space-x-1 bg-slate-100 dark:bg-slate-950 p-1 rounded-lg border border-slate-200 dark:border-slate-800 text-xs font-mono">
+            <button id="btn-proj-2d" class="px-3 py-1 rounded bg-emerald-600 dark:bg-emerald-950 text-white dark:text-emerald-400 border border-emerald-700 dark:border-emerald-800 font-bold transition-all">🗺️ 2D Flat</button>
+            <button id="btn-proj-3d" class="px-3 py-1 rounded text-slate-600 dark:text-slate-400 transition-all">🌐 3D Globe</button>
           </div>
         </div>
 
         <!-- GIS Canvas Viewport with Enhanced Popover Tooltip -->
-        <div class="bg-slate-900/90 border border-slate-800/80 rounded-xl p-4 shadow-sm relative backdrop-blur-md">
-          <div id="map-viewport">
+        <div class="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800/80 rounded-xl p-4 shadow-sm relative backdrop-blur-md">
+          <div id="map-viewport" class="border border-slate-200 dark:border-slate-800 rounded-lg">
             <canvas id="gis-canvas"></canvas>
 
             <!-- Expanded Glassmorphic Popover Tooltip -->
-            <div id="node-tooltip" class="absolute z-50 bg-slate-900/95 border border-emerald-500/50 rounded-xl p-3.5 shadow-2xl backdrop-blur-md text-xs font-mono space-y-1.5 hidden pointer-events-none max-w-xs transition-all">
-              <div class="flex items-center justify-between border-b border-slate-800 pb-1.5 font-bold">
-                <span id="tooltip-title" class="text-emerald-400">Houston, US</span>
-                <span id="tooltip-status-badge" class="text-[10px] bg-emerald-950 text-emerald-300 px-1.5 py-0.5 rounded border border-emerald-800">HQ NODE</span>
+            <div id="node-tooltip" class="absolute z-50 bg-white/95 dark:bg-slate-900/95 border border-emerald-500/50 rounded-xl p-3.5 shadow-2xl backdrop-blur-md text-xs font-mono space-y-1.5 hidden pointer-events-none max-w-xs transition-all text-slate-900 dark:text-slate-100">
+              <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-1.5 font-bold">
+                <span id="tooltip-title" class="text-emerald-600 dark:text-emerald-400">Houston, US</span>
+                <span id="tooltip-status-badge" class="text-[10px] bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 px-1.5 py-0.5 rounded border border-emerald-300 dark:border-emerald-800">HQ NODE</span>
               </div>
-              <div class="text-slate-300">Tag ID: <strong id="tooltip-tagid" class="text-white">NTAG-424-DNA-8000</strong></div>
-              <div class="text-slate-300">Batch ID: <strong id="tooltip-batchid" class="text-sky-400">BATCH-2026-QN-8840</strong></div>
-              <div class="text-slate-300">Tap Counter: <strong id="tooltip-sequence" class="text-slate-100">Sequence #001</strong></div>
-              <div class="text-slate-300">CMAC Crypto: <strong id="tooltip-cmac" class="text-emerald-400">AES-128 SUN Verified</strong></div>
-              <div class="text-slate-300">Active Chips: <strong id="tooltip-chips" class="text-white">48,290</strong></div>
-              <div class="text-slate-300">Mesh Latency: <strong id="tooltip-latency" class="text-emerald-400">12 ms</strong></div>
-              <div id="tooltip-extra" class="text-slate-400 text-[10px] pt-1 border-t border-slate-800">Haversine Impossible Velocity Engine: ACTIVE</div>
+              <div class="text-slate-700 dark:text-slate-300">Tag ID: <strong id="tooltip-tagid" class="text-slate-900 dark:text-white">NTAG-424-DNA-8000</strong></div>
+              <div class="text-slate-700 dark:text-slate-300">Batch ID: <strong id="tooltip-batchid" class="text-sky-600 dark:text-sky-400">BATCH-2026-QN-8840</strong></div>
+              <div class="text-slate-700 dark:text-slate-300">Tap Counter: <strong id="tooltip-sequence" class="text-slate-900 dark:text-slate-100">Sequence #001</strong></div>
+              <div class="text-slate-700 dark:text-slate-300">CMAC Crypto: <strong id="tooltip-cmac" class="text-emerald-600 dark:text-emerald-400">AES-128 SUN Verified</strong></div>
+              <div class="text-slate-700 dark:text-slate-300">Active Chips: <strong id="tooltip-chips" class="text-slate-900 dark:text-white">48,290</strong></div>
+              <div class="text-slate-700 dark:text-slate-300">Mesh Latency: <strong id="tooltip-latency" class="text-emerald-600 dark:text-emerald-400">12 ms</strong></div>
+              <div id="tooltip-extra" class="text-slate-500 dark:text-slate-400 text-[10px] pt-1 border-t border-slate-200 dark:border-slate-800">Haversine Impossible Velocity Engine: ACTIVE</div>
             </div>
           </div>
 
           <!-- Color Classification Legend Bar -->
-          <div class="mt-3 pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between text-[11px] font-mono gap-2 text-slate-400">
+          <div class="mt-3 pt-2 border-t border-slate-200 dark:border-slate-800/80 flex flex-wrap items-center justify-between text-[11px] font-mono gap-2 text-slate-600 dark:text-slate-400">
             <div class="flex items-center space-x-1.5">
               <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-              <span class="text-slate-200">🟢 Green: Authentic Tap 1</span>
+              <span class="text-slate-800 dark:text-slate-200">🟢 Green: Authentic Tap 1</span>
             </div>
             <div class="flex items-center space-x-1.5">
               <span class="w-2.5 h-2.5 rounded-full bg-yellow-500"></span>
-              <span class="text-slate-200">🟡 Yellow: Replay Attack (Both Pings Turn Yellow)</span>
+              <span class="text-slate-800 dark:text-slate-200">🟡 Yellow: Replay Attack (Both Pings Turn Yellow)</span>
             </div>
             <div class="flex items-center space-x-1.5">
               <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
-              <span class="text-slate-200">🔴 Red: Bad Cryptographic Signature</span>
+              <span class="text-slate-800 dark:text-slate-200">🔴 Red: Bad Cryptographic Signature</span>
             </div>
           </div>
         </div>
 
         <!-- Guaranteed Responsive Incident Time Scrubber Bar -->
-        <div class="bg-slate-900/90 border border-slate-800/80 rounded-xl p-4 backdrop-blur-md space-y-2">
+        <div class="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800/80 rounded-xl p-4 backdrop-blur-md space-y-2 shadow-sm">
           <div class="flex items-center justify-between text-xs font-mono">
             <div class="flex items-center space-x-2">
-              <span class="font-bold text-white">⏱️ Incident Time Scrubber:</span>
-              <span id="scrubber-status" class="text-emerald-400 font-semibold">🔴 LIVE STREAMING (0s)</span>
+              <span class="font-bold text-slate-900 dark:text-white">⏱️ Incident Time Scrubber:</span>
+              <span id="scrubber-status" class="text-emerald-600 dark:text-emerald-400 font-semibold">🔴 LIVE STREAMING (0s)</span>
             </div>
             <div class="flex items-center space-x-2">
               <button id="btn-scrub-live" class="px-2.5 py-1 rounded text-[11px] font-bold bg-emerald-600 hover:bg-emerald-500 text-white cursor-pointer transition-colors">▶ RESUME LIVE</button>
             </div>
           </div>
 
-          <input id="time-slider" type="range" min="0" max="60" value="60" class="w-full accent-emerald-500 bg-slate-800 rounded-lg cursor-pointer h-2">
+          <input id="time-slider" type="range" min="0" max="60" value="60" class="w-full accent-emerald-500 bg-slate-200 dark:bg-slate-800 rounded-lg cursor-pointer h-2">
           <div class="flex justify-between text-[10px] font-mono text-slate-500">
             <span>-60 Seconds (Audit History)</span>
             <span>-30 Seconds</span>
@@ -273,28 +307,28 @@
       </div>
 
       <!-- Right Column: Live Telemetry Feed -->
-      <div class="bg-slate-900/90 border border-slate-800/80 rounded-xl p-5 shadow-sm space-y-4 flex flex-col h-[670px] backdrop-blur-md">
+      <div class="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800/80 rounded-xl p-5 shadow-sm space-y-4 flex flex-col h-[670px] backdrop-blur-md">
         
-        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
           <div>
-            <h2 class="text-base font-bold text-white">Live Telemetry Stream</h2>
-            <p class="text-xs text-slate-400 font-mono">Filtered Security Events</p>
+            <h2 class="text-base font-bold text-slate-900 dark:text-white">Live Telemetry Stream</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400 font-mono">Filtered Security Events</p>
           </div>
-          <span id="stream-status-badge" class="px-2 py-0.5 text-xs font-mono font-bold rounded bg-emerald-950 text-emerald-400 border border-emerald-800 animate-pulse flex items-center gap-1">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> STREAM ACTIVE
+          <span id="stream-status-badge" class="px-2 py-0.5 text-xs font-mono font-bold rounded bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800 animate-pulse flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> STREAM ACTIVE
           </span>
         </div>
 
         <!-- Telemetry Filter Buttons -->
-        <div class="flex items-center space-x-1.5 text-xs font-mono bg-slate-950 p-1.5 rounded-lg border border-slate-800">
+        <div class="flex items-center space-x-1.5 text-xs font-mono bg-slate-100 dark:bg-slate-950 p-1.5 rounded-lg border border-slate-200 dark:border-slate-800">
           <button id="btn-filter-all" class="flex-1 py-1.5 rounded-md bg-emerald-600 text-white font-bold transition-all text-center">All Telemetry</button>
-          <button id="btn-filter-threats" class="flex-1 py-1.5 rounded-md bg-slate-800 text-slate-400 hover:text-white transition-all text-center">Threats Only</button>
-          <button id="btn-filter-us" class="flex-1 py-1.5 rounded-md bg-slate-800 text-slate-400 hover:text-white transition-all text-center">US Region</button>
+          <button id="btn-filter-threats" class="flex-1 py-1.5 rounded-md bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all text-center">Threats Only</button>
+          <button id="btn-filter-us" class="flex-1 py-1.5 rounded-md bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all text-center">US Region</button>
         </div>
 
         <!-- Tag Search Input -->
         <div>
-          <input id="tag-search" type="text" placeholder="🔍 Search Tag ID (e.g. NTAG-424-8000)" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs font-mono text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500">
+          <input id="tag-search" type="text" placeholder="🔍 Search Tag ID (e.g. NTAG-424-8000)" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-xs font-mono text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-emerald-500">
         </div>
 
         <div id="telemetry-feed" class="flex-1 overflow-y-auto space-y-3 pr-1">
@@ -594,8 +628,9 @@
     function renderLoop() {
       const width = canvas.width = canvas.parentElement.clientWidth || 800;
       const height = canvas.height = canvas.parentElement.clientHeight || 520;
+      const isDark = document.documentElement.classList.contains('dark');
 
-      ctx.fillStyle = '#030712';
+      ctx.fillStyle = isDark ? '#030712' : '#f8fafc';
       ctx.fillRect(0, 0, width, height);
 
       let projection;
@@ -607,19 +642,19 @@
 
         ctx.beginPath();
         ctx.arc(width / 2, height / 2, height / 2.3, 0, Math.PI * 2);
-        ctx.fillStyle = '#060c1c'; ctx.fill();
-        ctx.strokeStyle = 'rgba(16, 185, 129, 0.4)'; ctx.lineWidth = 2; ctx.stroke();
+        ctx.fillStyle = isDark ? '#060c1c' : '#e2e8f0'; ctx.fill();
+        ctx.strokeStyle = isDark ? 'rgba(16, 185, 129, 0.4)' : 'rgba(16, 185, 129, 0.6)'; ctx.lineWidth = 2; ctx.stroke();
       }
 
       const pathGenerator = d3.geoPath().projection(projection).context(ctx);
 
-      ctx.strokeStyle = 'rgba(15, 32, 56, 0.6)'; ctx.lineWidth = 0.5; ctx.setLineDash([4, 4]);
+      ctx.strokeStyle = isDark ? 'rgba(15, 32, 56, 0.6)' : 'rgba(203, 213, 225, 0.8)'; ctx.lineWidth = 0.5; ctx.setLineDash([4, 4]);
       const graticule = d3.geoGraticule10(); ctx.beginPath(); pathGenerator(graticule); ctx.stroke(); ctx.setLineDash([]);
 
       if (topoData) {
         const geojson = topojson.feature(topoData, topoData.objects.land);
-        ctx.fillStyle = '#0d1726';
-        ctx.strokeStyle = '#1e3a5f';
+        ctx.fillStyle = isDark ? '#0d1726' : '#cbd5e1';
+        ctx.strokeStyle = isDark ? '#1e3a5f' : '#94a3b8';
         ctx.lineWidth = 1.2;
         ctx.beginPath();
         pathGenerator(geojson);
@@ -659,7 +694,7 @@
           ctx.fillStyle = mainColor; ctx.fill();
           ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1.2; ctx.stroke();
 
-          ctx.fillStyle = `rgba(255, 255, 255, ${fade})`;
+          ctx.fillStyle = isDark ? `rgba(255, 255, 255, ${fade})` : `rgba(15, 23, 42, ${fade})`;
           ctx.font = 'bold 10px JetBrains Mono';
           ctx.fillText(evt.origin.city, x + 8, y + 3);
         }
@@ -672,7 +707,7 @@
             ctx.fillStyle = mainColor; ctx.fill();
             ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1.2; ctx.stroke();
 
-            ctx.fillStyle = `rgba(255, 255, 255, ${fade})`;
+            ctx.fillStyle = isDark ? `rgba(255, 255, 255, ${fade})` : `rgba(15, 23, 42, ${fade})`;
             ctx.font = 'bold 10px JetBrains Mono';
             ctx.fillText(evt.destination.city, x + 8, y + 3);
           }
