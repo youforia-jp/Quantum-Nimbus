@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="dark scroll-smooth">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -43,151 +43,182 @@
 
   <style>
     body {
-      background-color: #0b0f19;
-      color: #cbd5e1;
       font-family: 'Inter', sans-serif;
     }
-    .glass-panel {
-      background: rgba(17, 24, 39, 0.75);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(31, 41, 61, 0.8);
-    }
-    .glass-card {
-      background: linear-gradient(135deg, rgba(17, 24, 39, 0.9) 0%, rgba(22, 32, 50, 0.6) 100%);
-      border: 1px solid rgba(31, 41, 61, 0.8);
-      transition: all 0.2s ease-in-out;
-    }
-    .glass-card:hover {
-      border-color: rgba(14, 165, 233, 0.4);
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 0 15px rgba(14, 165, 233, 0.1);
-    }
-    .pulse-green {
-      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
-      animation: pulseGreen 2s infinite;
-    }
-    @keyframes pulseGreen {
-      0% {
-        transform: scale(0.95);
-        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
-      }
-      70% {
-        transform: scale(1);
-        box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
-      }
-      100% {
-        transform: scale(0.95);
-        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
-      }
-    }
+    
     /* Custom Scrollbar */
     ::-webkit-scrollbar {
       width: 6px;
       height: 6px;
     }
     ::-webkit-scrollbar-track {
-      background: #0b0f19;
+      background: #f8fafc;
     }
     ::-webkit-scrollbar-thumb {
-      background: #1f293d;
+      background: #cbd5e1;
       border-radius: 3px;
     }
     ::-webkit-scrollbar-thumb:hover {
-      background: #334155;
+      background: #94a3b8;
+    }
+    
+    .pulse-green {
+      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+      animation: pulseGreen 2s infinite;
+    }
+    @keyframes pulseGreen {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+      70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
     }
   </style>
+
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('nimbus_theme');
+      if (savedTheme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    })();
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('nimbus_theme', isDark ? 'dark' : 'light');
+    }
+    window.toggleTheme = toggleTheme;
+  </script>
 </head>
-<body class="min-h-screen flex flex-col antialiased selection:bg-sky-500 selection:text-white">
+<body class="w-full min-h-screen bg-slate-50 text-slate-900 antialiased bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:16px_16px]">
 
   <!-- ========================================== -->
-  <!-- TOP DARK NAVBAR                            -->
+  <!-- TOP NAVIGATION BAR                         -->
   <!-- ========================================== -->
-  <header class="sticky top-0 z-40 bg-[#070a12]/90 backdrop-blur-md border-b border-nimbusBorder px-4 lg:px-8 py-3.5">
-    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+  <nav class="w-full bg-white/90 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+      
+      <!-- Brand Logo -->
+      <div class="flex-shrink-0 flex items-center">
+        <a href="index.html" aria-label="Nimbus" class="flex items-center gap-2.5 group">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-sky-600 via-indigo-600 to-cyan-400 p-[1px] shadow-md shadow-sky-500/20">
+            <div class="w-full h-full bg-slate-900 rounded-[11px] flex items-center justify-center">
+              <i data-lucide="shield-check" class="w-5 h-5 text-sky-400"></i>
+            </div>
+          </div>
+          <span class="font-heading font-extrabold text-lg text-slate-900 tracking-wider">QUANTUM<span class="text-sky-600">NIMBUS</span></span>
+        </a>
+      </div>
+
+      <!-- Desktop Nav Links -->
+      <div class="hidden lg:flex items-center gap-5 xl:gap-6 whitespace-nowrap">
+        <a href="index.html#technology" class="text-slate-600 hover:text-slate-900 font-medium text-xs transition-colors">Platform Overview</a>
+        <a href="how-it-works.html" class="text-slate-600 hover:text-slate-900 font-medium text-xs transition-colors">How It Works</a>
+        <a href="safety.html" class="text-slate-600 hover:text-slate-900 font-medium text-xs transition-colors">Compliance Data</a>
+        <a href="unit-economics.html" class="text-slate-600 hover:text-slate-900 font-medium text-xs transition-colors">Unit Economics</a>
+        <a href="simulator.html" class="text-slate-600 hover:text-slate-900 font-medium text-xs transition-colors">NFC + AI Simulation</a>
+        <a href="dashboard.html" class="text-slate-600 hover:text-slate-900 font-medium text-xs transition-colors">Live Threat Map</a>
+        <a href="state-auditor-dashboard.html" class="text-cyan-700 font-bold bg-cyan-50 border border-cyan-200/80 rounded-lg px-3 py-1.5 text-xs flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-cyan-500 animate-pulse"></span>State Auditor
+        </a>
+      </div>
+
+      <!-- Right Actions -->
+      <div class="hidden lg:flex items-center gap-3">
+        <button onclick="toggleTheme()" class="p-2 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors" aria-label="Toggle Theme">
+          <i data-lucide="sun" class="w-4 h-4 hidden dark:block text-amber-500"></i>
+          <i data-lucide="moon" class="w-4 h-4 block dark:hidden text-slate-600"></i>
+        </button>
+        <a href="contact.html" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition-all shadow-sm">
+          Schedule a Demo
+        </a>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <div class="lg:hidden flex items-center gap-2">
+        <button onclick="toggleTheme()" class="p-2 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors" aria-label="Toggle Theme">
+          <i data-lucide="sun" class="w-4 h-4 hidden dark:block text-amber-500"></i>
+          <i data-lucide="moon" class="w-4 h-4 block dark:hidden text-slate-600"></i>
+        </button>
+        <button id="mobile-menu-btn" class="p-2 rounded-lg text-slate-600 hover:bg-slate-100 focus:outline-none" aria-label="Toggle Menu">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Mobile Navigation Menu -->
+    <div id="mobile-menu" class="lg:hidden hidden bg-white border-t border-slate-200/80 px-4 py-3 space-y-2">
+      <a href="index.html#technology" class="block px-3 py-2 text-xs font-medium text-slate-700 hover:bg-slate-100 rounded-lg">Platform Overview</a>
+      <a href="how-it-works.html" class="block px-3 py-2 text-xs font-medium text-slate-700 hover:bg-slate-100 rounded-lg">How It Works</a>
+      <a href="safety.html" class="block px-3 py-2 text-xs font-medium text-slate-700 hover:bg-slate-100 rounded-lg">Compliance Data</a>
+      <a href="unit-economics.html" class="block px-3 py-2 text-xs font-medium text-slate-700 hover:bg-slate-100 rounded-lg">Unit Economics</a>
+      <a href="simulator.html" class="block px-3 py-2 text-xs font-medium text-slate-700 hover:bg-slate-100 rounded-lg">NFC + AI Simulation</a>
+      <a href="dashboard.html" class="block px-3 py-2 text-xs font-medium text-slate-700 hover:bg-slate-100 rounded-lg">Live Threat Map</a>
+      <a href="state-auditor-dashboard.html" class="block px-3 py-2 text-xs font-bold text-cyan-700 bg-cyan-50 rounded-lg flex items-center gap-1.5">
+        <span class="w-2 h-2 rounded-full bg-cyan-500 animate-pulse"></span>State Auditor
+      </a>
+      <a href="contact.html" class="block text-center px-4 py-2 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl transition-all shadow-sm mt-2">
+        Schedule a Demo
+      </a>
+    </div>
+  </nav>
+
+  <!-- ========================================== -->
+  <!-- AUDITOR GATEWAY BAR                        -->
+  <!-- ========================================== -->
+  <header class="w-full bg-white/60 border-b border-slate-200/80 py-4 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex flex-col md:flex-row items-center justify-between gap-4">
       
       <!-- Left Brand & Context -->
-      <div class="flex items-center gap-4 w-full md:w-auto justify-between md:justify-start">
-        <div class="flex items-center gap-3">
-          <a href="index.html" class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-600 via-indigo-600 to-cyan-400 p-[1px] shadow-lg shadow-sky-500/20">
-              <div class="w-full h-full bg-nimbusDark rounded-[11px] flex items-center justify-center">
-                <i data-lucide="shield-check" class="w-5 h-5 text-sky-400"></i>
-              </div>
-            </div>
-            <div>
-              <div class="flex items-center gap-2">
-                <span class="font-heading font-extrabold text-lg text-white tracking-wider">QUANTUM<span class="text-sky-400">NIMBUS</span></span>
-                <span class="text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded bg-sky-950 text-sky-300 border border-sky-800/50">AUDITOR GATEWAY</span>
-              </div>
-              <p class="text-xs text-slate-400 flex items-center gap-1.5">
-                <span>State Compliance Monitoring</span>
-                <span class="text-slate-600">•</span>
-                <span class="text-sky-400 font-medium">Florida Department of Health (OMMU)</span>
-              </p>
-            </div>
-          </a>
-        </div>
-
-        <!-- Site Navigation Links -->
-        <nav class="hidden lg:flex items-center gap-4 text-xs font-medium text-slate-400 ml-4 border-l border-nimbusBorder pl-4">
-          <a href="index.html" class="hover:text-white transition-colors">Home</a>
-          <a href="dashboard.html" class="hover:text-emerald-400 transition-colors flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Threat Map</a>
-          <a href="state-auditor-dashboard.html" class="text-sky-400 font-bold">State Auditor</a>
-          <a href="simulator.html" class="hover:text-white transition-colors">Simulation</a>
-          <a href="safety.html" class="hover:text-white transition-colors">Compliance</a>
-        </nav>
-
-        <!-- Region Selector & Status Badge (Mobile layout split) -->
-        <div class="hidden sm:flex md:hidden items-center gap-2">
-          <!-- Region Select -->
-          <div class="relative">
-            <select id="region-select-mobile" class="bg-nimbusCard text-xs text-slate-200 border border-nimbusBorder rounded-lg px-3 py-1.5 pr-8 focus:outline-none focus:border-sky-500 appearance-none cursor-pointer">
-              <option value="FL" selected>🌴 Florida Region</option>
-              <option value="CO">🏔️ Colorado Region</option>
-              <option value="CA">☀️ California Region</option>
-              <option value="NV">🎰 Nevada Region</option>
-            </select>
-            <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+      <div class="flex items-center gap-3 w-full md:w-auto justify-between md:justify-start">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-heading font-extrabold text-base text-slate-900 tracking-wider">STATE AUDITOR GATEWAY</span>
+            <span class="text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded bg-sky-100 text-sky-800 border border-sky-200">OFFICIAL MONITOR</span>
           </div>
+          <p class="text-xs text-slate-500 flex items-center gap-1.5 mt-0.5">
+            <span>State Compliance Monitoring</span>
+            <span class="text-slate-300">•</span>
+            <span class="text-slate-700 font-mono font-medium">Florida Department of Health (OMMU)</span>
+          </p>
         </div>
       </div>
 
-      <!-- Center & Right Controls -->
+      <!-- Right Controls -->
       <div class="flex flex-wrap items-center justify-between md:justify-end gap-3 w-full md:w-auto">
         
-        <!-- Region Selector (Desktop) -->
-        <div class="hidden md:flex items-center gap-2 bg-nimbusCard/90 border border-nimbusBorder rounded-lg p-1">
-          <div class="flex items-center gap-1.5 px-2 py-1 text-xs text-slate-400 font-medium">
-            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-sky-400"></i>
+        <!-- Region Selector -->
+        <div class="flex items-center gap-2 bg-slate-100/80 border border-slate-200 rounded-lg p-1">
+          <div class="flex items-center gap-1.5 px-2 py-1 text-xs text-slate-500 font-medium">
+            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-sky-600"></i>
             <span>Region:</span>
           </div>
           <div class="relative">
-            <select id="region-select" class="bg-[#0f172a] text-xs font-semibold text-sky-300 border border-sky-900/60 rounded-md px-3 py-1 pr-7 focus:outline-none focus:ring-1 focus:ring-sky-500 appearance-none cursor-pointer">
+            <select id="region-select" class="bg-white text-xs font-semibold text-sky-700 border border-slate-300 rounded-md px-3 py-1 pr-7 focus:outline-none focus:ring-1 focus:ring-sky-500 appearance-none cursor-pointer">
               <option value="FL" selected>Florida Region (District 4)</option>
               <option value="CO">Colorado Region (Central)</option>
               <option value="CA">California Region (Pacific)</option>
               <option value="NV">Nevada Region (West)</option>
             </select>
-            <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-sky-400 absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+            <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-sky-600 absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none"></i>
           </div>
         </div>
 
-        <!-- Status Badge: 'BioTrack API Connected' (green) -->
-        <div class="flex items-center gap-2.5 bg-emerald-950/40 border border-emerald-800/50 text-emerald-300 text-xs px-3 py-1.5 rounded-lg font-medium shadow-sm">
+        <!-- Status Badge: 'BioTrack API Connected' -->
+        <div class="flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs px-3 py-1.5 rounded-lg font-medium shadow-sm">
           <span class="relative flex h-2.5 w-2.5">
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
             <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
           </span>
           <div class="flex items-center gap-1.5">
-            <i data-lucide="database" class="w-3.5 h-3.5 text-emerald-400"></i>
+            <i data-lucide="database" class="w-3.5 h-3.5 text-emerald-600"></i>
             <span class="font-semibold tracking-wide">BioTrack API Connected</span>
           </div>
-          <span class="text-[10px] text-emerald-400/80 bg-emerald-900/50 px-1.5 py-0.5 rounded font-mono hidden sm:inline">12ms • Live</span>
+          <span class="text-[10px] text-emerald-600/90 bg-emerald-100/80 px-1.5 py-0.5 rounded font-mono hidden sm:inline">12ms • Live</span>
         </div>
 
-        <!-- Top Right Action Button: Export Official State Audit Log (PDF) -->
-        <button id="export-pdf-btn" onclick="openAuditExportModal()" class="flex items-center gap-2 bg-gradient-to-r from-sky-600 via-sky-500 to-cyan-500 hover:from-sky-500 hover:to-cyan-400 text-white font-medium text-xs md:text-sm px-4 py-2 rounded-lg shadow-lg shadow-sky-600/25 transition-all duration-200 active:scale-95 group">
+        <!-- Top Right Action Button: Export PDF -->
+        <button id="export-pdf-btn" onclick="openAuditExportModal()" class="flex items-center gap-2 bg-gradient-to-r from-sky-600 via-sky-500 to-cyan-500 hover:from-sky-500 hover:to-cyan-400 text-white font-medium text-xs md:text-sm px-4 py-2 rounded-lg shadow-sm transition-all active:scale-95 group">
           <i data-lucide="file-down" class="w-4 h-4 text-sky-100 group-hover:translate-y-0.5 transition-transform"></i>
           <span>Export Official State Audit Log (PDF)</span>
         </button>
@@ -199,26 +230,26 @@
   <!-- ========================================== -->
   <!-- MAIN DASHBOARD CONTENT                     -->
   <!-- ========================================== -->
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 lg:px-8 py-6 space-y-6">
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-6 space-y-6">
 
     <!-- SUBHEADER / AUDIT SESSION INFO BANNER -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-nimbusBorder">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200">
       <div>
-        <h1 class="font-heading text-2xl md:text-3xl font-bold text-white tracking-tight flex items-center gap-2.5">
+        <h1 class="font-heading text-2xl md:text-3xl font-bold text-slate-900 tracking-tight flex items-center gap-2.5">
           <span>State Auditor Dashboard</span>
-          <span class="text-xs bg-slate-800 text-slate-300 font-mono font-normal px-2.5 py-1 rounded-md border border-slate-700">FL-OMMU-2026.08</span>
+          <span class="text-xs bg-slate-100 text-slate-600 font-mono font-normal px-2.5 py-1 rounded-md border border-slate-300">FL-OMMU-2026.08</span>
         </h1>
-        <p class="text-sm text-slate-400 mt-1">Real-time NFC anti-cloning verification, chain-of-custody tracking & BioTrack API telemetry.</p>
+        <p class="text-slate-500 text-sm mt-1">Real-time NFC anti-cloning verification, chain-of-custody tracking & BioTrack API telemetry.</p>
       </div>
 
       <!-- Quick Action Controls / Refresh Timer -->
       <div class="flex items-center gap-3">
-        <div class="text-xs text-slate-400 bg-nimbusCard border border-nimbusBorder px-3 py-1.5 rounded-lg flex items-center gap-2">
-          <i data-lucide="clock" class="w-3.5 h-3.5 text-sky-400"></i>
+        <div class="text-xs text-slate-500 bg-white border border-slate-200 px-3 py-1.5 rounded-lg flex items-center gap-2 shadow-sm">
+          <i data-lucide="clock" class="w-3.5 h-3.5 text-sky-600"></i>
           <span>Auto-syncing every 15s</span>
-          <span id="sync-counter" class="font-mono text-sky-400 font-semibold">12s</span>
+          <span id="sync-counter" class="font-mono text-sky-600 font-semibold">12s</span>
         </div>
-        <button onclick="refreshData()" class="p-1.5 bg-nimbusCard hover:bg-nimbusCardHover border border-nimbusBorder text-slate-300 hover:text-white rounded-lg transition-colors" title="Manual Refresh">
+        <button onclick="refreshData()" class="p-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-600 hover:text-slate-900 rounded-lg transition-colors shadow-sm" title="Manual Refresh">
           <i data-lucide="refresh-cw" id="refresh-icon" class="w-4 h-4"></i>
         </button>
       </div>
@@ -227,101 +258,109 @@
     <!-- ========================================== -->
     <!-- TOP METRIC CARDS ROW                       -->
     <!-- ========================================== -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 my-6">
       
       <!-- Card 1: Total Handoffs (24h) -->
-      <div class="glass-card rounded-xl p-5 relative overflow-hidden">
+      <div class="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm flex flex-col justify-between relative overflow-hidden">
         <div class="absolute -right-4 -bottom-4 opacity-5 pointer-events-none">
-          <i data-lucide="arrow-right-left" class="w-28 h-28 text-sky-400"></i>
+          <i data-lucide="arrow-right-left" class="w-28 h-28 text-sky-500"></i>
         </div>
-        <div class="flex items-center justify-between text-slate-400 text-xs font-medium uppercase tracking-wider mb-2">
-          <span>Total Handoffs (24h)</span>
-          <span class="p-1.5 rounded-lg bg-sky-950/60 border border-sky-800/50 text-sky-400">
-            <i data-lucide="arrow-right-left" class="w-4 h-4"></i>
-          </span>
-        </div>
-        <div class="flex items-baseline justify-between">
-          <div class="font-heading text-3xl font-extrabold text-white tracking-tight" id="metric-handoffs">14,892</div>
-          <div class="flex items-center gap-1 text-xs text-emerald-400 font-medium bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-800/40">
-            <i data-lucide="trending-up" class="w-3 h-3"></i>
-            <span>+12.4%</span>
+        <div>
+          <div class="flex items-center justify-between text-slate-500 text-xs font-medium uppercase tracking-wider mb-2">
+            <span>Total Handoffs (24h)</span>
+            <span class="p-1.5 rounded-lg bg-sky-50 border border-sky-200 text-sky-600">
+              <i data-lucide="arrow-right-left" class="w-4 h-4"></i>
+            </span>
+          </div>
+          <div class="flex items-baseline justify-between">
+            <div class="font-heading text-slate-900 font-extrabold text-3xl tracking-tight" id="metric-handoffs">14,892</div>
+            <div class="flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200/80 whitespace-nowrap">
+              <i data-lucide="trending-up" class="w-3 h-3"></i>
+              <span>+12.4%</span>
+            </div>
           </div>
         </div>
-        <div class="mt-3 pt-3 border-t border-nimbusBorder/60 flex items-center justify-between text-xs text-slate-400">
+        <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
           <span>Target Integrity</span>
-          <span class="text-slate-200 font-mono">100.0% BioTrack Sync</span>
+          <span class="text-slate-700 font-mono font-medium">100.0% BioTrack Sync</span>
         </div>
       </div>
 
       <!-- Card 2: Verified Scans -->
-      <div class="glass-card rounded-xl p-5 relative overflow-hidden">
+      <div class="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm flex flex-col justify-between relative overflow-hidden">
         <div class="absolute -right-4 -bottom-4 opacity-5 pointer-events-none">
-          <i data-lucide="check-circle-2" class="w-28 h-28 text-emerald-400"></i>
+          <i data-lucide="check-circle-2" class="w-28 h-28 text-emerald-500"></i>
         </div>
-        <div class="flex items-center justify-between text-slate-400 text-xs font-medium uppercase tracking-wider mb-2">
-          <span>Verified Scans</span>
-          <span class="p-1.5 rounded-lg bg-emerald-950/60 border border-emerald-800/50 text-emerald-400">
-            <i data-lucide="shield-check" class="w-4 h-4"></i>
-          </span>
-        </div>
-        <div class="flex items-baseline justify-between">
-          <div class="font-heading text-3xl font-extrabold text-emerald-400 tracking-tight" id="metric-verified">14,845</div>
-          <div class="flex items-center gap-1 text-xs text-emerald-400 font-medium bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-800/40">
-            <i data-lucide="check" class="w-3 h-3"></i>
-            <span>99.68%</span>
+        <div>
+          <div class="flex items-center justify-between text-slate-500 text-xs font-medium uppercase tracking-wider mb-2">
+            <span>Verified Scans</span>
+            <span class="p-1.5 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-600">
+              <i data-lucide="shield-check" class="w-4 h-4"></i>
+            </span>
+          </div>
+          <div class="flex items-baseline justify-between">
+            <div class="font-heading text-slate-900 font-extrabold text-3xl tracking-tight" id="metric-verified">14,845</div>
+            <div class="flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200/80 whitespace-nowrap">
+              <i data-lucide="check" class="w-3 h-3"></i>
+              <span>99.68%</span>
+            </div>
           </div>
         </div>
-        <div class="mt-3 pt-3 border-t border-nimbusBorder/60 flex items-center justify-between text-xs text-slate-400">
+        <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
           <span>NFC ECDSA Valid</span>
-          <span class="text-emerald-400 font-mono font-medium">14,845 Tags</span>
+          <span class="text-emerald-600 font-mono font-medium">14,845 Tags</span>
         </div>
       </div>
 
       <!-- Card 3: Flagged Anomalies -->
-      <div class="glass-card rounded-xl p-5 relative overflow-hidden border-amber-900/40">
+      <div class="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm flex flex-col justify-between relative overflow-hidden">
         <div class="absolute -right-4 -bottom-4 opacity-5 pointer-events-none">
-          <i data-lucide="alert-triangle" class="w-28 h-28 text-amber-400"></i>
+          <i data-lucide="alert-triangle" class="w-28 h-28 text-amber-500"></i>
         </div>
-        <div class="flex items-center justify-between text-slate-400 text-xs font-medium uppercase tracking-wider mb-2">
-          <span>Flagged Anomalies</span>
-          <span class="p-1.5 rounded-lg bg-amber-950/60 border border-amber-800/50 text-amber-400">
-            <i data-lucide="alert-triangle" class="w-4 h-4"></i>
-          </span>
-        </div>
-        <div class="flex items-baseline justify-between">
-          <div class="font-heading text-3xl font-extrabold text-amber-400 tracking-tight" id="metric-flagged">47</div>
-          <div class="flex items-center gap-1 text-xs text-amber-400 font-medium bg-amber-950/40 px-2 py-0.5 rounded border border-amber-800/40">
-            <i data-lucide="alert-circle" class="w-3 h-3"></i>
-            <span>0.32%</span>
+        <div>
+          <div class="flex items-center justify-between text-slate-500 text-xs font-medium uppercase tracking-wider mb-2">
+            <span>Flagged Anomalies</span>
+            <span class="p-1.5 rounded-lg bg-amber-50 border border-amber-200 text-amber-600">
+              <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+            </span>
+          </div>
+          <div class="flex items-baseline justify-between">
+            <div class="font-heading text-slate-900 font-extrabold text-3xl tracking-tight" id="metric-flagged">47</div>
+            <div class="flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-md bg-amber-50 text-amber-700 border border-amber-200/80 whitespace-nowrap">
+              <i data-lucide="alert-circle" class="w-3 h-3"></i>
+              <span>0.32%</span>
+            </div>
           </div>
         </div>
-        <div class="mt-3 pt-3 border-t border-nimbusBorder/60 flex items-center justify-between text-xs text-slate-400">
+        <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
           <span>Requires State Audit</span>
-          <span class="text-amber-400 font-medium cursor-pointer hover:underline" onclick="filterTable('FLAGGED')">Review 47 Items &rarr;</span>
+          <span class="text-amber-600 font-medium cursor-pointer hover:underline" onclick="filterTable('FLAGGED')">Review 47 Items &rarr;</span>
         </div>
       </div>
 
       <!-- Card 4: Active Transport Manifests -->
-      <div class="glass-card rounded-xl p-5 relative overflow-hidden">
+      <div class="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm flex flex-col justify-between relative overflow-hidden">
         <div class="absolute -right-4 -bottom-4 opacity-5 pointer-events-none">
-          <i data-lucide="truck" class="w-28 h-28 text-cyan-400"></i>
+          <i data-lucide="truck" class="w-28 h-28 text-sky-500"></i>
         </div>
-        <div class="flex items-center justify-between text-slate-400 text-xs font-medium uppercase tracking-wider mb-2">
-          <span>Active Transport Manifests</span>
-          <span class="p-1.5 rounded-lg bg-cyan-950/60 border border-cyan-800/50 text-cyan-400">
-            <i data-lucide="truck" class="w-4 h-4"></i>
-          </span>
-        </div>
-        <div class="flex items-baseline justify-between">
-          <div class="font-heading text-3xl font-extrabold text-sky-300 tracking-tight" id="metric-manifests">128</div>
-          <div class="flex items-center gap-1 text-xs text-sky-400 font-medium bg-sky-950/40 px-2 py-0.5 rounded border border-sky-800/40">
-            <i data-lucide="radio" class="w-3 h-3"></i>
-            <span>In Transit</span>
+        <div>
+          <div class="flex items-center justify-between text-slate-500 text-xs font-medium uppercase tracking-wider mb-2">
+            <span>Active Transport Manifests</span>
+            <span class="p-1.5 rounded-lg bg-sky-50 border border-sky-200 text-sky-600">
+              <i data-lucide="truck" class="w-4 h-4"></i>
+            </span>
+          </div>
+          <div class="flex items-baseline justify-between">
+            <div class="font-heading text-slate-900 font-extrabold text-3xl tracking-tight" id="metric-manifests">128</div>
+            <div class="flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-md bg-sky-50 text-sky-700 border border-sky-200/80 whitespace-nowrap">
+              <i data-lucide="radio" class="w-3 h-3"></i>
+              <span>In Transit</span>
+            </div>
           </div>
         </div>
-        <div class="mt-3 pt-3 border-t border-nimbusBorder/60 flex items-center justify-between text-xs text-slate-400">
+        <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
           <span>FL State Corridors</span>
-          <span class="text-slate-200 font-mono">I-95, I-4, I-75 Active</span>
+          <span class="text-slate-700 font-mono font-medium">I-95, I-4, I-75 Active</span>
         </div>
       </div>
 
@@ -330,32 +369,32 @@
     <!-- ========================================== -->
     <!-- RECENT ASSET MOVEMENTS DATA TABLE          -->
     <!-- ========================================== -->
-    <div class="glass-panel rounded-2xl border border-nimbusBorder shadow-2xl overflow-hidden">
+    <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
       
       <!-- Table Header & Controls -->
-      <div class="p-5 border-b border-nimbusBorder bg-nimbusCard/80 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div class="p-5 border-b border-slate-200 bg-slate-50/50 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div class="flex items-center gap-2">
-            <h2 class="font-heading text-lg font-bold text-white">Recent Asset Movements & Handoff Logs</h2>
-            <span class="text-xs bg-nimbusDark text-slate-400 px-2.5 py-0.5 rounded-full border border-nimbusBorder font-mono" id="table-count-badge">Showing 10 of 14,892 records</span>
+            <h2 class="text-slate-900 font-bold text-lg">Recent Asset Movements & Handoff Logs</h2>
+            <span class="text-xs text-slate-500 bg-white px-2.5 py-0.5 rounded-full border border-slate-200 font-mono shadow-sm" id="table-count-badge">Showing 10 of 14,892 records</span>
           </div>
-          <p class="text-xs text-slate-400 mt-1">Live chain-of-custody verification feed synced directly with Florida BioTrack state seed-to-sale registry.</p>
+          <p class="text-xs text-slate-500 mt-1">Live chain-of-custody verification feed synced directly with Florida BioTrack state seed-to-sale registry.</p>
         </div>
 
         <!-- Controls: Filter Buttons + Search -->
         <div class="flex flex-wrap items-center gap-3">
           
           <!-- Status Filter Pills -->
-          <div class="flex items-center bg-nimbusDark border border-nimbusBorder rounded-lg p-1 text-xs font-medium">
-            <button onclick="filterTable('ALL')" id="filter-btn-all" class="px-3 py-1.5 rounded-md text-white bg-sky-600 font-semibold transition-all">All Records</button>
-            <button onclick="filterTable('VERIFIED')" id="filter-btn-verified" class="px-3 py-1.5 rounded-md text-slate-400 hover:text-white transition-all">Verified (Green)</button>
-            <button onclick="filterTable('FLAGGED')" id="filter-btn-flagged" class="px-3 py-1.5 rounded-md text-slate-400 hover:text-white transition-all">Flagged (Yellow)</button>
+          <div class="flex items-center bg-slate-100 border border-slate-200 rounded-lg p-1 text-xs font-medium">
+            <button onclick="filterTable('ALL')" id="filter-btn-all" class="px-3 py-1.5 rounded-md text-slate-900 bg-white font-semibold shadow-sm transition-all">All Records</button>
+            <button onclick="filterTable('VERIFIED')" id="filter-btn-verified" class="px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 transition-all">Verified (Green)</button>
+            <button onclick="filterTable('FLAGGED')" id="filter-btn-flagged" class="px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 transition-all">Flagged (Yellow)</button>
           </div>
 
           <!-- Search Input -->
           <div class="relative min-w-[220px]">
-            <input type="text" id="table-search" oninput="handleSearch()" placeholder="Search Tag ID, Driver, Facility..." class="w-full bg-nimbusDark text-xs text-slate-200 border border-nimbusBorder rounded-lg pl-9 pr-4 py-2 focus:outline-none focus:border-sky-500 placeholder-slate-500">
-            <i data-lucide="search" class="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2"></i>
+            <input type="text" id="table-search" oninput="handleSearch()" placeholder="Search Tag ID, Driver, Facility..." class="w-full bg-white text-xs text-slate-800 border border-slate-200 rounded-lg pl-9 pr-4 py-2 focus:outline-none focus:border-sky-500 placeholder-slate-400 shadow-sm">
+            <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
           </div>
 
         </div>
@@ -365,32 +404,32 @@
       <div class="overflow-x-auto">
         <table class="w-full text-left text-xs border-collapse">
           <thead>
-            <tr class="bg-[#0f172a]/90 text-slate-400 font-semibold border-b border-nimbusBorder uppercase tracking-wider">
-              <th class="py-3.5 px-4 font-mono">Tag ID</th>
-              <th class="py-3.5 px-4">Origin Facility</th>
-              <th class="py-3.5 px-4">Destination</th>
-              <th class="py-3.5 px-4">Driver Name</th>
-              <th class="py-3.5 px-4">Timestamp (EST)</th>
-              <th class="py-3.5 px-4 text-center">Status Badge</th>
-              <th class="py-3.5 px-4 text-right">Actions</th>
+            <tr class="bg-slate-100/90 text-slate-700 font-bold text-xs uppercase tracking-wider border-b border-slate-200">
+              <th class="py-3.5 px-4 font-mono text-slate-700">Tag ID</th>
+              <th class="py-3.5 px-4 text-slate-700">Origin Facility</th>
+              <th class="py-3.5 px-4 text-slate-700">Destination</th>
+              <th class="py-3.5 px-4 text-slate-700">Driver Name</th>
+              <th class="py-3.5 px-4 text-slate-700">Timestamp (EST)</th>
+              <th class="py-3.5 px-4 text-center text-slate-700">Status Badge</th>
+              <th class="py-3.5 px-4 text-right text-slate-700">Actions</th>
             </tr>
           </thead>
-          <tbody id="asset-table-body" class="divide-y divide-nimbusBorder/60 font-sans">
+          <tbody id="asset-table-body" class="divide-y divide-slate-100 font-sans">
             <!-- Table rows dynamically populated by JavaScript -->
           </tbody>
         </table>
       </div>
 
       <!-- Table Footer / Pagination -->
-      <div class="p-4 border-t border-nimbusBorder bg-nimbusCard/50 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400">
+      <div class="p-4 border-t border-slate-200 bg-slate-50/50 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
         <div class="flex items-center gap-2">
-          <span>Showing Page <strong class="text-white font-mono">1</strong> of <strong class="text-white font-mono">1,490</strong></span>
-          <span class="text-slate-600">|</span>
-          <span class="text-slate-400">BioTrack Seed-to-Sale Hash Validated</span>
+          <span>Showing Page <strong class="text-slate-900 font-mono">1</strong> of <strong class="text-slate-900 font-mono">1,490</strong></span>
+          <span class="text-slate-300">|</span>
+          <span class="text-slate-500">BioTrack Seed-to-Sale Hash Validated</span>
         </div>
         <div class="flex items-center gap-2">
-          <button class="px-3 py-1.5 rounded-lg bg-nimbusDark border border-nimbusBorder text-slate-400 hover:text-white disabled:opacity-50" disabled>Previous</button>
-          <button class="px-3 py-1.5 rounded-lg bg-nimbusDark border border-nimbusBorder text-slate-300 hover:text-white hover:border-sky-600 transition-colors">Next Page &rarr;</button>
+          <button class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-400 cursor-not-allowed text-xs font-medium" disabled>Previous</button>
+          <button class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-700 hover:text-slate-900 hover:border-sky-500 transition-colors text-xs font-medium shadow-sm">Next Page &rarr;</button>
         </div>
       </div>
 
@@ -398,33 +437,33 @@
 
     <!-- ANOMALY SUMMARY BANNER & COMPLIANCE FOOTER -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
-      <div class="bg-nimbusCard/60 border border-nimbusBorder rounded-xl p-4 flex items-start gap-3">
-        <div class="p-2 bg-sky-950/60 border border-sky-800/40 rounded-lg text-sky-400 shrink-0">
+      <div class="bg-white border border-slate-200/80 rounded-xl p-4 flex items-start gap-3 shadow-sm">
+        <div class="p-2 bg-sky-50 border border-sky-200 rounded-lg text-sky-600 shrink-0">
           <i data-lucide="cpu" class="w-5 h-5"></i>
         </div>
         <div>
-          <h4 class="text-xs font-bold text-white uppercase tracking-wider">Cryptographic Tag Integrity</h4>
-          <p class="text-xs text-slate-400 mt-1">Every physical asset scan authenticates against hardware ECDSA keys via NXP NTAG424 DNA Chips.</p>
+          <h4 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Cryptographic Tag Integrity</h4>
+          <p class="text-xs text-slate-500 mt-1">Every physical asset scan authenticates against hardware ECDSA keys via NXP NTAG424 DNA Chips.</p>
         </div>
       </div>
 
-      <div class="bg-nimbusCard/60 border border-nimbusBorder rounded-xl p-4 flex items-start gap-3">
-        <div class="p-2 bg-emerald-950/60 border border-emerald-800/40 rounded-lg text-emerald-400 shrink-0">
+      <div class="bg-white border border-slate-200/80 rounded-xl p-4 flex items-start gap-3 shadow-sm">
+        <div class="p-2 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-600 shrink-0">
           <i data-lucide="shield" class="w-5 h-5"></i>
         </div>
         <div>
-          <h4 class="text-xs font-bold text-white uppercase tracking-wider">Florida BioTrack Sync</h4>
-          <p class="text-xs text-slate-400 mt-1">Direct state registry hook ensures zero discrepancy between physical manifests & digital logs.</p>
+          <h4 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Florida BioTrack Sync</h4>
+          <p class="text-xs text-slate-500 mt-1">Direct state registry hook ensures zero discrepancy between physical manifests & digital logs.</p>
         </div>
       </div>
 
-      <div class="bg-nimbusCard/60 border border-nimbusBorder rounded-xl p-4 flex items-start gap-3">
-        <div class="p-2 bg-amber-950/60 border border-amber-800/40 rounded-lg text-amber-400 shrink-0">
+      <div class="bg-white border border-slate-200/80 rounded-xl p-4 flex items-start gap-3 shadow-sm">
+        <div class="p-2 bg-amber-50 border border-amber-200 rounded-lg text-amber-600 shrink-0">
           <i data-lucide="file-warning" class="w-5 h-5"></i>
         </div>
         <div>
-          <h4 class="text-xs font-bold text-white uppercase tracking-wider">Automated Audit Triggers</h4>
-          <p class="text-xs text-slate-400 mt-1">47 flagged anomaly records automatically compiled for official OMMU state review protocol.</p>
+          <h4 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Automated Audit Triggers</h4>
+          <p class="text-xs text-slate-500 mt-1">47 flagged anomaly records automatically compiled for official OMMU state review protocol.</p>
         </div>
       </div>
     </div>
@@ -434,49 +473,39 @@
   <!-- ========================================== -->
   <!-- FOOTER                                     -->
   <!-- ========================================== -->
-  <footer class="mt-auto border-t border-nimbusBorder bg-[#070a12] py-4 px-4 lg:px-8 text-xs text-slate-500">
-    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
-      <div class="flex items-center gap-2">
-        <span class="font-heading font-bold text-slate-300">Quantum Nimbus Tech</span>
-        <span>&copy; 2026 All Rights Reserved</span>
-        <span>•</span>
-        <span class="text-sky-400">Florida State Auditor System v4.2.0</span>
-      </div>
-      <div class="flex items-center gap-4 text-slate-400">
-        <a href="#" class="hover:text-slate-200 transition-colors">OMMU Guidelines</a>
-        <a href="#" class="hover:text-slate-200 transition-colors">BioTrack Schema</a>
-        <a href="#" class="hover:text-slate-200 transition-colors">Security Specs</a>
-      </div>
+  <footer class="bg-white border-t border-slate-200 text-slate-500 py-6 text-xs text-center">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <p>&copy; 2026 Quantum Nimbus Tech. U.S. Patent Pending &mdash; NFC Cryptographic Authentication.</p>
     </div>
   </footer>
 
   <!-- ========================================== -->
   <!-- MODAL 1: OFFICIAL STATE AUDIT LOG PDF PREVIEW -->
   <!-- ========================================== -->
-  <div id="pdf-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
-    <div class="bg-[#0f172a] border border-sky-800/60 rounded-2xl max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden scale-95 transition-transform duration-300" id="pdf-modal-container">
+  <div id="pdf-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+    <div class="bg-white border border-slate-200 rounded-2xl max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden scale-95 transition-transform duration-300" id="pdf-modal-container">
       
       <!-- Modal Header -->
-      <div class="p-4 md:p-6 bg-nimbusCard border-b border-nimbusBorder flex items-center justify-between">
+      <div class="p-4 md:p-6 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <div class="p-2 rounded-xl bg-sky-950 text-sky-400 border border-sky-800/50">
+          <div class="p-2 rounded-xl bg-sky-100 text-sky-700 border border-sky-200">
             <i data-lucide="file-text" class="w-6 h-6"></i>
           </div>
           <div>
-            <h3 class="font-heading text-lg font-bold text-white">Official State Compliance Audit Log</h3>
-            <p class="text-xs text-slate-400">Florida Department of Health • BioTrack Integration Report</p>
+            <h3 class="text-slate-900 font-bold text-lg">Official State Compliance Audit Log</h3>
+            <p class="text-xs text-slate-500">Florida Department of Health • BioTrack Integration Report</p>
           </div>
         </div>
-        <button onclick="closeAuditExportModal()" class="text-slate-400 hover:text-white p-2 rounded-lg bg-nimbusDark border border-nimbusBorder">
+        <button onclick="closeAuditExportModal()" class="text-slate-400 hover:text-slate-700 p-2 rounded-lg hover:bg-slate-200/60 transition-colors">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
 
       <!-- Printable Document Sheet Preview -->
-      <div class="p-6 overflow-y-auto space-y-6 text-slate-300 font-sans text-xs bg-slate-950/60">
+      <div class="p-6 overflow-y-auto space-y-6 text-slate-600 font-sans text-xs bg-slate-100">
         
         <!-- Official Watermark Header Document Box -->
-        <div class="bg-white text-slate-900 p-6 rounded-lg shadow-inner border border-slate-300 space-y-4">
+        <div class="bg-white text-slate-900 p-6 rounded-xl shadow-sm border border-slate-300 space-y-4">
           <div class="flex items-start justify-between border-b border-slate-200 pb-4">
             <div>
               <div class="flex items-center gap-2">
@@ -567,15 +596,15 @@
       </div>
 
       <!-- Modal Footer -->
-      <div class="p-4 bg-nimbusCard border-t border-nimbusBorder flex flex-col sm:flex-row items-center justify-between gap-3">
-        <div class="text-xs text-slate-400">
-          <span>Format: <strong class="text-white">PDF / ISO-19005 Compliance Archive</strong></span>
+      <div class="p-4 bg-white border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div class="text-xs text-slate-500">
+          <span>Format: <strong class="text-slate-900">PDF / ISO-19005 Compliance Archive</strong></span>
         </div>
         <div class="flex items-center gap-3">
-          <button onclick="closeAuditExportModal()" class="px-4 py-2 rounded-lg bg-nimbusDark hover:bg-nimbusCard border border-nimbusBorder text-slate-300 text-xs font-medium transition-colors">
+          <button onclick="closeAuditExportModal()" class="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 text-xs font-medium transition-colors">
             Cancel
           </button>
-          <button onclick="triggerPDFDownload()" class="flex items-center gap-2 px-5 py-2 rounded-lg bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold shadow-lg shadow-sky-600/30 transition-all">
+          <button onclick="triggerPDFDownload()" class="flex items-center gap-2 px-5 py-2 rounded-lg bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold shadow-md shadow-sky-600/30 transition-all">
             <i data-lucide="download" class="w-4 h-4"></i>
             <span>Download Official PDF Log</span>
           </button>
@@ -588,24 +617,24 @@
   <!-- ========================================== -->
   <!-- MODAL 2: ANOMALY INSPECTION MODAL          -->
   <!-- ========================================== -->
-  <div id="anomaly-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
-    <div class="bg-[#0f172a] border border-amber-800/60 rounded-2xl max-w-xl w-full flex flex-col shadow-2xl overflow-hidden scale-95 transition-transform duration-300" id="anomaly-modal-container">
+  <div id="anomaly-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+    <div class="bg-white border border-amber-200 rounded-2xl max-w-xl w-full flex flex-col shadow-2xl overflow-hidden scale-95 transition-transform duration-300" id="anomaly-modal-container">
       
       <!-- Modal Header -->
-      <div class="p-4 bg-amber-950/40 border-b border-amber-800/50 flex items-center justify-between">
+      <div class="p-4 bg-amber-50 border-b border-amber-200 flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <div class="p-2 rounded-xl bg-amber-900/60 text-amber-400 border border-amber-700/50">
+          <div class="p-2 rounded-xl bg-amber-100 text-amber-700 border border-amber-200">
             <i data-lucide="alert-octagon" class="w-6 h-6"></i>
           </div>
           <div>
-            <h3 class="font-heading text-lg font-bold text-white flex items-center gap-2">
+            <h3 class="text-slate-900 font-bold text-lg flex items-center gap-2">
               <span>Flagged Anomaly Audit Inspect</span>
-              <span class="text-xs bg-amber-500/20 text-amber-300 border border-amber-500/40 px-2 py-0.5 rounded font-mono">FLAGGED</span>
+              <span class="text-xs bg-amber-200 text-amber-800 border border-amber-300 px-2 py-0.5 rounded font-mono font-bold">FLAGGED</span>
             </h3>
-            <p class="text-xs text-amber-200/80">Detailed telemetry diagnostic report for Quantum Nimbus State Auditors</p>
+            <p class="text-xs text-amber-800">Detailed telemetry diagnostic report for Quantum Nimbus State Auditors</p>
           </div>
         </div>
-        <button onclick="closeAnomalyModal()" class="text-slate-400 hover:text-white p-2 rounded-lg bg-nimbusDark border border-nimbusBorder">
+        <button onclick="closeAnomalyModal()" class="text-slate-400 hover:text-slate-700 p-2 rounded-lg hover:bg-amber-100 transition-colors">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
@@ -613,60 +642,59 @@
       <!-- Anomaly Content Body -->
       <div class="p-6 space-y-4 text-xs">
         
-        <div class="grid grid-cols-2 gap-3 bg-nimbusDark p-4 rounded-xl border border-nimbusBorder">
+        <div class="grid grid-cols-2 gap-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
           <div>
-            <span class="text-slate-400">Tag ID:</span>
-            <p class="font-mono text-amber-400 font-bold text-sm" id="anomaly-tag-id">FL-NFC-99482-X</p>
+            <span class="text-slate-500">Tag ID:</span>
+            <p class="font-mono text-amber-600 font-bold text-sm" id="anomaly-tag-id">FL-NFC-99482-X</p>
           </div>
           <div>
-            <span class="text-slate-400">Driver Name:</span>
-            <p class="text-white font-medium" id="anomaly-driver">Marcus Vance (FL-DRV-409)</p>
+            <span class="text-slate-500">Driver Name:</span>
+            <p class="text-slate-900 font-medium" id="anomaly-driver">Marcus Vance (FL-DRV-409)</p>
           </div>
           <div>
-            <span class="text-slate-400">Origin:</span>
-            <p class="text-slate-200" id="anomaly-origin">Trulieve Cultivation - Tallahassee</p>
+            <span class="text-slate-500">Origin:</span>
+            <p class="text-slate-700" id="anomaly-origin">Trulieve Cultivation - Tallahassee</p>
           </div>
           <div>
-            <span class="text-slate-400">Destination:</span>
-            <p class="text-slate-200" id="anomaly-destination">Sunburn Dispensary - Orlando</p>
+            <span class="text-slate-500">Destination:</span>
+            <p class="text-slate-700" id="anomaly-destination">Sunburn Dispensary - Orlando</p>
           </div>
         </div>
 
         <div class="space-y-2">
-          <label class="text-slate-300 font-semibold uppercase tracking-wider text-[10px]">Cryptographic Anomaly Diagnostics:</label>
-          <div class="bg-black/80 text-amber-300 p-3 rounded-xl font-mono text-[11px] space-y-1.5 border border-amber-900/50">
+          <label class="text-slate-600 font-semibold uppercase tracking-wider text-[10px]">Cryptographic Anomaly Diagnostics:</label>
+          <div class="bg-amber-50 text-amber-900 p-3 rounded-xl font-mono text-[11px] space-y-1.5 border border-amber-200">
             <p class="flex items-center gap-1.5">
-              <i data-lucide="x-circle" class="w-3.5 h-3.5 text-amber-400"></i>
+              <i data-lucide="x-circle" class="w-3.5 h-3.5 text-amber-600"></i>
               <span>[FAIL] BioTrack API Nonce Sync Timeout (Delay: 42 mins)</span>
             </p>
-            <p class="flex items-center gap-1.5 text-slate-400">
-              <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-400"></i>
+            <p class="flex items-center gap-1.5 text-slate-700">
+              <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-600"></i>
               <span>[PASS] NXP NTAG424 DNA ECDSA Chip Verification</span>
             </p>
-            <p class="flex items-center gap-1.5 text-amber-400">
-              <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-amber-400"></i>
+            <p class="flex items-center gap-1.5 text-amber-700">
+              <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-amber-600"></i>
               <span>[WARN] Driver GPS Speed Telemetry Spike detected on I-75 Corridor</span>
             </p>
           </div>
         </div>
 
-        <div class="p-3 bg-sky-950/30 border border-sky-900/50 rounded-xl text-sky-300 text-[11px]">
+        <div class="p-3 bg-sky-50 border border-sky-200 rounded-xl text-sky-800 text-[11px]">
           <strong>Auditor Recommended Action:</strong> Submit secondary supervisor override code or request manual BioTrack batch re-verification.
         </div>
 
       </div>
 
       <!-- Modal Footer -->
-      <div class="p-4 bg-nimbusCard border-t border-nimbusBorder flex items-center justify-end gap-3">
-        <button onclick="closeAnomalyModal()" class="px-4 py-2 rounded-lg bg-nimbusDark hover:bg-nimbusCard border border-nimbusBorder text-slate-300 text-xs font-medium">Close</button>
-        <button onclick="overrideAnomaly()" class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-md shadow-emerald-600/30">
+      <div class="p-4 bg-white border-t border-slate-200 flex items-center justify-end gap-3">
+        <button onclick="closeAnomalyModal()" class="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 text-xs font-medium">Close</button>
+        <button onclick="overrideAnomaly()" class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm">
           Approve State Override
         </button>
       </div>
 
     </div>
   </div>
-
 
   <!-- ========================================== -->
   <!-- JAVASCRIPT APP LOGIC                       -->
@@ -802,33 +830,33 @@
 
       filtered.forEach(item => {
         const tr = document.createElement('tr');
-        tr.className = 'hover:bg-nimbusCardHover/80 transition-colors group';
+        tr.className = 'border-b border-slate-100 hover:bg-slate-50 text-slate-800 text-xs font-medium transition-colors group';
 
         const isVerified = item.status === 'VERIFIED';
         const badgeHTML = isVerified 
-          ? `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-950/80 text-emerald-400 border border-emerald-800/60 shadow-sm shadow-emerald-950">
-               <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          ? `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-sm">
+               <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                VERIFIED
              </span>`
-          : `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-950/80 text-amber-300 border border-amber-800/60 shadow-sm shadow-amber-950">
-               <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span>
+          : `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200 shadow-sm">
+               <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping"></span>
                FLAGGED
              </span>`;
 
         tr.innerHTML = `
-          <td class="py-3.5 px-4 font-mono font-bold ${isVerified ? 'text-sky-300' : 'text-amber-400'} group-hover:underline cursor-pointer" onclick="inspectRow('${item.tagId}')">
+          <td class="py-3.5 px-4 font-mono font-bold ${isVerified ? 'text-sky-600' : 'text-amber-600'} group-hover:underline cursor-pointer" onclick="inspectRow('${item.tagId}')">
             ${item.tagId}
           </td>
-          <td class="py-3.5 px-4 text-slate-300 font-medium">${item.origin}</td>
-          <td class="py-3.5 px-4 text-slate-400">${item.destination}</td>
-          <td class="py-3.5 px-4 text-slate-300 flex items-center gap-1.5">
-            <i data-lucide="user-check" class="w-3.5 h-3.5 text-slate-500"></i>
+          <td class="py-3.5 px-4 text-slate-800 font-medium">${item.origin}</td>
+          <td class="py-3.5 px-4 text-slate-600">${item.destination}</td>
+          <td class="py-3.5 px-4 text-slate-700 flex items-center gap-1.5">
+            <i data-lucide="user-check" class="w-3.5 h-3.5 text-slate-400"></i>
             <span>${item.driver}</span>
           </td>
-          <td class="py-3.5 px-4 text-slate-400 font-mono text-[11px]">${item.timestamp}</td>
+          <td class="py-3.5 px-4 text-slate-500 font-mono text-[11px]">${item.timestamp}</td>
           <td class="py-3.5 px-4 text-center">${badgeHTML}</td>
           <td class="py-3.5 px-4 text-right">
-            <button onclick="inspectRow('${item.tagId}')" class="px-2.5 py-1 rounded bg-nimbusDark hover:bg-sky-950 text-slate-300 hover:text-sky-300 border border-nimbusBorder hover:border-sky-800 transition-all font-mono text-[11px]">
+            <button onclick="inspectRow('${item.tagId}')" class="px-2.5 py-1 rounded-md bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 transition-all font-mono text-[11px] shadow-sm">
               ${isVerified ? 'Details' : 'Inspect'}
             </button>
           </td>
@@ -848,15 +876,15 @@
       const btnFla = document.getElementById('filter-btn-flagged');
 
       [btnAll, btnVer, btnFla].forEach(b => {
-        b.className = "px-3 py-1.5 rounded-md text-slate-400 hover:text-white transition-all font-normal";
+        b.className = "px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 transition-all font-medium";
       });
 
       if (filter === 'ALL') {
-        btnAll.className = "px-3 py-1.5 rounded-md text-white bg-sky-600 font-semibold transition-all shadow-sm";
+        btnAll.className = "px-3 py-1.5 rounded-md text-slate-900 bg-white font-semibold shadow-sm transition-all";
       } else if (filter === 'VERIFIED') {
-        btnVer.className = "px-3 py-1.5 rounded-md text-white bg-emerald-600 font-semibold transition-all shadow-sm";
+        btnVer.className = "px-3 py-1.5 rounded-md text-slate-900 bg-white font-semibold shadow-sm transition-all";
       } else if (filter === 'FLAGGED') {
-        btnFla.className = "px-3 py-1.5 rounded-md text-white bg-amber-600 font-semibold transition-all shadow-sm";
+        btnFla.className = "px-3 py-1.5 rounded-md text-slate-900 bg-white font-semibold shadow-sm transition-all";
       }
 
       renderTable();
@@ -885,7 +913,7 @@
     }
 
     function triggerPDFDownload() {
-      alert(" Official State Audit Log PDF generated successfully!\n\nDocument Certificate: FL-AUD-2026-0805-99A\nBioTrack API Checksum Verified.");
+      alert("Official State Audit Log PDF generated successfully!\n\nDocument Certificate: FL-AUD-2026-0805-99A\nBioTrack API Checksum Verified.");
       closeAuditExportModal();
     }
 
@@ -920,7 +948,7 @@
         selectedAnomalyTag.reason = 'State Auditor Supervisor Override';
         renderTable();
       }
-      alert(` State Auditor Override Approved for ${selectedAnomalyTag ? selectedAnomalyTag.tagId : 'asset tag'}.\n\nBioTrack Registry Status Updated.`);
+      alert(`State Auditor Override Approved for ${selectedAnomalyTag ? selectedAnomalyTag.tagId : 'asset tag'}.\n\nBioTrack Registry Status Updated.`);
       closeAnomalyModal();
     }
 
@@ -929,7 +957,6 @@
       icon.classList.add('animate-spin');
       setTimeout(() => {
         icon.classList.remove('animate-spin');
-        // Randomly alter handoffs count slightly to simulate real-time updates
         const currentVal = parseInt(document.getElementById('metric-handoffs').innerText.replace(',', ''));
         document.getElementById('metric-handoffs').innerText = (currentVal + Math.floor(Math.random() * 5 + 1)).toLocaleString();
       }, 700);
@@ -950,6 +977,14 @@
     document.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();
       renderTable();
+
+      const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
+      if (mobileMenuBtn && mobileMenu) {
+        mobileMenuBtn.addEventListener('click', () => {
+          mobileMenu.classList.toggle('hidden');
+        });
+      }
     });
   </script>
 
