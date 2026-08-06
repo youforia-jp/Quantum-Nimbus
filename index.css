@@ -2134,7 +2134,6 @@ body.theme-warning .cloud-particle {
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-weight: 600;
     font-size: 0.9rem;
-    color: var(--text-secondary);
     text-decoration: none;
     letter-spacing: 0.3px;
     position: relative;
@@ -2153,16 +2152,8 @@ body.theme-warning .cloud-particle {
     transition: width 0.25s ease, background 0.3s ease;
 }
 
-.nav-link:hover {
-    color: var(--accent-color);
-}
-
 .nav-link:hover::after {
     width: 100%;
-}
-
-.nav-link.active-page {
-    color: var(--accent-color);
 }
 
 .nav-link.active-page::after {
