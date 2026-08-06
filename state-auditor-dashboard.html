@@ -101,38 +101,38 @@
   <!-- TOP NAVIGATION BAR                         -->
   <!-- ========================================== -->
   <nav class="fixed w-full z-50 bg-white/95 dark:bg-slate-950/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors">
-    <div class="max-w-[100rem] mx-auto px-6 lg:px-12">
-        <div class="flex justify-between items-center h-20 gap-4">
+    <div class="max-w-[100rem] mx-auto px-4 sm:px-6 lg:px-12">
+        <div class="flex justify-between items-center h-20 gap-2 sm:gap-4">
             <!-- Logo -->
-            <div class="flex-shrink-0 flex items-center pl-2 sm:pl-6">
+            <div class="flex-shrink-0 flex items-center pl-1 sm:pl-4">
                 <a href="index.html" aria-label="Nimbus" class="flex items-center justify-center group -mt-2">
-                    <img src="nimbus-actual-logo.png" alt="Nimbus Logo" class="h-16 sm:h-18 w-auto object-contain block dark:hidden">
-                    <img src="nimbus-actual-logo-dark.png" alt="Nimbus Logo" class="h-16 sm:h-18 w-auto object-contain hidden dark:block">
+                    <img src="nimbus-actual-logo.png" alt="Nimbus Logo" class="h-14 sm:h-16 lg:h-18 w-auto object-contain block dark:hidden">
+                    <img src="nimbus-actual-logo-dark.png" alt="Nimbus Logo" class="h-14 sm:h-16 lg:h-18 w-auto object-contain hidden dark:block">
                 </a>
             </div>
             <!-- Desktop Nav Links -->
-            <div class="hidden lg:flex items-center gap-6 xl:gap-8 whitespace-nowrap">
-                <a href="index.html#technology" class="nav-link whitespace-nowrap text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Platform Overview</a>
-                <a href="how-it-works.html" class="nav-link whitespace-nowrap text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">How It Works</a>
-                <a href="safety.html" class="nav-link whitespace-nowrap text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Compliance Data</a>
-                <a href="unit-economics.html" class="nav-link whitespace-nowrap text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Unit Economics</a>
-                <a href="simulator.html" class="nav-link whitespace-nowrap text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">NFC Sandbox</a>
-                <a href="dashboard.html" class="nav-link whitespace-nowrap text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>Live Threat Map</a>
-                <a href="state-auditor-dashboard.html" class="nav-link whitespace-nowrap text-sm font-bold text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300 transition-colors flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-sky-500 dark:bg-sky-400 animate-pulse"></span>State Auditor</a>
+            <div class="hidden md:flex items-center gap-3 lg:gap-5 xl:gap-7 whitespace-nowrap">
+                <a href="index.html#technology" class="nav-link whitespace-nowrap text-xs xl:text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Platform Overview</a>
+                <a href="how-it-works.html" class="nav-link whitespace-nowrap text-xs xl:text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">How It Works</a>
+                <a href="safety.html" class="nav-link whitespace-nowrap text-xs xl:text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Compliance Data</a>
+                <a href="unit-economics.html" class="nav-link whitespace-nowrap text-xs xl:text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Unit Economics</a>
+                <a href="simulator.html" class="nav-link whitespace-nowrap text-xs xl:text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">NFC Sandbox</a>
+                <a href="dashboard.html" class="nav-link whitespace-nowrap text-xs xl:text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>Live Threat Map</a>
+                <a href="state-auditor-dashboard.html" class="nav-link whitespace-nowrap text-xs xl:text-sm font-bold text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300 transition-colors flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-sky-500 dark:bg-sky-400 animate-pulse"></span>State Auditor</a>
             </div>
             <!-- Right Actions -->
-            <div class="hidden lg:flex items-center gap-4">
+            <div class="hidden md:flex items-center gap-2 sm:gap-4">
                 <!-- Theme Toggle -->
                 <button onclick="toggleTheme()" class="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle Theme">
                     <svg class="w-5 h-5 hidden dark:block text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
                     <svg class="w-5 h-5 block dark:hidden text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
                 </button>
-                <a href="contact.html" class="inline-flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-accentGreen hover:bg-accentGreenHover rounded-lg transition-colors shadow-sm">
+                <a href="contact.html" class="inline-flex items-center justify-center px-3.5 py-2 text-xs xl:text-sm font-semibold text-white bg-accentGreen hover:bg-accentGreenHover rounded-lg transition-colors shadow-sm whitespace-nowrap">
                     Schedule a Demo
                 </a>
             </div>
             <!-- Mobile Menu Btn -->
-            <div class="lg:hidden flex items-center gap-2">
+            <div class="md:hidden flex items-center gap-2">
                 <button onclick="toggleTheme()" class="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle Theme">
                     <svg class="w-5 h-5 hidden dark:block text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
                     <svg class="w-5 h-5 block dark:hidden text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
@@ -144,7 +144,7 @@
         </div>
     </div>
     <!-- Mobile Menu -->
-    <div id="mobile-menu" class="lg:hidden hidden bg-slate-50 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
+    <div id="mobile-menu" class="md:hidden hidden bg-slate-50 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
         <div class="px-4 py-3 space-y-1">
             <a href="index.html#technology" class="block px-3 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 rounded-md">Platform Overview</a>
             <a href="how-it-works.html" class="block px-3 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 rounded-md">How It Works</a>

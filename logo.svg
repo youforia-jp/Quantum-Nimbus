@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 310 44" width="310" height="44" role="img" aria-label="Quantum Nimbus Tech logo">
+  <title>Quantum Nimbus Tech</title>
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@700;800&amp;display=swap');
+      .qn-quantum { font-family: 'Outfit', 'Inter', sans-serif; font-weight: 800; font-size: 24px; fill: #0F172A; }
+      .qn-nimbus  { font-family: 'Outfit', 'Inter', sans-serif; font-weight: 800; font-size: 24px; fill: #047857; }
+      .qn-tech    { font-family: 'Outfit', 'Inter', sans-serif; font-weight: 700; font-size: 18px; fill: #0F172A; }
+    </style>
+  </defs>
+
+  <!-- ── QUANTUM ── -->
+  <text x="0" y="31" class="qn-quantum" letter-spacing="-0.3">Quantum</text>
+
+  <!-- ── NIMBUS with cloud-dot-i ── -->
+  <!-- "N" -->
+  <text x="136" y="31" class="qn-nimbus">N</text>
+  <!-- dotless "i" stem: a slim rounded rectangle, no dot -->
+  <rect x="155.5" y="14" width="3.5" height="17" rx="1.75" fill="#047857"/>
+  <!-- Cloud icon replacing the i-dot, centred over the stem at x≈157 -->
+  <!-- Cloud: 3-bump rounded shape, Mint Teal, positioned at y≈2–12 -->
+  <path
+    d="M148,10.5 C148,7.8 150,5.8 152.5,5.8 C153.1,3.5 155.1,2 157.5,2 C159.9,2 161.9,3.5 162.5,5.8 C164.9,5.8 167,7.8 167,10.5 C167,12.8 164.9,13.5 162.5,13.5 L152.5,13.5 C150,13.5 148,12.8 148,10.5 Z"
+    fill="#06B6D4"
+  />
+  <!-- "mbus" -->
+  <text x="161" y="31" class="qn-nimbus">mbus</text>
+
+  <!-- separator dot -->
+  <circle cx="254" cy="31" r="2" fill="#CBD5E1"/>
+
+  <!-- ── TECH ── -->
+  <text x="261" y="31" class="qn-tech" letter-spacing="1.5">TECH</text>
+</svg>

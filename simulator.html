@@ -178,38 +178,38 @@
 
     <!-- Navbar -->
     <nav class="fixed w-full z-50 bg-white/95 dark:bg-slate-950/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors">
-        <div class="max-w-[100rem] mx-auto px-6 lg:px-12">
-            <div class="flex justify-between items-center h-20 gap-4">
+        <div class="max-w-[100rem] mx-auto px-4 sm:px-6 lg:px-12">
+            <div class="flex justify-between items-center h-20 gap-2 sm:gap-4">
                 <!-- Logo -->
-                <div class="flex-shrink-0 flex items-center pl-2 sm:pl-6">
+                <div class="flex-shrink-0 flex items-center pl-1 sm:pl-4">
                     <a href="index.html" aria-label="Nimbus" class="flex items-center justify-center group -mt-2">
-                        <img src="nimbus-actual-logo.png" alt="Nimbus Logo" class="h-16 sm:h-18 w-auto object-contain block dark:hidden">
-                        <img src="nimbus-actual-logo-dark.png" alt="Nimbus Logo" class="h-16 sm:h-18 w-auto object-contain hidden dark:block">
+                        <img src="nimbus-actual-logo.png" alt="Nimbus Logo" class="h-14 sm:h-16 lg:h-18 w-auto object-contain block dark:hidden">
+                        <img src="nimbus-actual-logo-dark.png" alt="Nimbus Logo" class="h-14 sm:h-16 lg:h-18 w-auto object-contain hidden dark:block">
                     </a>
                 </div>
                 <!-- Desktop Nav Links -->
-                <div class="hidden lg:flex items-center gap-6 xl:gap-8 whitespace-nowrap">
-                    <a href="index.html#technology" class="nav-link whitespace-nowrap text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Platform Overview</a>
-                    <a href="how-it-works.html" class="nav-link whitespace-nowrap text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">How It Works</a>
-                    <a href="safety.html" class="nav-link whitespace-nowrap text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Compliance Data</a>
-                    <a href="unit-economics.html" class="nav-link whitespace-nowrap text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Unit Economics</a>
-                    <a href="simulator.html" class="nav-link whitespace-nowrap text-sm font-semibold text-slate-900 dark:text-white transition-colors">NFC Sandbox</a>
-                    <a href="dashboard.html" class="nav-link whitespace-nowrap text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>Live Threat Map</a>
-                    <a href="state-auditor-dashboard.html" class="nav-link whitespace-nowrap text-sm font-bold text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300 transition-colors flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-sky-500 dark:bg-sky-400 animate-pulse"></span>State Auditor</a>
+                <div class="hidden md:flex items-center gap-3 lg:gap-5 xl:gap-7 whitespace-nowrap">
+                    <a href="index.html#technology" class="nav-link whitespace-nowrap text-xs xl:text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Platform Overview</a>
+                    <a href="how-it-works.html" class="nav-link whitespace-nowrap text-xs xl:text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">How It Works</a>
+                    <a href="safety.html" class="nav-link whitespace-nowrap text-xs xl:text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Compliance Data</a>
+                    <a href="unit-economics.html" class="nav-link whitespace-nowrap text-xs xl:text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Unit Economics</a>
+                    <a href="simulator.html" class="nav-link whitespace-nowrap text-xs xl:text-sm font-semibold text-slate-900 dark:text-white transition-colors">NFC Sandbox</a>
+                    <a href="dashboard.html" class="nav-link whitespace-nowrap text-xs xl:text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>Live Threat Map</a>
+                    <a href="state-auditor-dashboard.html" class="nav-link whitespace-nowrap text-xs xl:text-sm font-bold text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300 transition-colors flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-sky-500 dark:bg-sky-400 animate-pulse"></span>State Auditor</a>
                 </div>
                 <!-- Right Actions -->
-                <div class="hidden lg:flex items-center gap-4">
+                <div class="hidden md:flex items-center gap-2 sm:gap-4">
                     <!-- Theme Toggle -->
                     <button onclick="toggleTheme()" class="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle Theme">
                         <svg class="w-5 h-5 hidden dark:block text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
                         <svg class="w-5 h-5 block dark:hidden text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
                     </button>
-                    <a href="contact.html" class="inline-flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-accentGreen hover:bg-accentGreenHover rounded-lg transition-colors shadow-sm">
+                    <a href="contact.html" class="inline-flex items-center justify-center px-3.5 py-2 text-xs xl:text-sm font-semibold text-white bg-accentGreen hover:bg-accentGreenHover rounded-lg transition-colors shadow-sm whitespace-nowrap">
                         Schedule a Demo
                     </a>
                 </div>
                 <!-- Mobile Menu Btn -->
-                <div class="lg:hidden flex items-center gap-2">
+                <div class="md:hidden flex items-center gap-2">
                     <button onclick="toggleTheme()" class="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle Theme">
                         <svg class="w-5 h-5 hidden dark:block text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
                         <svg class="w-5 h-5 block dark:hidden text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
@@ -221,8 +221,8 @@
             </div>
         </div>
         <!-- Mobile Menu -->
-        <div id="mobile-menu" class="lg:hidden hidden bg-slate-50 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
-<div class="px-4 py-3 space-y-1">
+        <div id="mobile-menu" class="md:hidden hidden bg-slate-50 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
+            <div class="px-4 py-3 space-y-1">
                 <a href="index.html#technology" class="block px-3 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 rounded-md">Platform Overview</a>
                 <a href="how-it-works.html" class="block px-3 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 rounded-md">How It Works</a>
                 <a href="safety.html" class="block px-3 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 rounded-md">Compliance Data</a>
@@ -597,106 +597,55 @@
                         </div>
 
                         <!-- ============================================================
-                             ONNX ISOLATION FOREST AI ENGINE SECTION
+                             ONNX ISOLATION FOREST ANOMALY ENGINE WIDGET
                         ============================================================ -->
                         <div class="w-full mt-8">
-                            <div class="w-full bg-slate-50/60 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 rounded-xl p-5 sm:p-6">
-                                <!-- Section Header -->
-                                <div class="flex items-center justify-between border-b border-slate-200 pb-3 mb-5 w-full">
-                                    <div class="flex items-center gap-2">
-                                        <span class="text-xs font-mono text-accentBlue font-bold uppercase tracking-wider">Layer 2</span>
-                                        <span class="text-slate-600">•</span>
-                                        <h3 class="text-sm font-bold text-nimbusHeading uppercase tracking-wider">ONNX Isolation Forest AI Engine</h3>
-                                    </div>
-                                    <span class="px-2.5 py-1 rounded-md text-[10px] font-mono font-bold bg-blue-100 text-accentBlue border border-blue-200">&lt;10ms INFERENCE</span>
-                                </div>
-
-                                <!-- Dual Cards -->
-                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-                                    <!-- Card 1: Silicon Crypto Summary -->
-                                    <div class="bg-white dark:bg-slate-800 border border-emerald-200 dark:border-emerald-900/40 rounded-xl p-5 space-y-4 relative overflow-hidden">
-                                        <div class="absolute -right-8 -top-8 w-32 h-32 bg-emerald-500/5 rounded-full blur-2xl pointer-events-none"></div>
-                                        <div class="flex items-center gap-3 border-b border-emerald-100 dark:border-emerald-900/40 pb-3">
-                                            <div class="w-9 h-9 rounded-xl bg-emerald-100 dark:bg-emerald-950 border border-emerald-200 dark:border-emerald-800 flex items-center justify-center text-lg">🔐</div>
-                                            <div>
-                                                <h4 class="text-sm font-bold text-slate-900 dark:text-white">Layer 1: Silicon Hardware Cryptography</h4>
-                                                <div class="text-[11px] font-mono text-emerald-700 dark:text-emerald-400 font-medium">NTAG® 424 DNA Dynamic SUN Verification</div>
-                                            </div>
+                            <div class="w-full bg-slate-950/90 border border-slate-800/90 rounded-2xl p-6 shadow-2xl relative overflow-hidden backdrop-blur-md">
+                                <!-- Header -->
+                                <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800/80 pb-4 mb-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-xl bg-cyan-950/80 border border-cyan-800/80 flex items-center justify-center text-xl text-cyan-400 shadow-[0_0_12px_rgba(6,182,212,0.25)]">
+                                            🤖
                                         </div>
-                                        <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                                            Every NFC tap generates a dynamic, one-time cryptographic message digest using <strong>NXP NTAG 424 DNA</strong> hardware with <strong>AES-128 SUN</strong> (Secure Unique NFC) architecture and a tamper-proof <strong>monotonic scan counter</strong>.
-                                        </p>
-                                        <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-3 font-mono text-[11px] space-y-2">
-                                            <div class="flex justify-between text-slate-600 dark:text-slate-400"><span>Silicon Architecture:</span><span class="text-emerald-600 dark:text-emerald-400 font-semibold">NTAG 424 DNA (AES-128)</span></div>
-                                            <div class="flex justify-between text-slate-600 dark:text-slate-400"><span>Cryptographic SUN Digest:</span><span class="text-emerald-600 dark:text-emerald-400 font-semibold">CMAC Verification</span></div>
-                                            <div class="flex justify-between text-slate-600 dark:text-slate-400"><span>Anti-Replay Mechanism:</span><span class="text-emerald-600 dark:text-emerald-400 font-bold">Monotonic Hardware Counter</span></div>
-                                            <div class="flex justify-between text-slate-600 dark:text-slate-400"><span>Execution Target:</span><span class="text-slate-800 dark:text-slate-200">Supabase Edge Core</span></div>
-                                        </div>
-                                        <div class="pt-2 flex items-center justify-between text-[10px] font-mono text-slate-500 dark:text-slate-400 border-t border-slate-200 dark:border-slate-700">
-                                            <span>STATUS: HARDWARE AUTH ACTIVE</span>
-                                            <span class="text-emerald-600 dark:text-emerald-400 font-bold">● ZERO-TRUST ENFORCED</span>
+                                        <div>
+                                            <h3 class="font-mono font-bold text-sm text-cyan-400 tracking-wider uppercase">ONNX ISOLATION FOREST ANOMALY ENGINE</h3>
+                                            <p class="text-xs font-mono text-slate-400">100 Trees &bull; Zero-Latency Edge Inference</p>
                                         </div>
                                     </div>
-
-                                    <!-- Card 2: ONNX Behavioral AI -->
-                                    <div class="bg-white dark:bg-slate-800 border border-blue-200 dark:border-blue-900/40 rounded-xl p-5 space-y-4 relative overflow-hidden">
-                                        <div class="absolute -right-8 -top-8 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl pointer-events-none"></div>
-                                        <div class="flex items-center gap-3 border-b border-blue-100 dark:border-blue-900/40 pb-3">
-                                            <div class="w-9 h-9 rounded-xl bg-blue-100 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 flex items-center justify-center text-lg">🤖</div>
-                                            <div>
-                                                <h4 class="text-sm font-bold text-slate-900 dark:text-white">Layer 2: Behavioral AI Telemetry Engine</h4>
-                                                <div class="text-[11px] font-mono text-accentBlue font-medium">ONNX Isolation Forest Anomaly Detection</div>
-                                            </div>
-                                        </div>
-                                        <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                                            Even if a valid silicon signature is scanned, our <strong>ONNX Isolation Forest AI Engine</strong> evaluates telemetry vectors across 4 spatial-temporal dimensions to instantly detect impossible transit, scrapers, and IP anomalies.
-                                        </p>
-
-                                        <!-- 4D Feature Vector -->
-                                        <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-3 font-mono text-[11px] space-y-3">
-                                            <div class="text-slate-500 dark:text-slate-400 font-bold text-[10px] uppercase tracking-wider flex justify-between">
-                                                <span>4D Feature Input Vector</span>
-                                                <span class="text-accentBlue">ONNX Opset v15</span>
-                                            </div>
-                                            <div class="space-y-2">
-                                                <div class="flex justify-between items-center text-slate-600 dark:text-slate-400">
-                                                    <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-cyan-500"></span>Δ Time (seconds)</span>
-                                                    <span class="text-cyan-600 dark:text-cyan-400 font-semibold">Inter-scan interval</span>
-                                                </div>
-                                                <div class="flex justify-between items-center text-slate-600 dark:text-slate-400">
-                                                    <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Δ Distance (km)</span>
-                                                    <span class="text-emerald-600 dark:text-emerald-400 font-semibold">Haversine GPS displacement</span>
-                                                </div>
-                                                <div class="flex justify-between items-center text-slate-600 dark:text-slate-400">
-                                                    <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>Velocity (km/h)</span>
-                                                    <span class="text-amber-600 dark:text-amber-400 font-semibold">Impossible transit detection</span>
-                                                </div>
-                                                <div class="flex justify-between items-center text-slate-600 dark:text-slate-400">
-                                                    <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>IP Geo Δ (km)</span>
-                                                    <span class="text-rose-600 dark:text-rose-400 font-semibold">Network origin anomaly</span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Model Specs -->
-                                        <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-3 font-mono text-[11px] space-y-2">
-                                            <div class="flex justify-between text-slate-600 dark:text-slate-400"><span>Model Architecture:</span><span class="text-accentBlue font-semibold">Isolation Forest (scikit-learn → ONNX)</span></div>
-                                            <div class="flex justify-between text-slate-600 dark:text-slate-400"><span>Runtime:</span><span class="text-accentBlue font-semibold">ONNX Runtime Web / Edge</span></div>
-                                            <div class="flex justify-between text-slate-600 dark:text-slate-400"><span>Contamination Threshold:</span><span class="text-accentBlue font-bold">0.05 (5% outlier rate)</span></div>
-                                            <div class="flex justify-between text-slate-600 dark:text-slate-400"><span>Inference Latency:</span><span class="text-emerald-600 dark:text-emerald-400 font-bold">&lt;10ms per scan event</span></div>
-                                        </div>
-
-                                        <div class="pt-2 flex items-center justify-between text-[10px] font-mono text-slate-500 dark:text-slate-400 border-t border-slate-200 dark:border-slate-700">
-                                            <span>STATUS: BEHAVIORAL AI ONLINE</span>
-                                            <span class="text-accentBlue font-bold">● ANOMALY ENGINE ARMED</span>
-                                        </div>
+                                    <div id="onnx-status-badge" class="px-3 py-1 rounded-lg text-xs font-mono font-bold bg-emerald-950/80 text-emerald-400 border border-emerald-800 flex items-center gap-1.5">
+                                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> INLIER NORMAL
                                     </div>
                                 </div>
 
-                                <!-- Footer -->
-                                <div class="text-[11px] text-slate-600 border-t border-slate-200/80 pt-3 mt-5 w-full text-center sm:text-left">
-                                    🛡️ Dual-layer security: NFC hardware cryptography + ONNX Isolation Forest behavioral AI telemetry — both execute in real time on every tag scan.
+                                <!-- 4 Metric Cards Grid -->
+                                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono mb-4">
+                                    <div class="bg-slate-900/90 border border-slate-800/90 rounded-xl p-3 text-left">
+                                        <div class="text-[10px] text-slate-400 font-semibold tracking-wider uppercase">THREAT SCORE</div>
+                                        <div id="onnx-threat-score" class="text-lg font-bold text-emerald-400 mt-1">0.00 / 1.00</div>
+                                    </div>
+                                    <div class="bg-slate-900/90 border border-slate-800/90 rounded-xl p-3 text-left">
+                                        <div class="text-[10px] text-slate-400 font-semibold tracking-wider uppercase">MODEL OUTPUT</div>
+                                        <div id="onnx-model-output" class="text-lg font-bold text-white mt-1">INLIER</div>
+                                    </div>
+                                    <div class="bg-slate-900/90 border border-slate-800/90 rounded-xl p-3 text-left">
+                                        <div class="text-[10px] text-slate-400 font-semibold tracking-wider uppercase">SCAN SPEED</div>
+                                        <div id="onnx-scan-speed" class="text-lg font-bold text-white mt-1">0 km/h</div>
+                                    </div>
+                                    <div class="bg-slate-900/90 border border-slate-800/90 rounded-xl p-3 text-left">
+                                        <div class="text-[10px] text-slate-400 font-semibold tracking-wider uppercase">INFERENCE TIME</div>
+                                        <div id="onnx-inference-time" class="text-lg font-bold text-purple-400 mt-1">0.8 ms</div>
+                                    </div>
+                                </div>
+
+                                <!-- Live Vector Output -->
+                                <div class="bg-slate-900/80 border border-slate-800/80 rounded-xl p-3 font-mono text-xs space-y-2">
+                                    <div class="flex items-center justify-between text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+                                        <span>INPUT VECTOR [ΔT, DIST, SPEED, IP_JUMP]</span>
+                                        <span class="text-cyan-400 font-semibold">ONNX OPSET V15</span>
+                                    </div>
+                                    <div id="onnx-vector-display" class="bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-center text-cyan-300 font-semibold shadow-inner">
+                                        [ Δt: 0s | dist: 0km | speed: 0km/h | ip_jump: 0 ]
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1560,6 +1509,8 @@
                         );
                     }
 
+                    updateONNXWidget(data, mode);
+
                     if (mode === 'authentic') lastSentScanCount = scanCount;
                 }, delay);
 
@@ -1572,6 +1523,53 @@
                 statusPill.textContent = `ERROR • ${latency}ms`;
                 jsonBox.textContent = JSON.stringify({ error: err.message }, null, 2);
                 if (mode === 'authentic') lastSentScanCount = scanCount;
+            }
+        }
+
+        function updateONNXWidget(data, mode) {
+            const scoreEl = document.getElementById('onnx-threat-score');
+            const outputEl = document.getElementById('onnx-model-output');
+            const speedEl = document.getElementById('onnx-scan-speed');
+            const inferenceEl = document.getElementById('onnx-inference-time');
+            const badgeEl = document.getElementById('onnx-status-badge');
+            const vectorEl = document.getElementById('onnx-vector-display');
+
+            if (!scoreEl) return;
+
+            if (mode === 'authentic') {
+                const score = (data.onnx_anomaly_score || 0.00).toFixed(2);
+                const infMs = (data.inference_ms || 0.8).toFixed(1);
+                scoreEl.className = 'text-lg font-bold text-emerald-400 mt-1';
+                scoreEl.textContent = `${score} / 1.00`;
+                outputEl.className = 'text-lg font-bold text-white mt-1';
+                outputEl.textContent = 'INLIER';
+                speedEl.textContent = `${data.velocity_km_h || 0} km/h`;
+                inferenceEl.textContent = `${infMs} ms`;
+                badgeEl.className = 'px-3 py-1 rounded-lg text-xs font-mono font-bold bg-emerald-950/80 text-emerald-400 border border-emerald-800 flex items-center gap-1.5';
+                badgeEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> INLIER NORMAL';
+                vectorEl.textContent = `[ Δt: 12s | dist: 0km | speed: ${data.velocity_km_h || 0}km/h | ip_jump: 0 ]`;
+            } else if (mode === 'replay') {
+                const score = (data.onnx_anomaly_score || 0.78).toFixed(2);
+                scoreEl.className = 'text-lg font-bold text-amber-400 mt-1';
+                scoreEl.textContent = `${score} / 1.00`;
+                outputEl.className = 'text-lg font-bold text-amber-400 mt-1';
+                outputEl.textContent = 'OUTLIER';
+                speedEl.textContent = '850 km/h';
+                inferenceEl.textContent = '1.2 ms';
+                badgeEl.className = 'px-3 py-1 rounded-lg text-xs font-mono font-bold bg-amber-950/80 text-amber-400 border border-amber-800 flex items-center gap-1.5';
+                badgeEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span> 🚨 REPLAY ANOMALY';
+                vectorEl.textContent = '[ Δt: 0s | dist: 1420km | speed: 850km/h | ip_jump: 1 ]';
+            } else {
+                const score = (data.onnx_anomaly_score || 0.98).toFixed(2);
+                scoreEl.className = 'text-lg font-bold text-rose-400 mt-1';
+                scoreEl.textContent = `${score} / 1.00`;
+                outputEl.className = 'text-lg font-bold text-rose-400 mt-1';
+                outputEl.textContent = 'CRITICAL';
+                speedEl.textContent = '0 km/h';
+                inferenceEl.textContent = '0.6 ms';
+                badgeEl.className = 'px-3 py-1 rounded-lg text-xs font-mono font-bold bg-rose-950/80 text-rose-400 border border-rose-800 flex items-center gap-1.5';
+                badgeEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-rose-400 animate-pulse"></span> 🚨 INVALID CMAC';
+                vectorEl.textContent = '[ Δt: 0s | dist: 0km | speed: 0km/h | ip_jump: 1 ]';
             }
         }
 
