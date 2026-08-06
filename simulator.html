@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nimbus Labs Sandbox | Quantum Nimbus Tech</title>
-    <meta name="description" content="Interactive hardware validation sandbox. Test physical vape pen WebBLE telemetry and mobile cryptographic NFC verification in real time with Web Audio API sound synthesis.">
+    <meta name="description" content="Interactive hardware validation sandbox. Test mobile cryptographic NFC tag verification, SUN/SDM counter validation, and real-time state compliance logging.">
     <!-- Google Fonts: Inter + Outfit + JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -244,8 +244,8 @@
                             ⚡
                         </div>
                         <div>
-                            <h2 class="font-heading font-bold text-lg text-nimbusHeading tracking-tight">Nimbus Labs Sandbox • Interactive WebBLE Hardware Telemetry &amp; Mobile NFC Verification</h2>
-                            <p class="text-xs text-nimbusText">Test physical vape pen WebBLE telemetry and mobile cryptographic NFC verification in real time.</p>
+                            <h2 class="font-heading font-bold text-lg text-nimbusHeading tracking-tight">Nimbus Labs Sandbox • Mobile Cryptographic NFC Verification &amp; State Audit Telemetry</h2>
+                            <p class="text-xs text-nimbusText">Test mobile cryptographic NFC tag verification, SUN/SDM counter validation, and real-time state compliance logging.</p>
                         </div>
                     </div>
                     <div class="flex items-center gap-3">
@@ -615,17 +615,7 @@
             
             <div class="phone-screen-content">
                 <!-- BLE Pairing Panel -->
-                <div id="ble-panel" class="app-section ble-section active">
-                    <div class="ble-pulse-container">
-                        <div class="pulse-ring"></div>
-                        <div class="pulse-ring"></div>
-                        <div class="pulse-center">⚡</div>
-                    </div>
-                    <h2>WebBLE Integration</h2>
-                    <p class="section-desc">Connect securely via Web Bluetooth API to configure your Nimbus device directly from the web browser.</p>
-                    <button id="btn-pair" class="btn-primary">Scan for Nimbus Device</button>
-                    <span id="ble-status-text" class="status-subtext">Device disconnected</span>
-                </div>
+                
 
                 <!-- Active App Interface -->
                 <div id="app-interface" class="app-section dynamic-fade">
