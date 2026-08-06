@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit Economics & ROI | Quantum Nimbus Tech</title>
+    <meta name="description" content="Unit Economics & ROI for Quantum Nimbus Tech. Protecting Margins Without Bloating BOM.">
+    <!-- Google Fonts: Inter + Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        nimbusBase:   '#FFFFFF',
+                        nimbusSurface:'#F8FAFC',
+                        nimbusBorder: '#E2E8F0',
+                        nimbusText:   '#334155',
+                        accentBlue:   '#0284C7',
+                        accentRed:    '#ef4444',
+                        accentGreen:  '#047857',
+                        accentGreenHover: '#065F46',
+                    },
+                    fontFamily: {
+                        sans:    ['Inter', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        };
+        (function() {
+            const savedTheme = localStorage.getItem('nimbus_theme');
+            if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        })();
+        function toggleTheme() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('nimbus_theme', isDark ? 'dark' : 'light');
+        }
+        window.toggleTheme = toggleTheme;
+    </script>
+    <link rel="stylesheet" href="index.css">
+    <style>
+        body {
+            overflow-x: hidden !important;
+            height: auto !important;
+            min-height: 100vh;
+            display: block !important;
+        }
+        .background-radial-glow { display: none; }
+        .nav-link { font-size: 0.875rem; font-weight: 500; color: #64748B; transition: color 0.18s; }
+        .nav-link:hover { color: #0F172A; }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased min-h-screen bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] dark:bg-none [background-size:16px_16px] font-sans transition-colors">
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 bg-white/95 dark:bg-slate-950/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors">
+    <div class="max-w-[100rem] mx-auto px-6 lg:px-12">
+        <div class="flex justify-between items-center h-20 gap-4">
+            <!-- Logo -->
+            <div class="flex-shrink-0 flex items-center pl-2 sm:pl-6">
+                <a href="index.html" aria-label="Nimbus" class="flex items-center justify-center group -mt-2">
+                    <img src="nimbus-actual-logo.png" alt="Nimbus Logo" class="h-16 sm:h-18 w-auto object-contain block dark:hidden">
+                    <img src="nimbus-actual-logo-dark.png" alt="Nimbus Logo" class="h-16 sm:h-18 w-auto object-contain hidden dark:block">
+                </a>
+            </div>
+            <!-- Desktop Nav Links -->
+            <div class="hidden lg:flex items-center gap-6 xl:gap-8 whitespace-nowrap">
+                    <a href="index.html#technology" class="nav-link whitespace-nowrap text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Platform Overview</a>
+                    <a href="how-it-works.html" class="nav-link whitespace-nowrap text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">How It Works</a>
+                    <a href="safety.html" class="nav-link whitespace-nowrap text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Compliance Data</a>
+                    <a href="unit-economics.html" class="nav-link whitespace-nowrap text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Unit Economics</a>
+                    <a href="simulator.html" class="nav-link whitespace-nowrap text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">NFC Sandbox</a>
+                    <a href="state-auditor-dashboard.html" class="nav-link whitespace-nowrap text-sm font-bold text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300 transition-colors flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-sky-500 dark:bg-sky-400 animate-pulse"></span>State Auditor</a>
+                </div>
+                <!-- Right Actions -->
+            <div class="hidden lg:flex items-center gap-4">
+                <!-- Theme Toggle -->
+                <button onclick="toggleTheme()" class="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle Theme">
+                    <svg class="w-5 h-5 hidden dark:block text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                    <svg class="w-5 h-5 block dark:hidden text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                </button>
+                <a href="contact.html" class="inline-flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-accentGreen hover:bg-accentGreenHover rounded-lg transition-colors shadow-sm">
+                    Schedule a Demo
+                </a>
+            </div>
+            <!-- Mobile Menu Btn -->
+            <div class="lg:hidden flex items-center gap-2">
+                <button onclick="toggleTheme()" class="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle Theme">
+                    <svg class="w-5 h-5 hidden dark:block text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                    <svg class="w-5 h-5 block dark:hidden text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                </button>
+                <button id="mobile-menu-btn" class="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="lg:hidden hidden bg-slate-50 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
+<div class="px-4 py-3 space-y-1">
+                <a href="index.html#technology" class="block px-3 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 rounded-md">Platform Overview</a>
+                <a href="how-it-works.html" class="block px-3 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 rounded-md">How It Works</a>
+                <a href="safety.html" class="block px-3 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 rounded-md">Compliance Data</a>
+                <a href="unit-economics.html" class="block px-3 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 rounded-md">Unit Economics</a>
+                <a href="simulator.html" class="block px-3 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 rounded-md">NFC Sandbox</a>
+                <a href="state-auditor-dashboard.html" class="block px-3 py-2 text-sm font-bold text-sky-600 dark:text-sky-400 hover:bg-white dark:hover:bg-slate-800 rounded-md flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-sky-500 dark:bg-sky-400 animate-pulse"></span>State Auditor</a>
+                <a href="contact.html" class="block px-3 py-2 text-sm font-semibold text-accentGreen hover:bg-white dark:hover:bg-slate-800 rounded-md">Schedule Demo</a>
+            </div>
+        </div>
+</nav>
+
+    <!-- HEADER / HERO -->
+    <section class="relative pt-24 pb-8 lg:pt-32 lg:pb-12 overflow-hidden border-b border-slate-200">
+        <div class="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-10%,rgba(59,130,246,0.08),transparent)]"></div>
+        <div class="max-w-5xl mx-auto px-8 sm:px-16 lg:px-24 xl:px-32 relative z-10 text-center reveal-on-scroll">
+            <div class="inline-flex items-center gap-2 mb-6 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-accentBlue text-xs font-medium uppercase tracking-widest animate-badge-glow">
+                Unit Economics & ROI
+            </div>
+            <h1 class="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-nimbusHeading mb-6 leading-tight">
+                Protecting Margins Without<br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">Bloating Your BOM</span>
+            </h1>
+            <p class="text-nimbusText text-lg md:text-xl max-w-3xl mx-auto leading-relaxed mb-10">
+                Secure your supply chain and turn counterfeit losses into guaranteed revenue with zero-trust cryptographic hardware verification.
+            </p>
+        </div>
+    </section>
+
+    <!-- CONTENT SECTION -->
+    <section class="py-12 relative">
+        <div class="max-w-[100rem] mx-auto px-6 lg:px-12 relative z-10">
+            
+            <!-- 3 Column Layout (Dual ROI Vectors) -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 mt-8" data-stagger>
+                
+                <!-- Pillar 1 -->
+                <div class="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all relative overflow-hidden card-hover-lift reveal-scale-on-scroll">
+                    <div class="w-12 h-12 rounded-lg bg-blue-50/50 border border-blue-100 flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <div class="inline-flex items-center px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-semibold mb-3">
+                        ~$0.35 - $0.50 / unit
+                    </div>
+                    <h3 class="text-xl font-extrabold text-slate-900 mb-4 font-heading">Low BOM Hardware Impact</h3>
+                    <ul class="space-y-3 text-slate-600 text-sm leading-relaxed">
+                        <li class="flex items-start gap-2">
+                            <svg class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                            <span>Authentic NXP NTAG 424 DNA inlays cost roughly $0.35–$0.50 per unit (only 0.1%–0.3% addition to a $150–$500 BOM).</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <svg class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                            <span>Integrates seamlessly into existing product packaging, cart tags, or smart battery enclosures with zero manufacturing overhauls.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Pillar 2 -->
+                <div class="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all relative overflow-hidden card-hover-lift reveal-scale-on-scroll">
+                    <div class="w-12 h-12 rounded-lg bg-emerald-50 border border-emerald-100 flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                    </div>
+                    <div class="inline-flex items-center px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-semibold mb-3">
+                        $45K–$65K Saved / Facility
+                    </div>
+                    <h3 class="text-xl font-extrabold text-slate-900 mb-4 font-heading">Automated Compliance</h3>
+                    <ul class="space-y-3 text-slate-600 text-sm leading-relaxed">
+                        <li class="flex items-start gap-2">
+                            <svg class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                            <span>Replacing manual 24-character RFID tag typing with a 1-second NFC tap eliminates 2–4 hours of daily data re-entry (1,000+ labor hours saved per facility annually).</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <svg class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                            <span>Drops human clerical error rates from 15%–20% down to 0%, saving $2,000–$4,000 per reconciled error and eliminating state fine risks ($10K–$100K+).</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Pillar 3 -->
+                <div class="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all relative overflow-hidden card-hover-lift reveal-scale-on-scroll">
+                    <div class="w-12 h-12 rounded-lg bg-indigo-50 border border-indigo-100 flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                    </div>
+                    <div class="inline-flex items-center px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-semibold mb-3">
+                        $10K–$25K Saved / Fleet
+                    </div>
+                    <h3 class="text-xl font-extrabold text-slate-900 mb-4 font-heading">Brand Defense & Fleet Velocity</h3>
+                    <ul class="space-y-3 text-slate-600 text-sm leading-relaxed">
+                        <li class="flex items-start gap-2">
+                            <svg class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                            <span>Neutralizes illicit clones, gray-market diversion, and fraudulent returns.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <svg class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                            <span>NFC-triggered instant manifest generation eliminates up to 45 minutes of loading dock driver downtime per dispatch.</span>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <!-- ROI Calculation Box -->
+            <div class="bg-white border border-slate-200/80 rounded-2xl p-8 shadow-sm mb-12">
+                <div class="text-center mb-8">
+                    <div class="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200 text-xs font-bold uppercase tracking-wider mb-4">
+                        Dual ROI Vector Model
+                    </div>
+                    <h2 class="text-2xl font-extrabold text-slate-900 font-heading">ROI Calculation Example</h2>
+                    <p class="text-slate-500 mt-2 max-w-2xl mx-auto">Demonstrating the combined financial return across <strong>10,000 Units</strong> and <strong>2 Licensed Facilities</strong>.</p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-center">
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-center">
+                        <div class="text-sm font-semibold text-slate-500 mb-2">Hardware &amp; Software</div>
+                        <div class="text-rose-600 font-extrabold text-2xl">-$5,000</div>
+                        <div class="text-slate-500 text-xs font-semibold mt-2 uppercase tracking-wide">($0.50 / Unit)</div>
+                    </div>
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-center">
+                        <div class="text-sm font-semibold text-slate-500 mb-2">Recovered Fraud Losses</div>
+                        <div class="text-emerald-600 font-extrabold text-2xl">+$100,000</div>
+                        <div class="text-slate-500 text-xs font-semibold mt-2 uppercase tracking-wide">Protected Revenue</div>
+                    </div>
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-center">
+                        <div class="text-sm font-semibold text-slate-500 mb-2">Direct Labor Savings</div>
+                        <div class="text-emerald-600 font-extrabold text-2xl">+$58,000</div>
+                        <div class="text-slate-500 text-xs font-semibold mt-2 uppercase tracking-wide">1,100 hrs @ $45/hr</div>
+                    </div>
+                    <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-center lg:scale-105 flex flex-col justify-center transform transition-transform">
+                        <div class="text-sm font-bold text-emerald-800 mb-1 uppercase tracking-wide">Net Value Created</div>
+                        <div class="text-emerald-700 font-extrabold text-2xl">+$153,000</div>
+                        <div class="text-emerald-700 text-xs font-semibold mt-2">30x ROI</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Enterprise Compliance Loss Calculator -->
+            <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-6 lg:p-8 shadow-md transition-all mb-16 relative">
+                
+                <!-- Section Header (Above Grid) -->
+                <div class="mb-8 max-w-3xl">
+                    <div class="inline-flex items-center px-2.5 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 text-xs font-bold uppercase tracking-wider mb-4">
+                        Calculate Your Loss
+                    </div>
+                    <h3 class="text-2xl font-extrabold text-slate-900 dark:text-white mb-2 font-heading">Interactive Enterprise Compliance Loss Calculator</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                        Quantify exactly how much capital is burning in manual data-entry compliance across your supply chain operations.
+                    </p>
+                </div>
+
+                <!-- 2-Column Grid (Inputs & Summary side-by-side, aligned at top) -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-stretch">
+                    
+                    <!-- Left Column: Input Controls -->
+                    <div class="bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-6 shadow-sm space-y-4">
+                        <!-- 1. Licensed Facilities (F) -->
+                        <div>
+                            <label for="inputF" class="text-slate-700 dark:text-slate-300 font-bold text-xs uppercase tracking-wider mb-1.5 block">Licensed Facilities (F)</label>
+                            <div class="flex items-center rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus-within:border-cyan-500 focus-within:ring-2 focus-within:ring-cyan-500/20 overflow-hidden transition-all">
+                                <input type="number" id="inputF" min="1" max="100" value="2" class="w-full bg-transparent px-3.5 py-2.5 text-slate-900 dark:text-white font-bold text-sm outline-none">
+                            </div>
+                        </div>
+                    
+                        <!-- 2. Daily Manual Entry Hours per Facility (H) -->
+                        <div>
+                            <label for="inputH" class="text-slate-700 dark:text-slate-300 font-bold text-xs uppercase tracking-wider mb-1.5 block">Daily Manual Entry Hours per Facility (H)</label>
+                            <div class="flex items-center rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus-within:border-cyan-500 focus-within:ring-2 focus-within:ring-cyan-500/20 overflow-hidden transition-all">
+                                <input type="number" id="inputH" min="1" max="24" value="3" step="0.5" class="w-full bg-transparent px-3.5 py-2.5 text-slate-900 dark:text-white font-bold text-sm outline-none">
+                                <span class="bg-slate-100 dark:bg-slate-800 border-l border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold uppercase tracking-wider px-3 py-2.5 flex items-center shrink-0 justify-center">HRS</span>
+                            </div>
+                        </div>
+                    
+                        <!-- 3. Fully Loaded Staff Hourly Wage (W) -->
+                        <div>
+                            <label for="inputW" class="text-slate-700 dark:text-slate-300 font-bold text-xs uppercase tracking-wider mb-1.5 block">Fully Loaded Staff Hourly Wage (W)</label>
+                            <div class="flex items-center rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus-within:border-cyan-500 focus-within:ring-2 focus-within:ring-cyan-500/20 overflow-hidden transition-all">
+                                <span class="pl-3 text-slate-500 dark:text-slate-400 font-bold text-sm">$</span>
+                                <input type="number" id="inputW" min="1" max="500" value="45" class="w-full bg-transparent px-3 py-2.5 text-slate-900 dark:text-white font-bold text-sm outline-none">
+                                <span class="bg-slate-100 dark:bg-slate-800 border-l border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold uppercase tracking-wider px-3 py-2.5 flex items-center shrink-0 justify-center">/HR</span>
+                            </div>
+                        </div>
+                    
+                        <!-- 4. Major Downstream Data Errors / Year (E) -->
+                        <div>
+                            <label for="inputE" class="text-slate-700 dark:text-slate-300 font-bold text-xs uppercase tracking-wider mb-1.5 block">Major Downstream Data Errors / Year (E)</label>
+                            <div class="flex items-center rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus-within:border-cyan-500 focus-within:ring-2 focus-within:ring-cyan-500/20 overflow-hidden transition-all">
+                                <input type="number" id="inputE" min="0" max="100" value="4" class="w-full bg-transparent px-3.5 py-2.5 text-slate-900 dark:text-white font-bold text-sm outline-none">
+                            </div>
+                        </div>
+                    
+                        <!-- 5. Fleet Delivery Vehicles (V) -->
+                        <div>
+                            <label for="inputV" class="text-slate-700 dark:text-slate-300 font-bold text-xs uppercase tracking-wider mb-1.5 block">Fleet Delivery Vehicles (V)</label>
+                            <div class="flex items-center rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus-within:border-cyan-500 focus-within:ring-2 focus-within:ring-cyan-500/20 overflow-hidden transition-all">
+                                <input type="number" id="inputV" min="0" max="100" value="3" class="w-full bg-transparent px-3.5 py-2.5 text-slate-900 dark:text-white font-bold text-sm outline-none">
+                                <span class="bg-slate-100 dark:bg-slate-800 border-l border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold uppercase tracking-wider px-3 py-2.5 flex items-center shrink-0 justify-center">VANS</span>
+                            </div>
+                        </div>
+                    
+                        <!-- 6. Fine Reserve Budget (R) -->
+                        <div>
+                            <label for="inputR" class="text-slate-700 dark:text-slate-300 font-bold text-xs uppercase tracking-wider mb-1.5 block">Fine Reserve Budget (R)</label>
+                            <div class="flex items-center rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus-within:border-cyan-500 focus-within:ring-2 focus-within:ring-cyan-500/20 overflow-hidden transition-all">
+                                <span class="pl-3 text-slate-500 dark:text-slate-400 font-bold text-sm">$</span>
+                                <input type="number" id="inputR" min="0" value="15000" step="500" class="w-full bg-transparent px-3 py-2.5 text-slate-900 dark:text-white font-bold text-sm outline-none">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Live ROI Results Card -->
+                    <div class="w-full">
+                        <div class="bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 text-slate-900 dark:text-white rounded-2xl p-6 lg:p-8 shadow-xl flex flex-col justify-between h-full sticky top-28 transition-colors">
+                            <div>
+                                <div class="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider">Total Annual Clerical Waste</div>
+                                <div class="flex items-baseline gap-2 mb-8">
+                                    <div id="totalACW" class="text-emerald-600 dark:text-emerald-400 font-extrabold text-4xl lg:text-5xl transition-transform duration-150 transform">$0</div>
+                                    <span class="text-slate-500 dark:text-slate-400 font-bold text-sm uppercase tracking-wider">/ year</span>
+                                </div>
+                        
+                                <div class="space-y-4 mb-8">
+                                    <div class="flex justify-between items-center border-b border-slate-200 dark:border-slate-800 pb-3">
+                                        <span class="text-slate-600 dark:text-slate-400 text-sm">Annual Labor Burned</span>
+                                        <span id="laborWaste" class="font-bold text-lg text-slate-900 dark:text-white">$0</span>
+                                    </div>
+                                    <div class="flex justify-between items-center border-b border-slate-200 dark:border-slate-800 pb-3">
+                                        <span class="text-slate-600 dark:text-slate-400 text-sm">Typo Reconciliation Costs</span>
+                                        <span id="errorCost" class="font-bold text-lg text-slate-900 dark:text-white">$0</span>
+                                    </div>
+                                    <div class="flex justify-between items-center border-b border-slate-200 dark:border-slate-800 pb-3">
+                                        <span class="text-slate-600 dark:text-slate-400 text-sm">Fleet Idle Costs</span>
+                                        <span id="fleetCost" class="font-bold text-lg text-slate-900 dark:text-white">$0</span>
+                                    </div>
+                                    <div class="flex justify-between items-center pb-3">
+                                        <span class="text-slate-600 dark:text-slate-400 text-sm">Estimated Quantum Nimbus Investment</span>
+                                        <span id="nimbusCost" class="font-bold text-lg text-blue-600 dark:text-blue-400">$0</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div class="flex items-center gap-3 mb-6">
+                                    <div class="px-3 py-1 bg-emerald-50 dark:bg-emerald-500/20 border border-emerald-200 dark:border-emerald-500/30 rounded-full text-emerald-700 dark:text-emerald-400 text-xs font-bold uppercase tracking-wider">
+                                        <span id="paybackPeriod">Immediate ROI</span>
+                                    </div>
+                                    <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">Estimated Payback Period</span>
+                                </div>
+                                <a href="contact.html" class="block w-full text-center px-6 py-3.5 bg-accentGreen hover:bg-accentGreenHover text-white font-bold rounded-xl transition-all shadow-md hover:shadow-lg">
+                                    Schedule a Custom ROI Audit &rarr;
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Formula Explanation Box at the Bottom of Calculator Card -->
+                <div class="mt-10 pt-8 border-t border-slate-200/80 dark:border-slate-800">
+                    <div class="bg-slate-50 dark:bg-slate-950 rounded-2xl p-6 lg:p-8 border border-slate-200/80 dark:border-slate-800">
+                        <div class="flex flex-col lg:flex-row gap-6 lg:gap-10 items-start lg:items-center mb-6">
+                            <div>
+                                <div class="inline-flex items-center px-2.5 py-0.5 rounded-full bg-cyan-50 dark:bg-cyan-950/60 text-cyan-700 dark:text-cyan-300 border border-cyan-200 dark:border-cyan-800 text-xs font-bold uppercase tracking-wider mb-2">
+                                    Mathematical Framework
+                                </div>
+                                <h4 class="text-xl font-extrabold text-slate-900 dark:text-white font-heading">
+                                    The Annual Clerical Waste (ACW) Formula
+                                </h4>
+                            </div>
+                            <div class="bg-white dark:bg-slate-900 px-5 py-3 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm font-mono text-base lg:text-lg font-bold text-slate-800 dark:text-emerald-400">
+                                ACW = (H × W × D × F) + (E × C) + (V × I) + R
+                            </div>
+                        </div>
+
+                        <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6">
+                            Quantifying compliance loss requires isolating four operational cost vectors: baseline labor waste, manual typo reconciliation costs, fleet dispatch delays, and regulatory penalty reserves.
+                        </p>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
+                            <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200/80 dark:border-slate-800">
+                                <div class="font-extrabold text-slate-900 dark:text-white text-sm mb-1">1. Direct Labor Burned</div>
+                                <div class="font-mono text-indigo-600 dark:text-indigo-400 font-bold mb-1">H × W × D × F</div>
+                                <p class="text-slate-500 dark:text-slate-400 leading-normal">
+                                    <strong>H</strong> (Hours/Day) × <strong>W</strong> (Hourly Wage) × <strong>365 Days</strong> × <strong>F</strong> (Facilities). Quantifies baseline labor wasted re-entering 24-character barcodes.
+                                </p>
+                            </div>
+                            <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200/80 dark:border-slate-800">
+                                <div class="font-extrabold text-slate-900 dark:text-white text-sm mb-1">2. Typo Reconciliation</div>
+                                <div class="font-mono text-indigo-600 dark:text-indigo-400 font-bold mb-1">E × (40 × W)</div>
+                                <p class="text-slate-500 dark:text-slate-400 leading-normal">
+                                    <strong>E</strong> (Errors/Year) × <strong>C</strong> (Reconciliation Cost = 40 audit hours × wage). Reflects forensic labor spent tracking down state portal discrepancies.
+                                </p>
+                            </div>
+                            <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200/80 dark:border-slate-800">
+                                <div class="font-extrabold text-slate-900 dark:text-white text-sm mb-1">3. Fleet Idle Costs</div>
+                                <div class="font-mono text-indigo-600 dark:text-indigo-400 font-bold mb-1">V × $10,950</div>
+                                <p class="text-slate-500 dark:text-slate-400 leading-normal">
+                                    <strong>V</strong> (Fleet Vans) × <strong>I</strong> ($10,950/yr). Based on 45 min daily loading dock courier delays at $40/hr crew rates.
+                                </p>
+                            </div>
+                            <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200/80 dark:border-slate-800">
+                                <div class="font-extrabold text-slate-900 dark:text-white text-sm mb-1">4. Fine Reserves</div>
+                                <div class="font-mono text-indigo-600 dark:text-indigo-400 font-bold mb-1">+ R</div>
+                                <p class="text-slate-500 dark:text-slate-400 leading-normal">
+                                    <strong>R</strong> (Reserve Budget). Capital set aside to cover potential state compliance fines ($10K–$100K+) triggered by human reporting errors.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    const inputF = document.getElementById('inputF');
+                    const inputH = document.getElementById('inputH');
+                    const inputW = document.getElementById('inputW');
+                    const inputE = document.getElementById('inputE');
+                    const inputV = document.getElementById('inputV');
+                    const inputR = document.getElementById('inputR');
+                
+                    const outTotalACW = document.getElementById('totalACW');
+                    const outLabor = document.getElementById('laborWaste');
+                    const outError = document.getElementById('errorCost');
+                    const outFleet = document.getElementById('fleetCost');
+                    const outNimbus = document.getElementById('nimbusCost');
+                    const outPayback = document.getElementById('paybackPeriod');
+                
+                    const formatCurrency = (val) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(val);
+                
+                    const calculate = () => {
+                        const F = parseFloat(inputF.value) || 0;
+                        const H = parseFloat(inputH.value) || 0;
+                        const W = parseFloat(inputW.value) || 0;
+                        const E = parseFloat(inputE.value) || 0;
+                        const V = parseFloat(inputV.value) || 0;
+                        const R = parseFloat(inputR.value) || 0;
+                        const D = 365;
+                
+                        const laborWaste = H * W * D * F;
+                        const errorCost = E * (40 * W);
+                        const fleetCost = V * 10950;
+                        const totalACW = laborWaste + errorCost + fleetCost + R;
+                        const nimbusCost = F * 3500;
+                
+                        outTotalACW.textContent = formatCurrency(totalACW);
+                        outLabor.textContent = formatCurrency(laborWaste);
+                        outError.textContent = formatCurrency(errorCost);
+                        outFleet.textContent = formatCurrency(fleetCost);
+                        outNimbus.textContent = formatCurrency(nimbusCost);
+                
+                        if (totalACW > nimbusCost * 12) {
+                            outPayback.textContent = 'Immediate ROI';
+                        } else if (totalACW > nimbusCost) {
+                            outPayback.textContent = '< 30 Days';
+                        } else {
+                            outPayback.textContent = 'Varies';
+                        }
+                        
+                        outTotalACW.classList.remove('scale-105', 'text-emerald-300');
+                        void outTotalACW.offsetWidth;
+                        outTotalACW.classList.add('scale-105', 'text-emerald-300');
+                        setTimeout(() => {
+                            outTotalACW.classList.remove('scale-105', 'text-emerald-300');
+                        }, 150);
+                    };
+                
+                    [inputF, inputH, inputW, inputE, inputV, inputR].forEach(el => {
+                        el.addEventListener('input', calculate);
+                        el.addEventListener('keyup', calculate);
+                    });
+                
+                    calculate();
+                });
+            </script>
+
+            <!-- CTA Section -->
+            <div class="text-center">
+                <a href="contact.html" class="inline-flex items-center justify-center px-8 py-4 text-base font-semibold text-white transition-all duration-200 bg-accentGreen hover:bg-accentGreenHover rounded-lg shadow-lg hover:scale-105 focus:outline-none">
+                    Schedule an Enterprise ROI Assessment
+                    <svg class="w-5 h-5 ml-2 -mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <!-- ============================================================
+         FOOTER (STANDARDIZED B2B LICENSING & IP ARCHITECTURE)
+    ============================================================ -->
+    <!-- FOOTER -->
+    <!-- ============================================================
+         FOOTER (STANDARDIZED B2B LICENSING & IP ARCHITECTURE)
+    ============================================================ -->
+    <footer class="bg-slate-100 border-t border-slate-200/80 text-slate-800 pt-12 pb-8 mt-16">
+        <div class="max-w-[100rem] mx-auto px-6 lg:px-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 lg:gap-12 items-start">
+                
+                <!-- Column 1: Brand & Patent Info -->
+                <div class="md:col-span-1 space-y-4">
+                    <a href="index.html" aria-label="Nimbus" class="inline-block group">
+                        <img src="nimbus-actual-logo.png" alt="Nimbus Logo" class="h-16 md:h-20 w-auto object-contain">
+                    </a>
+                    <p class="leading-relaxed text-slate-500 text-xs font-mono">
+                        U.S. Patent Pending — App. No. 64/114,968. Systems and Methods for Dynamic Vaporization Parameter Configuration and Authentication via Cryptographic Near Field Communication.
+                    </p>
+                    <div class="pt-1 space-y-2">
+                        <p class="text-slate-500 text-xs font-mono flex items-center gap-1.5">
+                            <span>✉️</span> <a href="mailto:JPLopez@QuantumNimbus.com" class="text-slate-600 hover:text-cyan-600 transition-colors">JPLopez@QuantumNimbus.com</a>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Column 2: Solutions -->
+                <div class="md:pt-2">
+                    <span class="text-slate-900 font-bold text-xs uppercase tracking-wider mb-3 block">Solutions</span>
+                    <ul class="space-y-1">
+                        <li><a href="index.html#technology" class="text-slate-600 hover:text-cyan-600 text-xs transition-colors block py-1">Platform Overview</a></li>
+                        <li><a href="how-it-works.html" class="text-slate-600 hover:text-cyan-600 text-xs transition-colors block py-1">How It Works</a></li>
+                        <li><a href="safety.html" class="text-slate-600 hover:text-cyan-600 text-xs transition-colors block py-1">Compliance Data</a></li>
+                        <li><a href="unit-economics.html" class="text-slate-600 hover:text-cyan-600 text-xs transition-colors block py-1 font-semibold text-slate-900">Unit Economics</a></li>
+                        <li><a href="dashboard.html" class="text-slate-600 hover:text-cyan-600 text-xs transition-colors block py-1">Live Threat Map</a></li>
+                        <li><a href="state-auditor-dashboard.html" class="text-slate-600 hover:text-cyan-600 text-xs transition-colors block py-1">State Auditor</a></li>
+                        <li><a href="simulator.html" class="text-slate-600 hover:text-cyan-600 text-xs transition-colors block py-1">Simulation</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 3: IP & Technology Licensing -->
+                <div class="md:pt-2">
+                    <span class="text-slate-900 font-bold text-xs uppercase tracking-wider mb-3 block">IP &amp; Technology Licensing</span>
+                    <ul class="space-y-1">
+                        <li><a href="index.html#technology" class="text-slate-600 hover:text-cyan-600 text-xs transition-colors block py-1">Patent &amp; IP Architecture</a></li>
+                        <li><a href="how-it-works.html" class="text-slate-600 hover:text-cyan-600 text-xs transition-colors block py-1">Cryptographic NFC Protocol</a></li>
+                        <li><a href="safety.html" class="text-slate-600 hover:text-cyan-600 text-xs transition-colors block py-1">OEM Hardware Security Specs</a></li>
+                        <li><a href="contact.html" class="text-slate-600 hover:text-cyan-600 text-xs transition-colors block py-1">B2B Integration Roadmap</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 4: Enterprise Contact -->
+                <div class="md:pt-2">
+                    <span class="text-slate-900 font-bold text-xs uppercase tracking-wider mb-3 block">Contact &amp; Licensing</span>
+                    <ul class="space-y-1">
+                        <li><a href="contact.html" class="text-slate-600 hover:text-cyan-600 text-xs transition-colors block py-1 font-medium text-emerald-600">Schedule an Enterprise Assessment</a></li>
+                        <li><a href="mailto:JPLopez@QuantumNimbus.com" class="text-slate-600 hover:text-cyan-600 text-xs transition-colors block py-1">Direct Licensing Inquiry</a></li>
+                        <li><a href="mailto:JPLopez@QuantumNimbus.com" class="text-slate-600 hover:text-cyan-600 text-xs transition-colors block py-1">Media Inquiries</a></li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <!-- Bottom Copyright Bar -->
+            <div class="border-t border-slate-200 mt-8 pt-6 flex flex-col md:flex-row justify-between items-center text-xs text-slate-500">
+                <p>© 2026 Quantum Nimbus Tech. All rights reserved.</p>
+                <p class="mt-2 md:mt-0 font-mono">U.S. Patent Pending — App. No. 64/114,968</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="animations.js" defer></script>
+    <script>
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        if (btn && menu) btn.addEventListener('click', () => menu.classList.toggle('hidden'));
+    </script>
+</body>
+</html>
