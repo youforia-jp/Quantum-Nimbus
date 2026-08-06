@@ -183,7 +183,7 @@
     <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <div class="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800/80 rounded-xl p-5 shadow-sm backdrop-blur-md">
         <div class="flex items-center justify-between text-slate-500 dark:text-slate-400 text-xs font-medium uppercase">
-          <span>Total Security Scans</span>
+          <span>Scans (Last 24 Hours)</span>
           <span>📊</span>
         </div>
         <div class="mt-2 flex items-baseline justify-between">
@@ -246,24 +246,24 @@
           </div>
         </div>
 
-        <!-- GIS Canvas Viewport with Enhanced Popover Tooltip -->
-        <div class="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800/80 rounded-xl p-4 shadow-sm relative backdrop-blur-md">
-          <div id="map-viewport" class="border border-slate-200 dark:border-slate-800 rounded-lg">
+        <!-- GIS Canvas Viewport with High-Contrast Industry Dark Mode Canvas -->
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-xl relative backdrop-blur-md">
+          <div id="map-viewport" class="bg-[#030712] border border-slate-800 rounded-lg">
             <canvas id="gis-canvas"></canvas>
 
-            <!-- Expanded Glassmorphic Popover Tooltip -->
-            <div id="node-tooltip" class="absolute z-50 bg-white/95 dark:bg-slate-900/95 border border-emerald-500/50 rounded-xl p-3.5 shadow-2xl backdrop-blur-md text-xs font-mono space-y-1.5 hidden pointer-events-none max-w-xs transition-all text-slate-900 dark:text-slate-100">
-              <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-1.5 font-bold">
-                <span id="tooltip-title" class="text-emerald-600 dark:text-emerald-400">Houston, US</span>
-                <span id="tooltip-status-badge" class="text-[10px] bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 px-1.5 py-0.5 rounded border border-emerald-300 dark:border-emerald-800">HQ NODE</span>
+            <!-- Expanded Dark Glassmorphic Popover Tooltip -->
+            <div id="node-tooltip" class="absolute z-50 bg-slate-900/95 border border-emerald-500/50 rounded-xl p-3.5 shadow-2xl backdrop-blur-md text-xs font-mono space-y-1.5 hidden pointer-events-none max-w-xs transition-all text-slate-100">
+              <div class="flex items-center justify-between border-b border-slate-800 pb-1.5 font-bold">
+                <span id="tooltip-title" class="text-emerald-400">Houston, US</span>
+                <span id="tooltip-status-badge" class="text-[10px] bg-emerald-950 text-emerald-300 px-1.5 py-0.5 rounded border border-emerald-800">HQ NODE</span>
               </div>
-              <div class="text-slate-700 dark:text-slate-300">Tag ID: <strong id="tooltip-tagid" class="text-slate-900 dark:text-white">NTAG-424-DNA-8000</strong></div>
-              <div class="text-slate-700 dark:text-slate-300">Batch ID: <strong id="tooltip-batchid" class="text-sky-600 dark:text-sky-400">BATCH-2026-QN-8840</strong></div>
-              <div class="text-slate-700 dark:text-slate-300">Tap Counter: <strong id="tooltip-sequence" class="text-slate-900 dark:text-slate-100">Sequence #001</strong></div>
-              <div class="text-slate-700 dark:text-slate-300">CMAC Crypto: <strong id="tooltip-cmac" class="text-emerald-600 dark:text-emerald-400">AES-128 SUN Verified</strong></div>
-              <div class="text-slate-700 dark:text-slate-300">Active Chips: <strong id="tooltip-chips" class="text-slate-900 dark:text-white">48,290</strong></div>
-              <div class="text-slate-700 dark:text-slate-300">Mesh Latency: <strong id="tooltip-latency" class="text-emerald-600 dark:text-emerald-400">12 ms</strong></div>
-              <div id="tooltip-extra" class="text-slate-500 dark:text-slate-400 text-[10px] pt-1 border-t border-slate-200 dark:border-slate-800">Haversine Impossible Velocity Engine: ACTIVE</div>
+              <div class="text-slate-300">Tag ID: <strong id="tooltip-tagid" class="text-white">NTAG-424-DNA-8000</strong></div>
+              <div class="text-slate-300">Batch ID: <strong id="tooltip-batchid" class="text-sky-400">BATCH-2026-QN-8840</strong></div>
+              <div class="text-slate-300">Tap Counter: <strong id="tooltip-sequence" class="text-slate-100">Sequence #001</strong></div>
+              <div class="text-slate-300">CMAC Crypto: <strong id="tooltip-cmac" class="text-emerald-400">AES-128 SUN Verified</strong></div>
+              <div class="text-slate-300">Active Chips: <strong id="tooltip-chips" class="text-white">48,290</strong></div>
+              <div class="text-slate-300">Mesh Latency: <strong id="tooltip-latency" class="text-emerald-400">12 ms</strong></div>
+              <div id="tooltip-extra" class="text-slate-400 text-[10px] pt-1 border-t border-slate-800">Haversine Impossible Velocity Engine: ACTIVE</div>
             </div>
           </div>
 
@@ -402,6 +402,7 @@
 
       let status = 'VERIFIED';
       if (forceType === 'CRYPTO_FAIL') {
+        destination = null;
         status = 'CRYPTO_FAIL';
         anomaliesBlocked++;
         document.getElementById('kpi-anomalies-blocked').textContent = anomaliesBlocked.toLocaleString();
@@ -420,7 +421,7 @@
       const now = Date.now();
       const batchNum = Math.floor(Math.random() * 8900 + 1000);
       const batchId = `BATCH-2026-QN-${batchNum}`;
-      const sequenceNum = destination ? 'Sequence #002 (Replay)' : 'Sequence #001 (Tap 1)';
+      const sequenceNum = destination ? 'Sequence #002 (Replay)' : (status === 'CRYPTO_FAIL' ? 'Sequence #001 (Bad CMAC)' : 'Sequence #001 (Tap 1)');
 
       const evt = {
         id: `evt-${now}-${Math.random()}`,
@@ -452,21 +453,21 @@
       filtered.slice(0, 40).forEach(evt => {
         const card = document.createElement('div');
 
-        let cardClass = 'bg-slate-950/80 border-slate-800 text-slate-300';
-        let badgeClass = 'bg-emerald-950 text-emerald-400 border border-emerald-800';
+        let cardClass = 'bg-slate-50 dark:bg-slate-950/80 border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-300';
+        let badgeClass = 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800';
         let statusText = 'VERIFIED';
-        let velColor = 'text-emerald-400';
+        let velColor = 'text-emerald-600 dark:text-emerald-400';
 
         if (evt.status === 'REPLAY_ATTACK') {
-          cardClass = 'bg-yellow-950/40 border-yellow-500/50 text-yellow-100';
-          badgeClass = 'bg-yellow-900 text-yellow-200 border border-yellow-700';
+          cardClass = 'bg-amber-50 dark:bg-amber-950/40 border-amber-300 dark:border-amber-500/50 text-amber-900 dark:text-amber-100';
+          badgeClass = 'bg-amber-100 dark:bg-amber-900 text-amber-800 dark:text-amber-200 border border-amber-300 dark:border-amber-700';
           statusText = '⚠️ REPLAY ATTACK';
-          velColor = 'text-yellow-400';
+          velColor = 'text-amber-600 dark:text-yellow-400';
         } else if (evt.status === 'CRYPTO_FAIL') {
-          cardClass = 'bg-red-950/40 border-red-500/50 text-red-200';
-          badgeClass = 'bg-red-900 text-red-200 border border-red-700';
+          cardClass = 'bg-rose-50 dark:bg-rose-950/40 border-rose-300 dark:border-rose-500/50 text-rose-900 dark:text-rose-200';
+          badgeClass = 'bg-rose-100 dark:bg-rose-900 text-rose-800 dark:text-rose-200 border border-rose-300 dark:border-rose-700';
           statusText = '🚨 BAD CRYPTO SIG';
-          velColor = 'text-red-400';
+          velColor = 'text-rose-600 dark:text-red-400';
         }
 
         card.className = `p-3 rounded-lg border text-xs space-y-1.5 transition-all ${cardClass}`;
@@ -478,12 +479,12 @@
               ${statusText}
             </span>
           </div>
-          <div class="font-mono font-semibold text-slate-100 flex justify-between">
+          <div class="font-mono font-semibold text-slate-900 dark:text-slate-100 flex justify-between">
             <span>Tag: ${evt.tagId}</span>
-            <span class="text-sky-400 text-[10px]">${evt.batchId}</span>
+            <span class="text-sky-600 dark:text-sky-400 text-[10px]">${evt.batchId}</span>
           </div>
-          <div class="text-slate-300">${evt.origin.city}, ${evt.origin.country} ${evt.destination ? `➔ ${evt.destination.city}, ${evt.destination.country}` : '(Tap 1 Verified)'}</div>
-          ${evt.destination ? `<div class="flex items-center justify-between text-[11px] font-mono text-slate-400">
+          <div class="text-slate-700 dark:text-slate-300">${evt.origin.city}, ${evt.origin.country} ${evt.destination ? `➔ ${evt.destination.city}, ${evt.destination.country}` : '(Single Node Verification)'}</div>
+          ${evt.destination ? `<div class="flex items-center justify-between text-[11px] font-mono text-slate-500 dark:text-slate-400">
             <span>Vel: <strong class="${velColor}">${evt.vel.toLocaleString()} km/h</strong></span>
             <span>Delta: <strong>${evt.timeDeltaSeconds}s</strong></span>
           </div>` : ''}
@@ -501,11 +502,11 @@
       if (val === 60) {
         scrubberSecondsAgo = 0;
         scrubberStatus.textContent = '🔴 LIVE STREAMING (0s)';
-        scrubberStatus.className = 'text-emerald-400 font-semibold';
+        scrubberStatus.className = 'text-emerald-600 dark:text-emerald-400 font-semibold';
       } else {
         scrubberSecondsAgo = 60 - val;
         scrubberStatus.textContent = `⏪ AUDIT SCRUBBING (-${scrubberSecondsAgo}s AGO)`;
-        scrubberStatus.className = 'text-yellow-400 font-bold';
+        scrubberStatus.className = 'text-amber-600 dark:text-yellow-400 font-bold';
       }
       renderTelemetryFeed();
     });
@@ -514,7 +515,7 @@
       scrubberSecondsAgo = 0;
       timeSlider.value = 60;
       scrubberStatus.textContent = '🔴 LIVE STREAMING (0s)';
-      scrubberStatus.className = 'text-emerald-400 font-semibold';
+      scrubberStatus.className = 'text-emerald-600 dark:text-emerald-400 font-semibold';
       renderTelemetryFeed();
     });
 
@@ -594,7 +595,7 @@
         document.getElementById('tooltip-batchid').textContent = foundEvt.batchId;
         document.getElementById('tooltip-sequence').textContent = foundEvt.sequenceNum;
         document.getElementById('tooltip-chips').textContent = foundEvt.origin.activeChips.toLocaleString();
-        document.getElementById('tooltip-latency').textContent = `${foundEvt.origin.avgLatencyMs} ms (${foundEvt.vel.toLocaleString()} km/h)`;
+        document.getElementById('tooltip-latency').textContent = `${foundEvt.origin.avgLatencyMs} ms ${foundEvt.vel ? `(${foundEvt.vel.toLocaleString()} km/h)` : ''}`;
         document.getElementById('tooltip-extra').textContent = `${bioTrackText} | Timestamp: ${foundEvt.timestamp}`;
 
         tooltip.classList.remove('hidden');
@@ -624,13 +625,13 @@
 
     canvas.addEventListener('mouseleave', () => tooltip.classList.add('hidden'));
 
-    // 60 FPS Canvas Render Loop
+    // 60 FPS Canvas Render Loop (INDUSTRY STANDARD DARK MODE GIS CANVAS)
     function renderLoop() {
       const width = canvas.width = canvas.parentElement.clientWidth || 800;
       const height = canvas.height = canvas.parentElement.clientHeight || 520;
-      const isDark = document.documentElement.classList.contains('dark');
 
-      ctx.fillStyle = isDark ? '#030712' : '#f8fafc';
+      // Dark Mode Industry Standard Ocean & Space Background
+      ctx.fillStyle = '#030712';
       ctx.fillRect(0, 0, width, height);
 
       let projection;
@@ -642,19 +643,19 @@
 
         ctx.beginPath();
         ctx.arc(width / 2, height / 2, height / 2.3, 0, Math.PI * 2);
-        ctx.fillStyle = isDark ? '#060c1c' : '#e2e8f0'; ctx.fill();
-        ctx.strokeStyle = isDark ? 'rgba(16, 185, 129, 0.4)' : 'rgba(16, 185, 129, 0.6)'; ctx.lineWidth = 2; ctx.stroke();
+        ctx.fillStyle = '#060c1c'; ctx.fill();
+        ctx.strokeStyle = 'rgba(16, 185, 129, 0.4)'; ctx.lineWidth = 2; ctx.stroke();
       }
 
       const pathGenerator = d3.geoPath().projection(projection).context(ctx);
 
-      ctx.strokeStyle = isDark ? 'rgba(15, 32, 56, 0.6)' : 'rgba(203, 213, 225, 0.8)'; ctx.lineWidth = 0.5; ctx.setLineDash([4, 4]);
+      ctx.strokeStyle = 'rgba(15, 32, 56, 0.6)'; ctx.lineWidth = 0.5; ctx.setLineDash([4, 4]);
       const graticule = d3.geoGraticule10(); ctx.beginPath(); pathGenerator(graticule); ctx.stroke(); ctx.setLineDash([]);
 
       if (topoData) {
         const geojson = topojson.feature(topoData, topoData.objects.land);
-        ctx.fillStyle = isDark ? '#0d1726' : '#cbd5e1';
-        ctx.strokeStyle = isDark ? '#1e3a5f' : '#94a3b8';
+        ctx.fillStyle = '#0d1726';
+        ctx.strokeStyle = '#1e3a5f';
         ctx.lineWidth = 1.2;
         ctx.beginPath();
         pathGenerator(geojson);
@@ -694,7 +695,7 @@
           ctx.fillStyle = mainColor; ctx.fill();
           ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1.2; ctx.stroke();
 
-          ctx.fillStyle = isDark ? `rgba(255, 255, 255, ${fade})` : `rgba(15, 23, 42, ${fade})`;
+          ctx.fillStyle = `rgba(255, 255, 255, ${fade})`;
           ctx.font = 'bold 10px JetBrains Mono';
           ctx.fillText(evt.origin.city, x + 8, y + 3);
         }
@@ -707,7 +708,7 @@
             ctx.fillStyle = mainColor; ctx.fill();
             ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1.2; ctx.stroke();
 
-            ctx.fillStyle = isDark ? `rgba(255, 255, 255, ${fade})` : `rgba(15, 23, 42, ${fade})`;
+            ctx.fillStyle = `rgba(255, 255, 255, ${fade})`;
             ctx.font = 'bold 10px JetBrains Mono';
             ctx.fillText(evt.destination.city, x + 8, y + 3);
           }
@@ -745,38 +746,38 @@
     document.getElementById('btn-proj-2d').addEventListener('click', () => {
       projectionMode = '2d';
       document.getElementById('map-mode-indicator').textContent = '2D EQUIRECTANGULAR GIS';
-      document.getElementById('btn-proj-2d').className = 'px-3 py-1 rounded bg-emerald-950 text-emerald-400 border border-emerald-800 font-bold transition-all';
-      document.getElementById('btn-proj-3d').className = 'px-3 py-1 rounded text-slate-400 transition-all';
+      document.getElementById('btn-proj-2d').className = 'px-3 py-1 rounded bg-emerald-600 dark:bg-emerald-950 text-white dark:text-emerald-400 border border-emerald-700 dark:border-emerald-800 font-bold transition-all';
+      document.getElementById('btn-proj-3d').className = 'px-3 py-1 rounded text-slate-600 dark:text-slate-400 transition-all';
     });
 
     document.getElementById('btn-proj-3d').addEventListener('click', () => {
       projectionMode = '3d';
       document.getElementById('map-mode-indicator').textContent = '3D ROTATING GLOBE';
-      document.getElementById('btn-proj-3d').className = 'px-3 py-1 rounded bg-emerald-950 text-emerald-400 border border-emerald-800 font-bold transition-all';
-      document.getElementById('btn-proj-2d').className = 'px-3 py-1 rounded text-slate-400 transition-all';
+      document.getElementById('btn-proj-3d').className = 'px-3 py-1 rounded bg-emerald-600 dark:bg-emerald-950 text-white dark:text-emerald-400 border border-emerald-700 dark:border-emerald-800 font-bold transition-all';
+      document.getElementById('btn-proj-2d').className = 'px-3 py-1 rounded text-slate-600 dark:text-slate-400 transition-all';
     });
 
     document.getElementById('btn-filter-all').addEventListener('click', () => {
       filterMode = 'all';
       document.getElementById('btn-filter-all').className = 'flex-1 py-1.5 rounded-md bg-emerald-600 text-white font-bold transition-all text-center';
-      document.getElementById('btn-filter-threats').className = 'flex-1 py-1.5 rounded-md bg-slate-800 text-slate-400 hover:text-white transition-all text-center';
-      document.getElementById('btn-filter-us').className = 'flex-1 py-1.5 rounded-md bg-slate-800 text-slate-400 hover:text-white transition-all text-center';
+      document.getElementById('btn-filter-threats').className = 'flex-1 py-1.5 rounded-md bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all text-center';
+      document.getElementById('btn-filter-us').className = 'flex-1 py-1.5 rounded-md bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all text-center';
       renderTelemetryFeed();
     });
 
     document.getElementById('btn-filter-threats').addEventListener('click', () => {
       filterMode = 'threats';
       document.getElementById('btn-filter-threats').className = 'flex-1 py-1.5 rounded-md bg-red-600 text-white font-bold transition-all text-center';
-      document.getElementById('btn-filter-all').className = 'flex-1 py-1.5 rounded-md bg-slate-800 text-slate-400 hover:text-white transition-all text-center';
-      document.getElementById('btn-filter-us').className = 'flex-1 py-1.5 rounded-md bg-slate-800 text-slate-400 hover:text-white transition-all text-center';
+      document.getElementById('btn-filter-all').className = 'flex-1 py-1.5 rounded-md bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all text-center';
+      document.getElementById('btn-filter-us').className = 'flex-1 py-1.5 rounded-md bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all text-center';
       renderTelemetryFeed();
     });
 
     document.getElementById('btn-filter-us').addEventListener('click', () => {
       filterMode = 'us';
       document.getElementById('btn-filter-us').className = 'flex-1 py-1.5 rounded-md bg-blue-600 text-white font-bold transition-all text-center';
-      document.getElementById('btn-filter-all').className = 'flex-1 py-1.5 rounded-md bg-slate-800 text-slate-400 hover:text-white transition-all text-center';
-      document.getElementById('btn-filter-threats').className = 'flex-1 py-1.5 rounded-md bg-slate-800 text-slate-400 hover:text-white transition-all text-center';
+      document.getElementById('btn-filter-all').className = 'flex-1 py-1.5 rounded-md bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all text-center';
+      document.getElementById('btn-filter-threats').className = 'flex-1 py-1.5 rounded-md bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all text-center';
       renderTelemetryFeed();
     });
 
@@ -793,24 +794,23 @@
 
     document.getElementById('btn-attack-crypto').addEventListener('click', () => {
       const tagId = `NTAG-424-${Math.floor(Math.random() * 8999 + 1000)}`;
-      processPayload(CITIES[2], CITIES[1], 0.35, tagId, 'CRYPTO_FAIL');
+      processPayload(CITIES[2], null, 0, tagId, 'CRYPTO_FAIL');
     });
 
+    // Enterprise Real-World Frequency Generator (92% Authentic Taps, 5% Replay Attacks, 3% Crypto Failures)
     setInterval(() => {
       const rand = Math.random();
       const tagId = `NTAG-424-${Math.floor(Math.random() * 8999 + 1000)}`;
       const c1 = CITIES[Math.floor(Math.random() * CITIES.length)];
 
-      if (rand < 0.55) {
+      if (rand < 0.92) {
         processPayload(c1, null, 0, tagId, 'VERIFIED');
-      } else if (rand < 0.85) {
+      } else if (rand < 0.97) {
         let c2 = CITIES[Math.floor(Math.random() * CITIES.length)];
         while (c2.city === c1.city) c2 = CITIES[Math.floor(Math.random() * CITIES.length)];
         processPayload(c1, c2, parseFloat((Math.random() * 1.8 + 0.2).toFixed(2)), tagId, 'REPLAY_ATTACK');
       } else {
-        let c2 = CITIES[Math.floor(Math.random() * CITIES.length)];
-        while (c2.city === c1.city) c2 = CITIES[Math.floor(Math.random() * CITIES.length)];
-        processPayload(c1, c2, 0.4, tagId, 'CRYPTO_FAIL');
+        processPayload(c1, null, 0, tagId, 'CRYPTO_FAIL');
       }
     }, 3200);
 
