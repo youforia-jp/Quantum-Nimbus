@@ -418,6 +418,54 @@
                                         </div>
                                     </div>
 
+                                    <!-- ONNX ISOLATION FOREST ANOMALY ENGINE WIDGET (COMPACT COLUMN WIDGET MATCHING SCREENSHOT) -->
+                                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-3.5 shadow-inner w-full space-y-3 font-mono">
+                                        <!-- Header -->
+                                        <div class="flex items-center justify-between border-b border-slate-800/80 pb-2">
+                                            <div class="flex items-center gap-2">
+                                                <span class="text-sm">🤖</span>
+                                                <div>
+                                                    <h4 class="font-mono font-bold text-xs text-cyan-400 tracking-wider uppercase">ONNX ISOLATION FOREST ANOMALY ENGINE</h4>
+                                                    <div class="text-[9px] text-slate-400">100 Trees &bull; Zero-Latency Edge Inference</div>
+                                                </div>
+                                            </div>
+                                            <div id="onnx-status-badge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-950 text-emerald-400 border border-emerald-800 flex items-center gap-1">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> INLIER NORMAL
+                                            </div>
+                                        </div>
+
+                                        <!-- 4 Metric Cards Grid -->
+                                        <div class="grid grid-cols-4 gap-2">
+                                            <div class="bg-slate-950 border border-slate-800/80 rounded-lg p-2 text-left">
+                                                <div class="text-[8px] text-slate-400 font-semibold uppercase tracking-wider">THREAT SCORE</div>
+                                                <div id="onnx-threat-score" class="text-xs font-bold text-emerald-400 mt-0.5">0.00 / 1.00</div>
+                                            </div>
+                                            <div class="bg-slate-950 border border-slate-800/80 rounded-lg p-2 text-left">
+                                                <div class="text-[8px] text-slate-400 font-semibold uppercase tracking-wider">MODEL OUTPUT</div>
+                                                <div id="onnx-model-output" class="text-xs font-bold text-white mt-0.5">INLIER</div>
+                                            </div>
+                                            <div class="bg-slate-950 border border-slate-800/80 rounded-lg p-2 text-left">
+                                                <div class="text-[8px] text-slate-400 font-semibold uppercase tracking-wider">SCAN SPEED</div>
+                                                <div id="onnx-scan-speed" class="text-xs font-bold text-white mt-0.5">0 km/h</div>
+                                            </div>
+                                            <div class="bg-slate-950 border border-slate-800/80 rounded-lg p-2 text-left">
+                                                <div class="text-[8px] text-slate-400 font-semibold uppercase tracking-wider">INFERENCE TIME</div>
+                                                <div id="onnx-inference-time" class="text-xs font-bold text-purple-400 mt-0.5">0.8 ms</div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Live Vector Output -->
+                                        <div class="space-y-1">
+                                            <div class="flex items-center justify-between text-[8px] text-slate-400 font-bold uppercase tracking-wider">
+                                                <span>INPUT VECTOR [ΔT, DIST, SPEED, IP_JUMP]</span>
+                                                <span class="text-cyan-400">ONNX OPSET V15</span>
+                                            </div>
+                                            <div id="onnx-vector-display" class="bg-slate-950 border border-slate-800 rounded-lg py-1.5 px-2 text-center text-cyan-300 font-bold text-[10px] shadow-inner">
+                                                [ Δt: 0s | dist: 0km | speed: 0km/h | ip_jump: 0 ]
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <!-- RAW API JSON RESPONSE BOX -->
                                     <div class="bg-slate-900 text-slate-100 font-mono text-[11px] rounded-xl p-3.5 shadow-inner border border-slate-800 w-full">
                                         <div class="flex items-center justify-between mb-1.5">
@@ -594,60 +642,6 @@
                                 <span>🔒 Integrated tap actions execute live cryptographic queries against /api/v1/verify backed by Supabase PostgreSQL.</span>
                             </div>
                         </div>
-                        </div>
-
-                        <!-- ============================================================
-                             ONNX ISOLATION FOREST ANOMALY ENGINE WIDGET
-                        ============================================================ -->
-                        <div class="w-full mt-8">
-                            <div class="w-full bg-slate-950/90 border border-slate-800/90 rounded-2xl p-6 shadow-2xl relative overflow-hidden backdrop-blur-md">
-                                <!-- Header -->
-                                <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800/80 pb-4 mb-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 rounded-xl bg-cyan-950/80 border border-cyan-800/80 flex items-center justify-center text-xl text-cyan-400 shadow-[0_0_12px_rgba(6,182,212,0.25)]">
-                                            🤖
-                                        </div>
-                                        <div>
-                                            <h3 class="font-mono font-bold text-sm text-cyan-400 tracking-wider uppercase">ONNX ISOLATION FOREST ANOMALY ENGINE</h3>
-                                            <p class="text-xs font-mono text-slate-400">100 Trees &bull; Zero-Latency Edge Inference</p>
-                                        </div>
-                                    </div>
-                                    <div id="onnx-status-badge" class="px-3 py-1 rounded-lg text-xs font-mono font-bold bg-emerald-950/80 text-emerald-400 border border-emerald-800 flex items-center gap-1.5">
-                                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> INLIER NORMAL
-                                    </div>
-                                </div>
-
-                                <!-- 4 Metric Cards Grid -->
-                                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono mb-4">
-                                    <div class="bg-slate-900/90 border border-slate-800/90 rounded-xl p-3 text-left">
-                                        <div class="text-[10px] text-slate-400 font-semibold tracking-wider uppercase">THREAT SCORE</div>
-                                        <div id="onnx-threat-score" class="text-lg font-bold text-emerald-400 mt-1">0.00 / 1.00</div>
-                                    </div>
-                                    <div class="bg-slate-900/90 border border-slate-800/90 rounded-xl p-3 text-left">
-                                        <div class="text-[10px] text-slate-400 font-semibold tracking-wider uppercase">MODEL OUTPUT</div>
-                                        <div id="onnx-model-output" class="text-lg font-bold text-white mt-1">INLIER</div>
-                                    </div>
-                                    <div class="bg-slate-900/90 border border-slate-800/90 rounded-xl p-3 text-left">
-                                        <div class="text-[10px] text-slate-400 font-semibold tracking-wider uppercase">SCAN SPEED</div>
-                                        <div id="onnx-scan-speed" class="text-lg font-bold text-white mt-1">0 km/h</div>
-                                    </div>
-                                    <div class="bg-slate-900/90 border border-slate-800/90 rounded-xl p-3 text-left">
-                                        <div class="text-[10px] text-slate-400 font-semibold tracking-wider uppercase">INFERENCE TIME</div>
-                                        <div id="onnx-inference-time" class="text-lg font-bold text-purple-400 mt-1">0.8 ms</div>
-                                    </div>
-                                </div>
-
-                                <!-- Live Vector Output -->
-                                <div class="bg-slate-900/80 border border-slate-800/80 rounded-xl p-3 font-mono text-xs space-y-2">
-                                    <div class="flex items-center justify-between text-[10px] text-slate-400 font-bold uppercase tracking-wider">
-                                        <span>INPUT VECTOR [ΔT, DIST, SPEED, IP_JUMP]</span>
-                                        <span class="text-cyan-400 font-semibold">ONNX OPSET V15</span>
-                                    </div>
-                                    <div id="onnx-vector-display" class="bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-center text-cyan-300 font-semibold shadow-inner">
-                                        [ Δt: 0s | dist: 0km | speed: 0km/h | ip_jump: 0 ]
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
