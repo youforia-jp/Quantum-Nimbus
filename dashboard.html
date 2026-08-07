@@ -377,12 +377,16 @@
     let anomaliesBlocked = 4144;
 
     fetch('assets/land-110m.json')
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error('Local asset missing');
+        return res.json();
+      })
       .then(data => { topoData = data; })
       .catch(() => {
         fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/land-110m.json')
           .then(res => res.json())
-          .then(data => { topoData = data; });
+          .then(data => { topoData = data; })
+          .catch(err => console.warn('Could not load map land data:', err));
       });
 
     function haversineDistanceKm(lat1, lon1, lat2, lon2) {
@@ -625,119 +629,125 @@
 
     canvas.addEventListener('mouseleave', () => tooltip.classList.add('hidden'));
 
-    // 60 FPS Canvas Render Loop (INDUSTRY STANDARD DARK MODE GIS CANVAS)
+    // 60 FPS Canvas Render Loop (DYNAMIC LIGHT/DARK GIS CANVAS)
     function renderLoop() {
-      const width = canvas.width = canvas.parentElement.clientWidth || 800;
-      const height = canvas.height = canvas.parentElement.clientHeight || 520;
+      requestAnimationFrame(renderLoop);
+      if (!window.d3) return;
 
-      // Dark Mode Industry Standard Ocean & Space Background
-      ctx.fillStyle = '#030712';
-      ctx.fillRect(0, 0, width, height);
+      try {
+        const width = canvas.width = canvas.parentElement ? canvas.parentElement.clientWidth || 800 : 800;
+        const height = canvas.height = canvas.parentElement ? canvas.parentElement.clientHeight || 520 : 520;
+        const isDark = document.documentElement.classList.contains('dark');
 
-      let projection;
-      if (projectionMode === '2d') {
-        projection = d3.geoEquirectangular().scale(width / (2 * Math.PI)).translate([width / 2, height / 2 + 20]);
-      } else {
-        rotationAngle = (rotationAngle + 0.25) % 360;
-        projection = d3.geoOrthographic().scale(height / 2.3).translate([width / 2, height / 2]).rotate([rotationAngle, -15]);
+        // Dynamic Background Ocean Color
+        ctx.fillStyle = isDark ? '#030712' : '#f8fafc';
+        ctx.fillRect(0, 0, width, height);
 
-        ctx.beginPath();
-        ctx.arc(width / 2, height / 2, height / 2.3, 0, Math.PI * 2);
-        ctx.fillStyle = '#060c1c'; ctx.fill();
-        ctx.strokeStyle = 'rgba(16, 185, 129, 0.4)'; ctx.lineWidth = 2; ctx.stroke();
-      }
+        let projection;
+        if (projectionMode === '2d') {
+          projection = d3.geoEquirectangular().scale(width / (2 * Math.PI)).translate([width / 2, height / 2 + 20]);
+        } else {
+          rotationAngle = (rotationAngle + 0.25) % 360;
+          projection = d3.geoOrthographic().scale(height / 2.3).translate([width / 2, height / 2]).rotate([rotationAngle, -15]);
 
-      const pathGenerator = d3.geoPath().projection(projection).context(ctx);
-
-      ctx.strokeStyle = 'rgba(15, 32, 56, 0.6)'; ctx.lineWidth = 0.5; ctx.setLineDash([4, 4]);
-      const graticule = d3.geoGraticule10(); ctx.beginPath(); pathGenerator(graticule); ctx.stroke(); ctx.setLineDash([]);
-
-      if (topoData) {
-        const geojson = topojson.feature(topoData, topoData.objects.land);
-        ctx.fillStyle = '#0d1726';
-        ctx.strokeStyle = '#1e3a5f';
-        ctx.lineWidth = 1.2;
-        ctx.beginPath();
-        pathGenerator(geojson);
-        ctx.fill();
-        ctx.stroke();
-      }
-
-      const targetTimeMs = Date.now() - (scrubberSecondsAgo * 1000);
-      const visibleEvents = masterEventHistory.filter(
-        evt => evt.timestampMs <= targetTimeMs && targetTimeMs - evt.timestampMs < 12000
-      );
-
-      visibleEvents.forEach(evt => {
-        const age = targetTimeMs - evt.timestampMs;
-        const fade = Math.max(0.1, 1 - age / 12000);
-        const radius = (age / 12000) * 28;
-
-        let mainColor = '#10b981';
-        let arcColorStr = `rgba(16, 185, 129, ${0.85 * (1 - Math.min(age / 2400, 1.0))})`;
-
-        if (evt.status === 'REPLAY_ATTACK') {
-          mainColor = '#eab308';
-          arcColorStr = `rgba(234, 179, 8, ${0.95 * (1 - Math.min(age / 2400, 1.0))})`;
-        } else if (evt.status === 'CRYPTO_FAIL') {
-          mainColor = '#ef4444';
-          arcColorStr = `rgba(239, 68, 68, ${0.95 * (1 - Math.min(age / 2400, 1.0))})`;
+          ctx.beginPath();
+          ctx.arc(width / 2, height / 2, height / 2.3, 0, Math.PI * 2);
+          ctx.fillStyle = isDark ? '#060c1c' : '#e2e8f0'; ctx.fill();
+          ctx.strokeStyle = isDark ? 'rgba(16, 185, 129, 0.4)' : 'rgba(16, 185, 129, 0.6)'; ctx.lineWidth = 2; ctx.stroke();
         }
 
-        const pt1 = projection([evt.origin.lng, evt.origin.lat]);
-        if (pt1) {
-          const [x, y] = pt1;
-          ctx.beginPath(); ctx.arc(x, y, Math.max(2, radius), 0, Math.PI * 2);
-          ctx.strokeStyle = mainColor;
-          ctx.lineWidth = 1.5; ctx.stroke();
+        const pathGenerator = d3.geoPath().projection(projection).context(ctx);
 
-          ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2);
-          ctx.fillStyle = mainColor; ctx.fill();
-          ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1.2; ctx.stroke();
+        ctx.strokeStyle = isDark ? 'rgba(15, 32, 56, 0.6)' : 'rgba(203, 213, 225, 0.8)'; ctx.lineWidth = 0.5; ctx.setLineDash([4, 4]);
+        const graticule = d3.geoGraticule10(); ctx.beginPath(); pathGenerator(graticule); ctx.stroke(); ctx.setLineDash([]);
 
-          ctx.fillStyle = `rgba(255, 255, 255, ${fade})`;
-          ctx.font = 'bold 10px JetBrains Mono';
-          ctx.fillText(evt.origin.city, x + 8, y + 3);
+        if (topoData && window.topojson && window.topojson.feature && topoData.objects && topoData.objects.land) {
+          const geojson = topojson.feature(topoData, topoData.objects.land);
+          ctx.fillStyle = isDark ? '#0d1726' : '#cbd5e1';
+          ctx.strokeStyle = isDark ? '#1e3a5f' : '#94a3b8';
+          ctx.lineWidth = 1.2;
+          ctx.beginPath();
+          pathGenerator(geojson);
+          ctx.fill();
+          ctx.stroke();
         }
 
-        if (evt.destination) {
-          const pt2 = projection([evt.destination.lng, evt.destination.lat]);
-          if (pt2) {
-            const [x, y] = pt2;
+        const targetTimeMs = Date.now() - (scrubberSecondsAgo * 1000);
+        const visibleEvents = masterEventHistory.filter(
+          evt => evt.timestampMs <= targetTimeMs && targetTimeMs - evt.timestampMs < 12000
+        );
+
+        visibleEvents.forEach(evt => {
+          const age = targetTimeMs - evt.timestampMs;
+          const fade = Math.max(0.1, 1 - age / 12000);
+          const radius = (age / 12000) * 28;
+
+          let mainColor = '#10b981';
+          let arcColorStr = `rgba(16, 185, 129, ${0.85 * (1 - Math.min(age / 2400, 1.0))})`;
+
+          if (evt.status === 'REPLAY_ATTACK') {
+            mainColor = '#eab308';
+            arcColorStr = `rgba(234, 179, 8, ${0.95 * (1 - Math.min(age / 2400, 1.0))})`;
+          } else if (evt.status === 'CRYPTO_FAIL') {
+            mainColor = '#ef4444';
+            arcColorStr = `rgba(239, 68, 68, ${0.95 * (1 - Math.min(age / 2400, 1.0))})`;
+          }
+
+          const pt1 = projection([evt.origin.lng, evt.origin.lat]);
+          if (pt1) {
+            const [x, y] = pt1;
+            ctx.beginPath(); ctx.arc(x, y, Math.max(2, radius), 0, Math.PI * 2);
+            ctx.strokeStyle = mainColor;
+            ctx.lineWidth = 1.5; ctx.stroke();
+
             ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2);
             ctx.fillStyle = mainColor; ctx.fill();
             ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1.2; ctx.stroke();
 
-            ctx.fillStyle = `rgba(255, 255, 255, ${fade})`;
+            ctx.fillStyle = isDark ? `rgba(255, 255, 255, ${fade})` : `rgba(15, 23, 42, ${fade})`;
             ctx.font = 'bold 10px JetBrains Mono';
-            ctx.fillText(evt.destination.city, x + 8, y + 3);
+            ctx.fillText(evt.origin.city, x + 8, y + 3);
           }
 
-          if (pt1 && pt2) {
-            const progress = Math.min(age / 2400, 1.0);
-            const midX = (pt1[0] + pt2[0]) / 2;
-            const midY = Math.min(pt1[1], pt2[1]) - Math.abs(pt1[0] - pt2[0]) * 0.28;
+          if (evt.destination) {
+            const pt2 = projection([evt.destination.lng, evt.destination.lat]);
+            if (pt2) {
+              const [x, y] = pt2;
+              ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2);
+              ctx.fillStyle = mainColor; ctx.fill();
+              ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1.2; ctx.stroke();
 
-            ctx.beginPath(); ctx.moveTo(pt1[0], pt1[1]);
-            ctx.quadraticCurveTo(midX, midY, pt2[0], pt2[1]);
-            ctx.strokeStyle = arcColorStr;
-            ctx.lineWidth = evt.status !== 'VERIFIED' ? 3.5 : 2;
-            ctx.setLineDash(evt.status !== 'VERIFIED' ? [6, 4] : []);
-            ctx.stroke(); ctx.setLineDash([]);
+              ctx.fillStyle = isDark ? `rgba(255, 255, 255, ${fade})` : `rgba(15, 23, 42, ${fade})`;
+              ctx.font = 'bold 10px JetBrains Mono';
+              ctx.fillText(evt.destination.city, x + 8, y + 3);
+            }
 
-            const t = Math.max(0.01, Math.min(progress, 0.99));
-            const currX = (1 - t) * (1 - t) * pt1[0] + 2 * (1 - t) * t * midX + t * t * pt2[0];
-            const currY = (1 - t) * (1 - t) * pt1[1] + 2 * (1 - t) * t * midY + t * t * pt2[1];
+            if (pt1 && pt2) {
+              const progress = Math.min(age / 2400, 1.0);
+              const midX = (pt1[0] + pt2[0]) / 2;
+              const midY = Math.min(pt1[1], pt2[1]) - Math.abs(pt1[0] - pt2[0]) * 0.28;
 
-            ctx.beginPath(); ctx.arc(currX, currY, evt.status !== 'VERIFIED' ? 6 : 4, 0, Math.PI * 2);
-            ctx.fillStyle = mainColor;
-            ctx.shadowColor = mainColor;
-            ctx.shadowBlur = 14; ctx.fill(); ctx.shadowBlur = 0;
+              ctx.beginPath(); ctx.moveTo(pt1[0], pt1[1]);
+              ctx.quadraticCurveTo(midX, midY, pt2[0], pt2[1]);
+              ctx.strokeStyle = arcColorStr;
+              ctx.lineWidth = evt.status !== 'VERIFIED' ? 3.5 : 2;
+              ctx.setLineDash(evt.status !== 'VERIFIED' ? [6, 4] : []);
+              ctx.stroke(); ctx.setLineDash([]);
+
+              const t = Math.max(0.01, Math.min(progress, 0.99));
+              const currX = (1 - t) * (1 - t) * pt1[0] + 2 * (1 - t) * t * midX + t * t * pt2[0];
+              const currY = (1 - t) * (1 - t) * pt1[1] + 2 * (1 - t) * t * midY + t * t * pt2[1];
+
+              ctx.beginPath(); ctx.arc(currX, currY, evt.status !== 'VERIFIED' ? 6 : 4, 0, Math.PI * 2);
+              ctx.fillStyle = mainColor;
+              ctx.shadowColor = mainColor;
+              ctx.shadowBlur = 14; ctx.fill(); ctx.shadowBlur = 0;
+            }
           }
-        }
-      });
-
-      requestAnimationFrame(renderLoop);
+        });
+      } catch (err) {
+        console.warn('Render loop frame warning:', err);
+      }
     }
 
     requestAnimationFrame(renderLoop);
