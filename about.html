@@ -58,39 +58,88 @@
     <!-- ============================================================
          NAVBAR
     ============================================================ -->
+    <!-- Navbar -->
     <nav class="fixed w-full z-50 bg-white/95 dark:bg-slate-950/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors">
-        <div class="max-w-[100rem] mx-auto px-6 lg:px-12">
-            <div class="flex justify-between items-center h-20 gap-4">
+        <div class="max-w-[100rem] mx-auto px-4 sm:px-6 lg:px-12 relative">
+            <div class="flex justify-between items-center h-20">
                 <!-- Logo -->
-                <div class="flex-shrink-0 flex items-center pl-2 sm:pl-6">
+                <div class="flex-shrink-0 flex items-center pl-1 sm:pl-4">
                     <a href="index.html" aria-label="Nimbus" class="flex items-center justify-center group -mt-2">
-                        <img src="nimbus-actual-logo.png" alt="Nimbus Logo" class="h-16 sm:h-18 w-auto object-contain block dark:hidden">
-                        <img src="nimbus-actual-logo-dark.png" alt="Nimbus Logo" class="h-16 sm:h-18 w-auto object-contain hidden dark:block">
+                        <img src="nimbus-actual-logo.png" alt="Nimbus Logo" class="h-14 sm:h-16 lg:h-18 w-auto object-contain block dark:hidden">
+                        <img src="nimbus-actual-logo-dark.png" alt="Nimbus Logo" class="h-14 sm:h-16 lg:h-18 w-auto object-contain hidden dark:block">
                     </a>
                 </div>
-                <!-- Desktop Nav Links -->
-                <div class="hidden lg:flex items-center gap-6 xl:gap-8 whitespace-nowrap">
-                    <a href="index.html#technology" class="nav-link whitespace-nowrap text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Platform Overview</a>
-                    <a href="how-it-works.html" class="nav-link whitespace-nowrap text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">How It Works</a>
-                    <a href="safety.html" class="nav-link whitespace-nowrap text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Compliance Data</a>
-                    <a href="unit-economics.html" class="nav-link whitespace-nowrap text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Unit Economics</a>
-                    <a href="simulator.html" class="nav-link whitespace-nowrap text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">NFC Sandbox</a>
-                    <a href="dashboard.html" class="nav-link whitespace-nowrap text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>Live Threat Map</a>
-                    <a href="state-auditor-dashboard.html" class="nav-link whitespace-nowrap text-sm font-bold text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300 transition-colors flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-sky-500 dark:bg-sky-400 animate-pulse"></span>State Auditor</a>
+
+                <!-- Desktop Nav Links (Truly Centered) -->
+                <div class="hidden md:flex items-center gap-6 lg:gap-8 text-sm font-medium absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+                    
+                    <!-- Platform Dropdown -->
+                    <div class="relative group">
+                        <button class="nav-link flex items-center gap-1.5 py-2 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors focus:outline-none text-xs xl:text-sm font-semibold">
+                            <span>Platform</span>
+                            <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-200 transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div class="absolute left-1/2 -translate-x-1/2 top-full pt-2 w-60 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform group-hover:translate-y-0 translate-y-1 z-50">
+                            <div class="p-2 bg-white dark:bg-slate-900 rounded-xl shadow-xl border border-slate-200/80 dark:border-slate-800 backdrop-blur-lg space-y-1">
+                                <a href="index.html#technology" class="block px-3.5 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors">
+                                    <div class="text-xs font-semibold text-slate-900 dark:text-slate-100">Platform Overview</div>
+                                    <div class="text-[11px] text-slate-500 dark:text-slate-400">NFC hardware architecture</div>
+                                </a>
+                                <a href="how-it-works.html" class="block px-3.5 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors">
+                                    <div class="text-xs font-semibold text-slate-900 dark:text-slate-100">How It Works</div>
+                                    <div class="text-[11px] text-slate-500 dark:text-slate-400">Cryptographic handshake &amp; Metrc</div>
+                                </a>
+                                <a href="safety.html" class="block px-3.5 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors">
+                                    <div class="text-xs font-semibold text-slate-900 dark:text-slate-100">Compliance &amp; Safety</div>
+                                    <div class="text-[11px] text-slate-500 dark:text-slate-400">Heavy metals &amp; lab testing</div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Demos Dropdown -->
+                    <div class="relative group">
+                        <button class="nav-link flex items-center gap-1.5 py-2 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors focus:outline-none text-xs xl:text-sm font-semibold">
+                            <span>Interactive Demos</span>
+                            <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-200 transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div class="absolute left-1/2 -translate-x-1/2 top-full pt-2 w-64 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform group-hover:translate-y-0 translate-y-1 z-50">
+                            <div class="p-2 bg-white dark:bg-slate-900 rounded-xl shadow-xl border border-slate-200/80 dark:border-slate-800 backdrop-blur-lg space-y-1">
+                                <a href="simulator.html" class="block px-3.5 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors">
+                                    <div class="text-xs font-semibold text-slate-900 dark:text-slate-100">NFC Sandbox Simulator</div>
+                                    <div class="text-[11px] text-slate-500 dark:text-slate-400">Interactive scan verification</div>
+                                </a>
+                                <a href="dashboard.html" class="block px-3.5 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors">
+                                    <div class="text-xs font-semibold text-slate-900 dark:text-slate-100">Live Threat Map</div>
+                                    <div class="text-[11px] text-slate-500 dark:text-slate-400">Global counterfeit telemetry</div>
+                                </a>
+                                <a href="state-auditor-dashboard.html" class="block px-3.5 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors">
+                                    <div class="text-xs font-semibold text-slate-900 dark:text-slate-100">State Auditor Portal</div>
+                                    <div class="text-[11px] text-slate-500 dark:text-slate-400">Regulator &amp; tax compliance</div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Unit Economics -->
+                    <a href="unit-economics.html" class="nav-link whitespace-nowrap text-xs xl:text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Unit Economics</a>
+
                 </div>
+
                 <!-- Right Actions -->
-                <div class="hidden lg:flex items-center gap-4">
+                <div class="hidden md:flex items-center gap-2 sm:gap-4">
                     <!-- Theme Toggle -->
                     <button onclick="toggleTheme()" class="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle Theme">
                         <svg class="w-5 h-5 hidden dark:block text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
                         <svg class="w-5 h-5 block dark:hidden text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
                     </button>
-                    <a href="contact.html" class="inline-flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-accentGreen hover:bg-accentGreenHover rounded-lg transition-colors shadow-sm">
+                    <a href="contact.html" class="inline-flex items-center justify-center px-3.5 py-2 text-xs xl:text-sm font-semibold text-white bg-accentGreen hover:bg-accentGreenHover rounded-lg transition-colors shadow-sm whitespace-nowrap">
                         Schedule a Demo
                     </a>
                 </div>
+
                 <!-- Mobile Menu Btn -->
-                <div class="lg:hidden flex items-center gap-2">
+                <div class="md:hidden flex items-center gap-2">
                     <button onclick="toggleTheme()" class="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle Theme">
                         <svg class="w-5 h-5 hidden dark:block text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
                         <svg class="w-5 h-5 block dark:hidden text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
@@ -101,17 +150,30 @@
                 </div>
             </div>
         </div>
+
         <!-- Mobile Menu -->
-        <div id="mobile-menu" class="lg:hidden hidden bg-slate-50 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
-<div class="px-4 py-3 space-y-1">
-                <a href="index.html#technology" class="block px-3 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 rounded-md">Platform Overview</a>
-                <a href="how-it-works.html" class="block px-3 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 rounded-md">How It Works</a>
-                <a href="safety.html" class="block px-3 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 rounded-md">Compliance Data</a>
-                <a href="unit-economics.html" class="block px-3 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 rounded-md">Unit Economics</a>
-                <a href="simulator.html" class="block px-3 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 rounded-md">NFC Sandbox</a>
-                <a href="dashboard.html" class="block px-3 py-2 text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:bg-white dark:hover:bg-slate-800 rounded-md flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>Live Threat Map</a>
-                <a href="state-auditor-dashboard.html" class="block px-3 py-2 text-sm font-bold text-sky-600 dark:text-sky-400 hover:bg-white dark:hover:bg-slate-800 rounded-md flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-sky-500 dark:bg-sky-400 animate-pulse"></span>State Auditor</a>
-                <a href="contact.html" class="block px-3 py-2 text-sm font-semibold text-accentGreen hover:bg-white dark:hover:bg-slate-800 rounded-md">Schedule Demo</a>
+        <div id="mobile-menu" class="md:hidden hidden bg-slate-50 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
+            <div class="px-4 py-3 space-y-3">
+                <div>
+                    <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 px-3 mb-1">Platform</div>
+                    <div class="space-y-1">
+                        <a href="index.html#technology" class="block px-3 py-1.5 text-sm text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 rounded-md">Platform Overview</a>
+                        <a href="how-it-works.html" class="block px-3 py-1.5 text-sm text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 rounded-md">How It Works</a>
+                        <a href="safety.html" class="block px-3 py-1.5 text-sm text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 rounded-md">Compliance &amp; Safety</a>
+                    </div>
+                </div>
+                <div>
+                    <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 px-3 mb-1">Interactive Demos</div>
+                    <div class="space-y-1">
+                        <a href="simulator.html" class="block px-3 py-1.5 text-sm text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 rounded-md">NFC Sandbox Simulator</a>
+                        <a href="dashboard.html" class="block px-3 py-1.5 text-sm text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 rounded-md">Live Threat Map</a>
+                        <a href="state-auditor-dashboard.html" class="block px-3 py-1.5 text-sm text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 rounded-md">State Auditor Portal</a>
+                    </div>
+                </div>
+                <div class="pt-2 border-t border-slate-200 dark:border-slate-800">
+                    <a href="unit-economics.html" class="block px-3 py-2 text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 rounded-md">Unit Economics</a>
+                    <a href="contact.html" class="block mt-2 text-center px-3 py-2 text-sm font-semibold text-white bg-accentGreen hover:bg-accentGreenHover rounded-md">Schedule a Demo</a>
+                </div>
             </div>
         </div>
     </nav>
