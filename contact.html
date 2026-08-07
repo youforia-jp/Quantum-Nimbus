@@ -15,53 +15,63 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Tailwind CSS -->
-    <script src="site-config.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        nimbusBase:   '#FFFFFF',
+                        nimbusSurface:'#F8FAFC',
+                        nimbusBorder: '#E2E8F0',
+                        nimbusText:   '#334155',
+                        accentBlue:   '#0284C7',
+                        accentRed:    '#ef4444',
+                        accentGreen:  '#047857',
+                        accentGreenHover: '#065F46',
+                    },
+                    fontFamily: {
+                        sans:    ['Inter', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        };
+        (function() {
+            const savedTheme = localStorage.getItem('nimbus_theme');
+            if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        })();
+        function toggleTheme() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('nimbus_theme', isDark ? 'dark' : 'light');
+        }
+        window.toggleTheme = toggleTheme;
+    </script>
     
     <!-- Existing Vanilla CSS -->
     <link rel="stylesheet" href="index.css">
     
-    <!-- Scoped overrides to prevent global index.css from breaking the Tailwind layout -->
+    <!-- Scoped overrides -->
     <style>
         body { 
             overflow-x: hidden !important; 
             height: auto !important; 
             min-height: 100vh;
             display: block !important;
-            background-color: #0c0f17 !important;
         }
         .background-radial-glow { display: none; }
-        .nav-link { font-size: 0.875rem; font-weight: 500; color: #8b9cb5; transition: color 0.18s; }
-        .nav-link:hover { color: #f1f5f9; }
-        /* Enterprise form inputs */
-        .ent-input {
-            width: 100%;
-            background: #0c0f17;
-            border: 1px solid #1e2d3d;
-            border-radius: 8px;
-            padding: 0.75rem 1rem;
-            color: #f1f5f9;
-            font-size: 0.875rem;
-            transition: border-color 0.18s, box-shadow 0.18s;
-            font-family: inherit;
-        }
-        .ent-input:focus {
-            outline: none;
-            border-color: rgba(59, 130, 246, 0.5);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.08);
-        }
-        .ent-label {
-            display: block;
-            font-size: 0.8rem;
-            font-weight: 500;
-            color: #8b9cb5;
-            margin-bottom: 0.5rem;
+        .dark body {
+            background-image: radial-gradient(#1e293b 1px, transparent 1px) !important;
         }
     </style>
 </head>
-<body class="bg-nimbusBase text-slate-300 font-sans antialiased">
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased min-h-screen bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] dark:bg-none [background-size:16px_16px] font-sans transition-colors">
 
-    <!-- Navbar -->
     <!-- Navbar -->
     <nav class="fixed w-full z-50 bg-white/95 dark:bg-slate-950/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors">
         <div class="max-w-[100rem] mx-auto px-4 sm:px-6 lg:px-12">
@@ -122,72 +132,73 @@
     </nav>
 
     <!-- CONTACT SECTION -->
-    <section id="contact" class="py-28 relative overflow-hidden" style="background:#0c0f17;">
+    <section id="contact" class="pt-28 pb-20 relative overflow-hidden bg-slate-50 dark:bg-slate-950 transition-colors">
         <div class="absolute inset-0 bg-[radial-gradient(ellipse_60%_40%_at_50%_0%,rgba(59,130,246,0.05),transparent)]"></div>
         
         <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <!-- Header -->
             <div class="mb-10">
-                <div class="inline-flex items-center gap-2 mb-4 text-xs font-medium text-accentBlue uppercase tracking-widest">
-                    <span class="w-4 h-px bg-accentBlue opacity-60"></span>
+                <div class="inline-flex items-center gap-2 mb-4 text-xs font-medium text-sky-600 dark:text-accentBlue uppercase tracking-widest">
+                    <span class="w-4 h-px bg-sky-600 dark:bg-accentBlue opacity-60"></span>
                     Enterprise & Consumer Support
                 </div>
-                <h1 class="font-heading text-3xl font-bold text-white mb-2">Contact Quantum Nimbus</h1>
-                <p class="text-nimbusText text-sm leading-relaxed">Initiate a dialogue for corporate partnerships, technical licensing, or submit a consumer hardware verification report.</p>
+                <h1 class="font-heading text-3xl font-bold text-slate-900 dark:text-white mb-2">Contact Quantum Nimbus</h1>
+                <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">Initiate a dialogue for corporate partnerships, technical licensing, or submit a consumer hardware verification report.</p>
             </div>
 
             <!-- Consumer Alert Banner -->
-            <div class="mb-6 bg-red-950/40 border border-red-900/40 p-4 rounded-xl flex items-start space-x-3 text-xs text-red-200">
-                <svg class="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="mb-6 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/40 p-4 rounded-xl flex items-start space-x-3 text-xs text-red-800 dark:text-red-200">
+                <svg class="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
                 </svg>
                 <div>
-                    <span class="font-bold text-red-300">Reporting a Security Incident or Cloned Tag?</span>
-                    <p class="text-red-300/80 mt-0.5">Select <span class="underline font-semibold">"Report a Security Incident / Counterfeit Tag"</span> in the inquiry dropdown below to route your message directly to our hardware compliance team.</p>
+                    <span class="font-bold text-red-900 dark:text-red-300">Reporting a Security Incident or Cloned Tag?</span>
+                    <p class="text-red-700 dark:text-red-300/80 mt-0.5">Select <span class="underline font-semibold">"Report a Security Incident / Counterfeit Tag"</span> in the inquiry dropdown below to route your message directly to our hardware compliance team.</p>
                 </div>
             </div>
 
             <!-- Contact form card -->
-            <div class="bg-nimbusSurface border border-nimbusBorder p-8 rounded-2xl shadow-xl">
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-8 rounded-2xl shadow-xl transition-colors">
                 <form class="space-y-5" action="https://formspree.io/f/maqrjybz" method="POST">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div>
-                            <label class="ent-label">Full name</label>
-                            <input type="text" name="name" required class="ent-input" placeholder="Jane Doe">
+                            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">Full name</label>
+                            <input type="text" name="name" required class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-3 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 placeholder-slate-400 dark:placeholder-slate-500 transition-colors" placeholder="Jane Doe">
                         </div>
                         <div>
-                            <label class="ent-label">Email address</label>
-                            <input type="email" name="_replyto" required class="ent-input" placeholder="jane@example.com">
+                            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">Email address</label>
+                            <input type="email" name="_replyto" required class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-3 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 placeholder-slate-400 dark:placeholder-slate-500 transition-colors" placeholder="jane@example.com">
                         </div>
                     </div>
                     <div>
-                        <label class="ent-label">Company / Brand Name <span class="text-gray-500 font-normal">(Optional for Consumers)</span></label>
-                        <input type="text" name="company" class="ent-input" placeholder="Acme Corp or N/A">
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">Company / Brand Name <span class="text-slate-400 dark:text-slate-500 font-normal lowercase">(Optional for Consumers)</span></label>
+                        <input type="text" name="company" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-3 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 placeholder-slate-400 dark:placeholder-slate-500 transition-colors" placeholder="Acme Corp or N/A">
                     </div>
                     <div>
-                        <label class="ent-label">Inquiry type</label>
-                        <select name="inquiry_type" class="ent-input">
-                            <option>🚨 Report a Security Incident / Counterfeit Tag</option>
-                            <option>Consumer Support & Product Inquiry</option>
-                            <option>Request Technical Whitepaper</option>
-                            <option>Schedule Blueprint Review under MNDA</option>
-                            <option>Licensing & Brand Integration</option>
-                            <option>Other Business Development</option>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">Inquiry type</label>
+                        <select name="inquiry_type" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-3 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 transition-colors cursor-pointer">
+                            <option value="Report Incident">🚨 Report a Security Incident / Counterfeit Tag</option>
+                            <option value="Consumer Support">Consumer Support & Product Inquiry</option>
+                            <option value="Technical Whitepaper">Request Technical Whitepaper</option>
+                            <option value="MNDA Review">Schedule Blueprint Review under MNDA</option>
+                            <option value="Licensing">Licensing & Brand Integration</option>
+                            <option value="Business Dev">Other Business Development</option>
                         </select>
                     </div>
                     <div>
-                        <label class="ent-label">Message / Incident details</label>
-                        <textarea name="message" rows="4" required class="ent-input" placeholder="Describe your inquiry or security incident details..."></textarea>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">Message / Incident details</label>
+                        <textarea name="message" rows="4" required class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-3 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 placeholder-slate-400 dark:placeholder-slate-500 transition-colors" placeholder="Describe your inquiry or security incident details..."></textarea>
                     </div>
-                    <button type="submit" id="contact-submit" class="w-full py-3.5 mt-2 bg-accentBlue text-white font-semibold text-sm rounded-md hover:bg-blue-500 transition-colors shadow-[0_0_20px_rgba(59,130,246,0.2)]">
+                    <button type="submit" id="contact-submit" class="w-full py-3.5 mt-2 bg-gradient-to-r from-sky-600 to-cyan-500 hover:from-sky-500 hover:to-cyan-400 text-white font-semibold text-sm rounded-lg transition-all shadow-md shadow-sky-600/20 active:scale-[0.99]">
                         Submit Message
                     </button>
                 </form>
             </div>
         </div>
     </section>
+
     <!-- Footer -->
-    <footer class="border-t border-nimbusBorder py-10" style="background:#0c0f17;">
+    <footer class="border-t border-slate-200 dark:border-slate-800 py-10 bg-slate-100 dark:bg-slate-950 text-slate-500 dark:text-slate-400 transition-colors">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col md:flex-row justify-between items-center gap-5 text-sm">
                 <div class="flex items-center gap-2.5">
@@ -195,17 +206,21 @@
                         <path d="M12 3C7.03 3 3 7.03 3 12s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9z" stroke="#3b82f6" stroke-width="1.5" fill="none"/>
                         <circle cx="12" cy="12" r="3" fill="#3b82f6"/>
                     </svg>
-                    <span class="text-nimbusText">Â© 2026 Quantum Nimbus Tech. All rights reserved.</span>
+                    <span class="text-slate-600 dark:text-slate-400">© 2026 Quantum Nimbus Tech. All rights reserved.</span>
                 </div>
-                <div class="text-xs text-nimbusText text-center md:text-right max-w-md leading-relaxed">
-                    U.S. Patent Pending â€” App. No. 64/114,968<br class="hidden md:inline">
+                <div class="text-xs text-slate-500 dark:text-slate-400 text-center md:text-right max-w-md leading-relaxed">
+                    U.S. Patent Pending — App. No. 64/114,968<br class="hidden md:inline">
                     <span class="opacity-70">"Systems and Methods for Dynamic Vaporization Parameter Configuration and Authentication via Cryptographic Near Field Communication"</span>
                 </div>
             </div>
         </div>
     </footer>
 
-
-    <script src="site-config.js"></script>
+    <script>
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        if (btn && menu) btn.addEventListener('click', () => menu.classList.toggle('hidden'));
+    </script>
 </body>
 </html>
+
