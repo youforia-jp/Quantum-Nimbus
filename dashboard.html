@@ -53,9 +53,17 @@
   </script>
   <link rel="stylesheet" href="index.css">
 
-  <!-- D3.js and TopoJSON CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-  <script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
+  <!-- D3.js and TopoJSON CDN (unpkg + jsdelivr fallback) -->
+  <script src="https://unpkg.com/d3@7/dist/d3.min.js"></script>
+  <script src="https://unpkg.com/topojson-client@3/dist/topojson-client.min.js"></script>
+  <script>
+    if (typeof d3 === 'undefined') {
+      document.write('<script src="https://cdn.jsdelivr.net/npm/d3@7"><\/script>');
+    }
+    if (typeof topojson === 'undefined') {
+      document.write('<script src="https://cdn.jsdelivr.net/npm/topojson-client@3"><\/script>');
+    }
+  </script>
 
   <style>
     body {
