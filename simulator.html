@@ -56,44 +56,13 @@
     <!-- Existing Design System CSS -->
     <link rel="stylesheet" href="index.css">
 
-    <!-- Global Tab Switch Handler -->
+    <!-- Global Tab Handler (NFC Security Engine Primary) -->
     <script>
         function switchTab(tabId) {
-            const btnNfc = document.getElementById('tab-btn-nfc');
-            const btnPen = document.getElementById('tab-btn-pen');
-            const contentNfc = document.getElementById('tab-content-nfc');
-            const contentPen = document.getElementById('tab-content-pen');
-
-            if (!btnNfc || !btnPen || !contentNfc || !contentPen) return;
-
-            if (tabId === 'nfc') {
-                btnNfc.className = 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-bold shadow-sm rounded-xl px-4 py-2 text-xs flex items-center justify-center gap-2 border border-slate-200 dark:border-slate-700 flex-1 cursor-pointer transition-all';
-                btnPen.className = 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white font-semibold px-4 py-2 text-xs transition-colors flex-1 flex items-center justify-center gap-2 cursor-pointer';
-                contentNfc.style.display = 'flex';
-                contentNfc.classList.remove('hidden');
-                contentNfc.classList.add('active');
-                contentPen.style.display = 'none';
-                contentPen.classList.add('hidden');
-                contentPen.classList.remove('active');
-            } else if (tabId === 'pen') {
-                btnPen.className = 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-bold shadow-sm rounded-xl px-4 py-2 text-xs flex items-center justify-center gap-2 border border-slate-200 dark:border-slate-700 flex-1 cursor-pointer transition-all';
-                btnNfc.className = 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white font-semibold px-4 py-2 text-xs transition-colors flex-1 flex items-center justify-center gap-2 cursor-pointer';
-                contentPen.style.display = 'block';
-                contentPen.classList.remove('hidden');
-                contentPen.classList.add('active');
-                contentNfc.style.display = 'none';
-                contentNfc.classList.add('hidden');
-                contentNfc.classList.remove('active');
-            }
+            // NFC Security Engine is the primary single engine
+            return;
         }
         window.switchTab = switchTab;
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const btnNfc = document.getElementById('tab-btn-nfc');
-            const btnPen = document.getElementById('tab-btn-pen');
-            if (btnNfc) btnNfc.onclick = (e) => { e.preventDefault(); switchTab('nfc'); };
-            if (btnPen) btnPen.onclick = (e) => { e.preventDefault(); switchTab('pen'); };
-        });
     </script>
     
     <style>
@@ -262,14 +231,11 @@
                     </div>
                 </div>
 
-                <!-- 2. SEGMENTED TOP NAVIGATION TABS -->
-                <div class="flex border-b border-slate-200 dark:border-slate-800 bg-slate-100/60 dark:bg-slate-900/80 p-1.5 rounded-t-2xl gap-2">
-                    <button id="tab-btn-nfc" onclick="switchTab('nfc')" class="bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-bold shadow-sm rounded-xl px-4 py-2 text-xs flex items-center justify-center gap-2 border border-slate-200 dark:border-slate-700 flex-1 cursor-pointer transition-all">
+                <!-- 2. TOP ENGINE HEADER BADGE -->
+                <div class="flex border-b border-slate-200 dark:border-slate-800 bg-slate-100/60 dark:bg-slate-900/80 p-2.5 rounded-t-2xl">
+                    <div id="tab-btn-nfc" class="bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-bold shadow-sm rounded-xl px-4 py-2 text-xs flex items-center gap-2 border border-slate-200 dark:border-slate-700">
                         <span>🏷️ NFC Security Engine</span>
-                    </button>
-                    <button id="tab-btn-pen" onclick="switchTab('pen')" class="text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white font-semibold px-4 py-2 text-xs transition-colors flex-1 flex items-center justify-center gap-2 cursor-pointer">
-                        <span>⚡ Smart Pen Telemetry</span>
-                    </button>
+                    </div>
                 </div>
 
                 <!-- TAB CONTENT CONTAINER -->
@@ -642,122 +608,6 @@
                                 <span>🔒 Integrated tap actions execute live cryptographic queries against /api/v1/verify backed by Supabase PostgreSQL.</span>
                             </div>
                         </div>
-                        </div>
-                    </div>
-
-                    <!-- ============================================================
-                         TAB 2: SMART PEN TELEMETRY (HIDDEN BY DEFAULT)
-                    ============================================================ -->
-                    <div id="tab-content-pen" class="tab-pane hidden w-full">
-<main class="simulator-container" style="display:flex; justify-content:center; align-items:flex-start; gap:2.5rem; flex-wrap:nowrap; padding:2rem 1.5rem;">
-
-        <!-- ================= SMARTPHONE APP PANE ================= -->
-        <section class="phone-mockup card">
-            <div class="phone-notch"></div>
-            <div class="phone-header">
-                <span class="phone-time">18:42</span>
-                <div class="phone-icons">
-                    <span class="wifi-icon">📶</span>
-                    <span class="battery-icon">100%</span>
-                </div>
-            </div>
-            
-            <!-- Fixed App Brand Header -->
-            <div class="app-brand">
-                <span class="brand-text">NIMBUS <span class="sub-brand">IQ</span></span>
-            </div>
-            
-            <div class="phone-screen-content">
-                <!-- BLE Pairing Panel -->
-                
-
-                <!-- Active App Interface -->
-                <div id="app-interface" class="app-section dynamic-fade">
-                    
-                    <!-- ================= TAB: CONTROL ================= -->
-                    <div id="tab-control" class="tab-view active">
-                        <!-- Cartridge Security & Info Card -->
-                        <div class="app-card auth-card">
-                            <div class="auth-header">
-                                <span class="card-label">CARTRIDGE INFORMATION</span>
-                                <span id="badge-auth" class="auth-badge">UNVERIFIED</span>
-                            </div>
-                            <div class="cart-details">
-                                <div class="detail-row">
-                                    <span class="label">Brand:</span>
-                                    <span id="info-brand" class="value">None</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span class="label">Oil Formula:</span>
-                                    <span id="info-type" class="value">None</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span class="label">Batch ID:</span>
-                                    <span id="info-batch" class="value">None</span>
-                                </div>
-                                <div class="detail-row key-row" style="display: none;">
-                                    <span class="label">NFC Signature:</span>
-                                    <span id="info-sig" class="value code-text">None</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Heating Insights Panel -->
-                        <div class="app-card heating-insights-card">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
-                                <span class="card-label" style="margin-bottom: 0;">HEATING INSIGHTS</span>
-                                <span id="advanced-badge" class="header-badge" style="background: rgba(var(--primary-glow-rgb), 0.15); border: 1px solid rgba(var(--primary-glow-rgb), 0.3); color: var(--accent-color); font-size: 0.65rem; padding: 0.15rem 0.4rem; display: none; margin-left: auto; border-radius: 4px; line-height: 1;">ADVANCED</span>
-                            </div>
-                            
-                            <!-- SVG Temperature Curve Graph -->
-                            <div class="temp-graph-container" style="position: relative; width: 100%; height: 110px; background: rgba(0, 0, 0, 0.25); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.05); margin-bottom: 0.8rem; overflow: hidden;">
-                                <svg id="temp-curve-svg" width="100%" height="100%" viewBox="0 0 300 110" style="display: block;">
-                                    <line x1="0" y1="27.5" x2="300" y2="27.5" stroke="rgba(255, 255, 255, 0.03)" stroke-width="1" />
-                                    <line x1="0" y1="55" x2="300" y2="55" stroke="rgba(255, 255, 255, 0.03)" stroke-width="1" />
-                                    <line x1="0" y1="82.5" x2="300" y2="82.5" stroke="rgba(255, 255, 255, 0.03)" stroke-width="1" />
-                                    <line id="graph-limit-line" x1="0" y1="20" x2="300" y2="20" stroke="rgba(239, 68, 68, 0.25)" stroke-dasharray="3,3" stroke-width="1.2" />
-                                    <line id="graph-target-line" x1="0" y1="50" x2="300" y2="50" stroke="rgba(var(--primary-glow-rgb), 0.5)" stroke-dasharray="3,3" stroke-width="1.2" />
-                                    <text id="graph-limit-label" x="5" y="15" fill="rgba(239, 68, 68, 0.6)" font-size="7" font-weight="600">LIMIT: --</text>
-                                    <text id="graph-target-label" x="5" y="45" fill="var(--accent-color)" font-size="7" font-weight="600">TARGET: --</text>
-                                    <path id="graph-preview-curve" d="" fill="none" stroke="rgba(255, 255, 255, 0.15)" stroke-dasharray="2,2" stroke-width="1.5" />
-                                    <path id="graph-live-curve" d="" fill="none" stroke="url(#tempGlowGrad)" stroke-width="2.5" stroke-linecap="round" filter="url(#tempGlow)" />
-                                    <defs>
-                                        <linearGradient id="tempGlowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                                            <stop offset="0%" stop-color="var(--accent-color)" />
-                                            <stop offset="100%" stop-color="var(--primary-glow)" />
-                                        </linearGradient>
-                                        <filter id="tempGlow">
-                                            <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
-                                            <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
-                                        </filter>
-                                    </defs>
-                                </svg>
-                            </div>
-                            
-                            <!-- Advanced Temp Tuning slider -->
-                            <div id="temp-tuner-container" style="display: none; flex-direction: column; gap: 0.35rem; margin-bottom: 0.8rem; background: rgba(0,0,0,0.15); border: 1px solid rgba(255,255,255,0.04); padding: 0.5rem 0.6rem; border-radius: 8px;">
-                                <div style="display: flex; justify-content: space-between; font-size: 0.65rem; color: var(--text-secondary); font-weight: 600; letter-spacing: 0.5px;">
-                                    <span>ADVANCED TEMPERATURE CONTROL</span>
-                                    <span id="val-tuner-temp" style="color: var(--accent-color); font-weight: 700;">180°C</span>
-                                </div>
-                                <input type="range" id="temp-tuner-slider" min="100" max="220" value="180" style="margin-top: 0.1rem;">
-                            </div>
-                            
-                            <!-- Telemetry Grid -->
-                            <div class="telemetry-grid">
-                                <div class="tel-item">
-                                    <span class="tel-label">Base Temp</span>
-                                    <span id="val-base-temp" class="tel-val">--</span>
-                                </div>
-                                <div class="tel-item">
-                                    <span class="tel-label">Active Target</span>
-                                    <span id="val-target-temp" class="tel-val highlight-val">--</span>
-                                </div>
-                                <div class="tel-item">
-                                    <span class="tel-label">Safe Max</span>
-                                    <span id="val-safe-max" class="tel-val">--</span>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
