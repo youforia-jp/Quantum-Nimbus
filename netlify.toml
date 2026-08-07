@@ -41,6 +41,21 @@
   status = 200
 
 [[redirects]]
+  from = "/unit-economics"
+  to = "/unit-economics.html"
+  status = 200
+
+[[redirects]]
+  from = "/how-it-works"
+  to = "/how-it-works.html"
+  status = 200
+
+[[redirects]]
+  from = "/state-auditor-dashboard"
+  to = "/state-auditor-dashboard.html"
+  status = 200
+
+[[redirects]]
   from = "/dashboard"
   to = "/dashboard.html"
   status = 200
