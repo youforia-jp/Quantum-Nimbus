@@ -1,0 +1,22 @@
+[flake8]
+# Align with Black formatter standards
+max-line-length = 88
+
+# E203: whitespace before ':' (disabled for compatibility with Black)
+# W503: line break before binary operator (disabled for compatibility with PEP 8 style guide changes)
+extend-ignore = E203, W503
+
+# Exclude directories that are noise or contain generated code
+exclude =
+    .git,
+    __pycache__,
+    .venv,
+    build,
+    dist,
+    node_modules,
+    *.egg-info
+
+# Per-file exception handling
+# F401: allow unused imports exclusively inside __init__.py files
+per-file-ignores =
+    __init__.py: F401

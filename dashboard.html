@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="dark scroll-smooth">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,6 +14,43 @@
   <!-- Tailwind CSS & Site Config -->
   <script src="site-config.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            nimbusBase:   '#FFFFFF',
+            nimbusSurface:'#F8FAFC',
+            nimbusBorder: '#E2E8F0',
+            nimbusText:   '#334155',
+            accentBlue:   '#0284C7',
+            accentRed:    '#ef4444',
+            accentGreen:  '#047857',
+            accentGreenHover: '#065F46',
+          },
+          fontFamily: {
+            sans:    ['Inter', 'sans-serif'],
+            heading: ['Outfit', 'sans-serif'],
+            mono:    ['JetBrains Mono', 'monospace'],
+          }
+        }
+      }
+    };
+    (function() {
+      const savedTheme = localStorage.getItem('nimbus_theme');
+      if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    })();
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('nimbus_theme', isDark ? 'dark' : 'light');
+    }
+    window.toggleTheme = toggleTheme;
+  </script>
   <link rel="stylesheet" href="index.css">
 
   <!-- D3.js and TopoJSON CDN -->
@@ -24,27 +61,16 @@
     body {
       overflow-x: hidden !important;
       min-height: 100vh;
-      background-color: #0c0f17 !important;
       font-family: 'Inter', sans-serif;
     }
     .font-mono { font-family: 'JetBrains Mono', monospace; }
-    .nav-link {
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: #8b9cb5;
-      transition: color 0.18s;
-    }
-    .nav-link:hover { color: #f1f5f9; }
-    .nav-link.active { color: #10b981; font-weight: 600; }
 
     #map-viewport {
       width: 100%;
       height: 520px;
       border-radius: 0.75rem;
-      background-color: #030712;
       position: relative;
       overflow: hidden;
-      border: 1px solid #1e2d3d;
     }
     
     #gis-canvas {
@@ -55,7 +81,7 @@
     }
   </style>
 </head>
-<body class="bg-nimbusBase text-slate-300 antialiased">
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-300 antialiased transition-colors">
 
   <!-- ============================================================
        EXACT SITE NAVBAR
@@ -64,38 +90,38 @@
        NAVBAR
   ============================================================ -->
   <nav class="fixed w-full z-50 bg-white/95 dark:bg-slate-950/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors">
-    <div class="max-w-[100rem] mx-auto px-6 lg:px-12">
-        <div class="flex justify-between items-center h-20 gap-4">
+    <div class="max-w-[100rem] mx-auto px-4 sm:px-6 lg:px-12">
+        <div class="flex justify-between items-center h-20 gap-2 sm:gap-4">
             <!-- Logo -->
-            <div class="flex-shrink-0 flex items-center pl-2 sm:pl-6">
+            <div class="flex-shrink-0 flex items-center pl-1 sm:pl-4">
                 <a href="index.html" aria-label="Nimbus" class="flex items-center justify-center group -mt-2">
-                    <img src="nimbus-actual-logo.png" alt="Nimbus Logo" class="h-16 sm:h-18 w-auto object-contain block dark:hidden">
-                    <img src="nimbus-actual-logo-dark.png" alt="Nimbus Logo" class="h-16 sm:h-18 w-auto object-contain hidden dark:block">
+                    <img src="nimbus-actual-logo.png" alt="Nimbus Logo" class="h-14 sm:h-16 lg:h-18 w-auto object-contain block dark:hidden">
+                    <img src="nimbus-actual-logo-dark.png" alt="Nimbus Logo" class="h-14 sm:h-16 lg:h-18 w-auto object-contain hidden dark:block">
                 </a>
             </div>
             <!-- Desktop Nav Links -->
-            <div class="hidden lg:flex items-center gap-6 xl:gap-8 whitespace-nowrap">
-                <a href="index.html#technology" class="nav-link whitespace-nowrap text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Platform Overview</a>
-                <a href="how-it-works.html" class="nav-link whitespace-nowrap text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">How It Works</a>
-                <a href="safety.html" class="nav-link whitespace-nowrap text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Compliance Data</a>
-                <a href="unit-economics.html" class="nav-link whitespace-nowrap text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Unit Economics</a>
-                <a href="simulator.html" class="nav-link whitespace-nowrap text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">NFC Sandbox</a>
-                <a href="dashboard.html" class="nav-link whitespace-nowrap text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>Live Threat Map</a>
-                <a href="state-auditor-dashboard.html" class="nav-link whitespace-nowrap text-sm font-bold text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300 transition-colors flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-sky-500 dark:bg-sky-400 animate-pulse"></span>State Auditor</a>
+            <div class="hidden md:flex items-center gap-3 lg:gap-5 xl:gap-7 whitespace-nowrap">
+                <a href="index.html#technology" class="nav-link whitespace-nowrap text-xs xl:text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Platform Overview</a>
+                <a href="how-it-works.html" class="nav-link whitespace-nowrap text-xs xl:text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">How It Works</a>
+                <a href="safety.html" class="nav-link whitespace-nowrap text-xs xl:text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Compliance Data</a>
+                <a href="unit-economics.html" class="nav-link whitespace-nowrap text-xs xl:text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Unit Economics</a>
+                <a href="simulator.html" class="nav-link whitespace-nowrap text-xs xl:text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">NFC Sandbox</a>
+                <a href="dashboard.html" class="nav-link whitespace-nowrap text-xs xl:text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>Live Threat Map</a>
+                <a href="state-auditor-dashboard.html" class="nav-link whitespace-nowrap text-xs xl:text-sm font-bold text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300 transition-colors flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-sky-500 dark:bg-sky-400 animate-pulse"></span>State Auditor</a>
             </div>
             <!-- Right Actions -->
-            <div class="hidden lg:flex items-center gap-4">
+            <div class="hidden md:flex items-center gap-2 sm:gap-4">
                 <!-- Theme Toggle -->
                 <button onclick="toggleTheme()" class="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle Theme">
                     <svg class="w-5 h-5 hidden dark:block text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
                     <svg class="w-5 h-5 block dark:hidden text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
                 </button>
-                <a href="contact.html" class="inline-flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-accentGreen hover:bg-accentGreenHover rounded-lg transition-colors shadow-sm">
+                <a href="contact.html" class="inline-flex items-center justify-center px-3.5 py-2 text-xs xl:text-sm font-semibold text-white bg-accentGreen hover:bg-accentGreenHover rounded-lg transition-colors shadow-sm whitespace-nowrap">
                     Schedule a Demo
                 </a>
             </div>
             <!-- Mobile Menu Btn -->
-            <div class="lg:hidden flex items-center gap-2">
+            <div class="md:hidden flex items-center gap-2">
                 <button onclick="toggleTheme()" class="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle Theme">
                     <svg class="w-5 h-5 hidden dark:block text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
                     <svg class="w-5 h-5 block dark:hidden text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
@@ -107,7 +133,7 @@
         </div>
     </div>
     <!-- Mobile Menu -->
-    <div id="mobile-menu" class="lg:hidden hidden bg-slate-50 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
+    <div id="mobile-menu" class="md:hidden hidden bg-slate-50 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
         <div class="px-4 py-3 space-y-1">
             <a href="index.html#technology" class="block px-3 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 rounded-md">Platform Overview</a>
             <a href="how-it-works.html" class="block px-3 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 rounded-md">How It Works</a>
@@ -124,78 +150,78 @@
   <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 pt-24 space-y-6">
     
     <!-- Title Banner -->
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#1e2d3d] pb-4">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 dark:border-[#1e2d3d] pb-4">
       <div>
         <div class="flex items-center space-x-2 mb-1">
           <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span class="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider">Cryptographic Threat Classification Engine Active</span>
+          <span class="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Cryptographic Threat Classification Engine Active</span>
         </div>
-        <h1 class="text-3xl font-extrabold text-white tracking-tight">Real-Time Threat Telemetry Map</h1>
-        <p class="text-slate-400 text-sm mt-1">Hover over any node or laser arc to inspect Batch ID, AES-128 SUN CMAC, and velocity telemetry.</p>
+        <h1 class="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Real-Time Threat Telemetry Map</h1>
+        <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">Hover over any node or laser arc to inspect Batch ID, AES-128 SUN CMAC, and velocity telemetry.</p>
       </div>
 
       <!-- Quick Control Bar -->
       <div class="flex items-center space-x-2">
-        <button id="btn-attack-replay" class="bg-yellow-600 hover:bg-yellow-500 text-white text-xs font-semibold px-3 py-2 rounded-lg shadow transition-all flex items-center space-x-1 cursor-pointer">
+        <button id="btn-attack-replay" class="bg-amber-600 hover:bg-amber-500 text-white text-xs font-semibold px-3 py-2 rounded-lg shadow transition-all flex items-center space-x-1 cursor-pointer">
           <span>⚠️ Replay Attack (Yellow)</span>
         </button>
-        <button id="btn-attack-crypto" class="bg-red-600 hover:bg-red-500 text-white text-xs font-semibold px-3 py-2 rounded-lg shadow transition-all flex items-center space-x-1 cursor-pointer">
+        <button id="btn-attack-crypto" class="bg-rose-600 hover:bg-rose-500 text-white text-xs font-semibold px-3 py-2 rounded-lg shadow transition-all flex items-center space-x-1 cursor-pointer">
           <span>🚨 Crypto Fail (Red)</span>
         </button>
       </div>
     </div>
 
     <!-- Demo Disclaimer Banner -->
-    <div class="bg-amber-950/40 border border-amber-500/30 rounded-xl p-3.5 flex items-start sm:items-center gap-3 text-amber-200 text-xs font-mono backdrop-blur-md">
-      <span class="text-amber-400 text-base leading-none">⚠️</span>
+    <div class="bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-500/30 rounded-xl p-3.5 flex items-start sm:items-center gap-3 text-amber-900 dark:text-amber-200 text-xs font-mono backdrop-blur-md">
+      <span class="text-amber-600 dark:text-amber-400 text-base leading-none">⚠️</span>
       <div>
-        <strong class="text-amber-300 font-bold uppercase tracking-wider">Demo Simulation Notice:</strong> The frequency of simulated Replay Attacks (Yellow) and Inauthentic Cryptographic CMAC Signatures (Red) is artificially elevated for interactive demonstration and real-time visualization purposes.
+        <strong class="text-amber-800 dark:text-amber-300 font-bold uppercase tracking-wider">Demo Simulation Notice:</strong> The frequency of simulated Replay Attacks (Yellow) and Inauthentic Cryptographic CMAC Signatures (Red) is artificially elevated for interactive demonstration and real-time visualization purposes.
       </div>
     </div>
 
     <!-- Metric KPI Cards Grid -->
     <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <div class="bg-slate-900/90 border border-slate-800/80 rounded-xl p-5 shadow-sm backdrop-blur-md">
-        <div class="flex items-center justify-between text-slate-400 text-xs font-medium uppercase">
-          <span>Total Security Scans</span>
+      <div class="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800/80 rounded-xl p-5 shadow-sm backdrop-blur-md">
+        <div class="flex items-center justify-between text-slate-500 dark:text-slate-400 text-xs font-medium uppercase">
+          <span>Scans (Last 24 Hours)</span>
           <span>📊</span>
         </div>
         <div class="mt-2 flex items-baseline justify-between">
-          <span id="kpi-total-scans" class="text-2xl font-bold font-mono text-white">1,482,978</span>
-          <span class="text-xs font-semibold text-emerald-400">+12.4%</span>
+          <span id="kpi-total-scans" class="text-2xl font-bold font-mono text-slate-900 dark:text-white">1,482,978</span>
+          <span class="text-xs font-semibold text-emerald-600 dark:text-emerald-400">+12.4%</span>
         </div>
       </div>
 
-      <div class="bg-slate-900/90 border border-slate-800/80 rounded-xl p-5 shadow-sm backdrop-blur-md">
-        <div class="flex items-center justify-between text-slate-400 text-xs font-medium uppercase">
+      <div class="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800/80 rounded-xl p-5 shadow-sm backdrop-blur-md">
+        <div class="flex items-center justify-between text-slate-500 dark:text-slate-400 text-xs font-medium uppercase">
           <span>Replay Attacks Caught</span>
           <span>⚠️</span>
         </div>
         <div class="mt-2 flex items-baseline justify-between">
-          <span id="kpi-replays-caught" class="text-2xl font-bold font-mono text-yellow-400">1,829</span>
-          <span class="text-xs font-semibold text-yellow-400 font-mono">Yellow Both Pings</span>
+          <span id="kpi-replays-caught" class="text-2xl font-bold font-mono text-amber-600 dark:text-yellow-400">1,829</span>
+          <span class="text-xs font-semibold text-amber-600 dark:text-yellow-400 font-mono">Yellow Both Pings</span>
         </div>
       </div>
 
-      <div class="bg-slate-900/90 border border-slate-800/80 rounded-xl p-5 shadow-sm backdrop-blur-md">
-        <div class="flex items-center justify-between text-slate-400 text-xs font-medium uppercase">
+      <div class="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800/80 rounded-xl p-5 shadow-sm backdrop-blur-md">
+        <div class="flex items-center justify-between text-slate-500 dark:text-slate-400 text-xs font-medium uppercase">
           <span>Crypto Failures Blocked</span>
           <span>🚨</span>
         </div>
         <div class="mt-2 flex items-baseline justify-between">
-          <span id="kpi-anomalies-blocked" class="text-2xl font-bold font-mono text-red-400">4,144</span>
-          <span class="text-xs font-semibold text-red-400 font-mono">Red Bad CMAC</span>
+          <span id="kpi-anomalies-blocked" class="text-2xl font-bold font-mono text-rose-600 dark:text-red-400">4,144</span>
+          <span class="text-xs font-semibold text-rose-600 dark:text-red-400 font-mono">Red Bad CMAC</span>
         </div>
       </div>
 
-      <div class="bg-slate-900/90 border border-slate-800/80 rounded-xl p-5 shadow-sm backdrop-blur-md">
-        <div class="flex items-center justify-between text-slate-400 text-xs font-medium uppercase">
+      <div class="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800/80 rounded-xl p-5 shadow-sm backdrop-blur-md">
+        <div class="flex items-center justify-between text-slate-500 dark:text-slate-400 text-xs font-medium uppercase">
           <span>Network Protection</span>
           <span>🛡️</span>
         </div>
         <div class="mt-2 flex items-baseline justify-between">
-          <span class="text-2xl font-bold font-mono text-white">99.98%</span>
-          <span class="text-xs font-semibold text-purple-400">Haversine Active</span>
+          <span class="text-2xl font-bold font-mono text-slate-900 dark:text-white">99.98%</span>
+          <span class="text-xs font-semibold text-purple-600 dark:text-purple-400">Haversine Active</span>
         </div>
       </div>
     </section>
@@ -207,26 +233,26 @@
       <div class="lg:col-span-2 space-y-4">
         
         <!-- Projection Mode Header Bar -->
-        <div class="bg-slate-900/90 border border-slate-800/80 rounded-xl p-3 backdrop-blur-md flex items-center justify-between gap-3">
-          <div class="text-xs font-mono font-bold text-slate-300 flex items-center space-x-2">
+        <div class="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800/80 rounded-xl p-3 backdrop-blur-md flex items-center justify-between gap-3 shadow-sm">
+          <div class="text-xs font-mono font-bold text-slate-700 dark:text-slate-300 flex items-center space-x-2">
             <span>MAP VIEWPORT ENGINE:</span>
-            <span id="map-mode-indicator" class="text-emerald-400">2D EQUIRECTANGULAR GIS</span>
+            <span id="map-mode-indicator" class="text-emerald-600 dark:text-emerald-400">2D EQUIRECTANGULAR GIS</span>
           </div>
 
           <!-- 2D vs 3D Projection Toggle -->
-          <div class="flex items-center space-x-1 bg-slate-950 p-1 rounded-lg border border-slate-800 text-xs font-mono">
-            <button id="btn-proj-2d" class="px-3 py-1 rounded bg-emerald-950 text-emerald-400 border border-emerald-800 font-bold transition-all">🗺️ 2D Flat</button>
-            <button id="btn-proj-3d" class="px-3 py-1 rounded text-slate-400 transition-all">🌐 3D Globe</button>
+          <div class="flex items-center space-x-1 bg-slate-100 dark:bg-slate-950 p-1 rounded-lg border border-slate-200 dark:border-slate-800 text-xs font-mono">
+            <button id="btn-proj-2d" class="px-3 py-1 rounded bg-emerald-600 dark:bg-emerald-950 text-white dark:text-emerald-400 border border-emerald-700 dark:border-emerald-800 font-bold transition-all">🗺️ 2D Flat</button>
+            <button id="btn-proj-3d" class="px-3 py-1 rounded text-slate-600 dark:text-slate-400 transition-all">🌐 3D Globe</button>
           </div>
         </div>
 
-        <!-- GIS Canvas Viewport with Enhanced Popover Tooltip -->
-        <div class="bg-slate-900/90 border border-slate-800/80 rounded-xl p-4 shadow-sm relative backdrop-blur-md">
-          <div id="map-viewport">
+        <!-- GIS Canvas Viewport with High-Contrast Industry Dark Mode Canvas -->
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-xl relative backdrop-blur-md">
+          <div id="map-viewport" class="bg-[#030712] border border-slate-800 rounded-lg">
             <canvas id="gis-canvas"></canvas>
 
-            <!-- Expanded Glassmorphic Popover Tooltip -->
-            <div id="node-tooltip" class="absolute z-50 bg-slate-900/95 border border-emerald-500/50 rounded-xl p-3.5 shadow-2xl backdrop-blur-md text-xs font-mono space-y-1.5 hidden pointer-events-none max-w-xs transition-all">
+            <!-- Expanded Dark Glassmorphic Popover Tooltip -->
+            <div id="node-tooltip" class="absolute z-50 bg-slate-900/95 border border-emerald-500/50 rounded-xl p-3.5 shadow-2xl backdrop-blur-md text-xs font-mono space-y-1.5 hidden pointer-events-none max-w-xs transition-all text-slate-100">
               <div class="flex items-center justify-between border-b border-slate-800 pb-1.5 font-bold">
                 <span id="tooltip-title" class="text-emerald-400">Houston, US</span>
                 <span id="tooltip-status-badge" class="text-[10px] bg-emerald-950 text-emerald-300 px-1.5 py-0.5 rounded border border-emerald-800">HQ NODE</span>
@@ -242,35 +268,35 @@
           </div>
 
           <!-- Color Classification Legend Bar -->
-          <div class="mt-3 pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between text-[11px] font-mono gap-2 text-slate-400">
+          <div class="mt-3 pt-2 border-t border-slate-800 flex flex-wrap items-center justify-between text-[11px] font-mono gap-2 text-white">
             <div class="flex items-center space-x-1.5">
               <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-              <span class="text-slate-200">🟢 Green: Authentic Tap 1</span>
+              <span class="text-white font-medium">🟢 Green: Authentic Tap 1</span>
             </div>
             <div class="flex items-center space-x-1.5">
               <span class="w-2.5 h-2.5 rounded-full bg-yellow-500"></span>
-              <span class="text-slate-200">🟡 Yellow: Replay Attack (Both Pings Turn Yellow)</span>
+              <span class="text-white font-medium">🟡 Yellow: Replay Attack (Both Pings Turn Yellow)</span>
             </div>
             <div class="flex items-center space-x-1.5">
               <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
-              <span class="text-slate-200">🔴 Red: Bad Cryptographic Signature</span>
+              <span class="text-white font-medium">🔴 Red: Bad Cryptographic Signature</span>
             </div>
           </div>
         </div>
 
         <!-- Guaranteed Responsive Incident Time Scrubber Bar -->
-        <div class="bg-slate-900/90 border border-slate-800/80 rounded-xl p-4 backdrop-blur-md space-y-2">
+        <div class="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800/80 rounded-xl p-4 backdrop-blur-md space-y-2 shadow-sm">
           <div class="flex items-center justify-between text-xs font-mono">
             <div class="flex items-center space-x-2">
-              <span class="font-bold text-white">⏱️ Incident Time Scrubber:</span>
-              <span id="scrubber-status" class="text-emerald-400 font-semibold">🔴 LIVE STREAMING (0s)</span>
+              <span class="font-bold text-slate-900 dark:text-white">⏱️ Incident Time Scrubber:</span>
+              <span id="scrubber-status" class="text-emerald-600 dark:text-emerald-400 font-semibold">🔴 LIVE STREAMING (0s)</span>
             </div>
             <div class="flex items-center space-x-2">
               <button id="btn-scrub-live" class="px-2.5 py-1 rounded text-[11px] font-bold bg-emerald-600 hover:bg-emerald-500 text-white cursor-pointer transition-colors">▶ RESUME LIVE</button>
             </div>
           </div>
 
-          <input id="time-slider" type="range" min="0" max="60" value="60" class="w-full accent-emerald-500 bg-slate-800 rounded-lg cursor-pointer h-2">
+          <input id="time-slider" type="range" min="0" max="60" value="60" class="w-full accent-emerald-500 bg-slate-200 dark:bg-slate-800 rounded-lg cursor-pointer h-2">
           <div class="flex justify-between text-[10px] font-mono text-slate-500">
             <span>-60 Seconds (Audit History)</span>
             <span>-30 Seconds</span>
@@ -281,28 +307,28 @@
       </div>
 
       <!-- Right Column: Live Telemetry Feed -->
-      <div class="bg-slate-900/90 border border-slate-800/80 rounded-xl p-5 shadow-sm space-y-4 flex flex-col h-[670px] backdrop-blur-md">
+      <div class="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800/80 rounded-xl p-5 shadow-sm space-y-4 flex flex-col h-[670px] backdrop-blur-md">
         
-        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
           <div>
-            <h2 class="text-base font-bold text-white">Live Telemetry Stream</h2>
-            <p class="text-xs text-slate-400 font-mono">Filtered Security Events</p>
+            <h2 class="text-base font-bold text-slate-900 dark:text-white">Live Telemetry Stream</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400 font-mono">Filtered Security Events</p>
           </div>
-          <span id="stream-status-badge" class="px-2 py-0.5 text-xs font-mono font-bold rounded bg-emerald-950 text-emerald-400 border border-emerald-800 animate-pulse flex items-center gap-1">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> STREAM ACTIVE
+          <span id="stream-status-badge" class="px-2 py-0.5 text-xs font-mono font-bold rounded bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800 animate-pulse flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> STREAM ACTIVE
           </span>
         </div>
 
         <!-- Telemetry Filter Buttons -->
-        <div class="flex items-center space-x-1.5 text-xs font-mono bg-slate-950 p-1.5 rounded-lg border border-slate-800">
+        <div class="flex items-center space-x-1.5 text-xs font-mono bg-slate-100 dark:bg-slate-950 p-1.5 rounded-lg border border-slate-200 dark:border-slate-800">
           <button id="btn-filter-all" class="flex-1 py-1.5 rounded-md bg-emerald-600 text-white font-bold transition-all text-center">All Telemetry</button>
-          <button id="btn-filter-threats" class="flex-1 py-1.5 rounded-md bg-slate-800 text-slate-400 hover:text-white transition-all text-center">Threats Only</button>
-          <button id="btn-filter-us" class="flex-1 py-1.5 rounded-md bg-slate-800 text-slate-400 hover:text-white transition-all text-center">US Region</button>
+          <button id="btn-filter-threats" class="flex-1 py-1.5 rounded-md bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all text-center">Threats Only</button>
+          <button id="btn-filter-us" class="flex-1 py-1.5 rounded-md bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all text-center">US Region</button>
         </div>
 
         <!-- Tag Search Input -->
         <div>
-          <input id="tag-search" type="text" placeholder="🔍 Search Tag ID (e.g. NTAG-424-8000)" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs font-mono text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500">
+          <input id="tag-search" type="text" placeholder="🔍 Search Tag ID (e.g. NTAG-424-8000)" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-xs font-mono text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-emerald-500">
         </div>
 
         <div id="telemetry-feed" class="flex-1 overflow-y-auto space-y-3 pr-1">
@@ -371,11 +397,9 @@
       totalScans++;
       document.getElementById('kpi-total-scans').textContent = totalScans.toLocaleString();
 
-      const distance = destination ? haversineDistanceKm(origin.lat, origin.lng, destination.lat, destination.lng) : 0;
-      const vel = destination ? Math.round((distance / Math.max(timeDeltaSeconds, 0.1)) * 3600) : 0;
-
       let status = 'VERIFIED';
       if (forceType === 'CRYPTO_FAIL') {
+        destination = null; // Bad Crypto Sig happens locally at origin tag scan attempt, never links to another city
         status = 'CRYPTO_FAIL';
         anomaliesBlocked++;
         document.getElementById('kpi-anomalies-blocked').textContent = anomaliesBlocked.toLocaleString();
@@ -391,10 +415,13 @@
         });
       }
 
+      const distance = destination ? haversineDistanceKm(origin.lat, origin.lng, destination.lat, destination.lng) : 0;
+      const vel = destination ? Math.round((distance / Math.max(timeDeltaSeconds, 0.1)) * 3600) : 0;
+
       const now = Date.now();
       const batchNum = Math.floor(Math.random() * 8900 + 1000);
       const batchId = `BATCH-2026-QN-${batchNum}`;
-      const sequenceNum = destination ? 'Sequence #002 (Replay)' : 'Sequence #001 (Tap 1)';
+      const sequenceNum = destination ? 'Sequence #002 (Replay)' : (status === 'CRYPTO_FAIL' ? 'Sequence #001 (Bad CMAC)' : 'Sequence #001 (Tap 1)');
 
       const evt = {
         id: `evt-${now}-${Math.random()}`,
@@ -426,21 +453,21 @@
       filtered.slice(0, 40).forEach(evt => {
         const card = document.createElement('div');
 
-        let cardClass = 'bg-slate-950/80 border-slate-800 text-slate-300';
-        let badgeClass = 'bg-emerald-950 text-emerald-400 border border-emerald-800';
+        let cardClass = 'bg-slate-50 dark:bg-slate-950/80 border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-300';
+        let badgeClass = 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800';
         let statusText = 'VERIFIED';
-        let velColor = 'text-emerald-400';
+        let velColor = 'text-emerald-600 dark:text-emerald-400';
 
         if (evt.status === 'REPLAY_ATTACK') {
-          cardClass = 'bg-yellow-950/40 border-yellow-500/50 text-yellow-100';
-          badgeClass = 'bg-yellow-900 text-yellow-200 border border-yellow-700';
+          cardClass = 'bg-amber-50 dark:bg-amber-950/40 border-amber-300 dark:border-amber-500/50 text-amber-900 dark:text-amber-100';
+          badgeClass = 'bg-amber-100 dark:bg-amber-900 text-amber-800 dark:text-amber-200 border border-amber-300 dark:border-amber-700';
           statusText = '⚠️ REPLAY ATTACK';
-          velColor = 'text-yellow-400';
+          velColor = 'text-amber-600 dark:text-yellow-400';
         } else if (evt.status === 'CRYPTO_FAIL') {
-          cardClass = 'bg-red-950/40 border-red-500/50 text-red-200';
-          badgeClass = 'bg-red-900 text-red-200 border border-red-700';
+          cardClass = 'bg-rose-50 dark:bg-rose-950/40 border-rose-300 dark:border-rose-500/50 text-rose-900 dark:text-rose-200';
+          badgeClass = 'bg-rose-100 dark:bg-rose-900 text-rose-800 dark:text-rose-200 border border-rose-300 dark:border-rose-700';
           statusText = '🚨 BAD CRYPTO SIG';
-          velColor = 'text-red-400';
+          velColor = 'text-rose-600 dark:text-red-400';
         }
 
         card.className = `p-3 rounded-lg border text-xs space-y-1.5 transition-all ${cardClass}`;
@@ -452,12 +479,12 @@
               ${statusText}
             </span>
           </div>
-          <div class="font-mono font-semibold text-slate-100 flex justify-between">
+          <div class="font-mono font-semibold text-slate-900 dark:text-slate-100 flex justify-between">
             <span>Tag: ${evt.tagId}</span>
-            <span class="text-sky-400 text-[10px]">${evt.batchId}</span>
+            <span class="text-sky-600 dark:text-sky-400 text-[10px]">${evt.batchId}</span>
           </div>
-          <div class="text-slate-300">${evt.origin.city}, ${evt.origin.country} ${evt.destination ? `➔ ${evt.destination.city}, ${evt.destination.country}` : '(Tap 1 Verified)'}</div>
-          ${evt.destination ? `<div class="flex items-center justify-between text-[11px] font-mono text-slate-400">
+          <div class="text-slate-700 dark:text-slate-300">${evt.origin.city}, ${evt.origin.country} ${evt.destination ? `➔ ${evt.destination.city}, ${evt.destination.country}` : '(Single Node Verification)'}</div>
+          ${evt.destination ? `<div class="flex items-center justify-between text-[11px] font-mono text-slate-500 dark:text-slate-400">
             <span>Vel: <strong class="${velColor}">${evt.vel.toLocaleString()} km/h</strong></span>
             <span>Delta: <strong>${evt.timeDeltaSeconds}s</strong></span>
           </div>` : ''}
@@ -475,11 +502,11 @@
       if (val === 60) {
         scrubberSecondsAgo = 0;
         scrubberStatus.textContent = '🔴 LIVE STREAMING (0s)';
-        scrubberStatus.className = 'text-emerald-400 font-semibold';
+        scrubberStatus.className = 'text-emerald-600 dark:text-emerald-400 font-semibold';
       } else {
         scrubberSecondsAgo = 60 - val;
         scrubberStatus.textContent = `⏪ AUDIT SCRUBBING (-${scrubberSecondsAgo}s AGO)`;
-        scrubberStatus.className = 'text-yellow-400 font-bold';
+        scrubberStatus.className = 'text-amber-600 dark:text-yellow-400 font-bold';
       }
       renderTelemetryFeed();
     });
@@ -488,7 +515,7 @@
       scrubberSecondsAgo = 0;
       timeSlider.value = 60;
       scrubberStatus.textContent = '🔴 LIVE STREAMING (0s)';
-      scrubberStatus.className = 'text-emerald-400 font-semibold';
+      scrubberStatus.className = 'text-emerald-600 dark:text-emerald-400 font-semibold';
       renderTelemetryFeed();
     });
 
@@ -568,7 +595,7 @@
         document.getElementById('tooltip-batchid').textContent = foundEvt.batchId;
         document.getElementById('tooltip-sequence').textContent = foundEvt.sequenceNum;
         document.getElementById('tooltip-chips').textContent = foundEvt.origin.activeChips.toLocaleString();
-        document.getElementById('tooltip-latency').textContent = `${foundEvt.origin.avgLatencyMs} ms (${foundEvt.vel.toLocaleString()} km/h)`;
+        document.getElementById('tooltip-latency').textContent = `${foundEvt.origin.avgLatencyMs} ms ${foundEvt.vel ? `(${foundEvt.vel.toLocaleString()} km/h)` : ''}`;
         document.getElementById('tooltip-extra').textContent = `${bioTrackText} | Timestamp: ${foundEvt.timestamp}`;
 
         tooltip.classList.remove('hidden');
@@ -598,11 +625,12 @@
 
     canvas.addEventListener('mouseleave', () => tooltip.classList.add('hidden'));
 
-    // 60 FPS Canvas Render Loop
+    // 60 FPS Canvas Render Loop (INDUSTRY STANDARD DARK MODE GIS CANVAS)
     function renderLoop() {
       const width = canvas.width = canvas.parentElement.clientWidth || 800;
       const height = canvas.height = canvas.parentElement.clientHeight || 520;
 
+      // Dark Mode Industry Standard Ocean & Space Background
       ctx.fillStyle = '#030712';
       ctx.fillRect(0, 0, width, height);
 
@@ -718,38 +746,38 @@
     document.getElementById('btn-proj-2d').addEventListener('click', () => {
       projectionMode = '2d';
       document.getElementById('map-mode-indicator').textContent = '2D EQUIRECTANGULAR GIS';
-      document.getElementById('btn-proj-2d').className = 'px-3 py-1 rounded bg-emerald-950 text-emerald-400 border border-emerald-800 font-bold transition-all';
-      document.getElementById('btn-proj-3d').className = 'px-3 py-1 rounded text-slate-400 transition-all';
+      document.getElementById('btn-proj-2d').className = 'px-3 py-1 rounded bg-emerald-600 dark:bg-emerald-950 text-white dark:text-emerald-400 border border-emerald-700 dark:border-emerald-800 font-bold transition-all';
+      document.getElementById('btn-proj-3d').className = 'px-3 py-1 rounded text-slate-600 dark:text-slate-400 transition-all';
     });
 
     document.getElementById('btn-proj-3d').addEventListener('click', () => {
       projectionMode = '3d';
       document.getElementById('map-mode-indicator').textContent = '3D ROTATING GLOBE';
-      document.getElementById('btn-proj-3d').className = 'px-3 py-1 rounded bg-emerald-950 text-emerald-400 border border-emerald-800 font-bold transition-all';
-      document.getElementById('btn-proj-2d').className = 'px-3 py-1 rounded text-slate-400 transition-all';
+      document.getElementById('btn-proj-3d').className = 'px-3 py-1 rounded bg-emerald-600 dark:bg-emerald-950 text-white dark:text-emerald-400 border border-emerald-700 dark:border-emerald-800 font-bold transition-all';
+      document.getElementById('btn-proj-2d').className = 'px-3 py-1 rounded text-slate-600 dark:text-slate-400 transition-all';
     });
 
     document.getElementById('btn-filter-all').addEventListener('click', () => {
       filterMode = 'all';
       document.getElementById('btn-filter-all').className = 'flex-1 py-1.5 rounded-md bg-emerald-600 text-white font-bold transition-all text-center';
-      document.getElementById('btn-filter-threats').className = 'flex-1 py-1.5 rounded-md bg-slate-800 text-slate-400 hover:text-white transition-all text-center';
-      document.getElementById('btn-filter-us').className = 'flex-1 py-1.5 rounded-md bg-slate-800 text-slate-400 hover:text-white transition-all text-center';
+      document.getElementById('btn-filter-threats').className = 'flex-1 py-1.5 rounded-md bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all text-center';
+      document.getElementById('btn-filter-us').className = 'flex-1 py-1.5 rounded-md bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all text-center';
       renderTelemetryFeed();
     });
 
     document.getElementById('btn-filter-threats').addEventListener('click', () => {
       filterMode = 'threats';
       document.getElementById('btn-filter-threats').className = 'flex-1 py-1.5 rounded-md bg-red-600 text-white font-bold transition-all text-center';
-      document.getElementById('btn-filter-all').className = 'flex-1 py-1.5 rounded-md bg-slate-800 text-slate-400 hover:text-white transition-all text-center';
-      document.getElementById('btn-filter-us').className = 'flex-1 py-1.5 rounded-md bg-slate-800 text-slate-400 hover:text-white transition-all text-center';
+      document.getElementById('btn-filter-all').className = 'flex-1 py-1.5 rounded-md bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all text-center';
+      document.getElementById('btn-filter-us').className = 'flex-1 py-1.5 rounded-md bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all text-center';
       renderTelemetryFeed();
     });
 
     document.getElementById('btn-filter-us').addEventListener('click', () => {
       filterMode = 'us';
       document.getElementById('btn-filter-us').className = 'flex-1 py-1.5 rounded-md bg-blue-600 text-white font-bold transition-all text-center';
-      document.getElementById('btn-filter-all').className = 'flex-1 py-1.5 rounded-md bg-slate-800 text-slate-400 hover:text-white transition-all text-center';
-      document.getElementById('btn-filter-threats').className = 'flex-1 py-1.5 rounded-md bg-slate-800 text-slate-400 hover:text-white transition-all text-center';
+      document.getElementById('btn-filter-all').className = 'flex-1 py-1.5 rounded-md bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all text-center';
+      document.getElementById('btn-filter-threats').className = 'flex-1 py-1.5 rounded-md bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all text-center';
       renderTelemetryFeed();
     });
 
@@ -758,32 +786,36 @@
       renderTelemetryFeed();
     });
 
+    // Random City Manual Trigger Buttons
     document.getElementById('btn-attack-replay').addEventListener('click', () => {
       const tagId = `NTAG-424-${Math.floor(Math.random() * 8999 + 1000)}`;
-      processPayload(CITIES[0], null, 0, tagId, 'VERIFIED');
-      setTimeout(() => { processPayload(CITIES[0], CITIES[5], 0.45, tagId, 'REPLAY_ATTACK'); }, 1200);
+      const c1 = CITIES[Math.floor(Math.random() * CITIES.length)];
+      let c2 = CITIES[Math.floor(Math.random() * CITIES.length)];
+      while (c2.city === c1.city) c2 = CITIES[Math.floor(Math.random() * CITIES.length)];
+      processPayload(c1, null, 0, tagId, 'VERIFIED');
+      setTimeout(() => { processPayload(c1, c2, parseFloat((Math.random() * 1.5 + 0.3).toFixed(2)), tagId, 'REPLAY_ATTACK'); }, 1200);
     });
 
     document.getElementById('btn-attack-crypto').addEventListener('click', () => {
       const tagId = `NTAG-424-${Math.floor(Math.random() * 8999 + 1000)}`;
-      processPayload(CITIES[2], CITIES[1], 0.35, tagId, 'CRYPTO_FAIL');
+      const c1 = CITIES[Math.floor(Math.random() * CITIES.length)];
+      processPayload(c1, null, 0, tagId, 'CRYPTO_FAIL');
     });
 
+    // Enterprise Real-World Frequency Generator (92% Authentic Taps, 5% Replay Attacks, 3% Crypto Failures)
     setInterval(() => {
       const rand = Math.random();
       const tagId = `NTAG-424-${Math.floor(Math.random() * 8999 + 1000)}`;
       const c1 = CITIES[Math.floor(Math.random() * CITIES.length)];
 
-      if (rand < 0.55) {
+      if (rand < 0.92) {
         processPayload(c1, null, 0, tagId, 'VERIFIED');
-      } else if (rand < 0.85) {
+      } else if (rand < 0.97) {
         let c2 = CITIES[Math.floor(Math.random() * CITIES.length)];
         while (c2.city === c1.city) c2 = CITIES[Math.floor(Math.random() * CITIES.length)];
         processPayload(c1, c2, parseFloat((Math.random() * 1.8 + 0.2).toFixed(2)), tagId, 'REPLAY_ATTACK');
       } else {
-        let c2 = CITIES[Math.floor(Math.random() * CITIES.length)];
-        while (c2.city === c1.city) c2 = CITIES[Math.floor(Math.random() * CITIES.length)];
-        processPayload(c1, c2, 0.4, tagId, 'CRYPTO_FAIL');
+        processPayload(c1, null, 0, tagId, 'CRYPTO_FAIL');
       }
     }, 3200);
 

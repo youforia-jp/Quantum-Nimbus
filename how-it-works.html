@@ -54,6 +54,9 @@
             overflow-x: hidden !important;
             min-height: 100vh;
         }
+        .dark body {
+            background-image: radial-gradient(#1e293b 1px, transparent 1px) !important;
+        }
         .nav-link {
             font-size: 0.875rem;
             font-weight: 500;
@@ -74,42 +77,42 @@
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900 antialiased min-h-screen bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:16px_16px]">
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased min-h-screen bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] dark:bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:16px_16px] font-sans transition-colors">
 
     <!-- Navbar -->
     <nav class="fixed w-full z-50 bg-white/95 dark:bg-slate-950/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors">
-        <div class="max-w-[100rem] mx-auto px-6 lg:px-12">
-            <div class="flex justify-between items-center h-20 gap-4">
+        <div class="max-w-[100rem] mx-auto px-4 sm:px-6 lg:px-12">
+            <div class="flex justify-between items-center h-20 gap-2 sm:gap-4">
                 <!-- Logo -->
-                <div class="flex-shrink-0 flex items-center pl-2 sm:pl-6">
+                <div class="flex-shrink-0 flex items-center pl-1 sm:pl-4">
                     <a href="index.html" aria-label="Nimbus" class="flex items-center justify-center group -mt-2">
-                        <img src="nimbus-actual-logo.png" alt="Nimbus Logo" class="h-16 sm:h-18 w-auto object-contain block dark:hidden">
-                        <img src="nimbus-actual-logo-dark.png" alt="Nimbus Logo" class="h-16 sm:h-18 w-auto object-contain hidden dark:block">
+                        <img src="nimbus-actual-logo.png" alt="Nimbus Logo" class="h-14 sm:h-16 lg:h-18 w-auto object-contain block dark:hidden">
+                        <img src="nimbus-actual-logo-dark.png" alt="Nimbus Logo" class="h-14 sm:h-16 lg:h-18 w-auto object-contain hidden dark:block">
                     </a>
                 </div>
                 <!-- Desktop Nav Links -->
-                <div class="hidden lg:flex items-center gap-6 xl:gap-8 whitespace-nowrap">
-                    <a href="index.html#technology" class="nav-link whitespace-nowrap text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Platform Overview</a>
-                    <a href="how-it-works.html" class="nav-link whitespace-nowrap text-sm font-semibold text-slate-900 dark:text-white transition-colors">How It Works</a>
-                    <a href="safety.html" class="nav-link whitespace-nowrap text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Compliance Data</a>
-                    <a href="unit-economics.html" class="nav-link whitespace-nowrap text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Unit Economics</a>
-                    <a href="simulator.html" class="nav-link whitespace-nowrap text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">NFC Sandbox</a>
-                    <a href="dashboard.html" class="nav-link whitespace-nowrap text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>Live Threat Map</a>
-                    <a href="state-auditor-dashboard.html" class="nav-link whitespace-nowrap text-sm font-bold text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300 transition-colors flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-sky-500 dark:bg-sky-400 animate-pulse"></span>State Auditor</a>
+                <div class="hidden md:flex items-center gap-3 lg:gap-5 xl:gap-7 whitespace-nowrap">
+                    <a href="index.html#technology" class="nav-link whitespace-nowrap text-xs xl:text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Platform Overview</a>
+                    <a href="how-it-works.html" class="nav-link whitespace-nowrap text-xs xl:text-sm font-semibold text-slate-900 dark:text-white transition-colors">How It Works</a>
+                    <a href="safety.html" class="nav-link whitespace-nowrap text-xs xl:text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Compliance Data</a>
+                    <a href="unit-economics.html" class="nav-link whitespace-nowrap text-xs xl:text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Unit Economics</a>
+                    <a href="simulator.html" class="nav-link whitespace-nowrap text-xs xl:text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">NFC Sandbox</a>
+                    <a href="dashboard.html" class="nav-link whitespace-nowrap text-xs xl:text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>Live Threat Map</a>
+                    <a href="state-auditor-dashboard.html" class="nav-link whitespace-nowrap text-xs xl:text-sm font-bold text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300 transition-colors flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-sky-500 dark:bg-sky-400 animate-pulse"></span>State Auditor</a>
                 </div>
                 <!-- Right Actions -->
-                <div class="hidden lg:flex items-center gap-4">
+                <div class="hidden md:flex items-center gap-2 sm:gap-4">
                     <!-- Theme Toggle -->
                     <button onclick="toggleTheme()" class="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle Theme">
                         <svg class="w-5 h-5 hidden dark:block text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
                         <svg class="w-5 h-5 block dark:hidden text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
                     </button>
-                    <a href="contact.html" class="inline-flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-accentGreen hover:bg-accentGreenHover rounded-lg transition-colors shadow-sm">
+                    <a href="contact.html" class="inline-flex items-center justify-center px-3.5 py-2 text-xs xl:text-sm font-semibold text-white bg-accentGreen hover:bg-accentGreenHover rounded-lg transition-colors shadow-sm whitespace-nowrap">
                         Schedule a Demo
                     </a>
                 </div>
                 <!-- Mobile Menu Btn -->
-                <div class="lg:hidden flex items-center gap-2">
+                <div class="md:hidden flex items-center gap-2">
                     <button onclick="toggleTheme()" class="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle Theme">
                         <svg class="w-5 h-5 hidden dark:block text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
                         <svg class="w-5 h-5 block dark:hidden text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
@@ -121,8 +124,8 @@
             </div>
         </div>
         <!-- Mobile Menu -->
-        <div id="mobile-menu" class="lg:hidden hidden bg-slate-50 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
-<div class="px-4 py-3 space-y-1">
+        <div id="mobile-menu" class="md:hidden hidden bg-slate-50 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
+            <div class="px-4 py-3 space-y-1">
                 <a href="index.html#technology" class="block px-3 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 rounded-md">Platform Overview</a>
                 <a href="how-it-works.html" class="block px-3 py-2 text-sm font-semibold text-slate-900 dark:text-white hover:bg-white dark:hover:bg-slate-800 rounded-md">How It Works</a>
                 <a href="safety.html" class="block px-3 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 rounded-md">Compliance Data</a>
@@ -138,13 +141,13 @@
     <!-- HERO HEADER -->
     <section class="pt-32 pb-12 lg:pt-40 lg:pb-14">
         <div class="max-w-[100rem] mx-auto px-6 lg:px-12 text-center">
-            <div class="inline-flex items-center gap-2 mb-4 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-accentGreen text-xs font-bold uppercase tracking-widest">
+            <div class="inline-flex items-center gap-2 mb-4 px-3.5 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-200 dark:border-emerald-800 text-accentGreen dark:text-emerald-400 text-xs font-bold uppercase tracking-widest">
                 Crypto-Silicon Hardware Verification
             </div>
-            <h1 class="font-heading text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 mb-4 tracking-tight leading-tight">
+            <h1 class="font-heading text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-4 tracking-tight leading-tight">
                 How Tap-to-Verify Works
             </h1>
-            <p class="text-slate-600 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
+            <p class="text-slate-600 dark:text-slate-300 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
                 A tamper-proof smart chip inside every vape cartridge that delivers instant mobile authentication with zero app download required.
             </p>
         </div>
@@ -154,82 +157,82 @@
     <section class="pb-16">
         <div class="max-w-[100rem] mx-auto px-6 lg:px-12">
             <div class="text-center mb-10">
-                <h2 class="font-heading text-2xl md:text-3xl font-extrabold text-slate-900 mb-2">The 3-Step Tap Architecture</h2>
-                <p class="text-slate-500 text-sm">Instant authentication pipeline from physical silicon hardware to cloud compliance engine.</p>
+                <h2 class="font-heading text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white mb-2">The 3-Step Tap Architecture</h2>
+                <p class="text-slate-500 dark:text-slate-400 text-sm">Instant authentication pipeline from physical silicon hardware to cloud compliance engine.</p>
             </div>
 
             <!-- 3-Column Pipeline Cards -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
                 
                 <!-- Step 1 Card -->
-                <div class="bg-white border border-slate-200/80 rounded-2xl p-6 lg:p-8 shadow-sm flex flex-col justify-between space-y-6">
+                <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-6 lg:p-8 shadow-sm flex flex-col justify-between space-y-6">
                     <div>
                         <div class="flex items-center justify-between mb-4">
-                            <div class="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 font-extrabold flex items-center justify-center font-mono text-sm">
+                            <div class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 font-extrabold flex items-center justify-center font-mono text-sm">
                                 01
                             </div>
-                            <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200 uppercase tracking-wider">
+                            <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 uppercase tracking-wider">
                                 STEP 1
                             </span>
                         </div>
-                        <h3 class="text-xl font-extrabold text-slate-900 mb-2 font-heading">
+                        <h3 class="text-xl font-extrabold text-slate-900 dark:text-white mb-2 font-heading">
                             TAP (Zero-App Phone Scan)
                         </h3>
-                        <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                        <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed mb-6">
                             Consumer taps any iOS or Android phone directly to the vape hardware.
                         </p>
                     </div>
-                    <div class="flex flex-wrap gap-2 pt-4 border-t border-slate-100">
-                        <span class="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-slate-100 text-slate-700 border border-slate-200">Native NFC</span>
-                        <span class="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-slate-100 text-slate-700 border border-slate-200">No App Required</span>
+                    <div class="flex flex-wrap gap-2 pt-4 border-t border-slate-100 dark:border-slate-800">
+                        <span class="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">Native NFC</span>
+                        <span class="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">No App Required</span>
                     </div>
                 </div>
 
                 <!-- Step 2 Card -->
-                <div class="bg-white border border-slate-200/80 rounded-2xl p-6 lg:p-8 shadow-sm flex flex-col justify-between space-y-6">
+                <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-6 lg:p-8 shadow-sm flex flex-col justify-between space-y-6">
                     <div>
                         <div class="flex items-center justify-between mb-4">
-                            <div class="w-10 h-10 rounded-xl bg-cyan-50 border border-cyan-200 text-cyan-700 font-extrabold flex items-center justify-center font-mono text-sm">
+                            <div class="w-10 h-10 rounded-xl bg-cyan-50 dark:bg-cyan-950/60 border border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-300 font-extrabold flex items-center justify-center font-mono text-sm">
                                 02
                             </div>
-                            <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-cyan-50 text-cyan-700 border border-cyan-200 uppercase tracking-wider">
+                            <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-cyan-50 dark:bg-cyan-950/60 text-cyan-700 dark:text-cyan-300 border border-cyan-200 dark:border-cyan-800 uppercase tracking-wider">
                                 STEP 2
                             </span>
                         </div>
-                        <h3 class="text-xl font-extrabold text-slate-900 mb-2 font-heading">
+                        <h3 class="text-xl font-extrabold text-slate-900 dark:text-white mb-2 font-heading">
                             VERIFY (Silicon Crypto Handshake)
                         </h3>
-                        <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                        <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed mb-6">
                             NXP NTAG 424 DNA generates a dynamic, single-use AES-128 SUN cryptographic digest.
                         </p>
                     </div>
-                    <div class="flex flex-wrap gap-2 pt-4 border-t border-slate-100">
-                        <span class="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-slate-100 text-slate-700 border border-slate-200">AES-128 SUN CMAC</span>
-                        <span class="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-slate-100 text-slate-700 border border-slate-200">ISO 14443A</span>
+                    <div class="flex flex-wrap gap-2 pt-4 border-t border-slate-100 dark:border-slate-800">
+                        <span class="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">AES-128 SUN CMAC</span>
+                        <span class="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">ISO 14443A</span>
                     </div>
                 </div>
 
                 <!-- Step 3 Card -->
-                <div class="bg-white border border-slate-200/80 rounded-2xl p-6 lg:p-8 shadow-sm flex flex-col justify-between space-y-6">
+                <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-6 lg:p-8 shadow-sm flex flex-col justify-between space-y-6">
                     <div>
                         <div class="flex items-center justify-between mb-4">
-                            <div class="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 font-extrabold flex items-center justify-center font-mono text-sm">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 font-extrabold flex items-center justify-center font-mono text-sm">
                                 03
                             </div>
-                            <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 uppercase tracking-wider">
+                            <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 uppercase tracking-wider">
                                 STEP 3
                             </span>
                         </div>
-                        <h3 class="text-xl font-extrabold text-slate-900 mb-2 font-heading">
+                        <h3 class="text-xl font-extrabold text-slate-900 dark:text-white mb-2 font-heading">
                             SECURE (Behavioral AI Threat Analysis)
                         </h3>
-                        <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                        <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed mb-6">
                             Cloud engine verifies physical scan velocity, IP anomalies, and prevents replay attacks in real time.
                         </p>
                     </div>
-                    <div class="flex flex-wrap gap-2 pt-4 border-t border-slate-100">
-                        <span class="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-slate-100 text-slate-700 border border-slate-200">Isolation Forest AI</span>
-                        <span class="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-slate-100 text-slate-700 border border-slate-200">&lt;200ms Latency</span>
+                    <div class="flex flex-wrap gap-2 pt-4 border-t border-slate-100 dark:border-slate-800">
+                        <span class="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">Isolation Forest AI</span>
+                        <span class="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">&lt;200ms Latency</span>
                     </div>
                 </div>
 
@@ -241,35 +244,35 @@
     <section class="py-12">
         <div class="max-w-[100rem] mx-auto px-6 lg:px-12">
             <div class="text-center mb-10">
-                <h2 class="font-heading text-2xl md:text-3xl font-extrabold text-slate-900 mb-2">Dual-Layer Security Architecture</h2>
-                <p class="text-slate-500 text-sm">Combining tamper-proof hardware silicon cryptography with real-time cloud AI telemetry.</p>
+                <h2 class="font-heading text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white mb-2">Dual-Layer Security Architecture</h2>
+                <p class="text-slate-500 dark:text-slate-400 text-sm">Combining tamper-proof hardware silicon cryptography with real-time cloud AI telemetry.</p>
             </div>
 
             <!-- 2 Side-by-Side Cards -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
                 
                 <!-- Left Card: Layer 1 -->
-                <div class="bg-white border border-slate-200/80 rounded-2xl p-6 lg:p-8 shadow-sm flex flex-col justify-between space-y-6">
+                <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-6 lg:p-8 shadow-sm flex flex-col justify-between space-y-6">
                     <div class="space-y-4">
-                        <div class="flex items-center justify-between border-b border-slate-100 pb-4">
-                            <h3 class="text-lg font-bold text-slate-900 font-heading">
+                        <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white font-heading">
                                 Layer 1 — Silicon Hardware Security
                             </h3>
-                            <span class="px-3 py-1 rounded-full text-xs font-bold font-mono bg-cyan-50 text-cyan-800 border border-cyan-200 uppercase tracking-wider">
+                            <span class="px-3 py-1 rounded-full text-xs font-bold font-mono bg-cyan-50 dark:bg-cyan-950/60 text-cyan-800 dark:text-cyan-300 border border-cyan-200 dark:border-cyan-800 uppercase tracking-wider">
                                 HARDWARE TOKEN
                             </span>
                         </div>
-                        <ul class="space-y-3 text-slate-600 text-sm">
+                        <ul class="space-y-3 text-slate-600 dark:text-slate-300 text-sm">
                             <li class="flex items-start gap-3">
-                                <svg class="w-5 h-5 text-cyan-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                <svg class="w-5 h-5 text-cyan-600 dark:text-cyan-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                                 <span>Dynamic CMAC signature changes on every tap.</span>
                             </li>
                             <li class="flex items-start gap-3">
-                                <svg class="w-5 h-5 text-cyan-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                <svg class="w-5 h-5 text-cyan-600 dark:text-cyan-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                                 <span>Tamper-proof hardware monotonic counter prevents clone recycling.</span>
                             </li>
                             <li class="flex items-start gap-3">
-                                <svg class="w-5 h-5 text-cyan-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                <svg class="w-5 h-5 text-cyan-600 dark:text-cyan-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                                 <span>Direct state ledger &amp; Metrc / BioTrack synchronization.</span>
                             </li>
                         </ul>
@@ -277,27 +280,27 @@
                 </div>
 
                 <!-- Right Card: Layer 2 -->
-                <div class="bg-white border border-slate-200/80 rounded-2xl p-6 lg:p-8 shadow-sm flex flex-col justify-between space-y-6">
+                <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-6 lg:p-8 shadow-sm flex flex-col justify-between space-y-6">
                     <div class="space-y-4">
-                        <div class="flex items-center justify-between border-b border-slate-100 pb-4">
-                            <h3 class="text-lg font-bold text-slate-900 font-heading">
+                        <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white font-heading">
                                 Layer 2 — Behavioral AI Threat Engine
                             </h3>
-                            <span class="px-3 py-1 rounded-full text-xs font-bold font-mono bg-emerald-50 text-emerald-800 border border-emerald-200 uppercase tracking-wider">
+                            <span class="px-3 py-1 rounded-full text-xs font-bold font-mono bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 uppercase tracking-wider">
                                 CLOUD INTELLIGENCE
                             </span>
                         </div>
-                        <ul class="space-y-3 text-slate-600 text-sm">
+                        <ul class="space-y-3 text-slate-600 dark:text-slate-300 text-sm">
                             <li class="flex items-start gap-3">
-                                <svg class="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                <svg class="w-5 h-5 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                                 <span>Detects impossible travel speed anomalies (e.g., NY tap to London tap in 5 minutes).</span>
                             </li>
                             <li class="flex items-start gap-3">
-                                <svg class="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                <svg class="w-5 h-5 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                                 <span>Blocks automated bot attacks and batch replay attempts.</span>
                             </li>
                             <li class="flex items-start gap-3">
-                                <svg class="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                <svg class="w-5 h-5 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                                 <span>Real-time threat telemetry mapping &amp; instant revocation.</span>
                             </li>
                         </ul>
@@ -307,13 +310,13 @@
             </div>
 
             <!-- SECTION 4: TECHNICAL SPECS BAR (MICRO-PILL LAYOUT) -->
-            <div class="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm">
-                <div class="flex flex-wrap items-center justify-center gap-3 font-mono text-xs text-slate-700">
-                    <span class="px-3.5 py-1.5 bg-slate-50 border border-slate-200 rounded-full font-bold">NXP NTAG 424 DNA</span>
-                    <span class="px-3.5 py-1.5 bg-slate-50 border border-slate-200 rounded-full font-bold">13.56 MHz</span>
-                    <span class="px-3.5 py-1.5 bg-slate-50 border border-slate-200 rounded-full font-bold">Zero Battery Required</span>
-                    <span class="px-3.5 py-1.5 bg-slate-50 border border-slate-200 rounded-full font-bold text-emerald-700 bg-emerald-50/50 border-emerald-200">Metrc API Ready</span>
-                    <span class="px-3.5 py-1.5 bg-slate-50 border border-slate-200 rounded-full font-bold text-blue-700 bg-blue-50/50 border-blue-200">U.S. Patent Pending</span>
+            <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+                <div class="flex flex-wrap items-center justify-center gap-3 font-mono text-xs text-slate-700 dark:text-slate-300">
+                    <span class="px-3.5 py-1.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-full font-bold">NXP NTAG 424 DNA</span>
+                    <span class="px-3.5 py-1.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-full font-bold">13.56 MHz</span>
+                    <span class="px-3.5 py-1.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-full font-bold">Zero Battery Required</span>
+                    <span class="px-3.5 py-1.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-full font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50/50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800">Metrc API Ready</span>
+                    <span class="px-3.5 py-1.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-full font-bold text-blue-700 dark:text-blue-300 bg-blue-50/50 dark:bg-blue-950/40 border-blue-200 dark:border-blue-800">U.S. Patent Pending</span>
                 </div>
             </div>
         </div>
@@ -323,64 +326,65 @@
     <!-- ============================================================
          FOOTER (STANDARDIZED B2B LICENSING & IP ARCHITECTURE)
     ============================================================ -->
-    <footer class="bg-slate-100 border-t border-slate-200 text-slate-800 pt-12 pb-8 mt-16">
+    <footer class="bg-slate-100 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 pt-12 pb-8 mt-16 transition-colors">
         <div class="max-w-[100rem] mx-auto px-6 lg:px-12">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8 lg:gap-12 items-start">
                 
                 <!-- Column 1: Brand & Patent Info -->
                 <div class="md:col-span-1 space-y-4">
                     <a href="index.html" aria-label="Nimbus" class="inline-block group">
-                        <img src="nimbus-actual-logo.png" alt="Nimbus Logo" class="h-16 md:h-20 w-auto object-contain">
+                        <img src="nimbus-actual-logo.png" alt="Nimbus Logo" class="h-16 md:h-20 w-auto object-contain block dark:hidden">
+                        <img src="nimbus-actual-logo-dark.png" alt="Nimbus Logo" class="h-16 md:h-20 w-auto object-contain hidden dark:block">
                     </a>
-                    <p class="leading-relaxed text-slate-500 text-xs font-mono">
+                    <p class="leading-relaxed text-slate-500 dark:text-slate-400 text-xs font-mono">
                         U.S. Patent Pending — App. No. 64/114,968. Systems and Methods for Dynamic Vaporization Parameter Configuration and Authentication via Cryptographic Near Field Communication.
                     </p>
                     <div class="pt-1 space-y-2">
-                        <p class="text-slate-500 text-xs font-mono flex items-center gap-1.5">
-                            <span>✉️</span> <a href="mailto:JPLopez@QuantumNimbus.com" class="text-slate-600 hover:text-cyan-600 transition-colors">JPLopez@QuantumNimbus.com</a>
+                        <p class="text-slate-500 dark:text-slate-400 text-xs font-mono flex items-center gap-1.5">
+                            <span>✉️</span> <a href="mailto:JPLopez@QuantumNimbus.com" class="text-slate-600 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">JPLopez@QuantumNimbus.com</a>
                         </p>
                     </div>
                 </div>
 
                 <!-- Column 2: Solutions -->
                 <div class="md:pt-2">
-                    <span class="text-slate-900 font-bold text-xs uppercase tracking-wider mb-3 block">Solutions</span>
+                    <span class="text-slate-900 dark:text-white font-bold text-xs uppercase tracking-wider mb-3 block">Solutions</span>
                     <ul class="space-y-1">
-                        <li><a href="index.html#technology" class="text-slate-600 hover:text-cyan-600 text-xs transition-colors block py-1">Platform Overview</a></li>
-                        <li><a href="how-it-works.html" class="text-slate-600 hover:text-cyan-600 text-xs transition-colors block py-1 font-semibold text-slate-900">How It Works</a></li>
-                        <li><a href="safety.html" class="text-slate-600 hover:text-cyan-600 text-xs transition-colors block py-1">Compliance Data</a></li>
-                        <li><a href="unit-economics.html" class="text-slate-600 hover:text-cyan-600 text-xs transition-colors block py-1">Unit Economics</a></li>
-                        <li><a href="dashboard.html" class="text-slate-600 hover:text-cyan-600 text-xs transition-colors block py-1">Live Threat Map</a></li>
-                        <li><a href="state-auditor-dashboard.html" class="text-slate-600 hover:text-cyan-600 text-xs transition-colors block py-1">State Auditor</a></li>
-                        <li><a href="simulator.html" class="text-slate-600 hover:text-cyan-600 text-xs transition-colors block py-1">Simulation</a></li>
+                        <li><a href="index.html#technology" class="text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 text-xs transition-colors block py-1">Platform Overview</a></li>
+                        <li><a href="how-it-works.html" class="text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 text-xs transition-colors block py-1 font-semibold text-slate-900 dark:text-white">How It Works</a></li>
+                        <li><a href="safety.html" class="text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 text-xs transition-colors block py-1">Compliance Data</a></li>
+                        <li><a href="unit-economics.html" class="text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 text-xs transition-colors block py-1">Unit Economics</a></li>
+                        <li><a href="dashboard.html" class="text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 text-xs transition-colors block py-1">Live Threat Map</a></li>
+                        <li><a href="state-auditor-dashboard.html" class="text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 text-xs transition-colors block py-1">State Auditor</a></li>
+                        <li><a href="simulator.html" class="text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 text-xs transition-colors block py-1">Simulation</a></li>
                     </ul>
                 </div>
 
                 <!-- Column 3: IP & Technology Licensing -->
                 <div class="md:pt-2">
-                    <span class="text-slate-900 font-bold text-xs uppercase tracking-wider mb-3 block">IP &amp; Technology Licensing</span>
+                    <span class="text-slate-900 dark:text-white font-bold text-xs uppercase tracking-wider mb-3 block">IP &amp; Technology Licensing</span>
                     <ul class="space-y-1">
-                        <li><a href="index.html#technology" class="text-slate-600 hover:text-cyan-600 text-xs transition-colors block py-1">Patent &amp; IP Architecture</a></li>
-                        <li><a href="how-it-works.html" class="text-slate-600 hover:text-cyan-600 text-xs transition-colors block py-1">Cryptographic NFC Protocol</a></li>
-                        <li><a href="safety.html" class="text-slate-600 hover:text-cyan-600 text-xs transition-colors block py-1">OEM Hardware Security Specs</a></li>
-                        <li><a href="contact.html" class="text-slate-600 hover:text-cyan-600 text-xs transition-colors block py-1">B2B Integration Roadmap</a></li>
+                        <li><a href="index.html#technology" class="text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 text-xs transition-colors block py-1">Patent &amp; IP Architecture</a></li>
+                        <li><a href="how-it-works.html" class="text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 text-xs transition-colors block py-1">Cryptographic NFC Protocol</a></li>
+                        <li><a href="safety.html" class="text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 text-xs transition-colors block py-1">OEM Hardware Security Specs</a></li>
+                        <li><a href="contact.html" class="text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 text-xs transition-colors block py-1">B2B Integration Roadmap</a></li>
                     </ul>
                 </div>
 
                 <!-- Column 4: Enterprise Contact -->
                 <div class="md:pt-2">
-                    <span class="text-slate-900 font-bold text-xs uppercase tracking-wider mb-3 block">Contact &amp; Licensing</span>
+                    <span class="text-slate-900 dark:text-white font-bold text-xs uppercase tracking-wider mb-3 block">Contact &amp; Licensing</span>
                     <ul class="space-y-1">
-                        <li><a href="contact.html" class="text-slate-600 hover:text-cyan-600 text-xs transition-colors block py-1 font-medium text-emerald-600">Schedule an Enterprise Assessment</a></li>
-                        <li><a href="mailto:JPLopez@QuantumNimbus.com" class="text-slate-600 hover:text-cyan-600 text-xs transition-colors block py-1">Direct Licensing Inquiry</a></li>
-                        <li><a href="mailto:JPLopez@QuantumNimbus.com" class="text-slate-600 hover:text-cyan-600 text-xs transition-colors block py-1">Media Inquiries</a></li>
+                        <li><a href="contact.html" class="text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 text-xs transition-colors block py-1 font-medium text-emerald-600 dark:text-emerald-400">Schedule an Enterprise Assessment</a></li>
+                        <li><a href="mailto:JPLopez@QuantumNimbus.com" class="text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 text-xs transition-colors block py-1">Direct Licensing Inquiry</a></li>
+                        <li><a href="mailto:JPLopez@QuantumNimbus.com" class="text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 text-xs transition-colors block py-1">Media Inquiries</a></li>
                     </ul>
                 </div>
 
             </div>
 
             <!-- Bottom Copyright Bar -->
-            <div class="border-t border-slate-200 mt-8 pt-6 flex flex-col md:flex-row justify-between items-center text-xs text-slate-500">
+            <div class="border-t border-slate-200 dark:border-slate-800 mt-8 pt-6 flex flex-col md:flex-row justify-between items-center text-xs text-slate-500 dark:text-slate-400">
                 <p>© 2026 Quantum Nimbus Tech. All rights reserved.</p>
                 <p class="mt-2 md:mt-0 font-mono">U.S. Patent Pending — App. No. 64/114,968</p>
             </div>

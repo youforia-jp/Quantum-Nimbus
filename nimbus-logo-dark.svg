@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 510 390" role="img" aria-label="Nimbus — A Cryptographic Authentication Brand">
+  <title>Nimbus</title>
+
+  <!-- ── CLOUD BODY (lighter emerald for dark backgrounds) ── -->
+  <g fill="#34D399">
+    <circle cx="88"  cy="178" r="46"/>
+    <circle cx="138" cy="148" r="58"/>
+    <circle cx="200" cy="130" r="65"/>
+    <circle cx="262" cy="148" r="54"/>
+    <circle cx="70"  cy="192" r="34"/>
+    <rect x="60" y="165" width="258" height="60" rx="4"/>
+  </g>
+
+  <!-- ── NFC SIGNAL ARCS ── -->
+  <path d="M 255,127 A 42,42 0 0,1 320,149"
+        fill="none" stroke="#34D399" stroke-width="11" stroke-linecap="round"/>
+  <path d="M 247,103 A 68,68 0 0,1 346,151"
+        fill="none" stroke="#34D399" stroke-width="11" stroke-linecap="round"/>
+  <path d="M 238,78  A 95,95 0 0,1 373,155"
+        fill="none" stroke="#34D399" stroke-width="11" stroke-linecap="round"/>
+
+  <!-- ── NIMBUS (white for dark bg) ── -->
+  <text x="0" y="318"
+        font-family="'Arial Black','Impact','Franklin Gothic Heavy','Helvetica Neue',sans-serif"
+        font-weight="900"
+        font-size="110"
+        fill="#FFFFFF"
+        letter-spacing="-1">NIMBUS</text>
+
+  <!-- ── TAGLINE ── -->
+  <text x="3" y="358"
+        font-family="Arial,Helvetica,sans-serif"
+        font-weight="400"
+        font-size="16.5"
+        fill="#94A3B8"
+        letter-spacing="3.8">A CRYPTOGRAPHIC AUTHENTICATION BRAND</text>
+</svg>
