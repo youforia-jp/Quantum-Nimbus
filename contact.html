@@ -16,27 +16,32 @@
     
     <!-- Tailwind CSS Config -->
     <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        nimbusBase:   '#FFFFFF',
-                        nimbusSurface:'#F8FAFC',
-                        nimbusBorder: '#E2E8F0',
-                        nimbusText:   '#334155',
-                        accentBlue:   '#0284C7',
-                        accentRed:    '#ef4444',
-                        accentGreen:  '#047857',
-                        accentGreenHover: '#065F46',
-                    },
-                    fontFamily: {
-                        sans:    ['Inter', 'sans-serif'],
-                        heading: ['Outfit', 'sans-serif'],
+        window.tailwind = {
+            config: {
+                darkMode: 'class',
+                theme: {
+                    extend: {
+                        colors: {
+                            nimbusBase:   '#FFFFFF',
+                            nimbusSurface:'#F8FAFC',
+                            nimbusBorder: '#E2E8F0',
+                            nimbusText:   '#334155',
+                            accentBlue:   '#0284C7',
+                            accentRed:    '#ef4444',
+                            accentGreen:  '#047857',
+                            accentGreenHover: '#065F46',
+                        },
+                        fontFamily: {
+                            sans:    ['Inter', 'sans-serif'],
+                            heading: ['Outfit', 'sans-serif'],
+                        }
                     }
                 }
             }
         };
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
         (function() {
             const savedTheme = localStorage.getItem('nimbus_theme');
             if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -51,7 +56,6 @@
         }
         window.toggleTheme = toggleTheme;
     </script>
-    <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Existing Vanilla CSS -->
     <link rel="stylesheet" href="index.css">
@@ -63,18 +67,14 @@
             height: auto !important; 
             min-height: 100vh;
             display: block !important;
-            background-color: #f8fafc !important;
-            color: #0f172a !important;
-        }
-        .dark body {
-            background-color: #020617 !important;
-            color: #f8fafc !important;
-            background-image: radial-gradient(#1e293b 1px, transparent 1px) !important;
         }
         .background-radial-glow { display: none; }
+        .dark body {
+            background-image: radial-gradient(#1e293b 1px, transparent 1px) !important;
+        }
     </style>
 </head>
-<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased min-h-screen font-sans transition-colors">
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased min-h-screen bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] dark:bg-none [background-size:16px_16px] font-sans transition-colors">
 
     <!-- Navbar -->
     <nav class="fixed w-full z-50 bg-white/95 dark:bg-slate-950/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors">

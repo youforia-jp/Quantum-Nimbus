@@ -7,45 +7,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-    /* ── Light Mode Base Tokens (Default) ── */
-    --card-bg: #ffffff;
-    --border-color: #e2e8f0;
-    --text-primary: #0f172a;
-    --text-secondary: #475569;
-
-    --bg-base: #f8fafc;
-    --bg-surface: #ffffff;
-    --bg-surface-raised: #f1f5f9;
-
-    --primary-glow: #0284c7;
-    --primary-glow-rgb: 2, 132, 199;
-    --bg-gradient-1: #f8fafc;
-    --bg-gradient-2: #ffffff;
-    --accent-color: #0284c7;
-    --device-color: #ffffff;
-    --device-ring-glow: 0 0 12px rgba(2, 132, 199, 0.2);
-
-    /* ── Enterprise Accent Colors ── */
-    --accent-blue: #0284c7;        /* CTAs and active connections only */
-    --accent-green: #10b981;       /* Verified / healthy states only */
-    --accent-red: #ef4444;         /* Risk signals only */
-    --accent-amber: #f59e0b;       /* Caution states */
-
-    /* ── Animation constants ── */
-    --transition-speed: 0.4s;
-}
-
-html.dark {
-    /* ── Dark Mode Surface & Border Tokens ── */
+    /* ── Enterprise Surface & Border Tokens ── */
     --card-bg: rgba(17, 24, 39, 0.75);
     --border-color: rgba(51, 65, 85, 0.6);
     --text-primary: #f1f5f9;
     --text-secondary: #8b9cb5;
 
+    /* ── Base body background ── */
     --bg-base: #0c0f17;
     --bg-surface: #111827;
     --bg-surface-raised: #1a2233;
 
+    /* ── Default theme variables (Disconnected / idle) ── */
     --primary-glow: #4b5e78;
     --primary-glow-rgb: 75, 94, 120;
     --bg-gradient-1: #0c0f17;
@@ -53,6 +26,15 @@ html.dark {
     --accent-color: #94a3b8;
     --device-color: #1a2233;
     --device-ring-glow: 0 0 12px rgba(75, 94, 120, 0.35);
+
+    /* ── Enterprise Accent Colors ── */
+    --accent-blue: #3b82f6;        /* CTAs and active connections only */
+    --accent-green: #10b981;       /* Verified / healthy states only */
+    --accent-red: #ef4444;         /* Risk signals only */
+    --accent-amber: #f59e0b;       /* Caution states */
+
+    /* ── Animation constants ── */
+    --transition-speed: 0.4s;
 }
 
 /* Theme Skins applied dynamically to body */
