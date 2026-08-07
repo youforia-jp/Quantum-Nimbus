@@ -100,15 +100,23 @@ body.theme-warning {
 }
 
 body {
-    background-color: var(--bg-gradient-1);
-    color: var(--text-primary);
     min-height: 100vh;
     overflow-x: hidden;
     position: relative;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    transition: background-color var(--transition-speed) ease;
+    transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+}
+
+html:not(.dark) body {
+    background-color: #ffffff;
+    color: #0f172a;
+}
+
+html.dark body {
+    background-color: var(--bg-gradient-1, #020617);
+    color: var(--text-primary, #f1f5f9);
 }
 
 /* Dynamic Radial Background Glow */
