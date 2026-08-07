@@ -43,6 +43,8 @@
 
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- html2pdf.js for Client-Side PDF Generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <style>
     body {
@@ -83,6 +85,29 @@
       0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
       70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
       100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #pdf-modal, #pdf-modal * {
+        visibility: visible;
+      }
+      #pdf-modal {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: auto;
+        background: white !important;
+        color: black !important;
+      }
+      #pdf-modal-container {
+        box-shadow: none !important;
+        border: none !important;
+        max-width: 100% !important;
+      }
     }
   </style>
 
@@ -171,7 +196,7 @@
   <!-- ========================================== -->
   <!-- AUDITOR GATEWAY BAR                        -->
   <!-- ========================================== -->
-  <header class="w-full bg-white/80 dark:bg-slate-900/80 border-b border-slate-200/80 dark:border-slate-800/80 py-4 shadow-sm backdrop-blur-md transition-colors">
+  <header class="w-full bg-white/80 dark:bg-slate-900/80 border-b border-slate-200/80 dark:border-slate-800/80 pt-24 pb-4 shadow-sm backdrop-blur-md transition-colors">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex flex-col md:flex-row items-center justify-between gap-4">
       
       <!-- Left Brand & Context -->
@@ -510,7 +535,7 @@
       <div class="p-6 overflow-y-auto space-y-6 text-slate-600 dark:text-slate-300 font-sans text-xs bg-slate-100 dark:bg-slate-950">
         
         <!-- Official Watermark Header Document Box -->
-        <div class="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 p-6 rounded-xl shadow-sm border border-slate-300 dark:border-slate-800 space-y-4">
+        <div id="pdf-document-sheet" class="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 p-6 rounded-xl shadow-sm border border-slate-300 dark:border-slate-800 space-y-4">
           <div class="flex items-start justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
             <div>
               <div class="flex items-center gap-2">
@@ -609,7 +634,7 @@
           <button onclick="closeAuditExportModal()" class="px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-xs font-medium transition-colors">
             Cancel
           </button>
-          <button onclick="triggerPDFDownload()" class="flex items-center gap-2 px-5 py-2 rounded-lg bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold shadow-md shadow-sky-600/30 transition-all">
+          <button id="pdf-download-btn" onclick="triggerPDFDownload()" class="flex items-center gap-2 px-5 py-2 rounded-lg bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold shadow-md shadow-sky-600/30 transition-all">
             <i data-lucide="download" class="w-4 h-4"></i>
             <span>Download Official PDF Log</span>
           </button>
@@ -919,9 +944,91 @@
       container.classList.add('scale-95');
     }
 
+    function showToast(title, message) {
+      let toast = document.getElementById('toast-notification');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'toast-notification';
+        toast.className = 'fixed bottom-5 right-5 z-[100] max-w-sm bg-slate-900 dark:bg-slate-800 text-white p-4 rounded-xl shadow-2xl border border-slate-700 flex items-start gap-3 transform translate-y-10 opacity-0 transition-all duration-300 pointer-events-none';
+        document.body.appendChild(toast);
+      }
+      
+      toast.innerHTML = `
+        <div class="p-2 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex-shrink-0">
+          <i data-lucide="check-circle" class="w-5 h-5"></i>
+        </div>
+        <div class="flex-1 min-w-0">
+          <h4 class="font-bold text-sm text-white">${title}</h4>
+          <p class="text-xs text-slate-300 mt-0.5">${message}</p>
+        </div>
+        <button onclick="hideToast()" class="text-slate-400 hover:text-white p-1">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      `;
+      if (window.lucide) lucide.createIcons();
+
+      toast.classList.remove('translate-y-10', 'opacity-0', 'pointer-events-none');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      setTimeout(hideToast, 4500);
+    }
+
+    function hideToast() {
+      const toast = document.getElementById('toast-notification');
+      if (toast) {
+        toast.classList.add('translate-y-10', 'opacity-0', 'pointer-events-none');
+        toast.classList.remove('translate-y-0', 'opacity-100');
+      }
+    }
+
     function triggerPDFDownload() {
-      alert("Official State Audit Log PDF generated successfully!\n\nDocument Certificate: FL-AUD-2026-0805-99A\nBioTrack API Checksum Verified.");
-      closeAuditExportModal();
+      const btn = document.getElementById('pdf-download-btn');
+      const origText = btn ? btn.innerHTML : '';
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i><span>Generating PDF...</span>`;
+        if (window.lucide) lucide.createIcons();
+      }
+
+      const element = document.getElementById('pdf-document-sheet');
+      const regionSelect = document.getElementById('region-select');
+      const region = regionSelect ? regionSelect.value : 'FL';
+      const timestamp = new Date().toISOString().slice(0, 10);
+      const filename = `State_Audit_Log_${region}_${timestamp}.pdf`;
+
+      const resetBtn = () => {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = origText;
+          if (window.lucide) lucide.createIcons();
+        }
+      };
+
+      if (window.html2pdf && element) {
+        const opt = {
+          margin:       [8, 8, 8, 8],
+          filename:     filename,
+          image:        { type: 'jpeg', quality: 0.98 },
+          html2canvas:  { scale: 2, useCORS: true, logging: false },
+          jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        html2pdf().set(opt).from(element).save().then(() => {
+          resetBtn();
+          closeAuditExportModal();
+          showToast('Audit Log Exported (PDF)', `ISO-19005 Compliance Archive generated: ${filename}`);
+        }).catch(err => {
+          console.warn('html2pdf export error, launching print fallback:', err);
+          resetBtn();
+          closeAuditExportModal();
+          setTimeout(() => { window.print(); }, 200);
+        });
+      } else {
+        resetBtn();
+        closeAuditExportModal();
+        showToast('Preparing State Audit PDF', 'Select "Save as PDF" in your print dialog.');
+        setTimeout(() => { window.print(); }, 300);
+      }
     }
 
     function inspectRow(tagId) {
